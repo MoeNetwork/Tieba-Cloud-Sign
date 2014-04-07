@@ -1,22 +1,26 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
+//加载所有激活的插件
+foreach (unserialize(option::get('actived_plugins')) as $value) {
+	include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
+}
+
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
 	$plug=strip_tags($_GET['plugin']);
-	if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php')) {
-		require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php';
-	} else {
-		msg('插件前台显示模块不存在或不正确');
+	if (in_array($_GET['plugin'], unserialize(option::get('actived_plugins')))) {
+		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php')) {
+			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php';
+		} else {
+			msg('插件前台显示模块不存在或不正确');
+		}
 	}
 }
-
-//加载所有激活的插件
-
 /**
 * 激活插件
 */
 function activePlugin($plugin) {
-		$active_plugins = option::get('active_plugins');
+		$active_plugins = unserialize(option::get('actived_plugins'));
 
 		$ret = false;
 
@@ -30,12 +34,10 @@ function activePlugin($plugin) {
 		}
 
 		//run init callback functions
-		$r = explode('/', $plugin, 2);
-		$plugin = $r[0];
 		$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
 		if (true === $ret && file_exists($callback_file)) {
 			require_once $callback_file;
-			if (function_exists('callback_init')) {
+			if (function_exists('callback_active')) {
 				callback_init();
 			}
 		}
@@ -46,7 +48,7 @@ function activePlugin($plugin) {
  * 禁用插件
 */
 	function inactivePlugin($plugin) {
-		$active_plugins = option::get('active_plugins');
+		$active_plugins = unserialize(option::get('actived_plugins'));
 		if (in_array($plugin, $active_plugins)) {
 			$key = array_search($plugin, $active_plugins);
 			unset($active_plugins[$key]);
@@ -56,14 +58,12 @@ function activePlugin($plugin) {
 		$active_plugins = serialize($active_plugins);
 		option::set('actived_plugins', $active_plugins);
 
-		//run remove callback functions
-		$r = explode('/', $plugin, 2);
-		$plugin = $r[0];
+		//run inactive callback functions
 		$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
 		if (file_exists($callback_file)) {
 			require_once $callback_file;
-			if (function_exists('callback_rm')) {
-				callback_rm();
+			if (function_exists('callback_inactive')) {
+				callback_inactive();
 			}
 		}
 	}
@@ -115,6 +115,22 @@ function activePlugin($plugin) {
 		}
 		return $PluginsList;
 	}
+/**
+* 卸载插件
+*/
+function uninstallPlugin($plugin) {
+	inactivePlugin($plugin);
+	//run remove callback functions
+	$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
+	if (file_exists($callback_file)) {
+		require_once $callback_file;
+		if (function_exists('callback_remove')) {
+			callback_remove();
+		}
+	}
+	DeleteFile(SYSTEM_ROOT.'/plugins/'.$plugin);
+}
+
 /**
  * 获取插件信息
  */

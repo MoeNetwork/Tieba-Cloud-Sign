@@ -1,13 +1,64 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } if (ROLE != 'admin') { msg('权限不足！'); }
+
+if (isset($_GET['dis'])) {
+	inactivePlugin($_GET['dis']);
+	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+}
+elseif (isset($_GET['act'])) {
+	activePlugin($_GET['act']);
+	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+}
+elseif (isset($_GET['uninst'])) {
+	uninstallPlugin($_GET['uninst']);
+	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+}
+
+if (isset($_GET['ok'])) {
+	echo '<div class="alert alert-success">插件操作成功</div>';
+}
+
 $x=getPlugins();
 $plugins = '';
 foreach($x as $key=>$val) {
-	if ($val['Setting'] != false) {
-		$set = '<a href="'.$val['Setting'].'">插件设置</a>';
-	} else { 
-		$set = '';
+	$pluginfo = '';
+	if (!empty($val['Url'])) {
+		$pluginfo .= '<b><a href="'.$val['Url'].'" target="_blank">'.$val['Name'].'</a></b>';
+	} else {
+		$pluginfo .= '<b>'.$val['Name'].'</b>';
 	}
-	$plugins .= '<tr><td>[V'.$val['Version'].'] <b><a href="'.$val['Url'].'" target="_blank">'.$val['Name'].'</a></b><br/>'.$val['Description'].'</td><td><a href="'.$val['AuthorUrl'].'" target="_blank">'.$val['Author'].'</a><br/>'.$val['Plugin'].'<td></td><td>'.$set.'</td></tr>'; 
+	if (!empty($val['Description'])) {
+		$pluginfo .= '<br/>'.$val['Description'];
+	} else {
+		$pluginfo .= '<br/>';
+	}
+
+	if (!empty($val['Version'])) {
+		$pluginfo .= '<br/>版本：'.$val['Version'];
+	} else {
+		$pluginfo .= '<br/>版本：1.0';
+	}
+
+	if (!empty($val['AuthorUrl'])) {
+		$authinfo = '<a href="'.$val['AuthorUrl'].'" target="_blank">'.$val['Author'].'</a>';
+	} else {
+		$authinfo = $val['Author'];
+	}
+
+	if (!empty($val['For'])) {
+		$fortc = '<br/>适用版本：'.$val['For'];
+	} else {
+		$fortc = '<br/>适用版本：不限';
+	}
+
+	if (in_array($val['Plugin'], unserialize(option::get('actived_plugins')))) {
+		$status = '<font color="green">已激活</font> | <a href="index.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
+		if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
+			$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
+		}
+	} else {
+		$status = '<font color="black">已禁用</font> | <a href="index.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
+	}
+	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="index.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
 }
 
 doAction('admin_plugins');
@@ -15,10 +66,9 @@ doAction('admin_plugins');
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th style="width:35%">插件信息</th>
-			<th style="width:25%">作者/标识符</th>
-			<th style="width:15%">状态/操作</th>
-			<th style="width:25%">操作</th>
+			<th style="width:40%">插件信息</th>
+			<th style="width:30%">作者/标识符</th>
+			<th style="width:30%">状态/操作</th>
 		</tr>
 	</thead>
 	<tobdy>

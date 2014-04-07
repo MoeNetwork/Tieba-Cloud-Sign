@@ -1,9 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
-/*
-if ($x['']) {
-	# code...
-}
-*/
+
 switch (SYSTEM_PAGE) {
 	case 'baiduid':
 		template('baiduid');
@@ -20,8 +16,20 @@ switch (SYSTEM_PAGE) {
 	case 'admin:tools':
 		template('admin-tools');
 		break;
+	case 'admin:users':
+		template('admin-users');
+		break;
 	case 'admin:plugins':
 		template('admin-plugins');
+		break;
+	case 'admin:setplug':
+		$plug = strip_tags($_GET['plug']);
+		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], unserialize(option::get('actived_plugins')))) {
+			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php';
+		} else {
+			echo '<b>插件设置页面不存在</b>';
+		}
+		echo '<br/><br/><br/><br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' By <a href="http://zhizhe8.net" target="_blank">无名智者</a>';
 		break;
 	default:
 		template('index');

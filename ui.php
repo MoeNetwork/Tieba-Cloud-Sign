@@ -7,6 +7,9 @@ function loadhead() {
 	echo '<script src="'.SYSTEM_URL.'js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
 	doAction('header');
+	if (option::get('trigger') == 1) {
+		echo "<script>$.ajax({ async:true, url: '".SYSTEM_URL."do.php', type: 'GET', data : {},dataType: 'HTML'});</script>";
+	}
 	template('navi');
 }
 function loadfoot() {
@@ -15,7 +18,7 @@ function loadfoot() {
 	}
 	echo '<br/>'.option::get('footer');
 	doAction('footer');
-	echo '</div></body></html>';
+	echo '</div></div></div></div></body></html>';
 }
 function template($file) {
 	include SYSTEM_ROOT.'/templates/'.$file.'.php';

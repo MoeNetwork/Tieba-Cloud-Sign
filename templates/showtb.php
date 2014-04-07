@@ -2,11 +2,11 @@
 global $m;
 
 if (isset($_GET['set'])) {
-	$x=$m->fetch_array($m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'tieba` WHERE  `uid` = '.UID.' LIMIT 1'));
+	$x=$m->fetch_array($m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' LIMIT 1'));
 	$f=$x['tieba'];
 	foreach ($_POST['no'] as $x) {
 		preg_match('/(.*)\[(.*)\]/', $x, $v);
-		$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."tieba` SET `no` =  '{$v[1]}' WHERE  `".DB_PREFIX."tieba`.`id` = {$v[2]} ;");
+		$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.TABLE."` SET `no` =  '{$v[1]}' WHERE  `".DB_PREFIX.TABLE."`.`id` = {$v[2]} ;");
 	}
 	header("Location: ".SYSTEM_URL.'index.php?mod=showtb&ok');
 }
@@ -25,9 +25,9 @@ elseif (isset($_GET['ref'])) {
 	  preg_match_all('/<td>(.*?).\<a href=\"\/mo\/(.*?)\"\>(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 	  $f = '';
 	  foreach ($list[3] as $v) {
-	  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
+	  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 		if($m->num_rows($osq) == 0) {
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."tieba` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
 		}
 	  }
 	  header("Location: ".SYSTEM_URL.'index.php?mod=showtb');
@@ -36,7 +36,7 @@ elseif (BDUSS != null) {
 	if (isset($_GET['ok'])) {
 		echo '<div class="alert alert-success">设置保存成功</div>';
 	}
-	$ex=$m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'tieba` WHERE  `uid` = '.UID.'');
+	$ex=$m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.'');
 	$f = '';
 	$num=0;
 	while($x=$m->fetch_array($ex)) {

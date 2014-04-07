@@ -99,8 +99,12 @@ class wmysql {
 	function query($sql,$noerror = false) {
 		$this->result = $this->conn->query($sql);
 		$this->queryCount++;
-		if (!$this->result && $noerror = false) {
-			msg("SQL语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+		if (!$this->result) {
+			if ($noerror = false) {
+				return false;
+			} else {
+				msg("SQL语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+			}	
 		} else {
 			return $this->result;
 		}

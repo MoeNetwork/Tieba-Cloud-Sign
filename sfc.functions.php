@@ -3,7 +3,7 @@
  * StusGame Framework 部分函数库
  * @author 无名智者
  */
-
+if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 /**
  * 获取用户ip地址
  */
@@ -103,7 +103,13 @@ function UnZip($zipfile, $path, $type = 'tpl') {
 		return 1;//文件权限问题
 	}
 }
-
+/**
+ * 清空缓冲区的内容
+ */
+function Clean() {
+	ob_clean();
+	flush();
+}
 /**
  * zip压缩
  */
@@ -181,4 +187,81 @@ function doAction($hook) {
 		}
 	}
 }
+
+/**
+ * 将ROLE名称转换为中文名称
+ *
+ * @param ROLE
+ */
+function getrole($role) {
+	if (ROLE == 'admin') {
+		return '管理员';
+	}
+	elseif (ROLE == 'user') {
+		return '用户';
+	}
+	else {
+		return '未定义';
+	}
+}
+
+
+/**
+ * 获取空闲的贴吧记录表
+ *
+ */
+function getfreetable() {
+	global $m;
+	$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX."tieba`");
+	if ($x['fffff'] > option::get('fb') && !empty(option::get('fb_tables'))) {	
+		$f = unserialize(option::get('fb_tables'));
+		$c = sizeof($f) - 1;
+		while ($c >= 0) {
+			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX.$f[$c]."`");
+			if ($x['fffff'] < option::get('fb')) {
+				return $f[$c];
+			} else {
+				$c - 1;
+				continue;
+			}
+		}
+	} else {
+		return 'tieba';
+	}
+}
+
+/**
+ * 清除用户的所有贴吧
+ *
+ * @param 用户ID
+ */
+function CleanUser($id) {
+	global $m;
+	$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = {$id} LIMIT 1");
+	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.$id);
+}
+
+/**
+ * 删除用户
+ * 为节省数据库，捆绑清除贴吧数据
+ * 
+ * @param 用户ID
+ */
+function DeleteUser($id) {
+	global $m;
+	CleanUser($id);
+	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.'users` WHERE `'.DB_PREFIX.'users`.`id` = '.$id);
+}
+
+/**
+ * 清空计划任务状态
+ * 
+ */
+/*
+function EmptyCron($id) {
+	global $m;
+	CleanUser($id);
+	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.'users` WHERE `'.DB_PREFIX.'.`id` = '.$id);
+}
+*/
 ?>
