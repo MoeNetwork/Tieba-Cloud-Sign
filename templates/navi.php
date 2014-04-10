@@ -3,6 +3,7 @@
 function system_tc_tempfunction_1() {
   echo <<< DATA
   <li><a href="index.php">首页</a></li>
+  <li><a href="index.php?mod=set">个人设置</a></li>
   <li><a href="index.php?mod=showtb">设置云签到</a></li>
   <li><a href="index.php?mod=log">签到执行日志</a></li>
   <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
@@ -20,6 +21,8 @@ DATA;
 
 addAction('navi_1','system_tc_tempfunction_1');
 addAction('navi_2','system_tc_tempfunction_2');
+addAction('navi_7','system_tc_tempfunction_1');
+addAction('navi_8','system_tc_tempfunction_2');
 
 ?>
 <div class="navbar navbar-default" role="navigation">
@@ -43,6 +46,7 @@ addAction('navi_2','system_tc_tempfunction_2');
           <?php doAction('navi_1'); ?>
         </ul>
       </li>
+      <?php if (ROLE == 'admin') { ?>
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -53,10 +57,11 @@ addAction('navi_2','system_tc_tempfunction_2');
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">插件菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
+          <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>
           <?php doAction('navi_3'); ?>
         </ul>
       </li>
-      <?php doAction('navi_4'); ?>
+      <?php } doAction('navi_4'); ?>
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -74,22 +79,21 @@ addAction('navi_2','system_tc_tempfunction_2');
   </div><!-- /.navbar-collapse -->
 </div>
 
-
 <!-- 侧边导航，宽屏设备可见 -->
-    <div class="container bs-docs-container">
+<div class="container bs-docs-container">
       <div class="row">
         <div class="col-md-3">
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
             <ul class="nav bs-sidenav">                 
               <li>
-               <?php doAction('navi_1'); ?>
+               <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
-               <?php doAction('navi_2'); ?>
+               <?php doAction('navi_8'); ?>
                <br/>
-               <?php doAction('navi_3'); ?>
+               <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>
+               <?php doAction('navi_9'); } ?>
               </li>
             </ul>
           </div>
         </div>
 <div class="col-md-9" role="main">
-<!-- Customizer form -->

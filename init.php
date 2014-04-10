@@ -14,6 +14,7 @@ $m                 = $mysql_conncet_var->con(); //以后直接使用$m->函数()
 require SYSTEM_ROOT.'/option.php';
 new option();
 define('SYSTEM_URL',option::get('system_url'));
+if (option::get('dev') != 1) { error_reporting(0); }
 require SYSTEM_ROOT.'/protector.php';
 require SYSTEM_ROOT.'/sfc.functions.php';
 require SYSTEM_ROOT.'/ui.php';

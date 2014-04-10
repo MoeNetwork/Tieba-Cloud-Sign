@@ -110,6 +110,7 @@ function Clean() {
 	ob_clean();
 	flush();
 }
+
 /**
  * zip压缩
  */
@@ -194,11 +195,14 @@ function doAction($hook) {
  * @param ROLE
  */
 function getrole($role) {
-	if (ROLE == 'admin') {
+	if ($role == 'admin') {
 		return '管理员';
 	}
-	elseif (ROLE == 'user') {
+	elseif ($role == 'user') {
 		return '用户';
+	}
+	elseif ($role == 'visitor') {
+		return '访客';
 	}
 	else {
 		return '未定义';

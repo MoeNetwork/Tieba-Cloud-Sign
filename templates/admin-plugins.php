@@ -1,18 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } if (ROLE != 'admin') { msg('权限不足！'); }
 
-if (isset($_GET['dis'])) {
-	inactivePlugin($_GET['dis']);
-	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
-}
-elseif (isset($_GET['act'])) {
-	activePlugin($_GET['act']);
-	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
-}
-elseif (isset($_GET['uninst'])) {
-	uninstallPlugin($_GET['uninst']);
-	header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
-}
-
 if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">插件操作成功</div>';
 }
@@ -51,14 +38,14 @@ foreach($x as $key=>$val) {
 	}
 
 	if (in_array($val['Plugin'], unserialize(option::get('actived_plugins')))) {
-		$status = '<font color="green">已激活</font> | <a href="index.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
+		$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
-			$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
+			$status .= '<a href="setting.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
 		}
 	} else {
-		$status = '<font color="black">已禁用</font> | <a href="index.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
+		$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
 	}
-	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="index.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
+	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="setting.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
 }
 
 doAction('admin_plugins');

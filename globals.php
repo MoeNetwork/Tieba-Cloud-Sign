@@ -23,6 +23,7 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {
+	define('ROLE', 'visitor');
 	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
 	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';
 	if (empty($name) || empty($pw)) {
@@ -48,6 +49,7 @@ if (SYSTEM_PAGE == 'admin:login') {
 	}
 }
 elseif (SYSTEM_PAGE == 'admin:reg') {
+	define('ROLE', 'visitor');
 	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
 	$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';
 	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';
@@ -73,20 +75,24 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	setcookie("wmzz_tc_pw",md5(md5($pw)));
 	header("Location: ".SYSTEM_URL);
 }
-elseif (SYSTEM_PAGE == 'login') {
+elseif (SYSTEM_PAGE == 'login') { 
+	define('ROLE', 'visitor');
 	template('login');
 	die;
 }
 elseif (SYSTEM_PAGE == 'reg') {
+	define('ROLE', 'visitor');
 	template('reg');
 	die;
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {
+	define('ROLE', 'visitor');
 	setcookie("wmzz_tc_user",'', time() - 3600);
 	setcookie("wmzz_tc_pw",'', time() - 3600);
 	header("Location: ".SYSTEM_URL);
 }
 elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
+	define('ROLE', 'visitor');
 	header("Location: ".SYSTEM_URL."index.php?mod=login");
 }
 ?>

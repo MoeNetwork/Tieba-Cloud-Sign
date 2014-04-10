@@ -10,6 +10,9 @@ switch (SYSTEM_PAGE) {
 	case 'log':
 		template('log');
 		break;
+	case 'set':
+		template('set');
+		break;
 	case 'admin:set':
 		template('admin-set');
 		break;

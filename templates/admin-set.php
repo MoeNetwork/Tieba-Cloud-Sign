@@ -1,34 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足！'); }
 global $m;
 
-if (isset($_GET['setting'])) {
-	Clean();
-	global $m;
-	@option::set('system_url',$_POST['system_url']);
-	@option::set('cron_limit',$_POST['cron_limit']);
-	@option::set('tb_max',$_POST['tb_max']);
-	@option::set('footer',$_POST['footer']);
-	@option::set('enable_reg',$_POST['enable_reg']);
-	@option::set('protect_reg',$_POST['protect_reg']);
-	@option::set('yr_reg',$_POST['yr_reg']);
-	@option::set('icp',$_POST['icp']);
-	@option::set('protector',$_POST['protector']);
-	@option::set('trigger',$_POST['trigger']);
-	@option::set('fb',$_POST['fb']);
-	@option::set('dev',$_POST['dev']);
-	if (empty($_POST['fb_tables'])) {
-		@option::set('fb_tables',NULL);
-	} else {
-		$fb_tables = explode("\n",$_POST['fb_tables']);
-		foreach ($fb_tables as $value) {
-			$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', DB_PREFIX.$value, file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
-			$m->query($sql);
-		}
-		@option::set('fb_tables',str_ireplace("\n", '', serialize($fb_tables)));
-	}
-	header("Location: ".SYSTEM_URL.'index.php?mod=admin:set&ok');
-}
-elseif (isset($_GET['ok'])) {
+if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">设置保存成功</div>';
 }
 
@@ -43,7 +16,7 @@ function addset($name,$type,$x,$other = '',$text = '') {
 	}
 	echo '<tr><td>'.$name.'</td><td><input type="'.$type.'" name="'.$x.'" value="'.$value.'" '.$other.'>'.$text.'</td>';
 }
-?><form action="index.php?mod=admin:set&setting" method="post">
+?><form action="setting.php?mod=admin:set" method="post">
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -84,6 +57,7 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
 		addset('依靠访客触发任务','checkbox','trigger',null,' 建议仅在不支持计划任务并拒绝加入云平台时使用');
 		addset('启用安全保护模块','checkbox','protector',null,' 建议开启');
+		doAction('admin_set');
 		addset('加入云平台','checkbox','cloud',null,' 建议开启，选择关闭将不连接云平台获取BDUSS并且不提供云触发器');
 		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');
 		?>

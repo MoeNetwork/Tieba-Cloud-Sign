@@ -1,8 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 global $m,$today;
 if (BDUSS == null) {
-	echo '<div class="alert alert-danger">无法列出签到日志，因为当前没有绑定百度账号</div><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>';
-	die;	
+	echo '<div class="alert alert-danger">无法列出签到日志，因为当前没有绑定百度账号</div>';	
 }
 	$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` = '".$today."'"));
 	$count1 = $count1[0];
