@@ -5,7 +5,7 @@
 -- 2.替换所有{VAR-DB}为你要安装该程序使用的数据库的名称
 -- 3.替换所有的{VAR-SYSTEM-URL}为站点地址，后面带上/
 -- 4.替换{VAR-USERNAME}为你的用户名
--- 5.替换{VAR-USERPW}为你的二次MD5加密后的密码，小写
+-- 5.替换{VAR-USERPW}为你的3次MD5加密后的密码，小写
 -- 6.替换{VAR-USERMAIL}为你的邮箱
 --
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}options` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `name` (`name`),
   FULLTEXT KEY `value` (`value`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- 转存表中的数据 `{VAR-DB}`.`{VAR-PREFIX}options`
@@ -63,7 +63,8 @@ INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}options` (`id`, `name`, `value`) VALUES
 (16, 'cloud', '1'),
 (17, 'dev', ''),
 (18, 'freetable', 'tieba'),
-(19, 'cron_isdoing', '0');
+(19, 'cron_isdoing', '0'),
+(20, 'pwdmode', 'md5(md5(md5($pwd)))');
 
 -- --------------------------------------------------------
 

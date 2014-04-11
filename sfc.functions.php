@@ -16,6 +16,13 @@ function getIp() {
 }
 
 /**
+ * 加密密码
+ */
+function EncodePwd($pwd) {
+	return eval('return '.option::get('pwdmode').';');
+}
+
+/**
  * 验证email地址格式
  */
 function checkMail($email) {

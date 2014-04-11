@@ -41,6 +41,7 @@ switch (strip_tags($_GET['mod'])) {
 		@option::set('fb',$_POST['fb']);
 		@option::set('cloud',$_POST['cloud']);
 		@option::set('dev',$_POST['dev']);
+		@option::set('pwdmode',$_POST['pwdmode']);
 		if (empty($_POST['fb_tables'])) {
 			@option::set('fb_tables',NULL);
 		} else {
@@ -116,7 +117,7 @@ switch (strip_tags($_GET['mod'])) {
 				if ($x['total'] > 0) {
 					msg('添加用户失败：用户名已经存在');
 				}
-				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.md5(md5($pw)).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
+				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
 				doAction('admin_users_add');
 				header("Location: ".SYSTEM_URL.'index.php?mod=admin:users&ok');
 				break;

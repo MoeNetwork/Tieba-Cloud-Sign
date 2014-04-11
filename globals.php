@@ -34,16 +34,16 @@ if (SYSTEM_PAGE == 'admin:login') {
 		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('账户不存在 [ 提示：账户名不是昵称 ]'));die;
 	}
 	$p = $m->fetch_array($osq);
-	if (md5(md5($pw)) != $p['pw']) {
+	if (EncodePwd($pw) != $p['pw']) {
 		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
 			setcookie("wmzz_tc_user",$name, time()+65535*65535*65535);
-			setcookie("wmzz_tc_pw",md5(md5($pw)), time()+65535*65535*65535);
+			setcookie("wmzz_tc_pw",EncodePwd($pw), time()+65535*65535*65535);
 			header("Location: ".SYSTEM_URL);
 		} else {
 			setcookie("wmzz_tc_user",$name);
-			setcookie("wmzz_tc_pw",md5(md5($pw)));
+			setcookie("wmzz_tc_pw",EncodePwd($pw));
 			header("Location: ".SYSTEM_URL);
 		}
 	}
@@ -61,6 +61,9 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	if ($x['total'] > 0) {
 		msg('注册失败：用户名已经存在');
 	}
+	if (!checkMail($mail)) {
+		msg('注册失败：邮箱格式不正确');
+	}
 	if (!empty(option::get('yr_reg'))) {
 		if (empty($yr)) {
 			msg('注册失败：请输入邀请码');
@@ -70,9 +73,9 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 			}
 		}
 	}
-	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.md5(md5($pw)).'\', \''.$mail.'\', \'user\', \''.getfreetable().'\', NULL);');
+	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \'user\', \''.getfreetable().'\', NULL);');
 	setcookie("wmzz_tc_user",$name);
-	setcookie("wmzz_tc_pw",md5(md5($pw)));
+	setcookie("wmzz_tc_pw",EncodePwd($pw));
 	header("Location: ".SYSTEM_URL);
 }
 elseif (SYSTEM_PAGE == 'login') { 

@@ -57,6 +57,7 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
 		addset('依靠访客触发任务','checkbox','trigger',null,' 建议仅在不支持计划任务并拒绝加入云平台时使用');
 		addset('启用安全保护模块','checkbox','protector',null,' 建议开启');
+		addset('密码保存模式<br/>支持PHP，无需加 &lt?php 或 ?&gt 使用 $pwd 表示变量密码，只能写一条语句，后面不需要带 ;','text','pwdmode',' class="form-control"');
 		doAction('admin_set');
 		addset('加入云平台','checkbox','cloud',null,' 建议开启，选择关闭将不连接云平台获取BDUSS并且不提供云触发器');
 		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');

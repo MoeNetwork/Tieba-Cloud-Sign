@@ -6,7 +6,9 @@ if (isset($_GET['ok'])) {
 
 $x=getPlugins();
 $plugins = '';
+$stat=0;
 foreach($x as $key=>$val) {
+	$stat++;
 	$pluginfo = '';
 	if (!empty($val['Url'])) {
 		$pluginfo .= '<b><a href="'.$val['Url'].'" target="_blank">'.$val['Name'].'</a></b>';
@@ -50,6 +52,7 @@ foreach($x as $key=>$val) {
 
 doAction('admin_plugins');
 ?>
+<div class="alert alert-info" id="tb_num">当前有 <?php echo sizeof(unserialize(option::get('actived_plugins'))); ?> 个已激活的插件，总共有 <?php echo $stat ?> 个插件 | <a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a><br/>插件安装方法：直接解包插件并上传到 /plugins/ 即可</div>
 <table class="table table-striped">
 	<thead>
 		<tr>
