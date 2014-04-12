@@ -40,17 +40,17 @@ if (file_exists(SYSTEM_ROOT.'/install.lock')) {
 <div style="width:90%;margin: 0 auto;overflow: hidden;position: relative;">
 <?php
 	if (!isset($_GET['step']) || $_GET['step'] == 0) {
-		echo '<h2>准备安装</h2><br/><h4>你是在 BAE/SAE 上使用本程序吗？</h4><br/>';
+		echo '<h2>准备安装</h2><br/><h4>你是在 BAE/SAE/JAE 上使用本程序吗？</h4><br/>';
 		echo '<li><a href="install.php?step=2">不，我不是</a></li><br/>';
 		echo '<li><a href="install.php?step=100">是的，我是</a></li>';
 	} else {
 		switch (strip_tags($_GET['step'])) {
 			case '100':
-				echo '<h2>(BAE/SAE) 手动修改配置</h2><br/>请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
+				echo '<h2>(BAE/SAE/JAE) 手动修改配置</h2><br/>请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
 				echo '<br/><br/><div class="alert alert-success"><pre>
 &lt?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
 
-//BAE/SAE的数据库地址，用户名，密码请参考相关文档
+//BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\'localhost\');
@@ -70,15 +70,14 @@ define(\'DB_PREFIX\',\'tc_\');
 				echo '<h2>设置所需信息</h2><br/>';
 				echo '<form action="install.php?step=3" method="post">';
 				if (!isset($_GET['bae'])) {
-					echo '<h4>数据库信息</h4><br/>';
-					echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" required class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
-					echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" required class="form-control" name="dbuser" placeholder=""></div><br/>';
-					echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
-					echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" required class="form-control" name="dbname" placeholder=""></div><br/>';
-					echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" required class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
-				} else {
 					echo '<input type="hidden" name="isbae" value="1">';
 				}
+				echo '<h4>数据库信息</h4><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" required class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" required class="form-control" name="dbuser" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" required class="form-control" name="dbname" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" required class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
 				echo '<h4>站点创始人信息</h4><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人用户名</span><input type="text" required class="form-control" name="user" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人邮箱</span><input type="email" required class="form-control" name="mail" placeholder=""></div><br/>';
@@ -88,38 +87,9 @@ define(\'DB_PREFIX\',\'tc_\');
 
 			case '3':
 				if (!isset($_POST['isbae'])) {
-					$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
-				if ($conn->connect_error) {
-					switch ($conn->connect_errno) {
-						case 1044:
-						case 1045:
-							msg("连接数据库失败，数据库用户名或密码错误");
-							break;
-
-		                case 1049:
-							msg("连接数据库失败，未找到您填写的数据库");
-							break;
-
-						case 2003:
-							msg("连接数据库失败，数据库端口错误");
-							break;
-
-						case 2005:
-							msg("连接数据库失败，数据库地址错误或者数据库服务器不可用");
-							break;
-
-						case 2006:
-							msg("连接数据库失败，数据库服务器不可用");
-							break;
-
-						default :
-							msg("连接数据库失败，请检查数据库信息。错误编号：" . $conn->connect_errno);
-							break;
-					}
-				}
 					file_put_contents(SYSTEM_ROOT.'/../config.php', '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
 
-//BAE/SAE的数据库地址，用户名，密码请参考相关文档
+//BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\''.$_POST['dbhost'].'\');
@@ -132,14 +102,48 @@ define(\'DB_NAME\',\''.$_POST['dbname'].'\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');');
 				}
-					preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
+				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
+				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
+				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
+				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
+				$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
+
+				if (class_exists("mysqli")) {
+					$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
+					if ($conn->connect_error) {
+						switch ($conn->connect_errno) {
+							case 1044:
+							case 1045:
+								msg("连接数据库失败，数据库用户名或密码错误");
+								break;
+
+			                case 1049:
+								msg("连接数据库失败，未找到您填写的数据库");
+								break;
+
+							case 2003:
+								msg("连接数据库失败，数据库端口错误");
+								break;
+
+							case 2005:
+								msg("连接数据库失败，数据库地址错误或者数据库服务器不可用");
+								break;
+
+							case 2006:
+								msg("连接数据库失败，数据库服务器不可用");
+								break;
+
+							default :
+								msg("连接数据库失败，请检查数据库信息。错误编号：" . $conn->connect_errno);
+								break;
+						}
+					}
 					$conn->query("set names 'utf8'");
-					$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
-					$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
-					$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
-					$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
 					$conn->multi_query($sql);
 					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
+				} else {
+					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请手动安装</h2><br/>由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre>';
+				}
 				break;
 
 			case '4':

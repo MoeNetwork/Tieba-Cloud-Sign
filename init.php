@@ -8,7 +8,11 @@ $today       = date("Y-m-d");
 header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/setup/msg.php';
 require SYSTEM_ROOT.'/config.php';
-require SYSTEM_ROOT.'/mysqli.php';
+if (class_exists("mysqli")) {
+	require SYSTEM_ROOT.'/mysqli.php';
+} else {
+	require SYSTEM_ROOT.'/mysql.php';
+}
 $mysql_conncet_var = new wmysql();
 $m                 = $mysql_conncet_var->con(); //以后直接使用$m->函数()即可操作数据库
 require SYSTEM_ROOT.'/option.php';
