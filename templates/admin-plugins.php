@@ -42,7 +42,7 @@ foreach($x as $key=>$val) {
 	if (in_array($val['Plugin'], unserialize(option::get('actived_plugins')))) {
 		$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
-			$status .= '<a href="setting.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
+			$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
 		}
 	} else {
 		$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
