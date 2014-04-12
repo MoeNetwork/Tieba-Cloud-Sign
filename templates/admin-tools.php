@@ -38,6 +38,6 @@ doAction('admin_tools_1');
 
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=fixdoing'" class="btn btn-primary" value="修复计划任务状态">&nbsp;&nbsp;&nbsp;&nbsp;可解决运行计划任务始终提示已经有一个计划任务正在运行中的问题
 
-<br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=reftable" class="btn btn-primary" value="扫描空闲的签到表">&nbsp;&nbsp;&nbsp;&nbsp;扫描空闲的签到数据表，用户注册时系统会自动扫描
+<br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=reftable'" class="btn btn-primary" value="扫描空闲的签到表">&nbsp;&nbsp;&nbsp;&nbsp;扫描空闲的签到数据表，用户注册时系统会自动扫描
 <?php doAction('admin_tools_2'); ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>

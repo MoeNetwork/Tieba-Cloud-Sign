@@ -41,7 +41,7 @@ function DoSign_Mobile($uid,$kw,$id) {
 function DoSign_Default($uid,$kw,$id) {
 	global $m,$today;
 	$ch = curl_init('http://tieba.baidu.com/mo/m?kw='.urlencode($kw));
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Referer: http://tieba.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, 'fuck phone');
 	curl_setopt($ch, CURLOPT_COOKIE, "BDUSS=".GetCookie($uid));
@@ -50,9 +50,11 @@ function DoSign_Default($uid,$kw,$id) {
 	preg_match('/\<td style=\"text-align:right;\"\>\<a href=\"(.*)\"\>签到\<\/a\>\<\/td\>\<\/tr\>/', $s, $s);
 	if (isset($s[1])) {
 		$ch = curl_init('http://tieba.baidu.com'.$s[1]);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('P3P: CP=" OTI DSP COR IVA OUR IND COM "','Referer: '.'http://tieba.baidu.com/mo/m?kw='.urlencode($kw)));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'fuck phone');
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Linux; U; Android 4.1.2; zh-cn; MB526 Build/JZO54K) AppleWebKit/530.17 (KHTML, like Gecko) FlyFlow/2.4 Version/4.0 Mobile Safari/530.17 baidubrowser/042_1.8.4.2_diordna_458_084/alorotoM_61_2.1.4_625BM/1200a/39668C8F77034455D4DED02169F3F7C7%7C132773740707453/1');
 		curl_setopt($ch, CURLOPT_COOKIE, "BDUSS=".GetCookie($uid));
 		$s=curl_exec($ch);
 		curl_close($ch);
@@ -81,8 +83,7 @@ function DoSign_Client($uid,$kw,$id){
 	);
 	$x = '';
 	foreach($temp as $k=>$v) $x .= $k.'='.$v;
-	$sign = strtoupper(md5($x.'tiebaclient!!!'));
-	$temp['sign'] = $sign;
+	$temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($temp));
 	return curl_exec($ch);
 }

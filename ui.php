@@ -16,8 +16,9 @@ function loadhead() {
 	template('navi');
 }
 function loadfoot() {
-	if (!empty(option::get('icp'))) {
-		echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.option::get('icp').'</a>';
+	$icp=option::get('icp');
+	if (!empty($icp)) {
+		echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
 	}
 	echo '<br/>'.option::get('footer');
 	doAction('footer');

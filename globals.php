@@ -38,8 +38,8 @@ if (SYSTEM_PAGE == 'admin:login') {
 		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
-			setcookie("wmzz_tc_user",$name, time()+65535*65535*65535);
-			setcookie("wmzz_tc_pw",EncodePwd($pw), time()+65535*65535*65535);
+			setcookie("wmzz_tc_user",$name, time()+65535*65535);
+			setcookie("wmzz_tc_pw",EncodePwd($pw), time()+65535*65535);
 			header("Location: ".SYSTEM_URL);
 		} else {
 			setcookie("wmzz_tc_user",$name);
@@ -64,11 +64,12 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	if (!checkMail($mail)) {
 		msg('注册失败：邮箱格式不正确');
 	}
-	if (!empty(option::get('yr_reg'))) {
+	$yr_reg = option::get('yr_reg');
+	if (!empty($yr_reg)) {
 		if (empty($yr)) {
 			msg('注册失败：请输入邀请码');
 		} else {
-			if (option::get('yr_reg') != $yr) {
+			if ($yr_reg != $yr) {
 				msg('注册失败：邀请码错误');
 			}
 		}

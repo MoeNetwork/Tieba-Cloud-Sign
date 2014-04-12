@@ -46,11 +46,15 @@ switch (strip_tags($_GET['mod'])) {
 			@option::set('fb_tables',NULL);
 		} else {
 			$fb_tables = explode("\n",$_POST['fb_tables']);
+			$fb_tab = array();
+			$n= 0;
 			foreach ($fb_tables as $value) {
-				$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', DB_PREFIX.$value, file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
+				$n++;
+				$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
 				$m->query($sql);
+				$fb_tab[$n] .= trim($value);
 			}
-			@option::set('fb_tables',str_ireplace("\n", '', serialize($fb_tables)));
+			@option::set('fb_tables', serialize($fb_tab));
 		}
 		doAction('admin_set_save');
 		header("Location: ".SYSTEM_URL.'index.php?mod=admin:set&ok');

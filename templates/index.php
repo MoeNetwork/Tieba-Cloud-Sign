@@ -17,9 +17,10 @@ if (BDUSS == null) {
 	$count1 = $count1[0];
 	$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."'"));
 	$count2 = $count2[0];
-	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	echo '<br/><br/><b>配置状态：</b>云签到已配置，<a href="index.php?mod=log">点击查看签到日志</a>';
 	echo "<br/><br/><b>签到状态：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
+}
+	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制(管理员)';
@@ -32,7 +33,6 @@ if (BDUSS == null) {
 		echo '<br/><br/><b>关注贴吧配额限制：</b>'.option::get('tb_max') .' 个';
 	}
 	echo '<br/><br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
-}
 doAction('index_2');
 ?>
 <br/><br/><br/>

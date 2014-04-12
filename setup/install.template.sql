@@ -4,9 +4,8 @@
 -- 1.替换所有{VAR-PREFIX}为你想要的数据表前缀
 -- 2.替换所有{VAR-DB}为你要安装该程序使用的数据库的名称
 -- 3.替换所有的{VAR-SYSTEM-URL}为站点地址，后面带上/
--- 4.替换{VAR-USERNAME}为你的用户名
--- 5.替换{VAR-USERPW}为你的3次MD5加密后的密码，小写
--- 6.替换{VAR-USERMAIL}为你的邮箱
+-- 4.修改并运行下列语句，并在运行的时候去除 -- 
+-- INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (1, '用户名', '密码', '邮箱', 'admin', 'tieba', '', NULL);
 --
 
 
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}cron` (
   `lastdo` varchar(200) DEFAULT NULL,
   `log` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -104,11 +103,4 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}users` (
   UNIQUE KEY `id_3` (`id`),
   KEY `id` (`id`),
   KEY `id_2` (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- 转存表中的数据 `{VAR-DB}`.`{VAR-PREFIX}users`
---
-
-INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES
-(1, '{VAR-USERNAME}', '{VAR-USERPW}', '{VAR-USERMAIL}', 'admin', 'tieba', '', NULL);
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

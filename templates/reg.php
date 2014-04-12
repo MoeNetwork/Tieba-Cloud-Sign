@@ -27,7 +27,9 @@ loadhead();
   <span class="input-group-addon">邮箱</span>
   <input type="email" class="form-control" name="mail" id="mail" required>
 </div>
-<?php if (!empty(option::get('yr_reg'))) { ?>
+<?php 
+$yr_reg = option::get('yr_reg');
+if (!empty($yr_reg)) { ?>
 <br/>
 <div class="input-group">
   <span class="input-group-addon">邀请码</span>

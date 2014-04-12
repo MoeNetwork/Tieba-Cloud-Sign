@@ -3,7 +3,7 @@ define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','1.0');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
-
+header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/msg.php';
 
 if (file_exists(SYSTEM_ROOT.'/install.lock')) {
@@ -133,18 +133,17 @@ define(\'DB_NAME\',\''.$_POST['dbname'].'\');
 define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');');
 				}
 					preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
-					$sql = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'install.template.sql'));
-					$sql = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
-					$sql = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . $sysurl[0], $sql);
-					$sql = str_ireplace('{VAR-USERNAME}', $_POST['user'], $sql);
-					$sql = str_ireplace('{VAR-USERPW}', md5(md5(md5($_POST['pw']))), $sql);
-					$sql = str_ireplace('{VAR-USERMAIL}', $_POST['mail'], $sql);
-					$conn->query($sql);
+					$conn->query("set names 'utf8'");
+					$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
+					$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
+					$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
+					$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
+					$conn->multi_query($sql);
 					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
 				break;
 
 			case '4':
-				echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>安装完成</h2><br/>恭喜你，安装已经完成<br/><br/><input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
+				echo '<h2>安装完成</h2><br/>恭喜你，安装已经完成<br/><br/>请添加一个计划任务，文件为本程序根目录下的 <b>do.php</b><br/><br/><input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
 				break;
 
 			default:
