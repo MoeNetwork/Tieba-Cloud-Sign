@@ -31,7 +31,7 @@ switch (strip_tags($_GET['mod'])) {
 		@option::set('system_url',$_POST['system_url']);
 		@option::set('cron_limit',$_POST['cron_limit']);
 		@option::set('tb_max',$_POST['tb_max']);
-		@option::set('footer',$_POST['footer']);
+		@option::set('footer',str_ireplace('\'', '\\\'', $_POST['footer']));
 		@option::set('enable_reg',$_POST['enable_reg']);
 		@option::set('protect_reg',$_POST['protect_reg']);
 		@option::set('yr_reg',$_POST['yr_reg']);

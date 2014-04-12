@@ -14,7 +14,7 @@ function addset($name,$type,$x,$other = '',$text = '') {
 	} else {
 		$value = option::get($x);
 	}
-	echo '<tr><td>'.$name.'</td><td><input type="'.$type.'" name="'.$x.'" value="'.$value.'" '.$other.'>'.$text.'</td>';
+	echo '<tr><td>'.$name.'</td><td><input type="'.$type.'" name="'.$x.'" value="'.htmlspecialchars($value).'" '.$other.'>'.$text.'</td>';
 }
 ?><form action="setting.php?mod=admin:set" method="post">
 <table class="table table-striped">
