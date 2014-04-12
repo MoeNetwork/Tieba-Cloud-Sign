@@ -13,18 +13,24 @@ if (BDUSS == null) {
 	echo '<br/><br/><b>配置状态：</b>无法自动签到 - 云签到未配置';
 } else {
 	$today = date('Y-m-d');
-	$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."'"));
+	$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
 	$count1 = $count1[0];
-	$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."'"));
+	$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
 	$count2 = $count2[0];
 	echo '<br/><br/><b>配置状态：</b>云签到已配置，<a href="index.php?mod=log">点击查看签到日志</a>';
 	echo "<br/><br/><b>签到状态：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 }
 	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
+		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."'"));
+		$count1 = $count1[0];
+		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."'"));
+		$count2 = $count2[0];
+		echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制(管理员)';
 		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.getfreetable();
+		echo "<br/><br/><b>签到状态：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 	}
 	elseif(option::get('tb_max') == 0) {
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制';
