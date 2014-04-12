@@ -26,7 +26,6 @@ if (option::get('cron_isdoing') == 0) {
 
 	///////////////
 
-	option::set('cron_last_do', (option::get('cron_last_do') + option::get('cron_limit')));
 	$count = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` != '".$today."'"));
 	doAction('cron_2');
 	option::set('cron_isdoing',0);

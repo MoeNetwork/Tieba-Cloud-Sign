@@ -58,6 +58,7 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 		msg('注册失败：请正确填写账户、密码或邮箱');
 	}
 	$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
+	$y=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users`");
 	if ($x['total'] > 0) {
 		msg('注册失败：用户名已经存在');
 	}
@@ -74,7 +75,13 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 			}
 		}
 	}
-	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \'user\', \''.getfreetable().'\', NULL);');
+	if ($y['total'] <= 0) {
+		$role = 'admin';
+	} else {
+		$role = 'user';
+	}
+
+	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
 	setcookie("wmzz_tc_user",$name);
 	setcookie("wmzz_tc_pw",EncodePwd($pw));
 	header("Location: ".SYSTEM_URL);

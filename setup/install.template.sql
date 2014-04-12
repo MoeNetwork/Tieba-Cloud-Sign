@@ -7,7 +7,7 @@
 -- 4.修改并运行下列语句，并在运行的时候去除 -- 
 -- INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (1, '用户名', '密码', '邮箱', 'admin', 'tieba', '', NULL);
 --
-
+-- 特别注意：如果没有明确给出数据库名称，请直接删除所有的 `{VAR-DB}`.
 
 --
 -- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}cron`

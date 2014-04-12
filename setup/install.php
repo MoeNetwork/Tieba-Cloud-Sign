@@ -68,11 +68,11 @@ define(\'DB_PREFIX\',\'tc_\');
 
 			case '2':
 				echo '<h2>设置所需信息</h2><br/>';
+				echo '<h4>数据库信息</h4><br/>';
 				echo '<form action="install.php?step=3" method="post">';
 				if (!isset($_GET['bae'])) {
-					echo '<input type="hidden" name="isbae" value="1">';
+					echo '<br/><b>提示：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 请直接忽略本设定，然后打开贴吧云签到注册一个账号即可<input type="hidden" name="isbae" value="1"><br/>';
 				}
-				echo '<h4>数据库信息</h4><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" required class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" required class="form-control" name="dbuser" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
