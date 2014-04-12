@@ -11,6 +11,7 @@ if (option::get('cron_isdoing') == 0) {
 
 	if (option::get('cron_last_do_time') != $today) {
 		option::set('cron_last_do_time',$today);
+		option::set('cron_last_do','0');
 	}
 
 	////////////////

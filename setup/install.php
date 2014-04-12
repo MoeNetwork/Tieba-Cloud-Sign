@@ -142,7 +142,8 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');');
 					$conn->multi_query($sql);
 					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
 				} else {
-					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请手动安装</h2><br/>由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre>';
+					echo '<h2>请手动安装</h2><br/>由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre>';
+					echo '<br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=4\'" class="btn btn-success" value="下一步 >>">';
 				}
 				break;
 

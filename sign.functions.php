@@ -139,7 +139,7 @@ function DoSign($table) {
 		$return .= '已直接处理所有未签到的贴吧';
 	} else {
 		$limit=(option::get('cron_last_do') + option::get('cron_limit'));
-		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' LIMIT ".option::get('cron_last_do').' , '.$limit);
+		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' LIMIT 0 , ".$limit);
 		$return .= '分批签到模式下无状态报告';
 	}
 
@@ -152,7 +152,7 @@ function DoSign($table) {
 		$return .= '已直接处理所有未签到的贴吧';
 	} else {
 		$limit=(option::get('cron_last_do') + option::get('cron_limit'));
-		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' LIMIT ".option::get('cron_last_do').' , '.$limit);
+		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' LIMIT 0 , ".$limit);
 		$return .= '分批签到模式下无状态报告';
 	}
 
