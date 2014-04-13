@@ -37,7 +37,7 @@ function activePlugin($plugin) {
 		$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
 		if (true === $ret && file_exists($callback_file)) {
 			require_once $callback_file;
-			if (function_exists('callback_active')) {
+			if (function_exists('callback_init')) {
 				callback_init();
 			}
 		}
