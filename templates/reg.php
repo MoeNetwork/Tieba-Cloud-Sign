@@ -45,6 +45,14 @@ if (!empty($yr_reg)) { ?>
   <?php } doAction('reg_page_3'); ?>
 	</div><br/><br/><br/>
 	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>
+	<?php
+	$icp=option::get('icp');
+    if (!empty($icp)) {
+      echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
+    }
+    echo '<br/>'.option::get('footer');
+    doAction('footer');
+    ?>
 	<div style=" clear:both;"></div>
 	<div class="login-ext"></div>
 	<div class="login-bottom"></div>
