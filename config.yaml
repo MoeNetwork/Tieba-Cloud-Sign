@@ -1,0 +1,6 @@
+name: tcscron
+version: 1
+cron:
+- description: tiebacloudsigncron
+  url: /do.php
+  schedule: "* * * * *"
