@@ -100,7 +100,7 @@ class wmysql {
 		$this->result = $this->conn->query($sql);
 		$this->queryCount++;
 		if (!$this->result) {
-			if ($noerror = false) {
+			if ($noerror == true) {
 				return false;
 			} else {
 				msg("SQL语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());

@@ -22,6 +22,7 @@ if (BDUSS == null) {
 }
 	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
+		global $today;
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."'"));
 		$count1 = $count1[0];
 		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."'"));
@@ -30,7 +31,6 @@ if (BDUSS == null) {
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制(管理员)';
 		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.getfreetable();
-		echo "<br/><br/><b>签到状态：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 	}
 	elseif(option::get('tb_max') == 0) {
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制';
