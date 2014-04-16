@@ -1,4 +1,5 @@
 <?php
+if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 function Gettbs($uid){
 	$ch = curl_init('http://tieba.baidu.com/dc/common/tbs');
 	curl_setopt($ch, CURLOPT_USERAGENT, 'fuck phone');
