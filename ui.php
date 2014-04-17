@@ -4,6 +4,7 @@ function loadhead() {
 	doAction('top');
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	echo '<title>'.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
 	echo '<script src="'.SYSTEM_URL.'js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'css/bootstrap.min.css">';
