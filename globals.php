@@ -20,10 +20,18 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 		define('EMAIL', $p['email']);
 		define('BDUSS', $p['ck_bduss']);
 		define('TABLE', $p['t']);
+		$GLOBALS['login'] = true;
+		$GLOBALS['role'] = $p['role'];
+		$GLOBALS['uid'] = $p['id'];
+		$GLOBALS['name'] = $p['name'];
+		$GLOBALS['email'] = $p['email'];
+		$GLOBALS['bduss'] = $p['ck_bduss'];
+		$GLOBALS['table'] = $p['t'];
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {
 	define('ROLE', 'visitor');
+	$GLOBALS['role'] = 'visitor';
 	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
 	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';
 	if (empty($name) || empty($pw)) {
@@ -38,8 +46,8 @@ if (SYSTEM_PAGE == 'admin:login') {
 		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
-			setcookie("wmzz_tc_user",$name, time()+65535*65535);
-			setcookie("wmzz_tc_pw",EncodePwd($pw), time()+65535*65535);
+			setcookie("wmzz_tc_user",$name, time()+65535+65535);
+			setcookie("wmzz_tc_pw",EncodePwd($pw), time()+65535+65535);
 			header("Location: ".SYSTEM_URL);
 		} else {
 			setcookie("wmzz_tc_user",$name);
@@ -88,22 +96,26 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 }
 elseif (SYSTEM_PAGE == 'login') { 
 	define('ROLE', 'visitor');
+	$GLOBALS['role'] = 'visitor';
 	template('login');
 	die;
 }
 elseif (SYSTEM_PAGE == 'reg') {
 	define('ROLE', 'visitor');
+	$GLOBALS['role'] = 'visitor';
 	template('reg');
 	die;
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {
 	define('ROLE', 'visitor');
+	$GLOBALS['role'] = 'visitor';
 	setcookie("wmzz_tc_user",'', time() - 3600);
 	setcookie("wmzz_tc_pw",'', time() - 3600);
 	header("Location: ".SYSTEM_URL);
 }
 elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	define('ROLE', 'visitor');
+	$GLOBALS['role'] = 'visitor';
 	header("Location: ".SYSTEM_URL."index.php?mod=login");
 }
 ?>
