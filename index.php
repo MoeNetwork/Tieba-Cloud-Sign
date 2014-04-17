@@ -1,5 +1,5 @@
 <?php
-include dirname(__FILE__).'/init.php';
+require dirname(__FILE__).'/init.php';
 
 if (!isset($_GET['plugin'])) {
 	loadhead();
