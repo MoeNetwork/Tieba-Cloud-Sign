@@ -2,7 +2,9 @@
 
 //加载所有激活的插件
 foreach (unserialize(option::get('actived_plugins')) as $value) {
-	include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
+	if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
+		include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
+	}
 }
 
 //加载插件前台页面
