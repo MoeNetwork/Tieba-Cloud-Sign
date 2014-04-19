@@ -142,6 +142,22 @@ switch (strip_tags($_GET['mod'])) {
 		header("Location: ".SYSTEM_URL.'index.php?mod=admin:users&ok');
 		break;
 
+	case 'admin:cron':
+		if (isset($_GET['act'])) {
+			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['act']}'");
+			cron::set($x['name'], $x['file'], '0', $x['status'], $x['freq'], $x['lastdo'], $x['log']);
+		}
+		elseif (isset($_GET['dis'])) {
+			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['dis']}'");
+			cron::set($x['name'], $x['file'], '1', $x['status'], $x['freq'], $x['lastdo'], $x['log']);
+		}
+		elseif (isset($_GET['uninst'])) {
+			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['uninst']}'");
+			cron::del($x['name']);
+		}
+		header("Location: ".SYSTEM_URL.'index.php?mod=admin:cron&ok');
+		break;
+
 	case 'baiduid':
 		if (isset($_GET['delete'])) {
 			CleanUser(UID);

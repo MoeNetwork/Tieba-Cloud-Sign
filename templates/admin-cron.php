@@ -25,11 +25,12 @@ while ($cs = $m->fetch_array($query)) {
 		if ($cs['status'] != 0) {
 			$status = '<font color="red">异常</font>';
 		}
-		$status .= ' | <a href="index.php?mod=admin:cron&dis='.$cs['id'].'">忽略此任务</a>';
+		$status .= ' | <a href="setting.php?mod=admin:cron&dis='.$cs['id'].'">忽略任务</a>';
 	} else {
-		$status = '<font color="blue">忽略</font> | <a href="index.php?mod=admin:cron&act='.$cs['id'].'">取消忽略任务</a>';
+		$status = '<font color="blue">忽略</font> | <a href="setting.php?mod=admin:cron&act='.$cs['id'].'">取消忽略</a>';
 	}
 
+	$status .= ' | <a href="setting.php?mod=admin:cron&uninst='.$cs['id'].'" onclick="return confirm(\'你确实要卸载此计划任务吗？\');">卸载</a>';
 	if (empty($cs['log'])) {
 		$status .= '<br/>没有日志可查看';
 	} else {
@@ -38,6 +39,10 @@ while ($cs = $m->fetch_array($query)) {
 	}
 
 	$cron .= '<tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'</td><td style="width:40%">'.$freq.'<br/>上次执行：'.$lastdo.'</td><td style="width:30%">'.$status.'</td></tr>';
+}
+
+if (isset($_GET['ok'])) {
+	echo '<div class="alert alert-success">计划任务操作成功</div>';
 }
 
 $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` ");
