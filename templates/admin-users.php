@@ -63,5 +63,8 @@ while ($x = $m->fetch_array($s)) {
 	</tbody>
 </table>
 选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="do" value="delete"> 删除用户
-<br/><br/><input type="submit" class="btn btn-primary" value="执行操作"></form><?php } ?>
+<br/><br/><input type="submit" class="btn btn-primary" value="执行操作">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:users&add'">添加用户</button>
+</form><?php } ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>

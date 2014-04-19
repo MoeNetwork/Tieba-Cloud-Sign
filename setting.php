@@ -155,6 +155,10 @@ switch (strip_tags($_GET['mod'])) {
 			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['uninst']}'");
 			cron::del($x['name']);
 		}
+		elseif (isset($_GET['add'])) {
+			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['lastdo'], $_POST['log']);
+			header("Location: ".SYSTEM_URL.'index.php?mod=admin:cron&ok');
+		}
 		header("Location: ".SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		break;
 

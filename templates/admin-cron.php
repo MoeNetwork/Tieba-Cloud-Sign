@@ -1,6 +1,48 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足!'); }
 global $m;
 
+if (isset($_GET['add'])) {
+?>
+<form action="setting.php?mod=admin:cron&add" method="post">
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th style="width:40%">参数</th>
+			<th style="width:60%">值</th>
+		<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>任务名称<br/>唯一，不能有中文</td>
+			<td><input type="text" name="name" class="form-control" required=""></td>
+		</tr>
+		<tr>
+			<td>任务文件<br/>基准目录为云签到根目录，开头不需要带/</td>
+			<td><input type="text" name="file" class="form-control" required=""></td>
+		</tr>
+		<tr>
+			<td>忽略任务</td>
+			<td><input type="radio" name="no" value="0" required="" checked> 否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="no" value="1" required=""> 是</td>
+		</tr>
+		<tr>
+			<td>任务状态</td>
+			<td><input type="radio" name="status" value="0" required="" checked> 正常&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="status" value="1" required="">错误</td>
+		</tr>
+		<tr>
+			<td>上次执行<br/>Unix 时间戳</td>
+			<td><input type="number" name="lastdo" class="form-control" required="" value="<?php echo time(); ?>"></td>
+		</tr>
+		<tr>
+			<td>执行日志<br/><br/>系统会自动写入</td>
+			<td><textarea name="log" class="form-control" style="height:100px"></textarea></td>
+		</tr>
+	</tbody>
+</table>
+<br/><button type="submit" class="btn btn-primary">提交更改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:cron'">取消</button>
+</form>
+<?php
+} else {
 $query = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
 $cron  = '';
 while ($cs = $m->fetch_array($query)) {
@@ -63,5 +105,5 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 		<td style="width:30%">对系统任务不可用</td>
 	</tbody>
 </table>
-
+<br/><button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button><?php } ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>
