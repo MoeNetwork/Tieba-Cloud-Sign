@@ -13,7 +13,7 @@
 -- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}cron`
 --
 
-CREATE TABLE IF NOT EXISTS `tc_cron` (
+CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}cron` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(1000) NOT NULL,
   `file` varchar(1000) DEFAULT NULL,
