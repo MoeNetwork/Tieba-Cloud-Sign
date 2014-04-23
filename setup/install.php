@@ -63,22 +63,22 @@ define(\'DB_NAME\',\'tiebacloud\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\'tc_\');
 </pre></div>';
-				echo '<br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=2&bae\'" class="btn btn-success" value="下一步 >>">';
+				echo '<b>参考文档：</b>BAE | SAE | JAE';
+				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=2&bae\'" class="btn btn-success" value="下一步 >>">';
 				break;
 
 			case '2':
 				echo '<h2>设置所需信息</h2><br/>';
 				echo '<h4>数据库信息</h4><br/>';
 				echo '<form action="install.php?step=3" method="post">';
-				if (!isset($_GET['bae'])) {
-					echo '<br/><b>提示：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 请直接忽略本设定，然后打开贴吧云签到注册一个账号即可<input type="hidden" name="isbae" value="1"><br/>';
-				}
-				echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" required class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" required class="form-control" name="dbuser" placeholder=""></div><br/>';
+				echo '<b>提示：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 并且您已经写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><input type="hidden" name="isbae" value="1"><br/><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">自动获得数据库配置信息</span><select name="from_config" class="form-control"  onchange="if(this.value == \'0\') { $(\'#db_config\').show(); } else { $(\'#db_config\').hide(); }"><option value="0">否</option><option value="1">是</option></select></div><br/>';
+				echo '<div id="db_config"><div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" name="dbuser" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" required class="form-control" name="dbname" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" required class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
-				echo '<h4>站点创始人信息</h4><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" name="dbname" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
+				echo '</div><h4>站点创始人信息</h4><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人用户名</span><input type="text" required class="form-control" name="user" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人邮箱</span><input type="email" required class="form-control" name="mail" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人密码</span><input type="password" required class="form-control" name="pw" placeholder=""></div><br/>';
@@ -86,11 +86,20 @@ define(\'DB_PREFIX\',\'tc_\');
 				break;
 
 			case '3':
+				$errorhappen = '';
+				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
+				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
+				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
+				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
+				$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
 				if (!isset($_POST['isbae'])) {
-					file_put_contents(SYSTEM_ROOT.'/../config.php', '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
+					$write_data = '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
+//特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
+//如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
 
 //BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 
+//MySQL 数据库地址，普通主机一般为localhost
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\''.$_POST['dbhost'].'\');
 //MySQL 数据库用户名
@@ -100,37 +109,39 @@ define(\'DB_PASSWD\',\''.$_POST['dbpw'].'\');
 //MySQL 数据库名称(存放百度贴吧云签到的)
 define(\'DB_NAME\',\''.$_POST['dbname'].'\');
 //MySQL 数据库前缀，建议保持默认
-define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');');
+define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
+					if(file_put_contents(SYSTEM_ROOT.'/../config.php', $write_data) <= 0) {
+						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b>';
+					}
 				}
-				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
-				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
-				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
-				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
-				$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
-
 				if (class_exists("mysqli")) {
-					$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
+					if($_POST['from_config'] == 1) {
+						require SYSTEM_ROOT.'/../config.php';
+						$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+					} else {
+						$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
+					}
 					if ($conn->connect_error) {
 						switch ($conn->connect_errno) {
 							case 1044:
 							case 1045:
-								msg("连接数据库失败，数据库用户名或密码错误");
+								msg("连接数据库失败，数据库用户名或密码错误。错误编号：" . $conn->connect_errno);
 								break;
 
 			                case 1049:
-								msg("连接数据库失败，未找到您填写的数据库");
+								msg("连接数据库失败，未找到您填写的数据库。错误编号：1049");
 								break;
 
 							case 2003:
-								msg("连接数据库失败，数据库端口错误");
+								msg("连接数据库失败，数据库端口错误。错误编号：2003");
 								break;
 
 							case 2005:
-								msg("连接数据库失败，数据库地址错误或者数据库服务器不可用");
+								msg("连接数据库失败，数据库地址错误或者数据库服务器不可用。错误编号：2005");
 								break;
 
 							case 2006:
-								msg("连接数据库失败，数据库服务器不可用");
+								msg("连接数据库失败，数据库服务器不可用。错误编号：2006");
 								break;
 
 							default :
@@ -138,12 +149,17 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');');
 								break;
 						}
 					}
-					$conn->query("set names 'utf8'");
+					$conn->set_charset('utf8');
 					$conn->multi_query($sql);
-					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
 				} else {
-					echo '<h2>请手动安装</h2><br/>由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre>';
-					echo '<br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=4\'" class="btn btn-success" value="下一步 >>">';
+					$errorhappen .= '由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
+				}
+
+				if (!empty($errorhappen)) {
+					echo '<h2>请手动安装</h2><br/>' . $errorhappen;
+					echo '完成上述操作后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=4\'" class="btn btn-success" value="下一步 >>">';
+				} else {
+					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
 				}
 				break;
 
