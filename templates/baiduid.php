@@ -11,6 +11,24 @@ if (BDUSS != null) {
 if (option::get('cloud') == 1) {
 ?>
 
+<div class="modal fade" id="DownloadPluginModal" tabindex="-1" role="dialog" aria-labelledby="DownloadPluginModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">请选择插件下载方式</h4>
+      </div>
+      <div class="modal-body">
+        方式1：<a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg" target="_blank">点击从谷歌应用商店安装</a><br/><br/>
+        方式2：<a href="http://pan.baidu.com/s/1pJqa1Dp" target="_blank">点击从百度网盘下载手动安装</a><br/><br/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <form method="post" action="http://support.zhizhe8.net/tc_bdid.php">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>
@@ -32,10 +50,12 @@ if (option::get('cloud') == 1) {
 <br/><br/><br/><br/><br/><br/><br/>我们推荐您使用上面的方式快速获取 Cookie，如果不能获取，还可以按下面的方法手动获取
 <?php } else { echo "该站点拒绝加入云平台，所以请手动获取"; } ?>
 <br/><br/><b>手动获取方法：</b>
-<br/><br/>1.使用 Chrome 或 Chromium 内核的浏览器打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com</a>
-<br/><br/>2.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
+<br/><br/>1.使用 Chrome 或 Chromium 内核的浏览器
+<br/><br/>2.<a href="javascript:;" onclick="$('#DownloadPluginModal').modal('show');">安装插件 [ EditThisCookie ]，点击下载 </a>
+<br/><br/>3.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
+<br/><br/>4.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
 <br/><br/>3.按下图操作：( 点图片查看大图 )
-<br/><br/><a href="<?php echo SYSTEM_URL ?>doc/baiduid.png" target="_blank"><img src="<?php echo SYSTEM_URL ?>doc/baiduid.png" width="90%" height="90%"></a>
+<br/><br/><a href="<?php echo SYSTEM_URL ?>doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>doc/baiduid.jpg" width="90%" height="90%"></a>
 <br/><br/>4.输入复制到的 BDUSS 到下面：
 <form action="setting.php" method="get">
 <input type="hidden" name="mod" value="baiduid">

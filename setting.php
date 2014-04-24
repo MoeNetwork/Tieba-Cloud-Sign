@@ -189,15 +189,17 @@ switch (strip_tags($_GET['mod'])) {
 		elseif (isset($_GET['ref'])) {
 			  header("Location: ".SYSTEM_URL.'index.php?mod=showtb');
 			  set_time_limit(0);
-			  $n     = 0;
-			  $n2    = 0;
-			  $n3    = 1;
-			  $list  = array();
-			  $o     = option::get('tb_max');
-			  $c     = curl_init(); 
+			  $n      = 0;
+			  $n2     = 0;
+			  $n3     = 1;
+			  $addnum = 0; 
+			  $list   = array();
+			  $o      = option::get('tb_max');
+			  $c      = curl_init(); 
 			  while(true) {
 			  	  $url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
 			  	  $n3++;
+			  	  $addnum = 0;
 				  curl_setopt($c, CURLOPT_URL, $url); //登陆地址 
 				  curl_setopt($c, CURLOPT_COOKIESESSION, true); 
 				  curl_setopt($c, CURLOPT_FOLLOWLOCATION, true); 
@@ -208,8 +210,8 @@ switch (strip_tags($_GET['mod'])) {
 				  curl_setopt($c, CURLOPT_HTTPHEADER, array("X-FORWARDED-FOR:183.185.2.".mt_rand(1,255)));
 				  curl_setopt($c, CURLOPT_HEADER, false);  
 				  $ch = curl_exec($c);
-				  preg_match_all('/\<td\>\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
-				  foreach ($list[2] as $v) {
+				  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
+				  foreach ($list[3] as $v) {
 				  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
 				  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 					if($m->num_rows($osq) == 0) {
@@ -219,14 +221,15 @@ switch (strip_tags($_GET['mod'])) {
 						}
 						$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
 					}
+					$addnum++;
 				  }
-				  if (!isset($list[2][0])) {
+				  if (!isset($list[3][0])) {
 				  	break;
 				  }
 				  elseif($o != 0 && $n2 >= $o && ROLE != 'admin') {
 				  	break;
 				  }
-				  $n2 = $n2 + 19;
+				  $n2 = $n2 + $addnum;
 			  }
 		}
 		elseif (isset($_GET['clean'])) {
