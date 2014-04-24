@@ -10,6 +10,7 @@ function loadhead() {
 	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'css/bootstrap.min.css">';
 	echo '<script src="'.SYSTEM_URL.'js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
+	echo '<script type="text/javascript" src="'.SYSTEM_URL.'js/js.js"></script>';
 	doAction('header');
 	if (option::get('trigger') == 1) {
 		echo "<script>$.ajax({ async:true, url: '".SYSTEM_URL."do.php', type: 'GET', data : {},dataType: 'HTML'});</script>";
