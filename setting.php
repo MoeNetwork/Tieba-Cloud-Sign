@@ -9,7 +9,7 @@ if (ROLE != 'admin' && stristr(strip_tags($_GET['mod']), 'admin:')) {
 	msg('权限不足');
 }
 
-switch (strip_tags($_GET['mod'])) {
+switch (SYSTEM_PAGE) {
 	case 'admin:plugins':
 		if (isset($_GET['dis'])) {
 			inactivePlugin($_GET['dis']);
@@ -254,9 +254,11 @@ switch (strip_tags($_GET['mod'])) {
 			msg('邮件发送失败：'.$x);
 		}
 		break;
+}
 
-	default:
-		msg('未定义操作');
-		break;
+if (ROLE == 'admin' && stristr(strip_tags($_GET['mod']), 'plugin:')) {
+	$plug = trim(strip_tags($_GET['mod']),'plugin:');
+	option::set('plugin_'.$plug, serialize($_POST));
+	header("Location: ".SYSTEM_URL."index.php?mod=admin:setplug&plug={$plug}&ok");
 }
 ?>

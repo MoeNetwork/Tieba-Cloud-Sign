@@ -39,8 +39,12 @@ class wmysql {
 		if (!class_exists('mysqli')) {
 			msg('服务器不支持MySqli类');
 		}
-
-		@$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+		if (stristr(DB_HOST, ':')) {
+			preg_match('/(.*):(.*)/', DB_HOST, $coninfo);
+			@$this->conn = new mysqli($coninfo[1], DB_USER, DB_PASSWD, DB_NAME, $coninfo[2]);
+		} else {
+			@$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+		}
 
 		if ($this->conn->connect_error) {
 			switch ($this->conn->connect_errno) {
@@ -103,7 +107,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				msg("SQL语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
 			}	
 		} else {
 			return $this->result;
@@ -157,7 +161,7 @@ class wmysql {
 	 * 获取mysql错误
 	 */
 	function geterror() {
-		return $this->conn->error;
+		return '#' . $this->geterrno() . ' - ' . $this->conn->error;
 	}
 
 	/**

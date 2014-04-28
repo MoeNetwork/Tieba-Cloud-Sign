@@ -1,5 +1,6 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+
 /**
  * option 设置类
  */
@@ -63,6 +64,15 @@ class option {
 		$x = serialize($data);
 		$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `options` =  '{$x}' WHERE `id` = ".$uid);
 	}
+
+	/**
+	 * 获取插件的设置
+	 * @param 插件标识符
+	 * @return array 设置数组
+	*/
+	public static function pget($plug) {
+		return unserialize(self::get('plugin_'.$plug));
+	}
 }
 
 /**
@@ -71,7 +81,7 @@ class option {
 class cron Extends option {
 	/**
 	 * 获取计划任务名称
-	 * @param $name 计划任务名称
+	 * $name 计划任务名称
 	 * @return array
 	*/
 	public static function get($name) {
@@ -94,26 +104,17 @@ class cron Extends option {
 	*/
 	public static function set($name, $file = '', $no = 0, $status = 0, $freq = 0, $lastdo = '', $log = '') {
 		global $m;
-		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
+		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = '{$name}'");
 		if ($x['ffffff'] <= 0) {
 			$m->query("INSERT INTO  `".DB_NAME."`.`".DB_PREFIX."cron` (`id`, `name`, `file`, `no`, `status`, `freq`, `lastdo`, `log`) VALUES (NULL, '{$name}', '{$file}', '{$no}', '{$status}', '{$freq}', '{$lastdo}', '{$log}');");	
 		} else {
 			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."cron` SET  `name` =  '{$name}',`file` =  '{$file}',`no` =  '{$no}',`status` =  '{$status}',`freq` =  '{$freq}',`lastdo` =  '{$lastdo}',`log` =  '{$log}'  WHERE `name` = '{$name}'");
 		}
 	}
-
-	/**
-	 * 删除一个计划任务
-	 * @param $name 计划任务名称
-	*/
-	public static function del($name) {
-		global $m;
-		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
-	}
 }
 
 /**
- * 杂项功能类
+ * 其他功能类
  */
 
 class misc {

@@ -92,7 +92,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				msg("SQL语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
 			}
 		}else {
 			return $this->result;
@@ -145,7 +145,7 @@ class wmysql {
 	 * 获取mysql错误
 	 */
 	function geterror() {
-		return mysql_error();
+		return '#' . mysql_errno() . ' - ' . mysql_error();
 	}
 
     /**

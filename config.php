@@ -5,6 +5,7 @@
 //BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 
 //MySQL 数据库地址，普通主机一般为localhost
+//MySQL 数据库地址，普通主机一般为localhost
 define('DB_HOST','localhost');
 //MySQL 数据库用户名
 define('DB_USER','root');

@@ -7,3 +7,21 @@ if(text != null) {document.getElementById('watext').innerHTML = text; } else { d
 if(title != null) {document.getElementById('watitle').innerHTML = title;} else { document.getElementById('watitle').innerHTML = '提示信息'; }
 $("#wabutton").click();
 }
+
+function view_status(e) { 
+		e.innerHTML = '正在读取，请稍候...';
+		$.ajax({ 
+		  async:true, 
+		  url: '../ajax.php?mod=ajax:status', 
+		  type: "GET", 
+		  data : {},
+		  dataType: 'HTML', 
+		  timeout: 90000, 
+		  success: function(data){
+		    e.innerHTML = data;
+		  },
+		  error: function(error){
+		  	e.innerHTML = '读取失败 [ 可点击此处重试 ]';
+		  }
+		});
+}

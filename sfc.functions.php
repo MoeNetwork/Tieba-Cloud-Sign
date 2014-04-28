@@ -127,8 +127,8 @@ function getfreetable() {
 	$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX."tieba`");
 	$fbs = option::get('fb_tables');
 	$fbset = option::get('fb');
-	if ($x['fffff'] > $fbset && !empty($fbs)) {	
-		$f = unserialize($fbs);
+	$f = unserialize($fbs);
+	if ($x['fffff'] > $fbset && !empty($f[0])) {	
 		$c = sizeof($f) - 1;
 		while ($c >= 0) {
 			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX.$f[$c]."`");
