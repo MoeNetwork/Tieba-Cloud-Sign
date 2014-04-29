@@ -2,18 +2,18 @@
 --
 -- 手工安装方法：
 -- 1.替换所有{VAR-PREFIX}为你想要的数据表前缀
--- 2.替换所有{VAR-DB}为你要安装该程序使用的数据库的名称
--- 3.替换所有的{VAR-SYSTEM-URL}为站点地址，后面带上/
--- 4.修改并运行下列语句，并在运行的时候去除 -- 
--- INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (1, '用户名', '密码', '邮箱', 'admin', 'tieba', '', NULL);
+-- 2.替换所有的{VAR-SYSTEM-URL}为站点地址，后面带上/
+-- 3.修改并运行下列语句，并在运行的时候去除 -- 
+-- INSERT INTO `{VAR-PREFIX}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (1, '用户名', '密码', '邮箱', 'admin', 'tieba', '', NULL);
 --
--- 特别注意：如果没有明确给出数据库名称，请直接删除所有的 `{VAR-DB}`.
+-- 特别注意：如果没有明确给出数据库名称，请直接删除所有的 
+-- 如果这是安装向导提示你手动安装的，请无视这些注释！
 
 --
--- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}cron`
+-- 表的结构 `{VAR-PREFIX}cron`
 --
 
-CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}cron` (
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}cron` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(1000) NOT NULL,
   `file` varchar(1000) DEFAULT NULL,
@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}cron` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}options`
+-- 表的结构 `{VAR-PREFIX}options`
 --
 
-CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}options` (
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}options` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `value` text,
@@ -43,10 +43,10 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}options` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
--- 转存表中的数据 `{VAR-DB}`.`{VAR-PREFIX}options`
+-- 转存表中的数据 `{VAR-PREFIX}options`
 --
 
-INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}options` (`id`, `name`, `value`) VALUES
+INSERT INTO `{VAR-PREFIX}options` (`id`, `name`, `value`) VALUES
 (1, 'system_url', '{VAR-SYSTEM-URL}'),
 (2, 'cron_limit', '0'),
 (3, 'cron_last_do', '10'),
@@ -71,10 +71,10 @@ INSERT INTO `{VAR-DB}`.`{VAR-PREFIX}options` (`id`, `name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}tieba`
+-- 表的结构 `{VAR-PREFIX}tieba`
 --
 
-CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}tieba` (
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}tieba` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `uid` int(30) NOT NULL,
   `tieba` varchar(10000) DEFAULT NULL,
@@ -89,10 +89,10 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}tieba` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `{VAR-DB}`.`{VAR-PREFIX}users`
+-- 表的结构 `{VAR-PREFIX}users`
 --
 
-CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-PREFIX}users` (
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}users` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `pw` varchar(500) NOT NULL,

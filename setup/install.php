@@ -71,10 +71,12 @@ define(\'DB_PREFIX\',\'tc_\');
 				echo '<h2>设置所需信息</h2><br/>';
 				echo '<h4>数据库信息</h4><br/>';
 				echo '<form action="install.php?step=3" method="post">';
-				if (isset($_GET['isbae'])) {
+				if (isset($_GET['isbae']) || isset($_GET['bae'])) {
 					echo '<input type="hidden" name="isbae" value="1">';
 				}
-				echo '<b>提示：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 并且您已经写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/><br/>';
+				echo '<b>提示 1：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 并且您已经写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/>';
+				echo '<b>提示 2：</b>如果程序并未写入数据库 [ 安装完成后进入首页提示 Table XX doesn\'t exist  ] 请选择强制手动导入 SQL<br/><br/>';
+				echo '<input type="checkbox" name="nosql" value="1"> 强制手动导入 SQL<br/><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">自动获得数据库配置信息</span><select name="from_config" class="form-control"  onchange="if(this.value == \'0\') { $(\'#db_config\').show(); } else { $(\'#db_config\').hide(); }"><option value="0">否</option><option value="1">是</option></select></div><br/>';
 				echo '<div id="db_config"><div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" name="dbuser" placeholder=""></div><br/>';
@@ -114,13 +116,18 @@ define(\'DB_NAME\',\''.$_POST['dbname'].'\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
 					if(file_put_contents('../config.php', $write_data) <= 0) {
-						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b>';
+						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
 				}
-				if (class_exists("mysqli")) {
+				if (class_exists("mysqli") && !isset($_POST['nosql'])) {
 					if($_POST['from_config'] == 1) {
 						require SYSTEM_ROOT.'/../config.php';
-						$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+						if (stristr(DB_HOST, ':')) {
+							preg_match('/(.*):(.*)/', DB_HOST, $coninfo);
+							$conn = new mysqli($coninfo[1], DB_USER, DB_PASSWD, DB_NAME, $coninfo[2]);
+						} else {
+							$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+						}
 					} else {
 						$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
 					}
@@ -155,7 +162,7 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
 					$conn->set_charset('utf8');
 					$conn->multi_query($sql);
 				} else {
-					$errorhappen .= '由于您的服务器不支持MySQLi，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
+					$errorhappen .= '由于您的服务器不支持 MySQLi 或您选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
 				}
 
 				if (!empty($errorhappen)) {
