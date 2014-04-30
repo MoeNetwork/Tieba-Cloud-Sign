@@ -111,6 +111,14 @@ class cron Extends option {
 			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."cron` SET  `name` =  '{$name}',`file` =  '{$file}',`no` =  '{$no}',`status` =  '{$status}',`freq` =  '{$freq}',`lastdo` =  '{$lastdo}',`log` =  '{$log}'  WHERE `name` = '{$name}'");
 		}
 	}
+
+	/**
+	 * 删除计划任务
+	 */
+	public static function del($name) {
+		global $m;
+		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
+	}
 }
 
 /**
