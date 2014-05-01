@@ -23,11 +23,6 @@ global $m,$today;
 		$tcc++;
 	}
 
-	/////////////// RUN ALL SIGN TASK
-
-	$count = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` != '".$today."'"));
-	doAction('cron_2');
-
 	/////////////// RUN ALL TASK IN THE CRON TABLE
 
 	$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
@@ -37,7 +32,7 @@ global $m,$today;
 				RunCron($cs['file'],$cs['name']);
 				$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
 			}
-			elseif ($cs['freq'] == '0') {
+			elseif (empty($cs['freq'])) {
 				$return=RunCron($cs['file'],$cs['name']);
 				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '{$time}',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
 			}
@@ -47,6 +42,11 @@ global $m,$today;
 			}
 		}
 	}	
+
+	/////////////// RUN ALL SIGN TASK
+
+	$count = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` != '".$today."'"));
+	doAction('cron_2');
 
 	/////////////// EXIT
 	msg('本次计划任务完毕',false,false);
