@@ -1,30 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
-function system_tc_tempfunction_1() {
-  echo <<< DATA
-  <li><a href="index.php">首页</a></li>
-  <li><a href="index.php?mod=set">个人设置</a></li>
-  <li><a href="index.php?mod=showtb">设置云签到</a></li>
-  <li><a href="index.php?mod=log">签到执行日志</a></li>
-  <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
-DATA;
-}
-
-function system_tc_tempfunction_2() {
-  echo <<< DATA
-  <li><a href="index.php?mod=admin:tools">工具箱</a></li>
-  <li><a href="index.php?mod=admin:set">全局设置</a></li>
-  <li><a href="index.php?mod=admin:users">用户管理</a></li>
-  <li><a href="index.php?mod=admin:cron">计划任务</a></li>
-  <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
-DATA;
-}
-
-addAction('navi_1','system_tc_tempfunction_1');
-addAction('navi_2','system_tc_tempfunction_2');
-addAction('navi_7','system_tc_tempfunction_1');
-addAction('navi_8','system_tc_tempfunction_2');
-
 ?>
 <div class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
@@ -44,6 +19,11 @@ addAction('navi_8','system_tc_tempfunction_2');
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
+          <li><a href="index.php">首页</a></li>
+          <li><a href="index.php?mod=set">个人设置</a></li>
+          <li><a href="index.php?mod=showtb">设置云签到</a></li>
+          <li><a href="index.php?mod=log">签到执行日志</a></li>
+          <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
           <?php doAction('navi_1'); ?>
         </ul>
       </li>
@@ -51,6 +31,11 @@ addAction('navi_8','system_tc_tempfunction_2');
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
+          <li><a href="index.php?mod=admin:tools">工具箱</a></li>
+          <li><a href="index.php?mod=admin:set">全局设置</a></li>
+          <li><a href="index.php?mod=admin:users">用户管理</a></li>
+          <li><a href="index.php?mod=admin:cron">计划任务</a></li>
+          <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
           <?php doAction('navi_2'); ?>
         </ul>
       </li>
@@ -87,8 +72,18 @@ addAction('navi_8','system_tc_tempfunction_2');
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
             <ul class="nav bs-sidenav">                 
               <li>
+                <li><a href="index.php">首页</a></li>
+                <li><a href="index.php?mod=set">个人设置</a></li>
+                <li><a href="index.php?mod=showtb">设置云签到</a></li>
+                <li><a href="index.php?mod=log">签到执行日志</a></li>
+                <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
+                <li><a href="index.php?mod=admin:tools">工具箱</a></li>
+                <li><a href="index.php?mod=admin:set">全局设置</a></li>
+                <li><a href="index.php?mod=admin:users">用户管理</a></li>
+                <li><a href="index.php?mod=admin:cron">计划任务</a></li>
+                <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>
