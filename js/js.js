@@ -12,7 +12,7 @@ function view_status(e) {
 		e.innerHTML = '正在读取，请稍候...';
 		$.ajax({ 
 		  async:true, 
-		  url: '../ajax.php?mod=ajax:status', 
+		  url: 'ajax.php?mod=ajax:status', 
 		  type: "GET", 
 		  data : {},
 		  dataType: 'HTML', 
