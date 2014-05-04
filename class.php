@@ -33,6 +33,15 @@ class option {
 	}
 
 	/**
+	 * 删除一个设置
+	 * @param @name 设置名称
+	*/
+	public static function del($name) {
+		global $m;
+		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = `{$name}`");
+	}
+
+	/**
 	 * 获取用户的设置
 	 * $name 设置项名称
 	 * $uid 用户UID，默认当前用户的UID
@@ -118,6 +127,24 @@ class cron Extends option {
 	public static function del($name) {
 		global $m;
 		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
+	}
+
+	/**
+	 * 执行一个计划任务
+	 * 
+	 * @param 计划任务文件
+	 * @param 计划任务名称
+	 * @return 执行成功true，否则false
+	 */
+
+	function run($file,$name) {
+		$GLOBALS['in_cron'] = true;
+		if (file_exists(SYSTEM_ROOT.'/'.$file)) {
+			include_once SYSTEM_ROOT.'/'.$file;
+			if (function_exists('cron_'.$name)) {
+				return call_user_func('cron_'.$name);
+			}
+		}
 	}
 }
 

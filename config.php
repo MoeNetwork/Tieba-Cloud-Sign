@@ -12,6 +12,6 @@ define('DB_USER','root');
 //MySQL 数据库密码
 define('DB_PASSWD','000000');
 //MySQL 数据库名称(存放百度贴吧云签到的)
-define('DB_NAME','test');
+define('DB_NAME','tiebacloud');
 //MySQL 数据库前缀，建议保持默认
 define('DB_PREFIX','tc_');

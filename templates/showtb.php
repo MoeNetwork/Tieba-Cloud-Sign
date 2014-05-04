@@ -17,7 +17,11 @@ if (BDUSS != null) {
 		}
 		$f .= '<tr><td>'.$x['id'].'</td><td>'.$x['tieba'].'</td><td>'.$no.'</td></tr>';
 	}
-	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧，<a href="setting.php?mod=showtb&ref" onclick="$(\'#tb_num\').html(\'正在刷新贴吧列表，可能需要较长时间，请耐心等待...\')">点击这里可以刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean">清空列表</a></div>';
+	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧，<a href="setting.php?mod=showtb&ref" onclick="$(\'#tb_num\').html(\'正在刷新贴吧列表，可能需要较长时间，请耐心等待...\')">点击这里可以刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean">清空列表</a>';
+	if (option::get('enable_addtieba') == 1) {
+		echo '<br/><br/><form action="setting.php?mod=showtb" method="post"><div class="input-group"><span class="input-group-addon">手动添加贴吧</span><input type="text" class="form-control" name="add" placeholder="若要手动添加贴吧，请输入贴吧名称"><span class="input-group-btn"><button type="submit" class="btn btn-default">提交贴吧</button></form></div>';
+	}
+	echo '</div>';
 	echo '<form action="setting.php?mod=showtb&set" method="post">';
 	echo '<table class="table"><thead><tr><th style="width:8%">ID</th><th style="width:62%">贴吧名称</th><th style="width:30%">忽略签到</th></thead><tbody>';
 	echo $f.'</tbody></table><input type="submit" class="btn btn-primary" value="提交更改"></form>';

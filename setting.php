@@ -49,8 +49,10 @@ switch (SYSTEM_PAGE) {
 		@option::set('dev',$_POST['dev']);
 		@option::set('fb',$_POST['fb']);
 		@option::set('cloud',$_POST['cloud']);
+		@option::set('enable_addtieba',$_POST['enable_addtieba']);
 		@option::set('dev',$_POST['dev']);
 		@option::set('pwdmode',$_POST['pwdmode']);
+		@option::set('retry_max',$_POST['retry_max']);
 		if (empty($_POST['fb_tables'])) {
 			@option::set('fb_tables',NULL);
 		} else {
@@ -235,6 +237,16 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
 			header("Location: ".SYSTEM_URL.'index.php?mod=showtb');
+		}
+		elseif (isset($_POST['add'])) {
+			if (option::get('enable_addtieba') == '1') {
+				$v = strip_tags($_POST['add']);
+				$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
+				if($m->num_rows($osq) == 0) {
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
+				}
+			}
+			header("Location: ".SYSTEM_URL.'index.php?mod=showtb&ok');
 		}
 		doAction('showtb_set');
 		break;

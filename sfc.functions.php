@@ -128,10 +128,10 @@ function getfreetable() {
 	$fbs = option::get('fb_tables');
 	$fbset = option::get('fb');
 	$f = unserialize($fbs);
-	if ($x['fffff'] > $fbset && !empty($f[0])) {	
+	if ($x['fffff'] > $fbset && !empty($f[0])) {
 		$c = sizeof($f) - 1;
 		while ($c >= 0) {
-			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX.$f[$c]."`");
+			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".$f[$c]."`");
 			if ($x['fffff'] < $fbset) {
 				return $f[$c];
 			} else {
@@ -275,12 +275,6 @@ function getrole($role) {
  */
 
 function RunCron($file,$name) {
-	$GLOBALS['in_cron'] = true;
-	if (file_exists(SYSTEM_ROOT.'/'.$file)) {
-		include_once SYSTEM_ROOT.'/'.$file;
-		if (function_exists('cron_'.$name)) {
-			return call_user_func('cron_'.$name);
-		}
-	}
+	cron::run($file,$name);
 }
 ?>
