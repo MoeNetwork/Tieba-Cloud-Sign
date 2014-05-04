@@ -5,7 +5,7 @@
 点击上方导航栏的 功能菜单 可以列出所有功能
 <br/><br/>
 此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> (@ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>)
-<br><br/>如果有人向您出售此程序或利用此程序盈利，<a href="mailto:kenvix@vip.qq.com">请点击此处举报(有奖)</a>
+<br/><br/>本站 [ <?php echo SYSTEM_URL ?> ] 保留所有权利
 </div>
 <?php
 doAction('index_3');
