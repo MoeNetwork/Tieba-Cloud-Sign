@@ -48,7 +48,6 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		<input type="checkbox" name="sign_mode[]" value="1" <?php if (isset($sign_mode[1])) { echo 'selected'; } ?> > 模拟客户端签到
 		</td>
 		*/ ?>
-		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
 		</td>
 		</tr>
 		<tr><td>贴吧数据分表<br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所有请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
