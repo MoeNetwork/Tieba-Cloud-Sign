@@ -5,6 +5,5 @@ if (class_exists("mysqli") && SQLMODE != 'mysql') {
 } else {
 	require SYSTEM_ROOT.'/mysql.php';
 }
-$mysql_conncet_var = new wmysql();
-$m                 = $mysql_conncet_var->con(); //以后直接使用$m->函数()即可操作数据库
+$m = new wmysql(); //以后直接使用$m->函数()即可操作数据库
 ?>

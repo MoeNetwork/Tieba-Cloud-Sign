@@ -2,7 +2,7 @@
 /**
  * StusGame Framework MYSQL数据操作方法封装类
  * [MySQL]
- * @note 实际我是为了兼容不支持MySQLi的JB云的
+ * @note 实际我是为了兼容不支持MySQLi的JB云的，一般不要使用此类
  * @copyright (c) 无名智者
  */
 
@@ -62,15 +62,14 @@ class wmysql {
 			mysql_query("SET NAMES 'utf8'");
 		}
 		@mysql_select_db(DB_NAME, $this->conn) OR msg("连接数据库失败，未找到您填写的数据库");
+		self::$instance = $this->conn;
+		return self::$instance;
 	}
 
 	/**
-	 * 静态方法，返回数据库连接实例
+	 * [弃用] 静态方法，返回数据库连接实例
 	 */
 	public static function con() {
-		if (self::$instance == null) {
-			self::$instance = new wmysql();
-		}
 		return self::$instance;
 	}
 

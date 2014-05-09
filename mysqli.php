@@ -76,16 +76,14 @@ class wmysql {
 		}
 
 		$this->conn->set_charset('utf8');
+		self::$instance = $this->conn;
+		return self::$instance;
 	}
 
 	/**
-	 * 静态方法，返回数据库连接实例
+	 * [弃用] 静态方法，返回数据库连接实例
 	 */
 	public static function con() {
-		if (self::$instance == null) {
-			self::$instance = new wmysql();
-		}
-
 		return self::$instance;
 	}
 
