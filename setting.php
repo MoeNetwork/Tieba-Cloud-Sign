@@ -189,7 +189,6 @@ switch (SYSTEM_PAGE) {
 			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
 		}
 		elseif (isset($_GET['ref'])) {
-			  Redirect(SYSTEM_URL.'index.php?mod=showtb');
 			  set_time_limit(0);
 			  $n      = 0;
 			  $n2     = 0;
@@ -212,6 +211,7 @@ switch (SYSTEM_PAGE) {
 				  curl_setopt($c, CURLOPT_HTTPHEADER, array("X-FORWARDED-FOR:183.185.2.".mt_rand(1,255)));
 				  curl_setopt($c, CURLOPT_HEADER, false);  
 				  $ch = curl_exec($c);
+				  dir($ch);
 				  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 				  foreach ($list[3] as $v) {
 				  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
@@ -233,6 +233,7 @@ switch (SYSTEM_PAGE) {
 				  }
 				  $n2 = $n2 + $addnum;
 			  }
+			  Redirect(SYSTEM_URL.'index.php?mod=showtb');
 		}
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
