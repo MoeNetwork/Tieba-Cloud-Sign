@@ -115,7 +115,6 @@ function UnZip($zipfile, $path, $type = 'tpl') {
  */
 function Clean() {
 	ob_clean();
-	flush();
 }
 
 /**
@@ -225,9 +224,7 @@ function DeleteFile($file) {
  */
 function addAction($hook, $actionFunc) {
 	global $PluginHooks;
-	if (!@in_array($actionFunc, $PluginHooks[$hook])) {
-		$PluginHooks[$hook][] = $actionFunc;
-	}
+	$PluginHooks[$hook][] = $actionFunc;
 	return true;
 }
 
@@ -267,6 +264,18 @@ function getrole($role) {
 }
 
 /**
+ * 页面重定向
+ *
+ * @param $url 地址
+ */
+
+function Redirect($url) {
+	Clean();
+	header("Location: ".$url);
+	msg('<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'" />请稍候......<br/><br/>如果您的浏览器没有自动跳转，请点击下面的链接',htmlspecialchars($url));
+}
+
+/**
  * 执行一个计划任务
  * 
  * @param 计划任务文件
@@ -275,6 +284,34 @@ function getrole($role) {
  */
 
 function RunCron($file,$name) {
-	cron::run($file,$name);
+	return cron::run($file,$name);
 }
+
+
+/**
+ * Framework 错误处理函数
+ */
+
+function sfc_error($errno, $errstr, $errfile, $errline) {
+	if (SYSTEM_DEV == true) {
+		switch ($errno) {
+		    case E_USER_ERROR:          $errnoo = 'User Error'; break;
+		    case E_USER_WARNING:        $errnoo = 'User Warning'; break;
+		    case E_ERROR:               $errnoo = 'Error'; break;
+	        case E_WARNING:             $errnoo = 'Warning'; break;
+	        case E_PARSE:               $errnoo = 'Parse Error'; break;
+			case E_USER_NOTICE:         $errnoo = 'User Notice';	    break;     
+ 			case E_CORE_ERROR:          $errnoo = 'Core Error'; break;
+	        case E_CORE_WARNING:        $errnoo = 'Core Warning'; break;
+	        case E_COMPILE_ERROR:       $errnoo = 'Compile Error'; break;
+	        case E_COMPILE_WARNING:     $errnoo = 'Compile Warning'; break;
+	        case E_STRICT:              $errnoo = 'Strict Warning'; break;
+		    default:                    $errnoo = 'Unknown Error [ #'.$errno.' ]';  break;
+   		}
+		echo '<div class="alert alert-danger alert-dismissable"><strong>[ StusGame Framework ] '.$errnoo.':</strong> [ Line: '.$errline.' ]<br/>'.$errstr.'<br/>File: '.$errfile.'</div>';
+	}
+	doAction('error', $errno, $errstr, $errfile, $errline, $errnoo);
+}
+
+set_error_handler('sfc_error');
 ?>

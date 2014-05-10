@@ -13,17 +13,17 @@ switch (SYSTEM_PAGE) {
 	case 'admin:plugins':
 		if (isset($_GET['dis'])) {
 			inactivePlugin($_GET['dis']);
-			header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['act'])) {
 			activePlugin($_GET['act']);
-			header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
-			header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
 		}
-		header("Location: ".SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+		Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
 		break;
 	
 	case 'admin:set':
@@ -68,7 +68,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('fb_tables', serialize($fb_tab));
 		}
 		doAction('admin_set_save');
-		header("Location: ".SYSTEM_URL.'index.php?mod=admin:set&ok');
+		Redirect(SYSTEM_URL.'index.php?mod=admin:set&ok');
 		break;
 
 	case 'admin:tools':
@@ -93,7 +93,7 @@ switch (SYSTEM_PAGE) {
 			msg('未定义操作');
 			break;
 		}
-		header("Location: ".SYSTEM_URL.'index.php?mod=admin:tools&ok');
+		Redirect(SYSTEM_URL.'index.php?mod=admin:tools&ok');
 		break;
 
 	case 'admin:users':
@@ -134,14 +134,14 @@ switch (SYSTEM_PAGE) {
 				}
 				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
 				doAction('admin_users_add');
-				header("Location: ".SYSTEM_URL.'index.php?mod=admin:users&ok');
+				Redirect(SYSTEM_URL.'index.php?mod=admin:users&ok');
 				break;
 
 			default:
 				msg('未定义操作');
 				break;
 			}
-		header("Location: ".SYSTEM_URL.'index.php?mod=admin:users&ok');
+		Redirect(SYSTEM_URL.'index.php?mod=admin:users&ok');
 		break;
 
 	case 'admin:cron':
@@ -159,9 +159,9 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['add'])) {
 			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['lastdo'], $_POST['log']);
-			header("Location: ".SYSTEM_URL.'index.php?mod=admin:cron&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		}
-		header("Location: ".SYSTEM_URL.'index.php?mod=admin:cron&ok');
+		Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		break;
 
 	case 'baiduid':
@@ -172,10 +172,10 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['bduss'])) {
 			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."users` SET  `ck_bduss` =  '".strip_tags($_GET['bduss'])."' WHERE  `".DB_PREFIX."users`.`id` =".UID.";");
 			Clean();
-			header("Location: ".SYSTEM_URL."?mod=baiduid");
+			Redirect(SYSTEM_URL."?mod=baiduid");
 		}
 		doAction('baiduid_set');
-		header("Location: ".SYSTEM_URL."?mod=baiduid");
+		Redirect(SYSTEM_URL."?mod=baiduid");
 		break;
 
 	case 'showtb':
@@ -186,10 +186,10 @@ switch (SYSTEM_PAGE) {
 				preg_match('/(.*)\[(.*)\]/', $x, $v);
 				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.TABLE."` SET `no` =  '{$v[1]}' WHERE  `".DB_PREFIX.TABLE."`.`id` = {$v[2]} ;");
 			}
-			header("Location: ".SYSTEM_URL.'index.php?mod=showtb&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
 		}
 		elseif (isset($_GET['ref'])) {
-			  header("Location: ".SYSTEM_URL.'index.php?mod=showtb');
+			  Redirect(SYSTEM_URL.'index.php?mod=showtb');
 			  set_time_limit(0);
 			  $n      = 0;
 			  $n2     = 0;
@@ -236,7 +236,7 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
-			header("Location: ".SYSTEM_URL.'index.php?mod=showtb');
+			Redirect(SYSTEM_URL.'index.php?mod=showtb');
 		}
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
@@ -246,7 +246,7 @@ switch (SYSTEM_PAGE) {
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
 				}
 			}
-			header("Location: ".SYSTEM_URL.'index.php?mod=showtb&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
 		}
 		doAction('showtb_set');
 		break;
@@ -255,13 +255,13 @@ switch (SYSTEM_PAGE) {
 			doAction('set_save1');
 			option::uset($_POST);
 			doAction('set_save2');
-			header("Location: ".SYSTEM_URL.'index.php?mod=set&ok');
+			Redirect(SYSTEM_URL.'index.php?mod=set&ok');
 			break;
 
 	case 'testmail':
 		$x = misc::mail(option::get('mail_name'), SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','本测试邮件还包含一个附件',array(SYSTEM_ROOT.'/README.md'));
 		if($x == true) {
-			header("Location: ".SYSTEM_URL.'index.php?mod=admin:set&mailtestok');
+			Redirect(SYSTEM_URL.'index.php?mod=admin:set&mailtestok');
 		} else {
 			msg('邮件发送失败：'.$x);
 		}
@@ -271,6 +271,6 @@ switch (SYSTEM_PAGE) {
 if (ROLE == 'admin' && stristr(strip_tags($_GET['mod']), 'plugin:')) {
 	$plug = trim(strip_tags($_GET['mod']),'plugin:');
 	option::set('plugin_'.$plug, serialize($_POST));
-	header("Location: ".SYSTEM_URL."index.php?mod=admin:setplug&plug={$plug}&ok");
+	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$plug}&ok");
 }
 ?>
