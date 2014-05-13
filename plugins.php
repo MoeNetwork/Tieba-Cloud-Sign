@@ -147,7 +147,7 @@ function getPluginData($pluginFile) {
 		preg_match("/Author:(.*)/i", $pluginData, $author_name);
 		preg_match("/Author URL:(.*)/i", $pluginData, $author_url);
 
-        $active_plugins = option::get('actived_plugins');
+        $active_plugins = unserialize(option::get('actived_plugins'));
         $ret = explode('/', $pluginFile);
         $plugin = $ret[0];
         @$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $active_plugins)) ? true : false;
