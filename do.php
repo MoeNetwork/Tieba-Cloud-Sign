@@ -13,7 +13,12 @@ global $m,$today;
 		option::set('cron_last_do','0');
 	}
 
-	///////////////
+	/////////////// RUN ALL TASK IN THE CRON TABLE
+
+	cron::runall();
+
+	/////////////// RUN ALL SIGN TASK
+
 	$time = time();
 	DoSign('tieba');
 	$tcc = 1;
@@ -22,29 +27,6 @@ global $m,$today;
 		$return = DoSign($value);
 		$tcc++;
 	}
-
-	/////////////// RUN ALL TASK IN THE CRON TABLE
-
-	$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
-	while ($cs = $m->fetch_array($cron)) {
-		if ($cs['no'] != '1') {
-			if ($cs['freq'] == '-1') {
-				RunCron($cs['file'],$cs['name']);
-				$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
-			}
-			elseif (empty($cs['freq'])) {
-				$return=RunCron($cs['file'],$cs['name']);
-				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '{$time}',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
-			}
-			elseif ($cs['lastdo'] - $cs['freq'] >= $cs['freq']) {
-				$return=RunCron($cs['file'],$cs['name']);
-				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '{$time}',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
-			}
-		}
-	}	
-
-	/////////////// RUN ALL SIGN TASK
-
 	$count = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` != '".$today."'"));
 	doAction('cron_2');
 

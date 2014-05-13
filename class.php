@@ -113,7 +113,7 @@ class cron Extends option {
 	*/
 	public static function set($name, $file = '', $no = 0, $status = 0, $freq = 0, $lastdo = '', $log = '') {
 		global $m;
-		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = '{$name}'");
+		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
 		if ($x['ffffff'] <= 0) {
 			$m->query("INSERT INTO  `".DB_NAME."`.`".DB_PREFIX."cron` (`id`, `name`, `file`, `no`, `status`, `freq`, `lastdo`, `log`) VALUES (NULL, '{$name}', '{$file}', '{$no}', '{$status}', '{$freq}', '{$lastdo}', '{$log}');");	
 		} else {
@@ -137,12 +137,34 @@ class cron Extends option {
 	 * @return 执行成功true，否则false
 	 */
 
-	function run($file,$name) {
+	public static function run($file,$name) {
 		$GLOBALS['in_cron'] = true;
 		if (file_exists(SYSTEM_ROOT.'/'.$file)) {
 			include_once SYSTEM_ROOT.'/'.$file;
 			if (function_exists('cron_'.$name)) {
 				return call_user_func('cron_'.$name);
+			}
+		}
+	}
+
+	/**
+	 * 运行所有计划任务
+	 *
+	 */
+	public static function runall() {
+		global $m;
+		$time = time();
+		$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
+		while ($cs = $m->fetch_array($cron)) {
+			if ($cs['no'] != '1') {
+				if ($cs['freq'] == '-1') {
+					self::run($cs['file'],$cs['name']);
+					$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
+				}
+				elseif ( empty($cs['freq']) || empty($cs['lastdo']) || $cs['lastdo'] - $cs['freq'] >= $cs['freq'] ) {
+					$return=self::run($cs['file'],$cs['name']);
+					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '{$time}',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
+				}
 			}
 		}
 	}
