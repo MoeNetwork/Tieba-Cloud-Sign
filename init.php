@@ -10,6 +10,7 @@ $PluginHooks = array();
 $today       = date("Y-m-d");
 header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/setup/msg.php';
+require SYSTEM_ROOT.'/curl.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/PHPMailerAutoload.php';
