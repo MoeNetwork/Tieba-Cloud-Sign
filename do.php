@@ -13,23 +13,42 @@ global $m,$today;
 		option::set('cron_last_do','0');
 	}
 
+	$sign_again = unserialize(option::get('cron_sign_again'));
+	if ($sign_again['lastdo'] != $today) {
+		option::set('cron_sign_again',serialize(array('num' => 0, 'lastdo' => $today)));
+	}
 	/////////////// RUN ALL TASK IN THE CRON TABLE
-
-	cron::runall();
-
+	if (option::get('cron_order') == '1') {
+		cron::runall();
+	}
 	/////////////// RUN ALL SIGN TASK
 
-	$time = time();
-	DoSign('tieba');
-	$tcc = 1;
+	$sign_mode = unserialize(option::get('sign_mode'));
 
-	foreach (unserialize(option::get('fb_tables')) as $value) {
-		$return = DoSign($value);
-		$tcc++;
+	if (option::get('cron_order') != '2') {
+		$time = time();
+		DoSign('tieba',$sign_mode);
+		$tcc = 1;
+
+		$fb_tables = unserialize(option::get('fb_tables'));
+		if (!empty($fb_tables)) {
+			foreach ($fb_tables as $value) {
+				$return = DoSign($value,$sign_mode);
+				$tcc++;
+			}
+		}
+
+		$sign_again_num = empty($sign_again['num']) ? 1 : $sign_again['num'] + 1;
+		option::set('cron_sign_again',serialize(array('num' => $sign_again_num, 'lastdo' => $today)));
 	}
-	$count = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."tieba` WHERE `lastdo` != '".$today."'"));
-	doAction('cron_2');
+	doAction('cron_3');
 
+	/////////////// RUN ALL TASK IN THE CRON TABLE
+	if (option::get('cron_order') == '0') {
+		cron::runall();
+	}
+
+	doAction('cron_2');
 	/////////////// EXIT
 	msg('本次计划任务完毕',false,false);
 ?>

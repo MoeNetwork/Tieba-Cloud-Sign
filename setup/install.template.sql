@@ -10,12 +10,22 @@
 -- 如果这是安装向导提示你手动安装的，请无视这些注释！
 
 --
+-- 删除存在的表
+--
+
+DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
+DROP TABLE IF EXISTS `{VAR-PREFIX}options`;
+DROP TABLE IF EXISTS `{VAR-PREFIX}tieba`;
+DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
+
+--
 -- 表的结构 `{VAR-PREFIX}cron`
 --
 
-CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}cron` (
+CREATE TABLE IF NOT EXISTS `tc_cron` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(1000) NOT NULL,
+  `orde` int(10) NOT NULL DEFAULT '0',
   `file` varchar(1000) DEFAULT NULL,
   `no` int(10) NOT NULL DEFAULT '0',
   `status` int(10) NOT NULL DEFAULT '0',
@@ -46,27 +56,38 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}options` (
 -- 转存表中的数据 `{VAR-PREFIX}options`
 --
 
-INSERT INTO `{VAR-PREFIX}options` (`id`, `name`, `value`) VALUES
-(1, 'system_url', '{VAR-SYSTEM-URL}'),
-(2, 'cron_limit', '0'),
-(3, 'cron_last_do', '10'),
-(4, 'cron_last_do_time', '0'),
-(5, 'tb_max', '0'),
-(6, 'footer', ''),
-(7, 'enable_reg', '1'),
-(8, 'protect_reg', '1'),
-(9, 'yr_reg', ''),
-(10, 'icp', ''),
-(11, 'actived_plugins', 'a:1:{i:0;s:10:"wmzz_debug";}'),
-(12, 'trigger', ''),
-(13, 'protector', '1'),
-(14, 'fb', '4000'),
-(15, 'fb_tables', ''),
-(16, 'cloud', '1'),
-(17, 'dev', ''),
-(18, 'freetable', 'tieba'),
-(19, 'cron_isdoing', '0'),
-(20, 'pwdmode', 'md5(md5(md5($pwd)))');
+INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
+('system_url', '{VAR-SYSTEM-URL}'),
+('system_name', '贴吧云签到'),
+('protector', '1'),
+('actived_plugins', 'a:1:{i:0;s:10:"wmzz_debug";}'),
+('cron_limit', '0'),
+('tb_max', '0'),
+('sign_mode', 'a:1:{i:0;s:1:"1";}'),
+('footer', ''),
+('enable_reg', '1'),
+('protect_reg', ''),
+('yr_reg', ''),
+('icp', ''),
+('trigger', ''),
+('mail_mode', 'MAIL'),
+('mail_name', ''),
+('mail_yourname', ''),
+('mail_host', ''),
+('mail_port', '21'),
+('mail_auth', '0'),
+('mail_smtpname', ''),
+('mail_smtppw', ''),
+('fb', '5000'),
+('cloud', '1'),
+('enable_addtieba', '1'),
+('pwdmode', 'md5(md5(md5($pwd)))'),
+('retry_max', '10'),
+('cron_order', '1'),
+('fb_tables', ''),
+('dev', '0'),
+('cron_last_do_time', '0'),
+('cron_last_do', '0');
 
 -- --------------------------------------------------------
 

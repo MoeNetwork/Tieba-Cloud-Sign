@@ -5,12 +5,12 @@
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">贴吧云签到</span>
+      <span class="sr-only"><?php echo SYSTEM_NAME ?></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="index.php">贴吧云签到</a>
+    <a class="navbar-brand" href="index.php"><?php echo SYSTEM_NAME ?></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->

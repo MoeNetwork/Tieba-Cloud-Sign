@@ -28,35 +28,39 @@ switch (SYSTEM_PAGE) {
 	
 	case 'admin:set':
 		global $m;
-		@option::set('system_url',$_POST['system_url']);
-		@option::set('cron_limit',$_POST['cron_limit']);
-		@option::set('tb_max',$_POST['tb_max']);
-		@option::set('footer',str_ireplace('\'', '\\\'', $_POST['footer']));
-		@option::set('enable_reg',$_POST['enable_reg']);
-		@option::set('protect_reg',$_POST['protect_reg']);
-		@option::set('yr_reg',$_POST['yr_reg']);
-		@option::set('icp',$_POST['icp']);
-		@option::set('protector',$_POST['protector']);
-		@option::set('trigger',$_POST['trigger']);
-		@option::set('mail_mode',$_POST['mail_mode']);
-		@option::set('mail_name',$_POST['mail_name']);
-		@option::set('mail_yourname',$_POST['mail_yourname']);
-		@option::set('mail_host',$_POST['mail_host']);
-		@option::set('mail_port',$_POST['mail_port']);
-		@option::set('mail_auth',$_POST['mail_auth']);
-		@option::set('mail_smtpname',$_POST['mail_smtpname']);
-		@option::set('mail_smtppw',$_POST['mail_smtppw']);
-		@option::set('dev',$_POST['dev']);
-		@option::set('fb',$_POST['fb']);
-		@option::set('cloud',$_POST['cloud']);
-		@option::set('enable_addtieba',$_POST['enable_addtieba']);
-		@option::set('dev',$_POST['dev']);
-		@option::set('pwdmode',$_POST['pwdmode']);
-		@option::set('retry_max',$_POST['retry_max']);
-		if (empty($_POST['fb_tables'])) {
+		$sou = adds($_POST);
+		@option::set('system_url',$sou['system_url']);
+		@option::set('system_name',$sou['system_name']);
+		@option::set('cron_limit',$sou['cron_limit']);
+		@option::set('tb_max',$sou['tb_max']);
+		@option::set('sign_mode', serialize($sou['sign_mode']));
+		@option::set('footer',$sou['footer']);
+		@option::set('enable_reg',$sou['enable_reg']);
+		@option::set('protect_reg',$sou['protect_reg']);
+		@option::set('yr_reg',$sou['yr_reg']);
+		@option::set('icp',$sou['icp']);
+		@option::set('protector',$sou['protector']);
+		@option::set('trigger',$sou['trigger']);
+		@option::set('mail_mode',$sou['mail_mode']);
+		@option::set('mail_name',$sou['mail_name']);
+		@option::set('mail_yourname',$sou['mail_yourname']);
+		@option::set('mail_host',$sou['mail_host']);
+		@option::set('mail_port',$sou['mail_port']);
+		@option::set('mail_auth',$sou['mail_auth']);
+		@option::set('mail_smtpname',$sou['mail_smtpname']);
+		@option::set('mail_smtppw',$sou['mail_smtppw']);
+		@option::set('dev',$sou['dev']);
+		@option::set('fb',$sou['fb']);
+		@option::set('cloud',$sou['cloud']);
+		@option::set('enable_addtieba',$sou['enable_addtieba']);
+		@option::set('dev',$sou['dev']);
+		@option::set('pwdmode',$sou['pwdmode']);
+		@option::set('retry_max',$sou['retry_max']);
+		@option::set('cron_order',$sou['cron_order']);
+		if (empty($sou['fb_tables'])) {
 			@option::set('fb_tables',NULL);
 		} else {
-			$fb_tables = explode("\n",$_POST['fb_tables']);
+			$fb_tables = explode("\n",$sou['fb_tables']);
 			$fb_tab = array();
 			$n= 0;
 			foreach ($fb_tables as $value) {
@@ -87,6 +91,10 @@ switch (SYSTEM_PAGE) {
 
 		case 'reftable':
 			option::set('freetable',getfreetable());
+			break;
+
+		case 'cron_sign_again':
+			option::set('cron_sign_again','');
 			break;
 
 		default:
@@ -161,6 +169,11 @@ switch (SYSTEM_PAGE) {
 			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['lastdo'], $_POST['log']);
 			Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		}
+		elseif (isset($_GET['order'])) {
+			foreach ($_POST['ids'] as $key => $value) {
+				$m->query("UPDATE `".DB_PREFIX."cron` SET  `orde` =  '{$_POST['order'][$key]}' WHERE  `".DB_PREFIX."cron`.`id` = ". $value);
+			}
+		}
 		Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		break;
 
@@ -196,21 +209,14 @@ switch (SYSTEM_PAGE) {
 			  $addnum = 0; 
 			  $list   = array();
 			  $o      = option::get('tb_max');
-			  $c      = curl_init(); 
 			  while(true) {
 			  	  $url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
 			  	  $n3++;
 			  	  $addnum = 0;
-				  curl_setopt($c, CURLOPT_URL, $url); //登陆地址 
-				  curl_setopt($c, CURLOPT_COOKIESESSION, true); 
-				  curl_setopt($c, CURLOPT_FOLLOWLOCATION, true); 
-				  curl_setopt($c, CURLOPT_RETURNTRANSFER, 1); 
-				  curl_setopt($c, CURLOPT_COOKIE, "BDUSS=".BDUSS);
-				  curl_setopt($c, CURLOPT_USERAGENT, 'Phone '.mt_rand());
-				  curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0); 
-				  curl_setopt($c, CURLOPT_HTTPHEADER, array("X-FORWARDED-FOR:183.185.2.".mt_rand(1,255)));
-				  curl_setopt($c, CURLOPT_HEADER, false);  
-				  $ch = curl_exec($c);
+			  	  $c      = new wcurl($url, array('User-Agent: Phone',"X-FORWARDED-FOR:183.185.2.".mt_rand(1,255))); 
+				  $c->addcookie("BDUSS=".BDUSS);
+				  $ch = $c->exec();
+				  $c->close();
 				  dir($ch);
 				  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 				  foreach ($list[3] as $v) {

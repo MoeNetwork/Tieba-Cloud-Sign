@@ -64,6 +64,22 @@ class wcurl {
 	}
 
 	/**
+	 * 添加一些Cookies，在访问的时候会携带它们
+	 * @param $ck Cookies，数组或cookies字符串
+	 */
+	public function addcookie($ck) {
+		if (is_array($ck)) {
+			$r = '';
+			foreach ($ck as $key => $value) {
+				$r .= "{$key}={$value}; ";
+			}
+		} else {
+			$r = $ck;
+		}
+		$this->set(CURLOPT_COOKIE, $r);
+	}
+
+	/**
 	 * 静态，获取网页返回的所有Cookies [从已经获取到的网页搜索] [不写文件]
 	 * @param 网页内容
  	 * @return array Cookies

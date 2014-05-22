@@ -3,7 +3,7 @@
  * 自动加载
  */
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','2.2');
+define('SYSTEM_VER','2.9');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 $PluginHooks = array();
@@ -22,6 +22,8 @@ if (option::get('dev') != 1) {
 }
 new option();
 define('SYSTEM_URL',option::get('system_url'));
+define('SYSTEM_NAME', option::get('system_name'));
+
 error_reporting(0);
 require SYSTEM_ROOT.'/sfc.functions.php';
 require SYSTEM_ROOT.'/ui.php';

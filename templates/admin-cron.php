@@ -43,7 +43,7 @@ if (isset($_GET['add'])) {
 </form>
 <?php
 } else {
-$query = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
+$query = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."cron` ORDER BY  `orde` ASC");
 $cron  = '';
 while ($cs = $m->fetch_array($query)) {
 	if ($cs['freq'] == '-1') {
@@ -80,7 +80,7 @@ while ($cs = $m->fetch_array($query)) {
 		$status .= '<br/><a href="javascript:;" onclick="alert(system_cron_log);">点击查看此任务的日志</a>';
 	}
 
-	$cron .= '<tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'</td><td style="width:40%">'.$freq.'<br/>上次执行：'.$lastdo.'</td><td style="width:30%">'.$status.'</td></tr>';
+	$cron .= '<input type="hidden" value="'.$cs['id'].'" name="ids[]"><tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'<br/>运行顺序：<input required style="width:30%" type="number" name="order[]" value="'.$cs['orde'].'"></td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'<br/>ID：'.$cs['id'].'</td><td style="width:40%">'.$status.'</td></tr>';
 }
 
 if (isset($_GET['ok'])) {
@@ -90,20 +90,23 @@ if (isset($_GET['ok'])) {
 $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` ");
 ?>
 <div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] + 1 ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">点击这里可以添加一个计划任务到系统</a></div>
+<form action="setting.php?mod=admin:cron&order" method="post">
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th style="width:30%">任务描述/文件</th>
-			<th style="width:40%">其他信息</th>
-			<th style="width:30%">状态/操作</th>
+			<th style="width:30%">其他信息</th>
+			<th style="width:40%">状态/操作</th>
 		</tr>
 	</thead>
 	<tobdy>
 		<?php echo $cron ?>
 		<td style="width:30%"><b>签到所有贴吧</b><br/>do.php</td>
-		<td style="width:40%">始终运行的任务<br/>上次执行：<?php echo option::get('cron_last_do_time') ?></td>
-		<td style="width:30%">对系统任务不可用</td>
+		<td style="width:30%">始终运行的任务<br/>上次执行：<?php echo option::get('cron_last_do_time') ?></td>
+		<td style="width:40%">对系统任务不可用</td>
 	</tbody>
 </table>
-<br/><button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button><?php } ?>
+<input type="submit" class="btn btn-primary" value="提交更改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button>
+</form>
+<br/><?php } ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>

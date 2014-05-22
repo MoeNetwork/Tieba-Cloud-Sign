@@ -287,6 +287,28 @@ function RunCron($file,$name) {
 	return cron::run($file,$name);
 }
 
+/**
+ * 使用反斜线引用字符串或数组
+ * @param $s 需要转义的
+ * @return 转义结果
+ */
+
+function adds($s) {
+	if (is_array($s)) {
+		$r = array();
+		foreach ($s as $key => $value) {
+			$k = addslashes($key);
+			if (!is_array($value)) {
+				$r[$k] = addslashes($value);
+			} else {
+				$r[$k] = $value;
+			}
+		}
+		return $r;
+	} else {
+		return addslashes($s);
+	}
+}
 
 /**
  * Framework 错误处理函数

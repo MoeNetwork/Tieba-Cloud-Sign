@@ -14,7 +14,12 @@ class option {
 		global $m;
 		$query=$m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = '{$name}'");
 		$temp=$m->fetch_array($query);
-		return $temp['value'];
+		if (!isset($temp['value'])) {
+			self::set($name,'0');
+			return 0;
+		} else {
+			return $temp['value'];
+		}
 	}
 
 	/**
@@ -159,13 +164,13 @@ class cron Extends option {
 	}
 
 	/**
-	 * 运行所有计划任务
+	 * 按运行顺序运行所有计划任务
 	 *
 	 */
 	public static function runall() {
 		global $m;
 		$time = time();
-		$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
+		$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` ORDER BY  `orde` ASC ");
 		while ($cs = $m->fetch_array($cron)) {
 			if ($cs['no'] != '1') {
 				if ($cs['freq'] == '-1') {
@@ -227,4 +232,5 @@ class misc {
 		    }
 	}
 }
+
 ?>
