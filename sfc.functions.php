@@ -83,26 +83,6 @@ function UnZip($zipfile, $path, $type = 'tpl') {
 	}
 	$r = explode('/', $zip->getNameIndex(0), 2);
 	$dir = isset($r[0]) ? $r[0] . '/' : '';
-	switch ($type) {
-		case 'tpl':
-			$re = $zip->getFromName($dir . 'header.php');
-			if (false === $re)
-				return -2;
-			break;
-		case 'plugin':
-			$plugin_name = substr($dir, 0, -1);
-			$re = $zip->getFromName($dir . $plugin_name . '.php');
-			if (false === $re)
-				return -1;
-			break;
-		case 'backup':
-			$sql_name = substr($dir, 0, -1);
-			if (getFileSuffix($sql_name) != 'sql')
-				return -3;
-			break;
-		case 'update':
-			break;
-	}
 	if (true === @$zip->extractTo($path)) {
 		$zip->close();
 		return 0;
@@ -169,20 +149,21 @@ function DeleteUser($id) {
 
 /**
  * zip压缩
+ * @param $orig_fname 将在zip的文件路径
+ * @param $content 文件内容
+ * @param $tempzip zip存储路径
+ * @return bool
  */
-function CreateZip($orig_fname, $content) {
+function CreateZip($orig_fname, $content, $tempzip) {
 	if (!class_exists('ZipArchive', FALSE)) {
 		return false;
 	}
 	$zip = new ZipArchive();
-	$tempzip = SYSTEM_ROOT . '/cache/zip_temp_'.time().mt_rand().'.zip';
 	$res = $zip->open($tempzip, ZipArchive::CREATE);
 	if ($res === TRUE) {
 		$zip->addFromString($orig_fname, $content);
 		$zip->close();
-		$zip_content = file_get_contents($tempzip);
-		unlink($tempzip);
-		return $zip_content;
+		return true;
 	} else {
 		return false;
 	}
@@ -213,6 +194,75 @@ function DeleteFile($file) {
 	}
 	return $ret;
 }
+
+/**
+ * fosckopen 改进版
+ */
+
+function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+        $return = '';
+        $matches = parse_url($url);
+        $host = $matches['host'];
+        $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
+        $port = !empty($matches['port']) ? $matches['port'] : 80;
+
+        if($post) {
+                $out = "POST $path HTTP/1.0\r\n";
+                $out .= "Accept: */*\r\n";
+                //$out .= "Referer: $boardurl\r\n";
+                $out .= "Accept-Language: zh-cn\r\n";
+                $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+                $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+                $out .= "Host: $host\r\n";
+                $out .= 'Content-Length: '.strlen($post)."\r\n";
+                $out .= "Connection: Close\r\n";
+                $out .= "Cache-Control: no-cache\r\n";
+                $out .= "Cookie: $cookie\r\n\r\n";
+                $out .= $post;
+        } else {
+                $out = "GET $path HTTP/1.0\r\n";
+                $out .= "Accept: */*\r\n";
+                //$out .= "Referer: $boardurl\r\n";
+                $out .= "Accept-Language: zh-cn\r\n";
+                $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+                $out .= "Host: $host\r\n";
+                $out .= "Connection: Close\r\n";
+                $out .= "Cookie: $cookie\r\n\r\n";
+        }
+        $fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+        if(!$fp) {
+                return '';//note $errstr : $errno \r\n
+        } else {
+                stream_set_blocking($fp, $block);
+                stream_set_timeout($fp, $timeout);
+                @fwrite($fp, $out);
+                while (!feof($fp)) {
+                        $status = stream_get_meta_data($fp);
+                        if(!empty($status['timed_out'])) {
+                                return '';
+                        }
+                        if(($header = @fgets($fp)) && ($header == "\r\n" ||  $header == "\n")) {
+                                break;
+                        }
+                }
+                $stop = false;
+                while(!feof($fp) && !$stop) {
+                        $status = stream_get_meta_data($fp);
+                        if(!empty($status['timed_out'])) {
+                                return '';
+                        }
+                        $data = fread($fp, ($limit == 0 || $limit > 8192 ? 8192 : $limit));
+                        $return .= $data;
+                        if($limit) {
+                                $limit -= strlen($data);
+                                $stop = $limit <= 0;
+                        }
+                }
+                @fclose($fp);
+                return $return;
+        }
+}
+
 
 /**
  * 该函数在插件中调用,挂载插件函数到预留的钩子上

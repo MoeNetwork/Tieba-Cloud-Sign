@@ -57,6 +57,7 @@ switch (SYSTEM_PAGE) {
 		@option::set('pwdmode',$sou['pwdmode']);
 		@option::set('retry_max',$sou['retry_max']);
 		@option::set('cron_order',$sou['cron_order']);
+		@option::set('sign_multith',$sou['sign_multith']);
 		if (empty($sou['fb_tables'])) {
 			@option::set('fb_tables',NULL);
 		} else {
