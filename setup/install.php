@@ -40,13 +40,26 @@ if (file_exists(SYSTEM_ROOT.'/install.lock')) {
 <div style="width:90%;margin: 0 auto;overflow: hidden;position: relative;">
 <?php
 	if (!isset($_GET['step']) || $_GET['step'] == 0) {
-		echo '<h2>准备安装</h2><br/><h4>你是在 BAE/SAE/JAE 上使用本程序吗？</h4><br/>';
-		echo '<li><a href="install.php?step=2">不，我不是</a></li><br/>';
-		echo '<li><a href="install.php?step=100">是的，我是</a></li>';
+		echo '<h2>准备安装: 功能检查</h2><br/>';
+		echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+    <span class="sr-only">10%</span>
+  </div>
+</div>';
+		define('DO_NOT_LOAD_UI', TRUE);
+		include SYSTEM_ROOT.'/check.php';
+		echo '<input type="button" onclick="location = \'install.php?step=1\'" class="btn btn-success" value="下一步 >>">';
 	} else {
 		switch (strip_tags($_GET['step'])) {
 			case '100':
-				echo '<h2>(BAE/SAE/JAE) 手动修改配置</h2><br/>请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
+				echo '<h2>(BAE/SAE/JAE) 手动修改配置</h2><br/>';
+				echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+    <span class="sr-only">25%</span>
+  </div>
+</div>';
+
+				echo '请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
 				echo '<br/><br/><div class="alert alert-success"><pre>
 &lt?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
 
@@ -67,8 +80,25 @@ define(\'DB_PREFIX\',\'tc_\');
 				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=2&bae\'" class="btn btn-success" value="下一步 >>">';
 				break;
 
+			case '1':
+				echo '<h2>准备安装: 设置运行环境</h2><br/>';
+				echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+    <span class="sr-only">20%</span>
+  </div>
+</div>';
+				echo '<h4>你是在 BAE/SAE/JAE 上使用本程序吗？</h4><br/>';
+				echo '<li><a href="install.php?step=2">不，我不是</a></li><br/>';
+				echo '<li><a href="install.php?step=100">是的，我是</a></li>';
+				break;
+
 			case '2':
 				echo '<h2>设置所需信息</h2><br/>';
+				echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
+    <span class="sr-only">30%</span>
+  </div>
+</div>';
 				echo '<h4>数据库信息</h4><br/>';
 				echo '<form action="install.php?step=3" method="post">';
 				if (isset($_GET['isbae']) || isset($_GET['bae'])) {
@@ -166,15 +196,32 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
 				}
 
 				if (!empty($errorhappen)) {
-					echo '<h2>请手动安装</h2><br/>' . $errorhappen;
+					echo '<h2>请手动安装</h2><br/>';
+					echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+    <span class="sr-only">60%</span>
+  </div>
+</div>';
+					echo $errorhappen;
 					echo '完成上述操作后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=4\'" class="btn btn-success" value="下一步 >>">';
 				} else {
+					echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+    <span class="sr-only">60%</span>
+  </div>
+</div>';
 					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
 				}
 				break;
 
 			case '4':
-				echo '<h2>安装完成</h2><br/>恭喜你，安装已经完成<br/><br/>请添加一个计划任务，文件为本程序根目录下的 <b>do.php</b><br/><br/><input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
+				echo '<h2>安装完成</h2><br/>';
+				echo '<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+    <span class="sr-only">90%</span>
+  </div>
+</div>';
+				echo '恭喜你，安装已经完成<br/><br/>请添加一个计划任务，文件为本程序根目录下的 <b>do.php</b><br/><br/>计划任务运行时间建议为每分钟运行 ( Linux Crontab参考：<b><font color="blue">* * * * *</font></b> )<br/><br/><input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
 				break;
 
 			default:
