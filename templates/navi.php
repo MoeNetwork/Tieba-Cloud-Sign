@@ -36,6 +36,7 @@
           <li><a href="index.php?mod=admin:users">用户管理</a></li>
           <li><a href="index.php?mod=admin:cron">计划任务</a></li>
           <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
+          <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
           <?php doAction('navi_2'); ?>
         </ul>
       </li>
@@ -84,6 +85,7 @@
                 <li><a href="index.php?mod=admin:users">用户管理</a></li>
                 <li><a href="index.php?mod=admin:cron">计划任务</a></li>
                 <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
+                <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
                <?php doAction('navi_8'); ?>
                <br/>
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>

@@ -200,6 +200,7 @@ function DeleteFile($file) {
  */
 
 function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+	if (function_exists('fsockopen')) {
         $return = '';
         $matches = parse_url($url);
         $host = $matches['host'];
@@ -261,6 +262,7 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
                 @fclose($fp);
                 return $return;
         }
+    }
 }
 
 

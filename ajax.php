@@ -38,5 +38,29 @@ switch (SYSTEM_PAGE) {
 		echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$count5} 个贴吧签到出错，{$count6} 个贴吧已被设定为忽略";
 		}
 		break;
+
+
+	case 'checkupd': 
+		$c  = new wcurl('http://localhost/CALLBACK/download.php');
+		$x  = simplexml_load_string($c->exec());
+		$n  = 0;
+		$v1 = $x->children()->items; //文件列表
+		$up = array();
+
+		foreach ($v1->item as $value) {
+			$md5  = (string) $v1->item[$n]->attributes();
+			$file = (string) $value;
+			if (file_exists(SYSTEM_ROOT.'/'.$file)) {
+				$mymd5 = md5_file(SYSTEM_ROOT.'/'.$file);
+				if ($mymd5 != $md5) {
+					$up[] = $file;
+				}
+			} else {
+					$up[] = $file;
+			}
+		}
+		echo json_encode($up);
+		$c->close();
+		break;
 }
 ?>

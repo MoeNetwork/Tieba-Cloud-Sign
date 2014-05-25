@@ -28,6 +28,9 @@ switch (SYSTEM_PAGE) {
 	case 'admin:cron':
 		template('admin-cron');
 		break;
+	case 'admin:update':
+		template('admin-update');
+		break;
 	case 'admin:setplug':
 		$plug = strip_tags($_GET['plug']);
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], unserialize(option::get('actived_plugins')))) {
