@@ -170,6 +170,10 @@ switch (SYSTEM_PAGE) {
 			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['lastdo'], $_POST['log']);
 			Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
 		}
+		elseif (isset($_GET['run'])) {
+			$return = cron::run($_GET['file'], $_GET['run']);
+			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '".time()."',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`name` = '".$_GET['run']."'");
+		}
 		elseif (isset($_GET['order'])) {
 			foreach ($_POST['ids'] as $key => $value) {
 				$m->query("UPDATE `".DB_PREFIX."cron` SET  `orde` =  '{$_POST['order'][$key]}' WHERE  `".DB_PREFIX."cron`.`id` = ". $value);

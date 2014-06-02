@@ -71,7 +71,7 @@ while ($cs = $m->fetch_array($query)) {
 	} else {
 		$status = '<font color="blue">忽略</font> | <a href="setting.php?mod=admin:cron&act='.$cs['id'].'">取消忽略</a>';
 	}
-
+	$status .= '<br/><a href="setting.php?mod=admin:cron&run='.$cs['name'].'&file='.$cs['file'].'">运行</a>';
 	$status .= ' | <a href="setting.php?mod=admin:cron&uninst='.$cs['id'].'" onclick="return confirm(\'你确实要卸载此计划任务吗？\');">卸载</a>';
 	if (empty($cs['log'])) {
 		$status .= '<br/>没有日志可查看';
@@ -103,7 +103,7 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 		<?php echo $cron ?>
 		<td style="width:30%"><b>签到所有贴吧</b><br/>do.php</td>
 		<td style="width:30%">始终运行的任务<br/>上次执行：<?php echo option::get('cron_last_do_time') ?></td>
-		<td style="width:40%">对系统任务不可用</td>
+		<td style="width:40%"><a href="do.php">运行全部</a></td>
 	</tbody>
 </table>
 <input type="submit" class="btn btn-primary" value="提交更改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button>
