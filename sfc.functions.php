@@ -107,17 +107,15 @@ function getfreetable() {
 	$fbs = option::get('fb_tables');
 	$fbset = option::get('fb');
 	$f = unserialize($fbs);
-	if ($x['fffff'] > $fbset && !empty($f[0])) {
-		$c = sizeof($f) - 1;
-		while ($c >= 0) {
-			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".$f[$c]."`");
+	if ($x['fffff'] >= $fbset && !empty($f)) {
+		$c = sizeof($f);
+		foreach ($f as $key => $value) {
+			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX.$value."`");
 			if ($x['fffff'] < $fbset) {
-				return $f[$c];
-			} else {
-				$c - 1;
-				continue;
+				break;
 			}
 		}
+		return $value;
 	} else {
 		return 'tieba';
 	}
