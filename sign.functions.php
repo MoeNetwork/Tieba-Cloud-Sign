@@ -118,11 +118,11 @@ function DoSign($table,$sign_mode) {
 
 	//处理所有未签到的贴吧
 	if (option::get('cron_limit') == 0) {
-		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."'");
+		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() ");
 		$return .= '已直接处理所有未签到的贴吧';
 	} else {
 		$limit=option::get('cron_limit');
-		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' LIMIT 0 , ".$limit);
+		$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() LIMIT 0 , ".$limit);
 		$return .= '分批签到模式下无状态报告';
 	}
 
@@ -133,20 +133,20 @@ function DoSign($table,$sign_mode) {
 	if (option::get('cron_limit') == 0) {
 		$sign_again = unserialize(option::get('cron_sign_again'));
 		if (option::get('retry_max') == '0') {
-			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
 		}
 		elseif ($sign_again['lastdo'] == $today && $sign_again['num'] <= option::get('retry_max') && option::get('retry_max') != '-1') {
-			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
 		}
 		$return .= '已直接处理所有未签到的贴吧';
 	} else {
 		$limit=option::get('cron_limit');
 		$sign_again = unserialize(option::get('cron_sign_again'));
 		if (option::get('retry_max') == '0') {
-			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
 		}
 		elseif ($sign_again['lastdo'] == $today && $sign_again['num'] <= option::get('retry_max') && option::get('retry_max') != '-1') {
-			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+			$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
 		}
 		$return .= '分批签到模式下无状态报告';
 	}
