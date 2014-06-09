@@ -90,7 +90,7 @@ class wmysql {
 	/**
 	 * 关闭数据库连接
 	 */
-	function close() {
+	public function close() {
 		return $this->conn->close();
 	}
 
@@ -98,7 +98,7 @@ class wmysql {
 	 * 发送查询语句
 	 *
 	 */
-	function query($sql,$noerror = false) {
+	public function query($sql,$noerror = false) {
 		$this->result = $this->conn->query($sql);
 		$this->queryCount++;
 		if (!$this->result) {
@@ -113,14 +113,36 @@ class wmysql {
 	}
 
 	/**
+	 * 发送批量查询语句
+	 * 记作一次查询，只返回最后的查询结果
+	 */
+	public function xquery($sql,$noerror = false) {
+		$this->result = $this->conn->multi_query($sql);
+		$this->queryCount++;
+		if (!$this->result) {
+			if ($noerror == true) {
+				return false;
+			} else {
+				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+			}	
+		} else {
+			return $this->result;
+		}
+	}
+	// 别名
+	public function multi_query($sql,$noerror = false) { 
+		return $this->xquery($sql,$noerror = false);
+	}
+
+	/**
 	 * 从结果集中取得一行作为关联数组/数字索引数组
 	 *
 	 */
-	function fetch_array(mysqli_result $query, $type = MYSQLI_ASSOC) {
+	public function fetch_array(mysqli_result $query, $type = MYSQLI_ASSOC) {
 		return $query->fetch_array($type);
 	}
 
-	function once_fetch_array($sql) {
+	public function once_fetch_array($sql) {
 		$this->result = $this->query($sql);
 		return $this->fetch_array($this->result);
 	}
@@ -129,7 +151,7 @@ class wmysql {
 	 * 从结果集中取得一行作为数字索引数组
 	 *
 	 */
-	function fetch_row(mysqli_result $query) {
+	public function fetch_row(mysqli_result $query) {
 		return $query->fetch_row();
 	}
 
@@ -137,63 +159,63 @@ class wmysql {
 	 * 取得行的数目
 	 *
 	 */
-	function num_rows(mysqli_result $query) {
+	public function num_rows(mysqli_result $query) {
 		return $query->num_rows;
 	}
 
 	/**
 	 * 取得结果集中字段的数目
 	 */
-	function num_fields(mysqli_result $query) {
+	public function num_fields(mysqli_result $query) {
 		return $query->field_count;
 	}
 
 	/**
 	 * 取得上一步 INSERT 操作产生的 ID
 	 */
-	function insert_id() {
+	public function insert_id() {
 		return $this->conn->insert_id;
 	}
 
 	/**
 	 * 获取mysql错误
 	 */
-	function geterror() {
+	public function geterror() {
 		return '#' . $this->geterrno() . ' - ' . $this->conn->error;
 	}
 
 	/**
 	 * 获取mysql错误编码
 	 */
-	function geterrno() {
+	public function geterrno() {
 		return $this->conn->errno;
 	}
 
 	/**
 	 * Get number of affected rows in previous MySQL operation
 	 */
-	function affected_rows() {
+	public function affected_rows() {
 		return $this->conn->affected_rows;
 	}
 
 	/**
 	 * 取得数据库版本信息
 	 */
-	function getMysqlVersion() {
+	public function getMysqlVersion() {
 		return $this->conn->server_info;
 	}
 
 	/**
 	 * 取得数据库查询次数
 	 */
-	function getQueryCount() {
+	public function getQueryCount() {
 		return $this->queryCount;
 	}
 
     /**
 	 *  Escapes special characters
 	 */
-	function escape_string($sql) {
+	public function escape_string($sql) {
 		return $this->conn->real_escape_string($sql);
 	}
 }

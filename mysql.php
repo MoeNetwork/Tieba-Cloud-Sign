@@ -36,7 +36,7 @@ class wmysql {
 	 * 构造函数
 	 */
 	public function __construct() {
-		if (!function_exists('mysql_connect')) {
+		if (!public function_exists('mysql_connect')) {
 			msg('服务器PHP不支持MySql数据库');
 		}
 		if (!$this->conn = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD)) {
@@ -76,7 +76,7 @@ class wmysql {
 	/**
 	 * 关闭数据库连接
 	 */
-	function close() {
+	public function close() {
 		return mysql_close($this->conn);
 	}
 
@@ -84,7 +84,7 @@ class wmysql {
 	 * 发送查询语句
 	 *
 	 */
-	function query($sql,$noerror = false) {
+	public function query($sql,$noerror = false) {
 		$this->result = @mysql_query($sql, $this->conn);
 		$this->queryCount++;
 		if (!$this->result) {
@@ -99,14 +99,40 @@ class wmysql {
 	}
 
 	/**
+	 * 发送批量查询语句
+	 * 记作一次查询，只返回最后的查询结果
+	 */
+	public function xquery($sql,$noerror = false) {
+		$sql  = str_ireplace("\n", '', $sql);
+		$sql2 = explode(';', $sql);
+		foreach ($sql2 as $value) {
+			$this->result = mysql_query($value);
+		}
+		$this->queryCount++;
+		if (!$this->result) {
+			if ($noerror == true) {
+				return false;
+			} else {
+				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+			}	
+		} else {
+			return $this->result;
+		}
+	}
+	// 别名
+	public function multi_query($sql,$noerror = false) { 
+		return $this->xquery($sql,$noerror = false);
+	}
+
+	/**
 	 * 从结果集中取得一行作为关联数组/数字索引数组
 	 *
 	 */
-	function fetch_array($query , $type = MYSQL_ASSOC) {
+	public function fetch_array($query , $type = MYSQL_ASSOC) {
 		return mysql_fetch_array($query, $type);
 	}
 
-	function once_fetch_array($sql) {
+	public function once_fetch_array($sql) {
 		$this->result = $this->query($sql);
 		return $this->fetch_array($this->result);
 	}
@@ -115,7 +141,7 @@ class wmysql {
 	 * 从结果集中取得一行作为数字索引数组
 	 *
 	 */
-	function fetch_row($query) {
+	public function fetch_row($query) {
 		return mysql_fetch_row($query);
 	}
 
@@ -123,55 +149,55 @@ class wmysql {
 	 * 取得行的数目
 	 *
 	 */
-	function num_rows($query) {
+	public function num_rows($query) {
 		return mysql_num_rows($query);
 	}
 
 	/**
 	 * 取得结果集中字段的数目
 	 */
-	function num_fields($query) {
+	public function num_fields($query) {
 		return mysql_num_fields($query);
 	}
 	/**
 	 * 取得上一步 INSERT 操作产生的 ID
 	 */
-	function insert_id() {
+	public function insert_id() {
 		return mysql_insert_id($this->conn);
 	}
 
 	/**
 	 * 获取mysql错误
 	 */
-	function geterror() {
+	public function geterror() {
 		return '#' . mysql_errno() . ' - ' . mysql_error();
 	}
 
     /**
 	 * 获取mysql错误编码
 	 */
-	function geterrno() {
+	public function geterrno() {
 		return mysql_errno();
 	}
 
 	/**
 	 * Get number of affected rows in previous MySQL operation
 	 */
-	function affected_rows() {
+	public function affected_rows() {
 		return mysql_affected_rows();
 	}
 
 	/**
 	 * 取得数据库版本信息
 	 */
-	function getMysqlVersion() {
+	public function getMysqlVersion() {
 		return mysql_get_server_info();
 	}
 
 	/**
 	 * 取得数据库查询次数
 	 */
-	function getQueryCount() {
+	public function getQueryCount() {
 		return $this->queryCount;
 	}
 }
