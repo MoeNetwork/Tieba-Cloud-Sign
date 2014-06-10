@@ -171,7 +171,7 @@ class wmysql {
 	}
 
 	/**
-	 * 取得上一步 INSERT 操作产生的 ID
+	 * 取得上一步 INSERT 操作产生的 ID 自增值
 	 */
 	public function insert_id() {
 		return $this->conn->insert_id;

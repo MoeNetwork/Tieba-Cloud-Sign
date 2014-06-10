@@ -36,7 +36,7 @@ class wmysql {
 	 * 构造函数
 	 */
 	public function __construct() {
-		if (!public function_exists('mysql_connect')) {
+		if (!function_exists('mysql_connect')) {
 			msg('服务器PHP不支持MySql数据库');
 		}
 		if (!$this->conn = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD)) {
@@ -160,7 +160,7 @@ class wmysql {
 		return mysql_num_fields($query);
 	}
 	/**
-	 * 取得上一步 INSERT 操作产生的 ID
+	 * 取得上一步 INSERT 操作产生的 ID 自增值
 	 */
 	public function insert_id() {
 		return mysql_insert_id($this->conn);
