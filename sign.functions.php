@@ -3,7 +3,15 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 function Gettbs($uid){
 	$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
 	$ch->addcookie("BDUSS=".GetCookie($uid));
-	return $ch->exec();
+	$x = json_decode($ch->exec(),true);
+	return $x['tbs'];
+}
+
+function Getfid($kw) {
+	$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+	$s = $ch->exec();
+	preg_match('/\<input type=\"hidden\" name=\"fid\" value=\"(.*?)\"\/\>/', $s, $fid);
+	return $fid[1];
 }
 
 function GetCookie($uid) {
@@ -17,33 +25,38 @@ function DoSign_Gettbs($uid) {
 }
 
 function DoSign_Mobile($uid,$kw,$id) {
-	//貌似有点问题
-	$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.DoSign_Gettbs($uid).'&kw='.urlencode($kw).'&is_like=1&fid=0',array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
+	//没问题了
+	$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.DoSign_Gettbs($uid).'&kw='.urlencode($kw).'&is_like=1&fid='.Getfid($kw) ,array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
 	$ch->addcookie("BDUSS=".GetCookie($uid));
 	return $ch->exec();
 }
 
 function DoSign_Default($uid,$kw,$id) {
 	global $m,$today;
-	$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+	$fid = Getfid($kw);
+	$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 	$ch->addcookie("BDUSS=".GetCookie($uid));
 	$s  = $ch->exec();
 	$ch->close();
-
 	preg_match('/\<td style=\"text-align:right;\"\>\<a href=\"(.*)\"\>签到\<\/a\>\<\/td\>\<\/tr\>/', $s, $s);
 	if (isset($s[1])) {
-		$ch = new wcurl('http://tieba.baidu.com'.$s[1], array('User-Agent: Mozilla/5.0 (Linux; U; Android 4.1.2; zh-cn; MB526 Build/JZO54K) AppleWebKit/530.17 (KHTML, like Gecko) FlyFlow/2.4 Version/4.0 Mobile Safari/530.17 baidubrowser/042_1.8.4.2_diordna_458_084/alorotoM_61_2.1.4_625BM/1200a/39668C8F77034455D4DED02169F3F7C7%7C132773740707453/1','P3P: CP=" OTI DSP COR IVA OUR IND COM "','Referer: '.'http://tieba.baidu.com/mo/m?kw='.urlencode($kw)));
+		$ch = new wcurl('http://tieba.baidu.com'.$s[1], 
+			array(
+				'Accept: text/html, application/xhtml+xml, */*',
+				'Accept-Language: zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
+				'User-Agent: Fucking Phone'
+			));
 		$ch->addcookie("BDUSS=".GetCookie($uid));
 		$ch->exec();
 		$ch->close();
 	} else {
-		$s = '{"c":"ok"}';
+		$s = '{"c":"err"}';
 	}
 	return $s;
 }
 
 function DoSign_Client($uid,$kw,$id){
-	$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded'));
+	$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded','User-Agent: Fucking iPhone/1.0 BadApple/99.1'));
 	$ch->addcookie("BDUSS=".GetCookie($uid));
 	$temp = array(
 		'BDUSS' => GetCookie($uid),
@@ -51,16 +64,17 @@ function DoSign_Client($uid,$kw,$id){
 		'_client_type' => '4',
 		'_client_version' => '1.2.1.17',
 		'_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
-		'fid' => '0',
+		'fid' => Getfid($kw),
 		'kw' => $kw,
 		'net_type' => '3',
 		'tbs' => DoSign_Gettbs($uid)
 	);
 	$x = '';
-	foreach($temp as $k=>$v) $x .= $k.'='.$v;
+	foreach($temp as $k=>$v) {
+		$x .= $k.'='.$v;
+	}
 	$temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
-	$ch->post($temp);
-	return $ch->exec();
+	return $ch->post($temp);
 }
 
 function DoSign_All($uid,$kw,$id,$table,$sign_mode) {

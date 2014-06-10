@@ -3,7 +3,7 @@
  * 自动加载
  */
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','2.9');
+define('SYSTEM_VER','2.91');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 $PluginHooks = array();
@@ -15,7 +15,7 @@ require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/PHPMailerAutoload.php';
 require SYSTEM_ROOT.'/class.php';
-if (option::get('dev') != 1) {
+if (option::get('dev') != 1 || defined('NO_ERROR')) {
 	define('SYSTEM_DEV', false);
 } else {
 	define('SYSTEM_DEV', true);
