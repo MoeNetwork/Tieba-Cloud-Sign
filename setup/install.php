@@ -5,6 +5,7 @@ define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/msg.php';
+include SYSTEM_ROOT.'/../lib/class.wcurl.php';
 
 if (file_exists(SYSTEM_ROOT.'/install.lock')) {
 	msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock');
@@ -13,9 +14,9 @@ if (file_exists(SYSTEM_ROOT.'/install.lock')) {
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
-	echo '<script src="../js/jquery.min.js"></script>';
-	echo '<link rel="stylesheet" href="../css/bootstrap.min.css">';
-	echo '<script src="../js/bootstrap.min.js"></script>';
+	echo '<script src="../source/js/jquery.min.js"></script>';
+	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
+	echo '<script src="../source/js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
 
 ?>
@@ -215,6 +216,17 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
 				break;
 
 			case '4':
+				@file_put_contents(SYSTEM_ROOT.'/install.lock', 'Locked');
+				$x = new wcurl('http://support.zhizhe8.net/tc_install.php');
+				$x->set(CURLOPT_CONNECTTIMEOUT, 2);
+				$x->post(array(
+					'url' => 'http://'.$_SERVER['HTTP_HOST'] . str_ireplace('/setup/install.php', '', $_SERVER['PHP_SELF']) ,
+					'date' => date('Y-m-d H:m:s')
+					));
+				header("Location: install.php?step=5");
+				break;
+
+			case '5':
 				echo '<h2>安装完成</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">

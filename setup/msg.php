@@ -8,10 +8,10 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
         <title><?php echo SYSTEM_FN ?> - 提示信息</title>
         <style type="text/css">
             html {
-                background: #555;
+                background: #eee;
             }
             body {
-                background: #eee;
+                background: #fff;
                 color: #333;
                 font-family: "微软雅黑","Microsoft YaHei", sans-serif;
                 margin: 2em auto;

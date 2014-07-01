@@ -5,14 +5,14 @@
     </div>
     <div style="margin:0% 5% 5% 5%;">
 	<div class="login-top"></div><br/><?php doAction('login_page_1'); ?>
-	<b>您需要输入账号和密码才能继续使用 <?php echo SYSTEM_FN ?>，请输入您的账号信息</b><br/><br/>
+	<b>您需要输入账户和密码才能继续使用 <?php echo SYSTEM_FN ?>，请输入您的账号信息</b><br/><br/>
   <?php if (isset($_GET['error_msg'])): ?><div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   错误：<?php echo strip_tags($_GET['error_msg']); ?></div><?php endif;?>
   <form name="f" method="post" action="<?php echo SYSTEM_URL ?>index.php?mod=admin:login">
 	<div class="input-group">
   <span class="input-group-addon">账户</span>
-  <input type="text" class="form-control" name="user">
+  <input type="text" class="form-control" name="user" placeholder="账户可以为用户名或者邮箱地址">
 </div><br/>
 <div class="input-group">
   <span class="input-group-addon">密码</span>

@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
 DROP TABLE IF EXISTS `{VAR-PREFIX}options`;
 DROP TABLE IF EXISTS `{VAR-PREFIX}tieba`;
 DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
+DROP TABLE IF EXISTS `{VAR-PREFIX}baiduid`;
 
 --
 -- 表的结构 `{VAR-PREFIX}cron`
@@ -98,6 +99,8 @@ INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
 CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}tieba` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `uid` int(30) NOT NULL,
+  `pid` int(30) NOT NULL DEFAULT '0',
+  `fid` int(30) NOT NULL DEFAULT '0',
   `tieba` varchar(10000) DEFAULT NULL,
   `no` int(10) NOT NULL DEFAULT '0',
   `status` int(10) NOT NULL DEFAULT '0',
@@ -120,7 +123,6 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}users` (
   `email` varchar(500) NOT NULL,
   `role` varchar(100) NOT NULL DEFAULT 'user',
   `t` varchar(200) NOT NULL DEFAULT 'tieba',
-  `ck_bduss` varchar(1000) DEFAULT NULL,
   `options` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
@@ -128,3 +130,16 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}users` (
   KEY `id` (`id`),
   KEY `id_2` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `{VAR-PREFIX}baiduid`
+--
+
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}baiduid` (
+  `id` int(30) NOT NULL AUTO_INCREMENT COMMENT 'pid',
+  `uid` int(30) NOT NULL,
+  `bduss` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

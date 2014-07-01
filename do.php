@@ -1,16 +1,15 @@
 <?php
 define('SYSTEM_DO_NOT_LOGIN', true);
 require dirname(__FILE__).'/init.php';
-error_reporting(0);
+global $m,$today,$i;
 require SYSTEM_ROOT.'/sign.functions.php';
 set_time_limit(0);
 $sign_multith = option::get('sign_multith');
 if (!isset($_GET['donnot_sign_multith']) && empty($sign_multith) && function_exists('fsockopen')) {
-	for ($i=0; $i < $sign_multith; $i++) { 
+	for ($ii=0; $ii < $sign_multith; $ii++) { 
 		XFSockOpen(SYSTEM_URL.'do.php?donnot_sign_multith',0,'','',false,'',0);
 	}
 }
-global $m,$today;
 	$return = '';
 	doAction('cron_1');
 
@@ -33,20 +32,16 @@ global $m,$today;
 
 	if (option::get('cron_order') != '2') {
 		$time = time();
-		DoSign('tieba',$sign_mode);
 		$tcc = 1;
-
-		$fb_tables = unserialize(option::get('fb_tables'));
-		if (!empty($fb_tables)) {
-			foreach ($fb_tables as $value) {
-				$return = DoSign($value,$sign_mode);
-				$tcc++;
-			}
+		foreach ($i['table'] as $value) {
+			$return = DoSign($value,$sign_mode);
+			$tcc++;
 		}
 
 		$sign_again_num = empty($sign_again['num']) ? 1 : $sign_again['num'] + 1;
 		option::set('cron_sign_again',serialize(array('num' => $sign_again_num, 'lastdo' => $today)));
 	}
+
 	doAction('cron_3');
 
 	/////////////// RUN ALL TASK IN THE CRON TABLE

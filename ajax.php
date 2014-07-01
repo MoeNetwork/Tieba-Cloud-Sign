@@ -36,16 +36,20 @@ switch (SYSTEM_PAGE) {
 
 		echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 		echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$count5} 个贴吧签到出错，{$count6} 个贴吧已被设定为忽略";
+		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.getfreetable();
 		}
 		break;
 
 
-	case 'checkupd': 
+	case 'admin:update': 
 		$c  = new wcurl('http://localhost/CALLBACK/download.php');
 		$x  = simplexml_load_string($c->exec());
 		$n  = 0;
 		$v1 = $x->children()->items; //文件列表
-		$up = array();
+
+		foreach ($v1->dir as $valu2) {
+			echo '<input type="hidden" name="dir[]" value="'.$valu2.'">';
+		}
 
 		foreach ($v1->item as $value) {
 			$md5  = (string) $v1->item[$n]->attributes();
@@ -53,13 +57,13 @@ switch (SYSTEM_PAGE) {
 			if (file_exists(SYSTEM_ROOT.'/'.$file)) {
 				$mymd5 = md5_file(SYSTEM_ROOT.'/'.$file);
 				if ($mymd5 != $md5) {
-					$up[] = $file;
+					echo "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
 				}
 			} else {
-					$up[] = $file;
+					echo "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
 			}
 		}
-		echo json_encode($up);
+
 		$c->close();
 		break;
 }

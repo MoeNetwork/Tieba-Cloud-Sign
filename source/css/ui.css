@@ -1,0 +1,10 @@
+.container .nav>.active>a, .container .nav>.active:hover>a, .container .nav>.active:focus>a {
+	padding-left: 18px;
+	font-weight: 700;
+	color: #563d7c;
+	background-color: transparent;
+	border-left: 2px solid #563d7c;
+}
+.container .nav>li>a {
+	color: #333;
+}

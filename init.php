@@ -1,35 +1,24 @@
 <?php
 /**
- * 自动加载
+ * 加载核心
  */
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','2.91');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
-$PluginHooks = array();
-$today       = date("Y-m-d");
 header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/setup/msg.php';
-require SYSTEM_ROOT.'/curl.php';
 require SYSTEM_ROOT.'/config.php';
-require SYSTEM_ROOT.'/mysql_autoload.php';
+require SYSTEM_ROOT.'/lib/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/PHPMailerAutoload.php';
-require SYSTEM_ROOT.'/class.php';
-if (option::get('dev') != 1 || defined('NO_ERROR')) {
-	define('SYSTEM_DEV', false);
-} else {
-	define('SYSTEM_DEV', true);
-}
-new option();
+require SYSTEM_ROOT.'/lib/reg.php';
 define('SYSTEM_URL',option::get('system_url'));
 define('SYSTEM_NAME', option::get('system_name'));
-
-error_reporting(0);
-require SYSTEM_ROOT.'/sfc.functions.php';
-require SYSTEM_ROOT.'/ui.php';
-require SYSTEM_ROOT.'/globals.php';
+require SYSTEM_ROOT.'/lib/sfc.functions.php';
+require SYSTEM_ROOT.'/lib/ui.php';
+require SYSTEM_ROOT.'/lib/globals.php';
 if (option::get('protector') == 1) {
-	require SYSTEM_ROOT.'/protector.php';
+	require SYSTEM_ROOT.'/lib/protector.php';
 }
-require SYSTEM_ROOT.'/plugins.php';
+require SYSTEM_ROOT.'/lib/plugins.php';
 ?>

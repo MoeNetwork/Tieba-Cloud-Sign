@@ -8,9 +8,9 @@ if (!defined('DO_NOT_LOAD_UI')) {
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 	echo '<title>功能检查 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
-	echo '<script src="../js/jquery.min.js"></script>';
-	echo '<link rel="stylesheet" href="../css/bootstrap.min.css">';
-	echo '<script src="../js/bootstrap.min.js"></script>';
+	echo '<script src="../source/js/jquery.min.js"></script>';
+	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
+	echo '<script src="../source/js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
 	?>
 		<div class="navbar navbar-default" role="navigation">

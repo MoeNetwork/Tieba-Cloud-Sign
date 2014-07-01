@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-
+global $i;
 ?>
 <div class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
@@ -17,40 +17,40 @@
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能菜单 <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list-alt"></span> 功能菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php">首页</a></li>
-          <li><a href="index.php?mod=set">个人设置</a></li>
-          <li><a href="index.php?mod=showtb">设置云签到</a></li>
-          <li><a href="index.php?mod=log">签到执行日志</a></li>
-          <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
+          <li><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+          <li><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
+          <li><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
+          <li><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
+          <li><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
           <?php doAction('navi_1'); ?>
         </ul>
       </li>
       <?php if (ROLE == 'admin') { ?>
       <li class="dropdown" class="active">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理菜单 <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> 管理菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php?mod=admin:tools">工具箱</a></li>
-          <li><a href="index.php?mod=admin:set">全局设置</a></li>
-          <li><a href="index.php?mod=admin:users">用户管理</a></li>
-          <li><a href="index.php?mod=admin:cron">计划任务</a></li>
-          <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
-          <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
+          <li><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+          <li><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+          <li><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+          <li><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+          <li><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+          <li><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
           <?php doAction('navi_2'); ?>
         </ul>
       </li>
       <li class="dropdown" class="active">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">插件菜单 <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span> 插件菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
-          <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>
+          <li><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+          <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
           <?php doAction('navi_3'); ?>
         </ul>
       </li>
       <?php } doAction('navi_4'); ?>
       <li class="dropdown" class="active">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于 <b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> 关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
           <li><a href="http://zhizhe8.net" target="_blank">无名智者个人博客</a></li>
@@ -60,7 +60,7 @@
     </ul>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="index.php?mod=admin:logout">退出登录</a></li>
+      <li><a href="index.php?mod=admin:logout"><span class="glyphicon glyphicon-off"></span> 退出登录</a></li>
       <?php doAction('navi_6'); ?>
     </ul>
   </div><!-- /.navbar-collapse -->
@@ -73,22 +73,23 @@
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
             <ul class="nav bs-sidenav">                 
               <li>
-                <li><a href="index.php">首页</a></li>
-                <li><a href="index.php?mod=set">个人设置</a></li>
-                <li><a href="index.php?mod=showtb">设置云签到</a></li>
-                <li><a href="index.php?mod=log">签到执行日志</a></li>
-                <li><a href="index.php?mod=baiduid">绑定百度账号</a></li>
+                <li <?php if($i['mode'][0] == 'default') { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+                <li <?php if($i['mode'][0] == 'set') { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
+                <li <?php if($i['mode'][0] == 'showtb') { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
+                <li <?php if($i['mode'][0] == 'log') { echo 'class="active"'; } ?> ><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
+                <li <?php if($i['mode'][0] == 'baiduid') { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
-                <li><a href="index.php?mod=admin:tools">工具箱</a></li>
-                <li><a href="index.php?mod=admin:set">全局设置</a></li>
-                <li><a href="index.php?mod=admin:users">用户管理</a></li>
-                <li><a href="index.php?mod=admin:cron">计划任务</a></li>
-                <li><a href="index.php?mod=admin:plugins">插件管理</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:tools') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:set') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:users') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:update') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:cron') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:plugins') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                 <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
                <?php doAction('navi_8'); ?>
                <br/>
-               <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a></li>
+               <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
             </ul>

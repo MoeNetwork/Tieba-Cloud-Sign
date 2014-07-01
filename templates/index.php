@@ -9,7 +9,7 @@
 </div>
 <?php
 doAction('index_3');
-if (BDUSS == null) {
+if (!isset($i['user']['bduss'][0])) {
 	echo '<br/><br/><b>配置状态：</b>无法自动签到 - 云签到未配置';
 } else {
 	$today = date('Y-m-d');
@@ -20,7 +20,6 @@ if (BDUSS == null) {
 	if (ROLE == 'admin') {
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制(管理员)';
-		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.getfreetable();
 	}
 	elseif(option::get('tb_max') == 0) {
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制';

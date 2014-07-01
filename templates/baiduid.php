@@ -1,16 +1,9 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
-
+global $i;
 global $m;
-
-if (BDUSS != null) {
-	echo '<div class="alert alert-success">您的百度账号已成功绑定。<a href="setting.php?mod=baiduid&delete" onclick="return confirm(\'你确实要解除绑定吗？\');">点击此处可以解绑</a><br/>如果签到不能进行，则请重新绑定</div>';
-} else {
-	echo '<div class="alert alert-warning">当前还没有绑定百度账号，所以云签到不可用，请输入下面的信息完成绑定</div>';
-}
-
-if (option::get('cloud') == 1) {
 ?>
 
+<!-- MODAL -->
 <div class="modal fade" id="DownloadPluginModal" tabindex="-1" role="dialog" aria-labelledby="DownloadPluginModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -28,7 +21,53 @@ if (option::get('cloud') == 1) {
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- END MODAL -->
 
+<!-- NAVI -->
+<ul class="nav nav-tabs" id="PageTab">
+  <li class="active"><a href="#adminid" data-toggle="tab" onclick="$('#newid').css('display','none');$('#adminid').css('display','');">管理账号</a></li>
+  <li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');">绑定新账号</a></li>
+</ul>
+<br/>
+<!-- END NAVI -->
+
+<!-- PAGE1: ADMINID-->
+<div class="tab-pane fade in active" id="adminid">
+<a name="#adminid"></a>
+<?php if(empty($i['user']['bduss'])) { ?>
+<div class="alert alert-warning">
+  无法显示列表，因为当前还没有绑定任何百度账号
+  <br/>若要绑定账号，请点击上方的 [ 绑定新账号 ]
+</div>
+<?php } else { ?>
+<div class="alert alert-info">
+  当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th style="width:10%">PID</th>
+      <th style="width:90%">BDUSS Cookie</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+   <?php
+    foreach ($i['user']['bduss'] as $key => $value) {
+      echo '<tr><td>'.$key.'</td><td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解除绑定</a></td></tr>';
+    }
+   ?>
+  </tbody>
+</table>
+<?php } ?>
+</div>
+<!-- END PAGE1 -->
+
+<!-- PAGE2: NEWID -->
+<?php if (option::get('cloud') == 1) { ?>
+<div class="tab-pane fade" id="newid" style="display:none">
+<a name="#newid"></a>
 <form method="post" action="http://support.zhizhe8.net/tc_bdid.php">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>
@@ -55,13 +94,14 @@ if (option::get('cloud') == 1) {
 <br/><br/>3.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
 <br/><br/>4.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
 <br/><br/>3.按下图操作：( 点图片查看大图 )
-<br/><br/><a href="<?php echo SYSTEM_URL ?>doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>doc/baiduid.jpg" width="90%" height="90%"></a>
+<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" width="90%" height="90%"></a>
 <br/><br/>4.输入复制到的 BDUSS 到下面：
 <form action="setting.php" method="get">
 <input type="hidden" name="mod" value="baiduid">
 <br/><input type="text" class="form-control" name="bduss" placeholder="输入获取到的 BDUSS">
 <br/><input type="submit" class="btn btn-primary" value="提交更改">
 </form>
-
+</div>
+<!-- END PAGE2 -->
 
 <br/><br/><br/><br/><br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>

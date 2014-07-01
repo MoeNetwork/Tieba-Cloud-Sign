@@ -121,14 +121,23 @@ function addset($name,$type,$x,$other = '',$text = '') {
 
 		</td>
 		</td>
+		</tr>
+		<tr><td>云平台级别设置<br/>强烈建议选择第一项</td><td>
+		<select name="cloud" class="form-control">
+			<option value="1" <?php if(option::get('cloud') == '1') { echo 'selected'; } ?>>高级会员 [ 提供完整的云服务 ]</option>
+			<option value="2" <?php if(option::get('cloud') == '2') { echo 'selected'; } ?>>普通成员 [ 提供部分的云服务 ]</option>
+			<option value="0" <?php if(option::get('cloud') == '0') { echo 'selected'; } ?>>拒绝加入 [ 不提供任何云服务 ]</option>
+		</select>
+		</td>
+		</tr>
 		<?php
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
 		addset('依靠访客触发任务','checkbox','trigger',null,' 建议仅在不支持计划任务并拒绝加入云平台时使用');
 		addset('启用安全保护模块','checkbox','protector',null,' 建议开启');
 		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加任何贴吧，添加贴吧时会忽略贴吧数量上限');
+		addset('记住密码有效期<br/>单位为秒，过大会导致浏览器无法记录','number','cktime',' class="form-control" step="1" min="1"');
 		addset('密码保存模式<br/>支持PHP，无需加 &lt?php 或 ?&gt 使用 $pwd 表示变量密码，填写\'或者"需要加上转义符\\，只能写一条语句，后面不需要带 ;','text','pwdmode',' class="form-control"','<br/>结果：'.highlight_string('<?php '.option::get('pwdmode').'; ?>',true));
 		doAction('admin_set');
-		addset('加入云平台','checkbox','cloud',null,' 建议开启，选择关闭将不连接云平台获取BDUSS并且不提供云触发器');
 		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');
 		?>
 	</tbody>

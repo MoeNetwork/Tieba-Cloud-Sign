@@ -43,7 +43,7 @@ $users = '';
 $s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users`');
 
 while ($x = $m->fetch_array($s)) {
-	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td><td><input type="text" style="width:100%" class="form-control" onclick="this.select();" value="'.$x['ck_bduss'].'" readonly></td></tr>';
+	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
 }
 
 ?>
@@ -53,9 +53,8 @@ while ($x = $m->fetch_array($s)) {
 	<thead>
 		<tr>
 			<th style="width:7%">UID</th>
-			<th style="width:35%">用户名/用户组</th>
-			<th style="width:20%">电子邮箱/数据表</th>
-			<th style="width:23%">Cookie</th>
+			<th style="width:40%">用户名/用户组</th>
+			<th style="width:25%">电子邮箱/数据表</th>
 		</tr>
 	</thead>
 	<tbody>

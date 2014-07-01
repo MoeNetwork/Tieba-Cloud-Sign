@@ -1,4 +1,8 @@
 <?php
+/**
+ * 设置保存页面
+ */
+
 require dirname(__FILE__).'/init.php';
 
 if (ROLE != 'user' && ROLE != 'admin') {
@@ -8,6 +12,9 @@ if (ROLE != 'user' && ROLE != 'admin') {
 if (ROLE != 'admin' && stristr(strip_tags($_GET['mod']), 'admin:')) {
 	msg('权限不足');
 }
+
+global $i;
+global $m;
 
 switch (SYSTEM_PAGE) {
 	case 'admin:plugins':
@@ -58,6 +65,7 @@ switch (SYSTEM_PAGE) {
 		@option::set('retry_max',$sou['retry_max']);
 		@option::set('cron_order',$sou['cron_order']);
 		@option::set('sign_multith',$sou['sign_multith']);
+		@option::set('cktime',$sou['cktime']);
 		if (empty($sou['fb_tables'])) {
 			@option::set('fb_tables',NULL);
 		} else {
@@ -66,6 +74,7 @@ switch (SYSTEM_PAGE) {
 			$n= 0;
 			foreach ($fb_tables as $value) {
 				$n++;
+				$value = strtolower($value);
 				$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
 				$m->query($sql);
 				$fb_tab[$n] .= trim($value);
@@ -98,6 +107,58 @@ switch (SYSTEM_PAGE) {
 			option::set('cron_sign_again','');
 			break;
 
+		case 'runsql':
+			global $m;
+			if (!empty($_POST['sql'])) {
+				$m->xquery($_POST['sql']);
+			}
+			break;
+
+		case 'remtab':
+			global $m;
+			if (!empty($_POST['tab'])) {
+				$m->query('DROP TABLE IF EXISTS `'.$_POST['tab'].'`');
+			}
+			break;
+
+		case 'updatefid':
+			global $m;
+			global $i;
+			$fbs = $i['tabpart'];
+				if (!isset($_GET['ok'])) {
+				$step = $_GET['step'] + 30;
+				$next = isset($_GET['in']) ? strip_tags($_GET['in']) : 'tieba';
+				$c  = $m->once_fetch_array("SELECT COUNT(*) AS `x` FROM `".DB_PREFIX.$next."`");
+				$c2 = $m->once_fetch_array("SELECT COUNT(*) AS `x` FROM `".DB_PREFIX.$next."` WHERE `fid` = '0'");
+				if ($c2['x'] >= 1) {
+					$x  = $m->query("SELECT * FROM `".DB_PREFIX.$next."` WHERE `fid` = '0' LIMIT 30");
+					while ($r = $m->fetch_array($x)) {
+						$fid = misc::getFid($r['tieba']);
+						$m->query("UPDATE `".DB_PREFIX.$next."` SET  `fid` =  '{$fid}' WHERE `".DB_PREFIX.$next."`.`id` = {$r['id']};");
+					}
+				} else {
+					$step = 0;
+					if ($next == 'tieba') {
+						$next = $fbs[1];
+					} else {
+						foreach ($fbs as $ke => $va) {
+							if ($va == $next) {
+								$newkey = $ke + 1;
+								$next = $ke[$newkey];
+								break;
+							}
+						}
+					}
+				}
+
+				if (empty($next)) {
+					msg('<meta http-equiv="refresh" content="0; url='.SYSTEM_URL.'index.php?mod=admin:tools&ok" />即将完成更新......程序将自动继续<br/><br/><a href="'.SYSTEM_URL.'index.php?mod=admin:tools&ok">如果你的浏览器没有自动跳转，请点击这里</a>',false);
+				}
+
+				msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='.$step.'&in='.$next.'" />已经更新表：'.DB_PREFIX.$next.' / 即将更新表：'.DB_PREFIX.$next.'<br/><br/>当前进度：'.$step.' / '.$c['x'].' <progress style="width:60%" value="'.$step.'" max="'.$c['x'].'"></progress><br/><br/>切勿关闭浏览器，程序将自动继续<br/><br/><a href="setting.php?mod=updatefid&step='.$step.'&in='.$next.'">如果你的浏览器没有自动跳转，请点击这里</a>',false);
+				}
+			break;
+
 		default:
 			msg('未定义操作');
 			break;
@@ -109,7 +170,7 @@ switch (SYSTEM_PAGE) {
 		switch (strip_tags($_POST['do'])) {
 			case 'cookie':
 				foreach ($_POST['user'] as $value) {
-					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET  `ck_bduss` =  '' WHERE  `".DB_PREFIX."users`.`id` = ".$value);
+					$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE  `".DB_PREFIX."baiduid`.`uid` = ".$value);
 				}
 				doAction('admin_users_cookie');
 				break;
@@ -141,7 +202,7 @@ switch (SYSTEM_PAGE) {
 				if ($x['total'] > 0) {
 					msg('添加用户失败：用户名已经存在');
 				}
-				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
+				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 				doAction('admin_users_add');
 				Redirect(SYSTEM_URL.'index.php?mod=admin:users&ok');
 				break;
@@ -185,12 +246,16 @@ switch (SYSTEM_PAGE) {
 	case 'baiduid':
 		if (isset($_GET['delete'])) {
 			CleanUser(UID);
-			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."users` SET  `ck_bduss` =  NULL WHERE  `".DB_PREFIX."users`.`id` =".UID.";");
+			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 		}
 		elseif (isset($_GET['bduss'])) {
-			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."users` SET  `ck_bduss` =  '".strip_tags($_GET['bduss'])."' WHERE  `".DB_PREFIX."users`.`id` =".UID.";");
-			Clean();
-			Redirect(SYSTEM_URL."?mod=baiduid");
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`) VALUES  (".UID.", '{$_GET['bduss']}' )");
+		}
+		elseif (isset($_GET['del'])) {
+			$del = (int) $_GET['del'];
+			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
+			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);	
+			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
 		}
 		doAction('baiduid_set');
 		Redirect(SYSTEM_URL."?mod=baiduid");
@@ -214,36 +279,39 @@ switch (SYSTEM_PAGE) {
 			  $addnum = 0; 
 			  $list   = array();
 			  $o      = option::get('tb_max');
-			  while(true) {
-			  	  $url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
-			  	  $n3++;
-			  	  $addnum = 0;
-			  	  $c      = new wcurl($url, array('User-Agent: Phone',"X-FORWARDED-FOR:183.185.2.".mt_rand(1,255))); 
-				  $c->addcookie("BDUSS=".BDUSS);
-				  $ch = $c->exec();
-				  $c->close();
-				  dir($ch);
-				  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
-				  foreach ($list[3] as $v) {
-				  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
-				  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
-					if($m->num_rows($osq) == 0) {
-						$n++;
-						if (!empty($o) && ROLE != 'admin' && $n > $o) {
-							msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
+			  global $i;
+			  foreach ($i['user']['bduss'] as $pid => $ubduss) {
+				  while(true) {
+				  	  $url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
+				  	  $n3++;
+				  	  $addnum = 0;
+				  	  $c      = new wcurl($url, array('User-Agent: Phone',"X-FORWARDED-FOR:183.185.2.".mt_rand(1,255))); 
+					  $c->addcookie("BDUSS=".$ubduss);
+					  $ch = $c->exec();
+					  $c->close();
+					  dir($ch);
+					  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
+					  foreach ($list[3] as $v) {
+					  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
+					  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
+						if($m->num_rows($osq) == 0) {
+							$n++;
+							if (!empty($o) && ROLE != 'admin' && $n > $o) {
+								msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
+							}
+							$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".UID.", '{$v}', 0, 0);");
 						}
-						$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
-					}
-					$addnum++;
+						$addnum++;
+					  }
+					  if (!isset($list[3][0])) {
+					  	break;
+					  }
+					  elseif($o != 0 && $n2 >= $o && ROLE != 'admin') {
+					  	break;
+					  }
+					  $n2 = $n2 + $addnum;
 				  }
-				  if (!isset($list[3][0])) {
-				  	break;
-				  }
-				  elseif($o != 0 && $n2 >= $o && ROLE != 'admin') {
-				  	break;
-				  }
-				  $n2 = $n2 + $addnum;
-			  }
+				}
 			  Redirect(SYSTEM_URL.'index.php?mod=showtb');
 		}
 		elseif (isset($_GET['clean'])) {
@@ -253,9 +321,10 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
 				$v = strip_tags($_POST['add']);
+				$pid = (int) strip_tags($_POST['pid']);
 				$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 				if($m->num_rows($osq) == 0) {
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, '".UID."', '{$v}', 0, 0);");
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
 				}
 			}
 			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
@@ -280,9 +349,8 @@ switch (SYSTEM_PAGE) {
 		break;
 }
 
-if (ROLE == 'admin' && stristr(strip_tags($_GET['mod']), 'plugin:')) {
-	$plug = trim(strip_tags($_GET['mod']),'plugin:');
-	option::set('plugin_'.$plug, serialize($_POST));
-	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$plug}&ok");
+if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
+	option::set('plugin_'.$i['mode'][1] , serialize($_POST));
+	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
 }
 ?>
