@@ -194,6 +194,35 @@ function DeleteFile($file) {
 }
 
 /**
+ * 批量复制
+ * @param $source 源目录名  
+ * @param $destination 目的目录名  
+ * @return 成功返回TRUE，失败返回原因
+ */
+function CopyAll($source,$destination){   
+    if(!is_dir($source)) {   
+        return "Error:the {$source} is not a direction!";   
+    }   
+  
+    if(!is_dir($destination)) {   
+        mkdir($destination,0777);   
+    }  
+
+    $handle = dir($source);   
+  
+    while($entry=$handle->read()) {   
+        if(($entry!==".")&&($entry!=="..")) {   
+            if(is_dir($source."/".$entry)) {   
+                CopyAll($source."/".$entry, $destination."/".$entry); 
+            } else {
+            	copy($source."/".$entry, $destination."/".$entry);
+            }
+		}
+    }   
+	return true;   
+}   
+
+/**
  * fosckopen 改进版
  */
 
@@ -358,6 +387,16 @@ function adds($s) {
 	} else {
 		return addslashes($s);
 	}
+}
+
+/**
+ * 转为正数或者0
+ * @param $s 需要转换的
+ * @return 转换结果
+ */
+
+function topos($s) {
+	return abs(intval($s));
 }
 
 /**

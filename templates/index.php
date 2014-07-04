@@ -1,7 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } ?>
 <div id="guide_page_1">
 <span id="avatar" style="float:right;"><img src="<?php echo getGravatar(EMAIL,140) ?>" alt="您的Gravatar头像" title="您的Gravatar头像" class="img-thumbnail" onerror="$('#avatar').html('无法加载 Gravatar 头像');"></span>
-<?php global $m; doAction('index_1'); echo NAME ;?>，你好，欢迎使用 百度贴吧云签到<br><br>
+<?php global $m,$i; doAction('index_1'); echo NAME ;?>，你好，欢迎使用 百度贴吧云签到<br><br>
 点击上方导航栏的 功能菜单 可以列出所有功能
 <br/><br/>
 此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> (@ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>)
@@ -9,13 +9,13 @@
 </div>
 <?php
 doAction('index_3');
-if (!isset($i['user']['bduss'][0])) {
+if (empty($i['user']['bduss'])) {
 	echo '<br/><br/><b>配置状态：</b>无法自动签到 - 云签到未配置';
 } else {
 	$today = date('Y-m-d');
 	echo '<br/><br/><b>配置状态：</b>云签到已配置，<a href="index.php?mod=log">点击查看签到日志</a>';
-	echo '<br/><br/><div id="stat" onclick="view_status(this);"><button type="button" class="btn btn-info">点击查看签到状态统计信息</button></div>';
 }
+	echo '<br/><br/><div id="stat" onclick="view_status(this);"><button type="button" class="btn btn-info">点击查看签到状态统计信息</button></div>';
 	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');

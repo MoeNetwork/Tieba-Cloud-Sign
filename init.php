@@ -6,6 +6,7 @@ define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','2.91');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
+define('SUPPORT_URL', 'http://support.zhizhe8.net/tcs/');
 header("content-type:text/html; charset=utf-8");
 require SYSTEM_ROOT.'/setup/msg.php';
 require SYSTEM_ROOT.'/config.php';

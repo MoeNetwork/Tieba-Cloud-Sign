@@ -5,23 +5,6 @@ if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">应用成功</div>';
 }
 doAction('admin_tools_1');
-
-if (isset($i['mode'][2]) && $i['mode'][2] == 'updnow') {
-	if (!is_dir(SYSTEM_ROOT.'/setup/update_cache')) {
-		mkdir(SYSTEM_ROOT.'/setup/update_cache');
-	}
-	foreach ($_POST['dir'] as $valu2) {
-		if (!is_dir(SYSTEM_ROOT.'/update_cache/'.$valu2)) {
-			mkdir(SYSTEM_ROOT.'/setup/update_cache/'.$valu2);
-		}
-	}
-	foreach ($_POST['file'] as $value) {
-		$c = new wcurl('http://localhost/CALLBACK/download.php?file='.$value);
-		file_put_contents(SYSTEM_ROOT.'/setup/update_cache/'.$value, $c->exec());
-		$c->close();
-	}
-	ReDirect('index.php?mod=admin:update&ok');
-}
 ?>
 <div id="comsys2">
 	<div class="alert alert-info"><span id="upd_info">正在检查更新......</span><br/><br/>
@@ -47,7 +30,7 @@ function update() {
 		  success: function(data){
 		    $("#upd_prog").css({'width':'70%'});
 			updata    = data;
-			$("#comsys3").html('<div class="alert alert-warning"><form action="index.php?mod=admin:update:updnow" method="post"><b>发现有新版文件，以下文件可以更新</b>：<br/>更新前请确保服务器具有写的权限，文件将被临时下载到 <b>/setup/update_cache</b> 文件夹<br/>' + updata + '<br/><br/><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"></form></div>');
+			$("#comsys3").html('<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>发现有新版文件，以下文件可以更新</b>：<br/>更新前请确保服务器具有写的权限，文件将被临时下载到 <b>/setup/update_cache</b> 文件夹<br/>' + updata + '<br/><br/><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"></form></div>');
 			console.log(data);
 		    $("#upd_info").html('完毕');
 		    $("#upd_prog").css({'width':'100%'});

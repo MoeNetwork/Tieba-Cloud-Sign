@@ -42,10 +42,13 @@ switch (SYSTEM_PAGE) {
 
 
 	case 'admin:update': 
-		$c  = new wcurl('http://localhost/CALLBACK/download.php');
+		$c  = new wcurl(SUPPORT_URL . 'download.xml');
 		$x  = simplexml_load_string($c->exec());
+		$c->close();
 		$n  = 0;
 		$v1 = $x->children()->items; //文件列表
+
+		echo '<input type="hidden" name="updfile" value="'. $x->children()->info->updatefile .'">';
 
 		foreach ($v1->dir as $valu2) {
 			echo '<input type="hidden" name="dir[]" value="'.$valu2.'">';
@@ -65,6 +68,33 @@ switch (SYSTEM_PAGE) {
 		}
 
 		$c->close();
+		break;
+
+	case 'admin:update:updnow':
+		if (!is_dir(SYSTEM_ROOT.'/setup/update_cache')) {
+			mkdir(SYSTEM_ROOT.'/setup/update_cache');
+		}
+		foreach ($_POST['dir'] as $valu2) {
+			if (!is_dir(SYSTEM_ROOT.'/update_cache/'.$valu2)) {
+				mkdir(SYSTEM_ROOT.'/setup/update_cache/'.$valu2);
+			}
+		}
+		foreach ($_POST['file'] as $value) {
+			$c = new wcurl(SUPPORT_URL . 'download.php?file='.$value);
+			file_put_contents(SYSTEM_ROOT.'/setup/update_cache/'.$value, $c->exec());
+			$c->close();
+		}
+		ReDirect('ajax.php?mod=admin:update:install&updfile=' . $_POST['updfile']);
+		break;
+
+	case 'admin:update:install':
+		CopyAll(SYSTEM_ROOT.'/setup/update_cache',SYSTEM_ROOT);
+		DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
+		if (!empty($_GET['updfile'])) {
+			ReDirect(SYSTEM_URL . $_GET['updfile']);
+		} else {
+			msg('站点升级完毕', SYSTEM_URL);
+		}
 		break;
 }
 ?>
