@@ -1,13 +1,14 @@
 <?php
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','1.0');
-define('SYSTEM_ROOT',dirname(__FILE__));
+define('SYSTEM_ROOT2',dirname(__FILE__));
+define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 header("content-type:text/html; charset=utf-8");
-require SYSTEM_ROOT.'/msg.php';
-include SYSTEM_ROOT.'/../lib/class.wcurl.php';
+require SYSTEM_ROOT2.'/msg.php';
+include SYSTEM_ROOT2.'/../lib/class.wcurl.php';
 
-if (file_exists(SYSTEM_ROOT.'/install.lock')) {
+if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 	msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock');
 }
 
@@ -48,7 +49,7 @@ if (file_exists(SYSTEM_ROOT.'/install.lock')) {
   </div>
 </div>';
 		define('DO_NOT_LOAD_UI', TRUE);
-		include SYSTEM_ROOT.'/check.php';
+		include SYSTEM_ROOT2.'/check.php';
 		echo '<input type="button" onclick="location = \'install.php?step=1\'" class="btn btn-success" value="下一步 >>">';
 	} else {
 		switch (strip_tags($_GET['step'])) {
@@ -124,12 +125,21 @@ define(\'DB_PREFIX\',\'tc_\');
 			case '3':
 				$errorhappen = '';
 				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
-				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT.'/install.template.sql'));
+				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
 				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
 				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
+				if($_POST['from_config'] == 1) {
+					require SYSTEM_ROOT2.'/../config.php';
+				} else {
+					define('DB_HOST',$_POST['dbhost']);
+					define('DB_USER',$_POST['dbuser']);
+					define('DB_PASSWD',$_POST['dbpw']);
+					define('DB_NAME',$_POST['dbname']);
+					define('DB_PREFIX',$_POST['dbprefix']);
+				}
 				if (!isset($_POST['isbae'])) {
-					$write_data = '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
+					$write_data = '<?php if (!defined(\'SYSTEM_ROOT2\')) { die(\'Insufficient Permissions\'); }
 //特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
 //如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
 
@@ -137,63 +147,25 @@ define(\'DB_PREFIX\',\'tc_\');
 
 //MySQL 数据库地址，普通主机一般为localhost
 //MySQL 数据库地址，普通主机一般为localhost
-define(\'DB_HOST\',\''.$_POST['dbhost'].'\');
+define(\'DB_HOST\',\''.DB_HOST.'\');
 //MySQL 数据库用户名
-define(\'DB_USER\',\''.$_POST['dbuser'].'\');
+define(\'DB_USER\',\''.DB_USER.'\');
 //MySQL 数据库密码
-define(\'DB_PASSWD\',\''.$_POST['dbpw'].'\');
+define(\'DB_PASSWD\',\''.DB_PASSWD.'\');
 //MySQL 数据库名称(存放百度贴吧云签到的)
-define(\'DB_NAME\',\''.$_POST['dbname'].'\');
+define(\'DB_NAME\',\''.DB_NAME.'\');
 //MySQL 数据库前缀，建议保持默认
-define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
+define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
 					if(file_put_contents('../config.php', $write_data) <= 0) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
 				}
-				if (class_exists("mysqli") && !isset($_POST['nosql'])) {
-					if($_POST['from_config'] == 1) {
-						require SYSTEM_ROOT.'/../config.php';
-						if (stristr(DB_HOST, ':')) {
-							preg_match('/(.*):(.*)/', DB_HOST, $coninfo);
-							$conn = new mysqli($coninfo[1], DB_USER, DB_PASSWD, DB_NAME, $coninfo[2]);
-						} else {
-							$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
-						}
-					} else {
-						$conn = new mysqli($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpw'], $_POST['dbname']);
-					}
-					if ($conn->connect_error) {
-						switch ($conn->connect_errno) {
-							case 1044:
-							case 1045:
-								msg("连接数据库失败，数据库用户名或密码错误。错误编号：" . $conn->connect_errno);
-								break;
-
-			                case 1049:
-								msg("连接数据库失败，未找到您填写的数据库。错误编号：1049");
-								break;
-
-							case 2003:
-								msg("连接数据库失败，数据库端口错误。错误编号：2003");
-								break;
-
-							case 2005:
-								msg("连接数据库失败，数据库地址错误或者数据库服务器不可用。错误编号：2005");
-								break;
-
-							case 2006:
-								msg("连接数据库失败，数据库服务器不可用。错误编号：2006");
-								break;
-
-							default :
-								msg("连接数据库失败，请检查数据库信息。错误编号：" . $conn->connect_errno);
-								break;
-						}
-					}
-					$conn->set_charset('utf8');
-					$conn->multi_query($sql);
+				if (!isset($_POST['nosql'])) {
+					require SYSTEM_ROOT.'/lib/mysql_autoload.php';
+					global $m; 
+					$m->multi_query($sql);
 				} else {
-					$errorhappen .= '由于您的服务器不支持 MySQLi 或您选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
+					$errorhappen .= '由于你选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
 				}
 
 				if (!empty($errorhappen)) {
@@ -216,7 +188,7 @@ define(\'DB_PREFIX\',\''.$_POST['dbprefix'].'\');';
 				break;
 
 			case '4':
-				@file_put_contents(SYSTEM_ROOT.'/install.lock', 'Locked');
+				@file_put_contents(SYSTEM_ROOT2.'/install.lock', '1');
 				$x = new wcurl('http://support.zhizhe8.net/tc_install.php');
 				$x->set(CURLOPT_CONNECTTIMEOUT, 2);
 				$x->post(array(

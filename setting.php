@@ -110,7 +110,8 @@ switch (SYSTEM_PAGE) {
 		case 'runsql':
 			global $m;
 			if (!empty($_POST['sql'])) {
-				$m->xquery($_POST['sql']);
+				$sql = str_ireplace('{VAR-DBNAME}', DB_NAME, str_ireplace('{VAR-PREFIX}', DB_PREFIX, $_POST['sql']));
+				$m->xquery($sql);
 			}
 			break;
 

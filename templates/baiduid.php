@@ -13,7 +13,8 @@ global $m;
       </div>
       <div class="modal-body">
         方式1：<a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg" target="_blank">点击从谷歌应用商店安装</a><br/><br/>
-        方式2：<a href="http://pan.baidu.com/s/1pJqa1Dp" target="_blank">点击从百度网盘下载手动安装</a><br/><br/>
+        方式2：<a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/attach_files" target="_blank">点击从 OSChina 下载 [ 选择 Edit This Cookie.crx ]</a><br/><br/>
+        方式3：<a href="http://pan.baidu.com/s/1nt4uCGx" target="_blank">点击从百度网盘下载手动安装</a><br/><br/>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

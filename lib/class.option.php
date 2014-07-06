@@ -28,12 +28,7 @@ class option {
 	*/
 	public static function set($name,$value) {
 		global $m;
-		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = '{$name}';");
-		if ($x['ffffff'] <= 0 && !empty($x) && $x != false) {
-			$m->query("INSERT INTO  `".DB_NAME."`.`".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
-		} else {
-			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."options` SET  `value` =  '{$value}' WHERE `name` = '{$name}';");
-		}
+		$m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';");
 		return true;
 	}
 
@@ -44,7 +39,7 @@ class option {
 	 */
 	public static function add($name,$value) {
 		global $m;
-		$m->query("INSERT INTO  `".DB_NAME."`.`".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
+		$m->query("INSERT INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
 	}
 
 	/**
@@ -53,7 +48,7 @@ class option {
 	*/
 	public static function del($name) {
 		global $m;
-		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."options` WHERE `name` = `{$name}`");
+		$m->query("DELETE FROM `".DB_PREFIX."options` WHERE `name` = `{$name}`");
 	}
 
 	/**

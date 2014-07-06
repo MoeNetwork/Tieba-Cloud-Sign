@@ -18,7 +18,7 @@ foreach ($x as $value) {
   if (SYSTEM_VER > $g[2]) {
     $other = '[ <font color="red">已安装</font> ] ';
   } else {
-    $other = '[ <b>未安装</b> ] ';
+    $other = '';
   }
   $v .= "<li>{$other}<a href=\"{$value}\" onclick=\"return confirm('你确定要升级到此版本吗？');\">从 {$g[1]} 升级到 {$g[2]} [ {$value} ]</a></li><br/>";
 }
@@ -42,5 +42,5 @@ foreach ($x as $value) {
   </div><!-- /.navbar-collapse -->
 </div>
 <div style="width:90%;margin: 0 auto;overflow: hidden;position: relative;">
-<h2>请选择要升级的版本</h2><b>当前版本：</b><?php echo SYSTEM_VER ?> | <b>提示：</b>请务必逐步升级<br/><br/>
+<h2>请选择要升级的版本</h2><b>提示：</b>请务必逐步升级<br/><br/>
 <?php echo $v ?></div>
