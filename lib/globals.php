@@ -23,21 +23,23 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 		define('NAME', $p['name']);
 		define('EMAIL', $p['email']);
 		define('TABLE', $p['t']);
-		$i['user']['login'] = true;
-		$i['user']['role'] = $p['role'];
-		$i['user']['uid'] = $p['id'];
-		$i['user']['name'] = $p['name'];
-		$i['user']['email'] = $p['email'];
-		$i['user']['pw'] = $p['pw'];
-		$i['user']['bduss'] = array();
-		$i['user']['table'] = $p['t'];
-		$bds = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE uid = ".UID);
-		while ($bd = $m->fetch_array($bds)) {
-			$bdspid = $bd['id'];
-			$i['user']['bduss'][$bdspid] = $bd['bduss'];
+		if (!defined('SYSTEM_ONLY_CHECK_LOGIN')) {
+			$i['user']['login'] = true;
+			$i['user']['role'] = $p['role'];
+			$i['user']['uid'] = $p['id'];
+			$i['user']['name'] = $p['name'];
+			$i['user']['email'] = $p['email'];
+			$i['user']['pw'] = $p['pw'];
+			$i['user']['bduss'] = array();
+			$i['user']['table'] = $p['t'];
+			$bds = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE uid = ".UID);
+			while ($bd = $m->fetch_array($bds)) {
+				$bdspid = $bd['id'];
+				$i['user']['bduss'][$bdspid] = $bd['bduss'];
+			}
+			$GLOBALS = $i['user'];
+			$i['user']['opt'] = unserialize($p['options']);
 		}
-		$GLOBALS = $i['user'];
-		$i['user']['opt'] = unserialize($p['options']);
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {
@@ -61,6 +63,10 @@ if (SYSTEM_PAGE == 'admin:login') {
 	} else {
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
 			$cktime = (int) option::get('cktime');
+			if (empty($cktime)) {
+				option::set('cktime','999999');
+				$cktime = 999999;
+			}
 			setcookie("wmzz_tc_user",$name, time() + $cktime);
 			setcookie("wmzz_tc_pw",EncodePwd($pw), time() + $cktime);
 			header("Location: ".SYSTEM_URL);
