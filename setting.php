@@ -191,6 +191,25 @@ switch (SYSTEM_PAGE) {
 				doAction('admin_users_delete');
 				break;
 
+			case 'crole':
+				foreach ($_POST['user'] as $value) {
+					$r = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE `".DB_PREFIX."users`.`id` = {$value}");
+					if ($r['role'] == 'user') {
+						$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = 'admin' WHERE `".DB_PREFIX."users`.`id` = {$value}");
+					} else {
+						$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = 'user' WHERE `".DB_PREFIX."users`.`id` = {$value}");
+					}
+				}
+				doAction('admin_users_crole');
+				break;
+
+			case 'cset':
+				foreach ($_POST['user'] as $value) {
+					option::udel($value);
+				}
+				doAction('admin_users_cset');
+				break;
+
 			case 'add':
 				$name = isset($_POST['name']) ? strip_tags($_POST['name']) : '';
 				$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';

@@ -61,7 +61,11 @@ while ($x = $m->fetch_array($s)) {
 		<?php echo $users; ?>
 	</tbody>
 </table>
-选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="do" value="delete"> 删除用户
+选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; 
+<input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; 
+<input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp; 
+<input type="radio" name="do" value="crole"> 提/降 用户组 &nbsp;&nbsp;&nbsp;&nbsp; 
+<input type="radio" name="do" value="cset"> 清除个人设置
 <br/><br/><input type="submit" class="btn btn-primary" value="执行操作">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:users&add'">添加用户</button>

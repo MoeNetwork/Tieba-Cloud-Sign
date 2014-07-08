@@ -83,6 +83,18 @@ class option {
 	}
 
 	/**
+	 * 清除用户的设置
+	 * $uid 用户UID，默认当前用户的UID
+	 */
+	public static function udel($uid = '') {
+		global $m;
+		if (empty($uid)) {
+			$uid = $GLOBALS['uid'];
+		}
+		$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `options` =  NULL WHERE `id` = ".$uid);
+	}
+
+	/**
 	 * 获取插件的设置
 	 * @param 插件标识符
 	 * @return array 设置数组
