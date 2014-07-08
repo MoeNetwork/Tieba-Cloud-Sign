@@ -35,6 +35,7 @@ global $i;
           <li><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
           <li><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
           <li><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+          <li><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
           <li><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
           <li><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
           <?php doAction('navi_2'); ?>
@@ -84,6 +85,7 @@ global $i;
                 <li <?php if(SYSTEM_PAGE == 'admin:set') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:users') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:update') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:stat') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:cron') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:plugins') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                 <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->

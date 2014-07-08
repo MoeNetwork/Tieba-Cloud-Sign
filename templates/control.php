@@ -43,6 +43,9 @@ switch ($i['mode'][0]) {
 				}
 				echo '<br/><br/><br/><br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' By <a href="http://zhizhe8.net" target="_blank">无名智者</a>';
 				break;
+			case 'stat':
+				template('admin-stat');
+				break;
 		}
 		break;
 	default:

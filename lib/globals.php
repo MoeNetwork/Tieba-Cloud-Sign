@@ -73,6 +73,9 @@ if (SYSTEM_PAGE == 'admin:login') {
 }
 elseif (SYSTEM_PAGE == 'admin:reg') {
 	define('ROLE', 'visitor');
+	if (option::get('enable_reg') != '1') {
+		msg('注册失败：该站点已关闭注册');
+	}
 	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
 	$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';
 	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';

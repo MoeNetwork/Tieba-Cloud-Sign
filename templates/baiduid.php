@@ -27,7 +27,7 @@ global $m;
 <!-- NAVI -->
 <ul class="nav nav-tabs" id="PageTab">
   <li class="active"><a href="#adminid" data-toggle="tab" onclick="$('#newid').css('display','none');$('#adminid').css('display','');">管理账号</a></li>
-  <li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');">绑定新账号</a></li>
+  <?php if (option::get('bduss_num') != '-1') { ?><li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');">绑定新账号</a></li><?php } ?>
 </ul>
 <br/>
 <!-- END NAVI -->
@@ -35,15 +35,22 @@ global $m;
 <!-- PAGE1: ADMINID-->
 <div class="tab-pane fade in active" id="adminid">
 <a name="#adminid"></a>
-<?php if(empty($i['user']['bduss'])) { ?>
+<?php if (option::get('bduss_num') == '-1' && ROLE != 'admin') { ?>
+<div class="alert alert-danger" role="alert">
+  本站禁止绑定百度账号，当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
+</div>
+<?php } elseif(empty($i['user']['bduss'])) { ?>
 <div class="alert alert-warning">
   无法显示列表，因为当前还没有绑定任何百度账号
   <br/>若要绑定账号，请点击上方的 [ 绑定新账号 ]
+  <?php if (option::get('bduss_num') != '0') echo '，您最多能够绑定 '.option::get('bduss_num').' 个账号'; ?>
 </div>
 <?php } else { ?>
 <div class="alert alert-info">
   当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
+  <?php if (option::get('bduss_num') != '0' && ROLE != 'admin') echo '，您最多能够绑定 '.option::get('bduss_num').' 个账号'; ?>
 </div>
+<?php } if(!empty($i['user']['bduss'])) { ?>
 
 <table class="table table-striped">
   <thead>

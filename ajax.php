@@ -36,7 +36,7 @@ switch (SYSTEM_PAGE) {
 
 		echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$count1} 个贴吧，还有 {$count2} 个贴吧等待签到";
 		echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$count5} 个贴吧签到出错，{$count6} 个贴吧已被设定为忽略";
-		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.getfreetable();
+		echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
 		}
 		break;
 

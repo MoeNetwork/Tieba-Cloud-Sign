@@ -57,6 +57,7 @@ switch (SYSTEM_PAGE) {
 		@option::set('mail_smtpname',$sou['mail_smtpname']);
 		@option::set('mail_smtppw',$sou['mail_smtppw']);
 		@option::set('dev',$sou['dev']);
+		@option::set('bduss_num',$sou['bduss_num']);
 		@option::set('fb',$sou['fb']);
 		@option::set('cloud',$sou['cloud']);
 		@option::set('enable_addtieba',$sou['enable_addtieba']);
@@ -250,6 +251,12 @@ switch (SYSTEM_PAGE) {
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 		}
 		elseif (isset($_GET['bduss'])) {
+			if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
+
+			if (option::get('bduss_num') != '0' && ROLE != 'admin') {
+				$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
+				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号'); 
+			}
 			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`) VALUES  (".UID.", '{$_GET['bduss']}' )");
 		}
 		elseif (isset($_GET['del'])) {

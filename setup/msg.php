@@ -5,7 +5,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php echo SYSTEM_FN ?> - 提示信息</title>
+        <title><?php echo SYSTEM_NAME ?> - 提示信息</title>
         <style type="text/css">
             html {
                 background: #eee;
@@ -33,7 +33,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 margin-top: 50px;
             }
             #error-page p {
-                font-size: 14px;
+                font-size: 9px;
                 line-height: 1.5;
                 margin: 25px 0 20px;
             }
@@ -42,7 +42,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
             }
             ul li {
                 margin-bottom: 10px;
-                font-size: 14px ;
+                font-size: 9px ;
             }
             a {
                 color: #21759B;
@@ -105,7 +105,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 </style>
     </head>
     <body id="error-page">
-        <h3><?php echo SYSTEM_FN ?> - 提示信息</h3>
+        <h3><?php echo SYSTEM_NAME ?> - 提示信息</h3>
         <?php echo $msg ?>
         <?php if ($url != false) {
             if ($url == true) {

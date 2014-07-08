@@ -34,6 +34,7 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		addset('最大关注贴吧数量<br/>0为不限,对管理员无效','number','tb_max','min="0" step="1" class="form-control"');
 		addset('自定义底部信息<br/>支持 HTML','text','footer',' class="form-control"');
 		addset('签到失败重试次数<br/>0为无限，-1为不重试','number','retry_max','min="-1" step="1" class="form-control"');
+		addset('最大允许用户绑定账号数<br/>0为无限，-1为禁止绑定，对管理员无效','number','bduss_num','min="-1" step="1" class="form-control"');
 		addset('计划任务线程数<br/>0单线程，此为模拟多线程','number','sign_multith','min="0" step="1" class="form-control"');
 		?>
 		<tr><td>注册杂项设置</td><td>
