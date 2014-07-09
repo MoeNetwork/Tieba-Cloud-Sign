@@ -113,7 +113,7 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 		$role = 'user';
 	}
 
-	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\', NULL);');
+	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 	setcookie("wmzz_tc_user",$name);
 	setcookie("wmzz_tc_pw",EncodePwd($pw));
 	header("Location: ".SYSTEM_URL);
