@@ -34,7 +34,7 @@ if (!isset($_GET['donnot_sign_multith']) && empty($sign_multith) && function_exi
 		$time = time();
 		$tcc = 1;
 		foreach ($i['table'] as $value) {
-			$return = DoSign($value,$sign_mode);
+			$return = misc::DoSign($value,$sign_mode);
 			$tcc++;
 		}
 

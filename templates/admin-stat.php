@@ -13,6 +13,7 @@ case 'sign' :
 ?>
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="index.php?mod=admin:stat:sign">签到</a></li>
+  <li><a href="index.php?mod=admin:stat:env">环境</a></li>
   <?php doAction('stat_navi'); ?>
 </ul>
 <h3>查看签到信息和用户信息</h3>
@@ -38,6 +39,17 @@ case 'sign' :
 		?>
 	</tbody>
 </table>
+<?php break; case 'env' : ?>
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="index.php?mod=admin:stat:sign">签到</a></li>
+  <li class="active"><a href="index.php?mod=admin:stat:env">环境</a></li>
+  <?php doAction('stat_navi'); ?>
+</ul>
+<h3>当前服务器软件环境</h3>
+<?php 
+define('DO_NOT_LOAD_UI', true);
+require SYSTEM_ROOT.'/setup/check.php';
+?>
 <?php break; default:  ?>
 <ul class="nav nav-tabs" role="tablist">
   <li><a href="index.php?mod=admin:stat:sign">签到</a></li>
