@@ -316,12 +316,11 @@ switch (SYSTEM_PAGE) {
 					  $c->addcookie("BDUSS=".$ubduss);
 					  $ch = $c->exec();
 					  $c->close();
-					  dir($ch);
 					  preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 					  foreach ($list[3] as $v) {
 					  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
-					  	$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
-						if($m->num_rows($osq) == 0) {
+					  	$osq = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
+						if($osq['c'] <= 0) {
 							$n++;
 							if (!empty($o) && ROLE != 'admin' && $n > $o) {
 								msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
