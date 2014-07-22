@@ -188,11 +188,16 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
 				break;
 
 			case '4':
+				if (!empty($_SERVER['HTTPS'])) {
+					$http = 'https://';
+				} else {
+					$http = 'http://';
+				}
 				@file_put_contents(SYSTEM_ROOT2.'/install.lock', '1');
 				$x = new wcurl('http://support.zhizhe8.net/tc_install.php');
 				$x->set(CURLOPT_CONNECTTIMEOUT, 2);
 				$x->post(array(
-					'url' => 'http://'.$_SERVER['HTTP_HOST'] . str_ireplace('/setup/install.php', '', $_SERVER['PHP_SELF']) ,
+					'url' => $http.$_SERVER['HTTP_HOST'] . str_ireplace('/setup/install.php', '', $_SERVER['PHP_SELF']) ,
 					'date' => date('Y-m-d H:m:s')
 					));
 				header("Location: install.php?step=5");
