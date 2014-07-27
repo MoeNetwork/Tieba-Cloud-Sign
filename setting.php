@@ -376,7 +376,7 @@ switch (SYSTEM_PAGE) {
 }
 
 if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
-	option::set('plugin_'.$i['mode'][1] , addslashes(serialize($_POST)));
+	option::set('plugin_'.$i['mode'][1] , serialize($_POST));
 	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
 }
 ?>

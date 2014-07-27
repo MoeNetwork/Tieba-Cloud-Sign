@@ -40,14 +40,6 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 			$GLOBALS = $i['user'];
 			$i['user']['opt'] = unserialize($p['options']);
 		}
-		//是否为VIP，管理员和VIP组的用户都为VIP
-		if (ROLE == 'admin' || ROLE == 'vip') {
-			$i['user']['isvip'] = true;
-			define('ISVIP', true);
-		} else {
-			$i['user']['isvip'] = false;
-			define('ISVIP', false);
-		}
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {
