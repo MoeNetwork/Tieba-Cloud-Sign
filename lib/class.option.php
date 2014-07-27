@@ -39,7 +39,7 @@ class option {
 	 */
 	public static function add($name,$value) {
 		global $m;
-		$m->query("INSERT INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
+		$m->query("INSERT IGNORE INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
 	}
 
 	/**
