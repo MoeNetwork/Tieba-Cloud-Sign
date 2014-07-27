@@ -1,11 +1,16 @@
 <?php
 function msg($msg = '未知的异常',$url = true,$die = true) {
+    if (defined('SYSTEM_NAME')) {
+        $sysname = SYSTEM_NAME;
+    } else {
+        $sysname = SYSTEM_FN;
+    }
     ?>  
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php echo SYSTEM_NAME ?> - 提示信息</title>
+        <title><?php echo $sysname ?> - 提示信息</title>
         <style type="text/css">
             html {
                 background: #eee;
@@ -105,7 +110,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 </style>
     </head>
     <body id="error-page">
-        <h3><?php echo SYSTEM_NAME ?> - 提示信息</h3>
+        <h3><?php echo $sysname ?> - 提示信息</h3>
         <?php echo $msg ?>
         <?php if ($url != false) {
             if ($url == true) {

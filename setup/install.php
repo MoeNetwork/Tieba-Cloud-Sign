@@ -128,7 +128,6 @@ define(\'DB_PREFIX\',\'tc_\');
 				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
 				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
 				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
-				$sql .= "\n"."INSERT INTO `{$_POST['dbname']}`.`{$_POST['dbprefix']}users` (`id`, `name`, `pw`, `email`, `role`, `t`, `ck_bduss`, `options`) VALUES (NULL, '{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin', 'tieba', '', NULL);";
 				if($_POST['from_config'] == 1) {
 					require SYSTEM_ROOT2.'/../config.php';
 				} else {
@@ -138,6 +137,7 @@ define(\'DB_PREFIX\',\'tc_\');
 					define('DB_NAME',$_POST['dbname']);
 					define('DB_PREFIX',$_POST['dbprefix']);
 				}
+				$sql .= "\n"."INSERT INTO `".DB_NAME."`.`".DB_PREFIX."users` (`name`, `pw`, `email`, `role`) VALUES ('{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin');";
 				if (!isset($_POST['isbae'])) {
 					$write_data = '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
 //特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
@@ -156,7 +156,7 @@ define(\'DB_PASSWD\',\''.DB_PASSWD.'\');
 define(\'DB_NAME\',\''.DB_NAME.'\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
-					if(file_put_contents('../config.php', $write_data) <= 0) {
+					if($_POST['from_config'] != 1 && file_put_contents('../config.php', $write_data) <= 0) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
 				}
@@ -209,7 +209,7 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
     <span class="sr-only">90%</span>
   </div>
 </div>';
-				echo '恭喜你，安装已经完成<br/><br/>请添加一个计划任务，文件为本程序根目录下的 <b>do.php</b><br/><br/>计划任务运行时间建议为每分钟运行 ( Linux Crontab参考：<b><font color="blue">* * * * *</font></b> )<br/><br/><br/><br/>为保证站点安全，系统已在 /setup 文件夹下放置了 install.lock 文件，如果您的服务器不支持写入，请手动放置一个空的 install.lock 文件到此文件夹下<input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
+				echo '恭喜你，安装已经完成<br/><br/>请添加一个计划任务，文件为本程序根目录下的 <b>do.php</b><br/><br/>计划任务运行时间建议为每分钟运行 ( Linux Crontab参考：<b><font color="blue">* * * * *</font></b> )<br/><br/><br/>为保证站点安全，系统已在 /setup 文件夹下放置了 install.lock 文件，如果您的服务器不支持写入，请手动放置一个空的 install.lock 文件到此文件夹下<br/><br/><input type="button" onclick="location = \'../index.php\'" class="btn btn-success" value="进入我的云签到 >>">';
 				@file_put_contents(SYSTEM_ROOT2.'/install.lock', '1');
 				break;
 

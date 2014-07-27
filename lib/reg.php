@@ -33,8 +33,10 @@ while ($rsr = $m->fetch_array($rs)) {
 $i['table'][] = 'tieba';
 //贴吧分表列表
 $i['tabpart'] = unserialize($i['opt']['fb_tables']);
-foreach ($i['tabpart'] as $value) {
-	$i['table'][] = $value;
+if (!empty($i['tabpart'])) {
+	foreach ($i['tabpart'] as $value) {
+		$i['table'][] = $value;
+	}
 }
 //激活的插件列表
 $i['plugin'] = unserialize($i['opt']['actived_plugins']);
