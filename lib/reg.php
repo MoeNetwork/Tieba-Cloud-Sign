@@ -3,7 +3,6 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 /**
  * 环境准备
  */
-error_reporting(0);
 
 $PluginHooks = array();
 $today       = date("Y-m-d");

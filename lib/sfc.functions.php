@@ -98,6 +98,45 @@ function Clean() {
 }
 
 /**
+ * MySQL 随机取记录
+ * 
+ * @param $t 表
+ * @param $c ID列，默认为id
+ * @param $n 取多少个
+ * @param $w 条件语句
+ * @return 取1个直接返回结果数组，取>1个返回多维数组，用foreach取出
+ */
+function rand_row($t , $c = 'id' , $n = '1', $w = '') {
+	global $m;
+	if (!empty($w)) {
+		$w = ' AND '.$w;
+	}
+	$sql = "SELECT * FROM `{$t}` AS r1 JOIN (SELECT (RAND() * (SELECT MAX(`{$c}`) FROM `{$t}`)) AS {$c}) AS r2 WHERE r1.{$c} >= r2.{$c} {$w} ORDER BY r1.{$c} ASC LIMIT 1;";
+	if ($n == '1') {
+		$r =  $m->once_fetch_array($sql);
+		$r['id'] = intval($r['id']);
+		return $r;
+	} else {
+		$r = array();
+		for ($i=0; $i < $n; $i++) { 
+			$r1 = $m->once_fetch_array($sql);
+			$r1['id'] = intval($r1['id']);
+			$r[] = $r1;
+		}
+		return $r;
+	}
+}
+
+/**
+ * 从数组中随机取一个值
+ * @param array 数组
+ */
+function rand_array($a) {
+	$r = array_rand($a,1);
+	return $a[$r];
+}
+
+/**
  * 获取空闲的贴吧记录表
  *
  */
@@ -328,11 +367,15 @@ function doAction($hook) {
  * @param ROLE
  */
 function getrole($role) {
+	$role = strtolower($role);
 	if ($role == 'admin') {
 		return '管理员';
 	}
 	elseif ($role == 'user') {
 		return '用户';
+	}
+	elseif ($role == 'vip') {
+		return 'VIP';
 	}
 	elseif ($role == 'visitor') {
 		return '访客';

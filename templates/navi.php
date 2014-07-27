@@ -74,20 +74,20 @@ global $i;
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
             <ul class="nav bs-sidenav">                 
               <li>
-                <li <?php if($i['mode'][0] == 'default') { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
-                <li <?php if($i['mode'][0] == 'set') { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
-                <li <?php if($i['mode'][0] == 'showtb') { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
-                <li <?php if($i['mode'][0] == 'log') { echo 'class="active"'; } ?> ><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
-                <li <?php if($i['mode'][0] == 'baiduid') { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
+                <li <?php if($i['mode'][0] == 'default' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+                <li <?php if($i['mode'][0] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
+                <li <?php if($i['mode'][0] == 'showtb' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
+                <li <?php if($i['mode'][0] == 'log' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
+                <li <?php if($i['mode'][0] == 'baiduid' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
-                <li <?php if(SYSTEM_PAGE == 'admin:tools') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:set') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:users') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:update') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
-                <li <?php if(isset($i['mode'][1]) && $i['mode'][1] == 'stat') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:cron') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:plugins') { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:tools' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:users' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:update' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                <li <?php if(isset($i['mode'][1]) && $i['mode'][1] == 'stat' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:cron' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+                <li <?php if(SYSTEM_PAGE == 'admin:plugins' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                 <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
                <?php doAction('navi_8'); ?>
                <br/>
