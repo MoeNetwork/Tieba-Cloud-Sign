@@ -16,4 +16,4 @@ define('DB_NAME','tiebacloud');
 define('DB_PREFIX','tc_');
 
 //请务必删掉下面这句，否则将每次转到安装页面
-//if(!file_exists('./setup/install.lock') && !defined('SYSTEM_DO_NOT_REMIND_INSTALL')) header('Location: ./setup/install.php');
+if(!file_exists('./setup/install.lock') && !defined('SYSTEM_DO_NOT_REMIND_INSTALL')) header('Location: ./setup/install.php');
