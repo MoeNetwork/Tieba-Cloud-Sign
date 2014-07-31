@@ -6,7 +6,7 @@ if (!empty($i['user']['bduss'])) {
 	if (isset($_GET['ok'])) {
 		echo '<div class="alert alert-success">设置保存成功</div>';
 	}
-	$ex=$m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.'');
+	$ex=$m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' ORDER BY `id` ASC');
 	$f = '';
 	$num=0;
 	?>

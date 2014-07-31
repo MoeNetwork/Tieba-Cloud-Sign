@@ -300,14 +300,14 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['ref'])) {
 			  set_time_limit(0);
-			  $n      = 0;
-			  $n2     = 0;
-			  $n3     = 1;
-			  $addnum = 0; 
-			  $list   = array();
 			  $o      = option::get('tb_max');
 			  global $i;
 			  foreach ($i['user']['bduss'] as $pid => $ubduss) {
+			  	  $n3     = 1;
+			  	  $n      = 0;
+				  $n2     = 0;
+				  $addnum = 0; 
+				  $list   = array();
 				  while(true) {
 				  	  $url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
 				  	  $n3++;
@@ -320,9 +320,9 @@ switch (SYSTEM_PAGE) {
 					  foreach ($list[3] as $v) {
 					  	$v = mb_convert_encoding($v, "UTF-8", "GBK");
 					  	$osq = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
-						if($osq['c'] <= 0) {
+						if($osq['c'] == '0') {
 							$n++;
-							if (!empty($o) && ROLE != 'admin' && $n > $o) {
+							if (!empty($o) && ISVIP == false && $n > $o) {
 								msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
 							}
 							$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".UID.", '{$v}', 0, 0);");
@@ -332,7 +332,7 @@ switch (SYSTEM_PAGE) {
 					  if (!isset($list[3][0])) {
 					  	break;
 					  }
-					  elseif($o != 0 && $n2 >= $o && ROLE != 'admin') {
+					  elseif($o != 0 && $n2 >= $o && ISVIP == false) {
 					  	break;
 					  }
 					  $n2 = $n2 + $addnum;

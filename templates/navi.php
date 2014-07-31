@@ -88,7 +88,6 @@ global $i;
                 <li <?php if(isset($i['mode'][1]) && $i['mode'][1] == 'stat' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:cron' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
                 <li <?php if(SYSTEM_PAGE == 'admin:plugins' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-                <!--<li><a href="index.php?mod=admin:update">检查更新</a></li>-->
                <?php doAction('navi_8'); ?>
                <br/>
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
