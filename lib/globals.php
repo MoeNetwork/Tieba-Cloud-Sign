@@ -129,13 +129,17 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 elseif (SYSTEM_PAGE == 'login') { 
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
+	loadplugins();
 	template('login');
+	doAction('login_page_4');
 	die;
 }
 elseif (SYSTEM_PAGE == 'reg') {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
+	loadplugins();
 	template('reg');
+	doAction('reg_page_4');
 	die;
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {

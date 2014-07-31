@@ -32,6 +32,18 @@ function loadfoot() {
 	doAction('footer');
 	echo '</div></div></div></div></body></html>';
 }
+
 function template($file) {
 	include SYSTEM_ROOT.'/templates/'.$file.'.php';
+}
+
+/**
+ * 加载所有激活的插件
+ */
+function loadplugins() {
+	foreach (unserialize(option::get('actived_plugins')) as $value) {
+		if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
+			include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
+		}
+	}
 }

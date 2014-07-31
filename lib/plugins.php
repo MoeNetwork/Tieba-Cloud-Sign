@@ -1,11 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
 //加载所有激活的插件
-foreach (unserialize(option::get('actived_plugins')) as $value) {
-	if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
-		include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
-	}
-}
+loadplugins();
 
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
