@@ -96,5 +96,60 @@ switch (SYSTEM_PAGE) {
 			msg('站点升级完毕', SYSTEM_URL);
 		}
 		break;
+
+	case 'baiduid:getverify':
+		$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: fxxxx phone'));
+		$r = $x->post(array(
+			'login_username'  => $_POST['bd_name'],
+			'login_loginpass' => $_POST['bd_name']
+			));
+		preg_match('/\<img src=\"(.*)\" alt=\"wait...\" \/\>/',$r, $out);
+		if (empty($out[1])) {
+			echo '<b>无需验证码，请直接点击 [ 点击绑定 ] 继续</b>';
+		} else {
+			echo '<img onclick="addbdid_getcode();" src="'.$out[1].'"style="float:left;">&nbsp;&nbsp;&nbsp;请在下面输入左图中的字符<br>&nbsp;&nbsp;&nbsp;点击图片更换验证码';
+			echo '<br/><br/><div class="input-group"><span class="input-group-addon">验证码</span>';
+			echo '<input type="text" class="form-control" id="bd_v" name="bd_v" placeholder="请输入上图的字符" required></div><br/>';
+		}
+		preg_match('/\<input type=\"hidden\" id=\"vcodeStr\" name=\"vcodestr\" value=\"(.*)\"\/\>/', $r, $outt);
+		echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$outt['1'].'"/>';
+		break;
+
+	case 'baiduid:bdid':
+		//多次循环有助于解决验证码问题
+		for ($e = 0; $e < 2; $i++) {
+			$x = misc::loginBaidu( $_POST['bd_name'] , $_POST['bd_pw'] , $_POST['bd_v'] , $_POST['vcodestr'] );
+			if (stristr($x, '您输入的验证码有误') || stristr($x, urlencode('您输入的验证码有误'))) {
+				$error  = '您输入的验证码有误';
+				if ($e < 2) {
+			 	break;
+				} else {
+					continue;
+				}
+			} elseif (stristr($x, '您输入的密码有误') || stristr($x, urlencode('您输入的密码有误'))) {
+				$error  = '您输入的密码或账号有误';
+				break;
+			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
+			    $error  = '您没有输入验证码或发生系统错误';
+			    break;
+			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
+				$error  = '请您输入密码';
+				break;
+			} else {
+				preg_match('/Set-Cookie:(.*)BDUSS=(.*); expires=/', $x, $y);
+				if (empty($y[2])) {
+				    $error = '请检查用户名，密码，验证码是否正确';
+				    break;
+				} else {
+					unset($error);
+					break;
+				}
+			}
+		}
+		if (!empty($error)) {
+			echo '{"error":"1","msg":"'.$error.'"}';
+		} else {
+			echo '{"error":"0","bduss":"'.$y[2].'"}';
+		}
 }
 ?>

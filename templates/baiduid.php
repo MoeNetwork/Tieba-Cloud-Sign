@@ -73,29 +73,125 @@ global $m;
 <!-- END PAGE1 -->
 
 <!-- PAGE2: NEWID -->
-<?php if (option::get('cloud') == 1) { ?>
 <div class="tab-pane fade" id="newid" style="display:none">
+  <script type="text/javascript">
+  function addbdid_getcode() {
+    $('#addbdid_submit').attr('disabled',true);
+    $('#addbdid_prog').css({"display":""});
+    $('.addbdis_text').html('正在拉取验证信息...');
+    $('#addbdid_pb').css({"width":"25%"});
+    $(document).ready(function(){
+      $.ajax({
+        url:"ajax.php?mod=baiduid:getverify",
+        async:true,
+        dataType:"html",
+        type:'POST',
+        data:{
+          'bd_name': document.getElementById('bd_name').value ,
+          'bd_pw': document.getElementById('bd_pw').value
+        },
+        complete: function(x,y) {
+          $('#addbdid_prog').css({"display":"none"});
+          $('#addbdid_submit').removeAttr('disabled');
+        },
+        success: function(x) {
+          $('#addbdid_form').attr('onsubmit','addbdid_getbduss();return false;');
+          $('#addbdid_ver').html(x);
+        },
+        error: function(x) {
+        	alert('(1/3)操作失败，发生未知错误。错误已记录到浏览器的控制台，请联系管理员协助解决此问题<br/>若要重新尝试绑定账号，请刷新此页面');
+        	if (console) {
+        		console.log(x);
+        	}
+        }
+     });
+    });
+  }
+  function addbdid_getbduss() {
+    $('#addbdid_submit').attr('disabled',true);
+    $('#addbdid_prog').css({"display":""});
+    $('.addbdis_text').html('正在绑定账号信息...');
+    $('#addbdid_pb').css({"width":"50%"});
+    $(document).ready(function(){
+      $.ajax({
+        url:"ajax.php?mod=baiduid:bdid",
+        async:true,
+        dataType:"json",
+        type:'POST',
+        data:{
+          'bd_name': document.getElementById('bd_name').value ,
+          'bd_pw': document.getElementById('bd_pw').value ,
+          'bd_v': document.getElementById('bd_v').value ,
+          'vcodestr': document.getElementById('vcodeStr').value ,
+        },
+        success: function(x) {
+          if (x.error == '0') {
+	        $('.addbdis_text').html('正在完成绑定...');
+	    	$('#addbdid_pb').css({"width":"75%"});
+	    	$.ajax({
+	    		url:'setting.php?mod=baiduid&bduss=' + x.bduss ,
+	    		async:true,
+	    		dataType:"html",
+        		type:'GET',
+        		success: function(x) {
+        			$('#addbdid_form').attr('onsubmit','addbdid_getcode();return false;');
+			        $('.addbdis_text').html('绑定完成...');
+			        $('#addbdid_pb').css({"width":"100%"});
+			        $('#addbdid_submit').removeAttr('disabled');
+			        $("#addbdid_prog").fadeOut(4000);
+			        alert('百度账号绑定完成，刷新本页后可以看到效果');
+        		},
+        		error: function(x) {
+        			$('#addbdid_submit').removeAttr('disabled');
+		        	alert('(3/3)操作失败，发生未知错误。错误已记录到浏览器的控制台，请联系管理员协助解决此问题<br/>若要重新尝试绑定账号，请刷新此页面');
+		        	if (console) {
+		        		console.log(x);
+		        	}
+        		}
+        	});
+	      } else {
+	      	$('#addbdid_submit').removeAttr('disabled');
+	      	$('#addbdid_form').attr('onsubmit','addbdid_getcode();return false;');
+	      	alert('绑定百度账号失败，' + x.msg);
+	      	addbdid_getcode();
+	      }
+        },
+        error: function(x) {
+        	$('#addbdid_submit').removeAttr('disabled');
+        	alert('(2/3)操作失败，发生未知错误。错误已记录到浏览器的控制台，请联系管理员协助解决此问题<br/>若要重新尝试绑定账号，请刷新此页面');
+        	if (console) {
+        		console.log(x);
+        	}
+        }
+     });
+    });
+  }
+</script>
+<div id="addbdid_prog" style="display:none">
+  <b><span class="addbdis_text">正在拉取验证信息...</span></b><br/><br/>
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped active" id="addbdid_pb" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+    </div>
+  </div>
+</div>
 <a name="#newid"></a>
-<form method="post" action="http://support.zhizhe8.net/tc_bdid.php">
+<form method="post" id="addbdid_form" onsubmit="addbdid_getcode();return false;">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>
-  <input type="text" class="form-control" name="bd_name" placeholder="你的百度账户名，建议填写邮箱">
+  <input type="text" class="form-control" id="bd_name" placeholder="你的百度账户名，建议填写邮箱" required>
 </div>
-
-<input type="hidden" name="direct" value="<?php echo SYSTEM_URL ?>setting.php?mod=baiduid&">
-<input type="hidden" name="domain" value="<?php echo trim(trim(SYSTEM_URL,'/'),'http://') ?>">
 
 <br/>
 
 <div class="input-group">
   <span class="input-group-addon">百度密码</span>
-  <input type="password" class="form-control" name="bd_pw" placeholder="你的百度账号密码">
+  <input type="password" class="form-control" id="bd_pw" placeholder="你的百度账号密码" required>
 </div>
-
-<br/><input type="submit" class="btn btn-primary" value="点击绑定">
+<br/><div id="addbdid_ver"></div>
+<input type="submit" id="addbdid_submit" class="btn btn-primary" value="点击绑定">
 </form>
 <br/><br/><br/><br/><br/><br/><br/>我们推荐您使用上面的方式快速获取 Cookie，如果不能获取，还可以按下面的方法手动获取
-<?php } else { echo "该站点拒绝加入云平台，所以请手动获取"; } ?>
+
 <br/><br/><b>手动获取方法：</b>
 <br/><br/>1.使用 Chrome 或 Chromium 内核的浏览器
 <br/><br/>2.<a href="javascript:;" onclick="$('#DownloadPluginModal').modal('show');">安装插件 [ EditThisCookie ]，点击下载 </a>

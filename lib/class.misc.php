@@ -300,4 +300,35 @@ class misc {
 			DoSign_All($x['uid'],$x['tieba'],$x['id'],$table,$sign_mode,$x['pid'],$x['fid']);
 		}
 	}
+
+	/**
+	 * 登录百度
+	 * @param 百度用户名
+	 * @param 百度密码
+	 * @param 验证码
+	 * @param $vcodestr
+	 * @return 登录完成的页面
+	 */
+	public static function loginBaidu( $bd_name , $bd_pw , $verifycode , $vcodestr ) {
+		$x = new wcurl('http://wappass.baidu.com/passport/?verifycode=' . $verifycode , array('User-Agent: Phone'.mt_rand()));
+		$x->set(CURLOPT_HEADER , true);
+		return $x->post(array(
+			'username'       => $bd_name ,
+			'password'       => $bd_pw ,
+			'verifycode'     => $verifycode , 
+			'login_save'     => '3' ,
+			'vcodestr'       => $vcodestr , 
+			'aaa'            => '%E7%99%BB%E5%BD%95' ,
+			'login'          => 'yes' ,
+			'can_input'      => '0' ,
+			'u'              => 'http%3A%2F%2Fm.baidu.com%2F%3Faction%3Dlogin' ,
+			'tn' ,
+			'tpl' ,
+			'ssid'           => '000000' ,
+			'form'           => '0' ,
+			'bd_page_type'   => '1' ,
+			'uid'            => 'wiaui_1316933575_9548' , 
+			'isPhone'        => 'isPhone' ,
+		));
+	}
 }
