@@ -68,6 +68,31 @@ class misc {
         }
 	}
 
+	/** 
+	 * 通过UID判断某个用户是不是VIP
+	 * @param $uid UID
+	 * @return bool VIP=true
+	 */
+	public static function isvip($uid) {
+		global $m;
+		$x = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users` WHERE `id` = '{$uid}';");
+		if ($x['role'] == 'vip' && $x['role'] == 'admin') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/** 
+	 * 通过UID获得指定用户的贴吧数据表
+	 * @param $uid UID
+	 */
+	public static function getTable($uid) {
+		global $m;
+		$x = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users` WHERE `id` = '{$uid}';");
+		return $x['t'];
+	}
+
 	/**
 	 * 寻找已缓存的贴吧 FID
 	 * @param $kw 贴吧名
@@ -330,5 +355,65 @@ class misc {
 			'uid'            => 'wiaui_1316933575_9548' , 
 			'isPhone'        => 'isPhone' ,
 		));
+	}
+	/**
+	 * 扫描指定PID的所有贴吧
+	 * @param $pid PID
+	 */
+	public static function scanTiebaByPid($pid) {
+		global $i;
+		global $m;
+		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");	
+		$uid    = $cma['uid'];
+		$ubduss = $cma['bduss'];
+		$isvip  = self::isvip($uid);
+		$pid    = $cma['id'];
+		$table  = self::getTable($uid);
+		$n3     = 1;
+		$n      = 0;
+		$n2     = 0;
+		$addnum = 0; 
+		$list   = array();
+		while(true) {
+			$url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
+			$n3++;
+			$addnum = 0;
+			$c      = new wcurl($url, array('User-Agent: Phone XXX')); 
+			$c->addcookie("BDUSS=".$ubduss);
+			$ch = $c->exec();
+			$c->close();
+			preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
+			foreach ($list[3] as $v) {
+				$v = mb_convert_encoding($v, "UTF-8", "GBK");
+				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
+				if($osq['c'] == '0') {
+					$n++;
+					if (!empty($o) && $isvip == false && $n > $o) {
+						msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
+					}
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
+				}
+				$addnum++;
+			}
+			if (!isset($list[3][0])) {
+				break;
+			} elseif($o != 0 && $n2 >= $o && $isvip == false) {
+				break;
+			}
+			$n2 = $n2 + $addnum;
+		}
+	}
+
+	/**
+	 * 扫描当前用户的所有贴吧并储存
+	 */
+	public static function scanTiebaByUser() {
+		global $i;
+		global $m;
+		set_time_limit(0);
+		$o      = option::get('tb_max');
+		foreach ($i['user']['bduss'] as $pid => $ubduss) {
+			self::scanTiebaByPid($pid);
+		}
 	}
 }
