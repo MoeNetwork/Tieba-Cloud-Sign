@@ -164,6 +164,17 @@ class wcurl {
 	}
 
 	/**
+	 * 静态，HTTP CURL GET 快速用法
+	 * @param $url 要抓取的URL
+	 * @return 抓取结果
+	 */
+	public static function xget($url) {
+		$CN = __CLASS__;
+		$x  = new $CN($url);
+		return $x->exec();
+	}
+
+	/**
 	 * 销毁类的时候自动释放cURL资源
 	 */
 	/* //请确保有需要再解除注释

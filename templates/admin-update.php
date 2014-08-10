@@ -30,7 +30,11 @@ function update() {
 		  success: function(data){
 		    $("#upd_prog").css({'width':'70%'});
 			updata    = data;
-			$("#comsys3").html('<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>发现有新版文件，以下文件可以更新</b>：<br/>更新前请确保服务器具有写的权限，文件将被临时下载到 <b>/setup/update_cache</b> 文件夹<br/>' + updata + '<br/><br/><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"></form></div>');
+			if (updata.length <= 1) {
+				$("#comsys3").html('<div class="alert alert-success">您当前正在使用最新版本的 <?php echo SYSTEM_FN ?>，无需更新</div>');
+			} else {
+				$("#comsys3").html('<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>发现有新版文件，以下文件可以更新</b>：<br/>更新前请确保服务器具有写的权限，文件将被临时下载到 <b>/setup/update_cache</b> 文件夹<br/>' + updata + '<br/><br/><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"></form></div>');
+			}
 			console.log(data);
 		    $("#upd_info").html('完毕');
 		    $("#upd_prog").css({'width':'100%'});

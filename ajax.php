@@ -44,30 +44,36 @@ switch (SYSTEM_PAGE) {
 	case 'admin:update': 
 		$c  = new wcurl(SUPPORT_URL . 'download.xml');
 		$x  = simplexml_load_string($c->exec());
-		$c->close();
 		$n  = 0;
+		$e  = '';
+		$c->close();
 		$v1 = $x->children()->items; //文件列表
-
-		echo '<input type="hidden" name="updfile" value="'. $x->children()->info->updatefile .'">';
-
-		foreach ($v1->dir as $valu2) {
-			echo '<input type="hidden" name="dir[]" value="'.$valu2.'">';
-		}
+		$lf = simplexml_load_file(SYSTEM_ROOT . '/setup/update.xml');
+		$lv = $lf->children()->items;
 
 		foreach ($v1->item as $value) {
 			$md5  = (string) $v1->item[$n]->attributes();
 			$file = (string) $value;
 			if (file_exists(SYSTEM_ROOT.'/'.$file)) {
-				$mymd5 = md5_file(SYSTEM_ROOT.'/'.$file);
-				if ($mymd5 != $md5) {
-					echo "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
+				//有效防止同文件MD5测算结果不一的问题
+				$mymd5a = (string) $lv->item[$n]->attributes();
+				$mymd5b = md5_file(SYSTEM_ROOT.'/'.$file);
+				if ($mymd5a != $md5 && $mymd5b != $md5) {
+					$e .= "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
 				}
 			} else {
-					echo "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
+					$e .= "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
 			}
+			$n++;
 		}
 
-		$c->close();
+		if ($n > 0 && !empty($e)) {
+			echo '<input type="hidden" name="updfile" value="'. $x->children()->info->updatefile .'">';
+			foreach ($v1->dir as $valu2) {
+				echo '<input type="hidden" name="dir[]" value="'.$valu2.'">';
+			}
+			echo $e;
+		}
 		break;
 
 	case 'admin:update:updnow':
@@ -80,7 +86,7 @@ switch (SYSTEM_PAGE) {
 			}
 		}
 		foreach ($_POST['file'] as $value) {
-			$c = new wcurl(SUPPORT_URL . 'download.php?file='.$value);
+			$c = new wcurl('http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master/'.$value);
 			file_put_contents(SYSTEM_ROOT.'/setup/update_cache/'.$value, $c->exec());
 			$c->close();
 		}
@@ -90,6 +96,7 @@ switch (SYSTEM_PAGE) {
 	case 'admin:update:install':
 		CopyAll(SYSTEM_ROOT.'/setup/update_cache',SYSTEM_ROOT);
 		DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
+		file_put_contents(SYSTEM_ROOT . '/setup/update.xml', wcurl::xget(SUPPORT_URL . 'download.xml'));
 		if (!empty($_GET['updfile'])) {
 			ReDirect(SYSTEM_URL . $_GET['updfile']);
 		} else {
