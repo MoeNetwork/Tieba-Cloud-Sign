@@ -124,10 +124,15 @@ define(\'DB_PREFIX\',\'tc_\');
 
 			case '3':
 				$errorhappen = '';
+				if (!empty($_SERVER['HTTPS'])) {
+					$http = 'https://';
+				} else {
+					$http = 'http://';
+				}
 				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
 				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
 				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
-				$sql  = str_ireplace('{VAR-SYSTEM-URL}', 'http://' . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
+				$sql  = str_ireplace('{VAR-SYSTEM-URL}', $http . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				if($_POST['from_config'] == 1) {
 					require SYSTEM_ROOT2.'/../config.php';
 				} else {

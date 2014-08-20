@@ -52,9 +52,9 @@ switch (SYSTEM_PAGE) {
 		$lv = $lf->children()->items;
 
 		foreach ($v1->item as $value) {
-			$md5  = (string) $v1->item[$n]->attributes();
+			$md5  = (string) $value->attributes();
 			$file = (string) $value;
-			if (file_exists(SYSTEM_ROOT.'/'.$file)) {
+			if (file_exists(SYSTEM_ROOT.'/'.$file) && method_exists($lv->item[$n], 'attributes')) {
 				//有效防止同文件MD5测算结果不一的问题
 				$mymd5a = (string) $lv->item[$n]->attributes();
 				$mymd5b = md5_file(SYSTEM_ROOT.'/'.$file);
