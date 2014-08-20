@@ -64,8 +64,15 @@ while ($x = $m->fetch_array($s)) {
 选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; 
 <input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; 
 <input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp; 
-<input type="radio" name="do" value="crole"> 提/降 用户组 &nbsp;&nbsp;&nbsp;&nbsp; 
-<input type="radio" name="do" value="cset"> 清除个人设置
+<input type="radio" name="do" value="cset"> 清除个人设置 &nbsp;&nbsp;&nbsp;&nbsp;
+<input type="radio" name="do" value="crole">
+<select name="crolev" onchange="document.getElementsByName('do')[4].checked = true">
+	<option>调整用户组为</option>
+	<option value="user">用户</option>
+	<option value="vip">VIP</option>
+	<option value="admin">管理员</option>
+	<option value="banned">禁止访问</option>
+</select>
 <br/><br/><input type="submit" class="btn btn-primary" value="执行操作">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:users&add'">添加用户</button>

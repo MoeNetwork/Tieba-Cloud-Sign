@@ -380,6 +380,9 @@ function getrole($role) {
 	elseif ($role == 'visitor') {
 		return '访客';
 	}
+	elseif ($role == 'banned') {
+		return '禁止访问';
+	}
 	else {
 		return '未定义';
 	}

@@ -48,6 +48,9 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 			$i['user']['isvip'] = false;
 			define('ISVIP', false);
 		}
+		if (ROLE == 'banned') {
+			msg('你已被禁止访问，请联系管理员解封');
+		}
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {

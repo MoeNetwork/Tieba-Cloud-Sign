@@ -193,12 +193,17 @@ switch (SYSTEM_PAGE) {
 
 			case 'crole':
 				foreach ($_POST['user'] as $value) {
-					$r = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE `".DB_PREFIX."users`.`id` = {$value}");
-					if ($r['role'] == 'user') {
-						$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = 'admin' WHERE `".DB_PREFIX."users`.`id` = {$value}");
-					} else {
-						$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = 'user' WHERE `".DB_PREFIX."users`.`id` = {$value}");
-					}
+					if ($_POST['crolev'] == 'user') {
+						$role = 'user';
+					} elseif ($_POST['crolev'] == 'admin') {
+						$role = 'admin';
+					} elseif ($_POST['crolev'] == 'vip') {
+						$role = 'vip';
+					} elseif ($_POST['crolev'] == 'banned') {
+						$role = 'banned';
+					} 
+
+					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = '{$role}' WHERE `".DB_PREFIX."users`.`id` = {$value}");
 				}
 				doAction('admin_users_crole');
 				break;
