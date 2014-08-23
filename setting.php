@@ -304,7 +304,7 @@ switch (SYSTEM_PAGE) {
 			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
 		}
 		elseif (isset($_GET['ref'])) {
-			misc::scanTiebaByUser(); 
+			$r = misc::scanTiebaByUser();
 			Redirect(SYSTEM_URL.'index.php?mod=showtb');
 		}
 		elseif (isset($_GET['clean'])) {

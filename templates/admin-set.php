@@ -143,4 +143,4 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		?>
 	</tbody>
 </table><input type="submit" class="btn btn-primary" value="提交更改">
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>

@@ -374,6 +374,7 @@ class misc {
 		$n2     = 0;
 		$addnum = 0; 
 		$list   = array();
+		$o      = option::get('tb_max');
 		while(true) {
 			$url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
 			$n3++;
@@ -389,31 +390,41 @@ class misc {
 				if($osq['c'] == '0') {
 					$n++;
 					if (!empty($o) && $isvip == false && $n > $o) {
-						msg('当前贴吧数量超出系统限定，无法将贴吧记录到数据库');
+						return '当前贴吧数量超出系统限定，无法将贴吧全部记录到数据库';
 					}
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
 				}
 				$addnum++;
 			}
 			if (!isset($list[3][0])) {
-				break;
+				break; //完成
 			} elseif($o != 0 && $n2 >= $o && $isvip == false) {
-				break;
+				break; //超限
 			}
 			$n2 = $n2 + $addnum;
 		}
 	}
 
 	/**
-	 * 扫描当前用户的所有贴吧并储存
+	 * 扫描指定用户的所有贴吧并储存
+	 * @param UID，如果留空，表示当前用户的UID
 	 */
-	public static function scanTiebaByUser() {
+	public static function scanTiebaByUser($uid = '') {
 		global $i;
 		global $m;
 		set_time_limit(0);
-		$o      = option::get('tb_max');
-		foreach ($i['user']['bduss'] as $pid => $ubduss) {
-			self::scanTiebaByPid($pid);
+		if (empty($uid)) {
+			$bduss = $i['user']['bduss'];
+		} else {
+			$bx = $m->query("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `uid` = '{$uid}';");
+			while ($by = $m->fetch_array($bx)) {
+				$upid         = $by['id'];
+				$bduss[$upid] = $by['bduss'];
+			}
+		}
+		$n      = 0;
+		foreach ($bduss as $pid => $ubduss) {
+			$t = self::scanTiebaByPid($pid);
 		}
 	}
 }

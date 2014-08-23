@@ -27,7 +27,7 @@
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">登陆</button>
   <?php } doAction('login_page_3'); ?>
 	</div><br/><br/><br/>
-	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>
+	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>
 	<?php 
   $icp=option::get('icp');
     if (!empty($icp)) {

@@ -28,8 +28,11 @@ if (empty($i['user']['bduss'])) {
 		echo '<br/><br/><b>关注贴吧配额限制：</b>'.option::get('tb_max') .' 个';
 	}
 	echo '<br/><br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
+	if (ROLE == 'admin') {
+		echo '<!--QQ邮件列表订阅嵌入代码--><br/><br/><script>var nId = "f752182ed774de32ef9ee39fbb5e44e38261368b16e7ea44",nWidth="auto",sColor="light",sText="请填写您的邮件地址，订阅 StusGame 云签到官方订阅，以便于及时接收关于云签到程序的更新与重要通知：" ;</script><script src="http://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>';
+	}
 doAction('index_2');
 ?>
 <br/><br/><br/>
 
-<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>
+<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>
