@@ -386,8 +386,8 @@ class misc {
 			preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 			foreach ($list[3] as $v) {
 				$v = mb_convert_encoding($v, "UTF-8", "GBK");
-				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
-				if($osq['c'] == '0') {
+				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `C` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
+				if($osq['C'] == '0') {
 					$n++;
 					if (!empty($o) && $isvip == false && $n > $o) {
 						return '当前贴吧数量超出系统限定，无法将贴吧全部记录到数据库';
