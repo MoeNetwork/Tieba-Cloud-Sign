@@ -19,7 +19,6 @@ if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
 	echo '<script src="../source/js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
-
 ?>
 <div class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
@@ -124,7 +123,7 @@ define(\'DB_PREFIX\',\'tc_\');
 
 			case '3':
 				$errorhappen = '';
-				if (!empty($_SERVER['HTTPS'])) {
+				if ($_SERVER['HTTPS'] == 'on') {
 					$http = 'https://';
 				} else {
 					$http = 'http://';
@@ -193,7 +192,7 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
 				break;
 
 			case '4':
-				if (!empty($_SERVER['HTTPS'])) {
+				if ($_SERVER['HTTPS'] == 'on') {
 					$http = 'https://';
 				} else {
 					$http = 'http://';
