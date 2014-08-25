@@ -277,7 +277,7 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['bduss'])) {
 			if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
 
-			if (option::get('bduss_num') != '0' && ROLE != 'admin') {
+			if (option::get('bduss_num') != '0' && ISVIP == false) {
 				$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号'); 
 			}
