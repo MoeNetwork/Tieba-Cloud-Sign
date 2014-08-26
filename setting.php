@@ -5,7 +5,7 @@
 
 require dirname(__FILE__).'/init.php';
 
-if (ROLE != 'user' && ROLE != 'admin') {
+if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
 	msg('权限不足');
 }
 
