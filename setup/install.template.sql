@@ -82,7 +82,7 @@ INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
 ('mail_name', ''),
 ('mail_yourname', ''),
 ('mail_host', ''),
-('mail_port', '21'),
+('mail_port', '25'),
 ('mail_auth', '0'),
 ('mail_smtpname', ''),
 ('mail_smtppw', ''),
