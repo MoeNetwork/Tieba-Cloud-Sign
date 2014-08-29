@@ -313,7 +313,7 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
-				$v = strip_tags($_POST['add']);
+				$v = addslashes(htmlspecialchars($_POST['add']));
 				$pid = (int) strip_tags($_POST['pid']);
 				$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 				if($m->num_rows($osq) == 0) {
