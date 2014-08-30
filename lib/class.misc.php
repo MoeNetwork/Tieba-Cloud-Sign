@@ -237,7 +237,7 @@ class misc {
 	 * 对一个UID执行完整的签到任务
 	 */
 	public static function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) {
-		global $m,$today;
+		global $m;
 
 		if (empty($fid)) {
 			$fid = misc::getFid($kw);
@@ -295,6 +295,11 @@ class misc {
 		} else {
 			$limit = option::get('cron_limit');
 			$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() LIMIT 0 , ".$limit);
+		}
+
+		$today = date('Y-m-d');
+		if (date('H') <= 0) {
+			return '0点时忽略签到';	
 		}
 
 		while ($x=$m->fetch_array($q)) {
