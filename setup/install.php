@@ -192,21 +192,6 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
 				break;
 
 			case '4':
-				if ($_SERVER['HTTPS'] == 'on') {
-					$http = 'https://';
-				} else {
-					$http = 'http://';
-				}
-				$x = new wcurl('http://support.zhizhe8.net/tc_install.php');
-				$x->set(CURLOPT_CONNECTTIMEOUT, 2);
-				$x->post(array(
-					'url' => $http.$_SERVER['HTTP_HOST'] . str_ireplace('/setup/install.php', '', $_SERVER['PHP_SELF']) ,
-					'date' => date('Y-m-d H:m:s')
-					));
-				header("Location: install.php?step=5");
-				break;
-
-			case '5':
 				echo '<h2>安装完成</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
