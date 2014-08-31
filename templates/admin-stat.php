@@ -53,7 +53,7 @@ require SYSTEM_ROOT.'/setup/check.php';
 <?php break; default:  ?>
 <ul class="nav nav-tabs" role="tablist">
   <li><a href="index.php?mod=admin:stat:sign">签到</a></li>
-  <li><a href="index.php?mod=admin:stat:sys">系统</a></li>
+  <li><a href="index.php?mod=admin:stat:env">环境</a></li>
   <?php doAction('stat_navi'); ?>
 </ul>
 <?php break;
