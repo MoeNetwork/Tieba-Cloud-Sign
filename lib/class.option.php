@@ -55,16 +55,25 @@ class option {
 	 * 获取用户的设置
 	 * $name 设置项名称
 	 * $uid 用户UID，默认当前用户的UID
-	 * @return string
+	 * @return string|bool 不存在时返回false
 	*/
 	public static function uget($name, $uid = '') {
 		global $m;
 		global $i;
 		if (empty($uid)) {
-			$uid = $GLOBALS['uid'];
-		}
-		if (isset($i['user']['opt'][$name])) {
-			return $i['user']['opt'][$name];
+			if (isset($i['user']['opt'][$name])) {
+				return $i['user']['opt'][$name];
+			} else {
+				return false;
+			}
+		} else {
+			$x = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users` WHERE `uid` = '{$uid}' LIMIT 1");
+			$y = unserialize($x);
+			if (isset($y[$name])) {
+				return $y[$name];
+			} else {
+				return false;
+			}
 		}
 	}
 
