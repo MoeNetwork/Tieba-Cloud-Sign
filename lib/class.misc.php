@@ -238,6 +238,7 @@ class misc {
 	 */
 	public static function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) {
 		global $m;
+		$today = date('Y-m-d');
 
 		if (empty($fid)) {
 			$fid = misc::getFid($kw);
@@ -287,7 +288,8 @@ class misc {
 	 * @param $sign_mode option::get('sign_mode')
 	 */
 	public static function DoSign($table,$sign_mode) {
-		global $m,$today,$i;
+		global $m,$i;
+		$today = date('Y-m-d');
 
 		//处理所有未签到的贴吧
 		if (option::get('cron_limit') == 0) {
@@ -297,9 +299,8 @@ class misc {
 			$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() LIMIT 0 , ".$limit);
 		}
 
-		$today = date('Y-m-d');
 		if (date('H') <= 0) {
-			return '0点时忽略签到';	
+			die ('0点时忽略签到');	
 		}
 
 		while ($x=$m->fetch_array($q)) {
