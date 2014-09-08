@@ -26,8 +26,9 @@ global $m;
 
 <!-- NAVI -->
 <ul class="nav nav-tabs" id="PageTab">
-  <li class="active"><a href="#adminid" data-toggle="tab" onclick="$('#newid').css('display','none');$('#adminid').css('display','');">管理账号</a></li>
-  <?php if (option::get('bduss_num') != '-1') { ?><li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');">绑定新账号</a></li><?php } ?>
+  <li class="active"><a href="#adminid" data-toggle="tab" onclick="$('#newid2').css('display','none');$('#newid').css('display','none');$('#adminid').css('display','');">管理账号</a></li>
+  <?php if (option::get('bduss_num') != '-1') { ?><li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');$('#newid2').css('display','none');">自动绑定</a></li>
+  <li><a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');">手动绑定</a></li><?php } ?>
 </ul>
 <br/>
 <!-- END NAVI -->
@@ -190,22 +191,42 @@ global $m;
 <br/><div id="addbdid_ver"></div>
 <input type="submit" id="addbdid_submit" class="btn btn-primary" value="点击绑定">
 </form>
-<br/><br/><br/><br/><br/><br/><br/>我们推荐您使用上面的方式快速获取 Cookie，如果不能获取，还可以按下面的方法手动获取
-
-<br/><br/><b>手动获取方法：</b>
-<br/><br/>1.使用 Chrome 或 Chromium 内核的浏览器
-<br/><br/>2.<a href="javascript:;" onclick="$('#DownloadPluginModal').modal('show');">安装插件 [ EditThisCookie ]，点击下载 </a>
-<br/><br/>3.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
-<br/><br/>4.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
-<br/><br/>3.按下图操作：( 点图片查看大图 )
-<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" width="90%" height="90%"></a>
-<br/><br/>4.输入复制到的 BDUSS 到下面：
-<form action="setting.php" method="get">
-<input type="hidden" name="mod" value="baiduid">
-<br/><input type="text" class="form-control" name="bduss" placeholder="输入获取到的 BDUSS">
-<br/><input type="submit" class="btn btn-primary" value="提交更改">
-</form>
 </div>
 <!-- END PAGE2 -->
+
+<!-- PAGE3: NEWID2 -->
+<div class="tab-pane fade" id="newid2" style="display:none">
+<form action="setting.php" method="get">
+<div class="input-group">
+  <input type="hidden" name="mod" value="baiduid">
+  <span class="input-group-addon">输入BDUSS</span>
+  <input type="text" class="form-control" name="bduss">
+  <span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击提交"></span>
+</div>
+</form>
+<br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
+<div class="panel panel-default">
+	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Windows 系统下的绑定方法</h3></div>
+	<div class="panel-body" id="win_bduss" style="display:none">
+	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器</a>
+	    <br/><br/>2.请确保已安装了 <b>.Net Framework 3.0</b> [ 正版Win7已自带 ]
+	    <br/><br/>3.请运行此程序，按照要求输入账号信息，然后将获取到的 BDUSS 填入上面的表单即可
+	</div>
+</div>
+<br/>
+<div class="panel panel-default">
+	<div class="panel-heading" onclick="$('#chrome_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Chrome 浏览器下的绑定方法</h3></div>
+	<div class="panel-body" id="chrome_bduss" style="display:none">
+	    1.使用 Chrome 或 Chromium 内核的浏览器
+		<br/><br/>2.<a href="javascript:;" onclick="$('#DownloadPluginModal').modal('show');">安装插件 [ EditThisCookie ]，点击下载 </a>
+		<br/><br/>3.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
+		<br/><br/>4.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
+		<br/><br/>3.按下图操作：( 点图片查看大图 )
+		<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" width="90%" height="90%"></a>
+		<br/><br/>4.输入复制到的 BDUSS 到上面的表单即可
+	</div>
+</div>
+</div>
+<!-- END PAGE3 -->
 
 <br/><br/><br/><br/><br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> By <a href="http://zhizhe8.net" target="_blank">无名智者</a>
