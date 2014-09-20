@@ -19,7 +19,6 @@ define('SYSTEM_NAME', option::get('system_name'));
 require SYSTEM_ROOT.'/lib/sfc.functions.php';
 require SYSTEM_ROOT.'/lib/ui.php';
 require SYSTEM_ROOT.'/lib/globals.php';
-require SYSTEM_ROOT.'/lib/class.cache.php';
 if (option::get('protector') == 1) {
 	require SYSTEM_ROOT.'/lib/protector.php';
 }
