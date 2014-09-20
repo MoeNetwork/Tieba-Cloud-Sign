@@ -2,7 +2,7 @@
 require dirname(__FILE__).'/init.php';
 
 switch (SYSTEM_PAGE) {
-	case 'ajax:status':
+    case 'ajax:status':
 		global $today;
 		global $m;
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
@@ -42,37 +42,33 @@ switch (SYSTEM_PAGE) {
 
 
 	case 'admin:update': 
-		$c  = new wcurl(SUPPORT_URL . 'download.xml');
-		$x  = simplexml_load_string($c->exec());
-		$n  = 0;
-		$e  = '';
+		$c=new wcurl(SUPPORT_URL . 'download.txt');
+		$data=json_decode($c->exec());
 		$c->close();
-		$v1 = $x->children()->items; //文件列表
-		$lf = simplexml_load_file(SYSTEM_ROOT . '/setup/update.xml');
-		$lv = $lf->children()->items;
-
-		foreach ($v1->item as $value) {
-			$md5  = (string) $value->attributes();
-			$file = (string) $value;
-			if (file_exists(SYSTEM_ROOT.'/'.$file) && method_exists($lv->item[$n], 'attributes')) {
-				//有效防止同文件MD5测算结果不一的问题
-				$mymd5a = (string) $lv->item[$n]->attributes();
-				$mymd5b = md5_file(SYSTEM_ROOT.'/'.$file);
-				if ($mymd5a != $md5 && $mymd5b != $md5) {
-					$e .= "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
+		if($data!=""){
+			$t="";
+			//是否有升级脚本
+			if(isset($data->updatefile)){ echo "<input type=\"hidden\" name=\"updatefile\" value=\"{$data->updatefile}\">"; }
+			//检测文件是否存在以及MD5是否相同
+			foreach ($data->items->file as $file) {
+				if(file_exists(SYSTEM_ROOT.$file->path)){
+					$md5=md5(file_get_contents(SYSTEM_ROOT.$file->path));
+					if($file->md5!=$md5){
+						$t.="- {$file->path} <input type=\"hidden\" name=\"file[]\" value=\"{$file->path}\"><br/>";
+					}
+				} else {
+					$t.="- {$file->path} <input type=\"hidden\" name=\"file[]\" value=\"{$file->path}\"><br/>";
 				}
-			} else {
-					$e .= "- {$file} <input type=\"hidden\" name=\"file[]\" value=\"{$file}\"><br/>";
 			}
-			$n++;
-		}
-
-		if ($n > 0 && !empty($e)) {
-			echo '<input type="hidden" name="updfile" value="'. $x->children()->info->updatefile .'">';
-			foreach ($v1->dir as $valu2) {
-				echo '<input type="hidden" name="dir[]" value="'.$valu2.'">';
+			//检测文件夹是否缺失
+			if($t!=""){
+				foreach ($data->items->dir as $dir) {
+					if(!is_dir(SYSTEM_ROOT.$dir)){
+						$t.="<input type=\"hidden\" name=\"dir[]\" value=\"{$dir}\">";
+					}
+				}
 			}
-			echo $e;
+			echo $t;
 		}
 		break;
 
@@ -80,25 +76,25 @@ switch (SYSTEM_PAGE) {
 		if (!is_dir(SYSTEM_ROOT.'/setup/update_cache')) {
 			mkdir(SYSTEM_ROOT.'/setup/update_cache');
 		}
-		foreach ($_POST['dir'] as $valu2) {
-			if (!is_dir(SYSTEM_ROOT.'/update_cache/'.$valu2)) {
-				mkdir(SYSTEM_ROOT.'/setup/update_cache/'.$valu2);
+		if(isset($_POST['dir'])){//如果需要创建目录
+			foreach ($_POST['dir'] as $dir) {
+				mkdir(SYSTEM_ROOT.'/setup/update_cache'.$dir);
 			}
 		}
-		foreach ($_POST['file'] as $value) {
-			$c = new wcurl('http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master/'.$value);
-			file_put_contents(SYSTEM_ROOT.'/setup/update_cache/'.$value, $c->exec());
+		foreach ($_POST['file'] as $file) {
+			$c = new wcurl('http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master'.$file);
+			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $c->exec());
 			$c->close();
 		}
-		ReDirect('ajax.php?mod=admin:update:install&updfile=' . $_POST['updfile']);
+		ReDirect('ajax.php?mod=admin:update:install&updfile=' . $_POST['updatefile']);
 		break;
 
 	case 'admin:update:install':
 		CopyAll(SYSTEM_ROOT.'/setup/update_cache',SYSTEM_ROOT);
 		DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
-		file_put_contents(SYSTEM_ROOT . '/setup/update.xml', wcurl::xget(SUPPORT_URL . 'download.xml'));
-		if (!empty($_GET['updfile'])) {
-			ReDirect(SYSTEM_URL . $_GET['updfile']);
+		file_put_contents(SYSTEM_ROOT . '/setup/update.txt', wcurl::xget(SUPPORT_URL . 'download.txt'));
+		if (!empty($_GET['updatefile'])) {
+			ReDirect(SYSTEM_URL . $_GET['updatefile']);
 		} else {
 			msg('站点升级完毕', SYSTEM_URL);
 		}
