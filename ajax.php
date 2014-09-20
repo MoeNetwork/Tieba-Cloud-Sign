@@ -42,7 +42,7 @@ switch (SYSTEM_PAGE) {
 
 
 	case 'admin:update': 
-		$c=new wcurl(SUPPORT_URL . 'download.txt');
+		$c=new wcurl(SUPPORT_URL . 'check.php?ver=' . SYSTEM_VER);
 		$data=json_decode($c->exec());
 		$c->close();
 		if($data!=""){
@@ -92,7 +92,6 @@ switch (SYSTEM_PAGE) {
 	case 'admin:update:install':
 		CopyAll(SYSTEM_ROOT.'/setup/update_cache',SYSTEM_ROOT);
 		DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
-		file_put_contents(SYSTEM_ROOT . '/setup/update.txt', wcurl::xget(SUPPORT_URL . 'download.txt'));
 		if (!empty($_GET['updatefile'])) {
 			ReDirect(SYSTEM_URL . $_GET['updatefile']);
 		} else {
