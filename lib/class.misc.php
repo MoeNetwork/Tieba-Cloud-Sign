@@ -238,6 +238,7 @@ class misc {
 	 */
 	public static function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) {
 		global $m;
+		$kw = addslashes($kw);
 		$today = date('Y-m-d');
 
 		if (empty($fid)) {
