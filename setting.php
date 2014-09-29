@@ -90,7 +90,7 @@ switch (SYSTEM_PAGE) {
 		switch (strip_tags($_GET['setting'])) {
 		case 'optim':
 			global $m;
-			$rs=$m->query("SHOW TABLES FROM ".DB_NAME);
+			$rs=$m->query("SHOW TABLES FROM `".DB_NAME.'`');
 			while ($row = $m->fetch_row($rs)) {
 				$m->query('OPTIMIZE TABLE  `'.DB_NAME.'`.`'.$row[0].'`');
 		    }
