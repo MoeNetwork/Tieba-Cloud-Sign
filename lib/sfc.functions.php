@@ -446,6 +446,77 @@ function topos($s) {
 }
 
 /**
+ * 执行一个通配符表达式匹配
+ * [可当preg_match()的简化版本去理解]
+ * @param string $exp 匹配表达式
+ * @param string $str 在这个字符串内运行匹配
+ * @param int $pat 规定匹配模式，0表示尽可能多匹配，1表示尽可能少匹配
+ * @return array 匹配结果，$matches[0]将包含完整模式匹配到的文本， $matches[1] 将包含第一个捕获子组匹配到的文本，以此类推。
+ */
+function easy_match($exp, $str, $pat = 0) {
+	$exp = str_ireplace('\\', '\\\\', $exp);
+	$exp = str_ireplace('/', '\/', $exp);
+	$exp = str_ireplace('?', '\?', $exp);
+	$exp = str_ireplace('<', '\<', $exp);
+	$exp = str_ireplace('>', '\>', $exp);
+	$exp = str_ireplace('^', '\^', $exp);
+	$exp = str_ireplace('$', '\$', $exp);
+	$exp = str_ireplace('+', '\+', $exp);
+	$exp = str_ireplace('(', '\(', $exp);
+	$exp = str_ireplace(')', '\)', $exp);
+	$exp = str_ireplace('[', '\[', $exp);
+	$exp = str_ireplace(']', '\]', $exp);
+	$exp = str_ireplace('|', '\|', $exp);
+	$exp = str_ireplace('}', '\}', $exp);
+	$exp = str_ireplace('{', '\{', $exp);
+	if ($pat==0) {
+		$z = '(.*)';
+	} else {
+		$z = '(.*?)';
+	}
+	$exp = str_ireplace('*', $z, $exp);
+	$exp = '/' . $exp . '/';
+	preg_match($exp, $str, $r);
+	return $r;
+}
+
+/**
+ * 执行一个全局通配符表达式匹配
+ * [可当preg_match_all()的简化版本去理解]
+ * @param string $exp 匹配表达式
+ * @param string $str 在这个字符串内运行匹配
+ * @param int $pat 规定匹配模式，0表示尽可能多匹配，1表示尽可能少匹配
+ * @param int $flags 可以使用 PREG_PATTERN_ORDER 或 PREG_SET_ORDER 或 PREG_OFFSET_CAPTURE
+ * @return array 匹配结果，数组排序通过flags指定。
+ */
+function easy_match_all($exp, $str, $pat = 0, $flags = PREG_PATTERN_ORDER) {
+	$exp = str_ireplace('\\', '\\\\', $exp);
+	$exp = str_ireplace('/', '\/', $exp);
+	$exp = str_ireplace('?', '\?', $exp);
+	$exp = str_ireplace('<', '\<', $exp);
+	$exp = str_ireplace('>', '\>', $exp);
+	$exp = str_ireplace('^', '\^', $exp);
+	$exp = str_ireplace('$', '\$', $exp);
+	$exp = str_ireplace('+', '\+', $exp);
+	$exp = str_ireplace('(', '\(', $exp);
+	$exp = str_ireplace(')', '\)', $exp);
+	$exp = str_ireplace('[', '\[', $exp);
+	$exp = str_ireplace(']', '\]', $exp);
+	$exp = str_ireplace('|', '\|', $exp);
+	$exp = str_ireplace('}', '\}', $exp);
+	$exp = str_ireplace('{', '\{', $exp);
+	if ($pat==0) {
+		$z = '(.*)';
+	} else {
+		$z = '(.*?)';
+	}
+	$exp = str_ireplace('*', $z, $exp);
+	$exp = '/' . $exp . '/';
+	preg_match($exp, $str, $r, $flags);
+	return $r;
+}
+
+/**
  * Framework 错误处理函数
  */
 
