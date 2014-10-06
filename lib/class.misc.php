@@ -259,9 +259,6 @@ class misc {
 		if (!isset($s['error_code']) && !isset($r['no']) && !isset($v['error_code'])) {
 			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
 		}
-		elseif ($v['error_code'] == '160002' || $v['error_code'] = '340003') {
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
-		}
 		else {
 			if (isset($s['error_code'])) {
 				$error = $s['error_code'];
