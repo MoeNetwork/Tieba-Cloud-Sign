@@ -3,26 +3,7 @@ global $i;
 global $m;
 ?>
 
-<!-- MODAL -->
-<div class="modal fade" id="DownloadPluginModal" tabindex="-1" role="dialog" aria-labelledby="DownloadPluginModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">请选择插件下载方式</h4>
-      </div>
-      <div class="modal-body">
-        方式1：<a href="https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg" target="_blank">点击从谷歌应用商店安装</a><br/><br/>
-        方式2：<a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/attach_files" target="_blank">点击从 OSChina 下载 [ 选择 Edit This Cookie.crx ]</a><br/><br/>
-        方式3：<a href="http://pan.baidu.com/s/1nt4uCGx" target="_blank">点击从百度网盘下载手动安装</a><br/><br/>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- END MODAL -->
+
 
 <!-- NAVI -->
 <ul class="nav nav-tabs" id="PageTab">
@@ -218,12 +199,13 @@ global $m;
 	<div class="panel-heading" onclick="$('#chrome_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Chrome 浏览器下的绑定方法</h3></div>
 	<div class="panel-body" id="chrome_bduss" style="display:none">
 	    1.使用 Chrome 或 Chromium 内核的浏览器
-		<br/><br/>2.<a href="javascript:;" onclick="$('#DownloadPluginModal').modal('show');">安装插件 [ EditThisCookie ]，点击下载 </a>
-		<br/><br/>3.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
-		<br/><br/>4.确保已经登录百度，然后按下 F12 ( 或右键点击审查元素 )
-		<br/><br/>3.按下图操作：( 点图片查看大图 )
-		<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.jpg" width="90%" height="90%"></a>
-		<br/><br/>4.输入复制到的 BDUSS 到上面的表单即可
+		<br/><br/>2.打开百度首页 <a href="http://www.baidu.com" target="_blank">http://www.baidu.com/</a>
+    <br/><br/>3.右键，点击 <b>查看网页信息</b>
+		<br/><br/>4.确保已经登录百度，然后点击 <b>显示 Cookie 和网站数据</b>
+		<br/><br/>5.如图，依次展开 <b>passport.baidu.com</b> -> <b>Cookie</b> -> <b>BDUSS</b>
+		<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.png" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.png"></a>
+		<br/><br/>6.按下 Ctrl+A 全选，然后复制并输入到上面的表单即可
+    <br/><br/>请注意，一旦退出登录，将导致 BDUSS 失效，因此建议在隐身模式下登录
 	</div>
 </div>
 </div>
