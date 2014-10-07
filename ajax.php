@@ -45,11 +45,12 @@ switch (SYSTEM_PAGE) {
 		$c=new wcurl(SUPPORT_URL . 'check.php?ver=' . SYSTEM_VER);
 		$data=json_decode($c->exec());
 		$c->close();
+		$d = '';
 		if($data!=""){
 			$t="";
 			//预先提供文件夹列表
 			foreach ($data->items->dir as $dir) {
-				echo '<input type="hidden" name="dir[]" value="'.$dir.'">';
+				$d .= '<input type="hidden" name="dir[]" value="'.$dir.'">';
 			}
 			//是否有升级脚本
 			if(isset($data->updatefile)){ echo "<input type=\"hidden\" name=\"updatefile\" value=\"{$data->updatefile}\">"; }
@@ -64,7 +65,9 @@ switch (SYSTEM_PAGE) {
 					$t.="<input type=\"checkbox\" name=\"file[]\" value=\"{$file->path}\" checked> {$file->path} <br/>";
 				}
 			}
-			echo $t;
+			if (!empty($t)) {
+				echo $d.$t;
+			}
 		}
 		break;
 
