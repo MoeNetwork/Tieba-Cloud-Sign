@@ -293,7 +293,7 @@ class misc {
 		$today = date('Y-m-d');
 
 		if (date('H') <= 0) {
-			die ('0点时忽略签到');	
+			return '0点时忽略签到';	
 		}
 
 		$limit = option::get('cron_limit');
