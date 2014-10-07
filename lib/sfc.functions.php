@@ -104,9 +104,10 @@ function Clean() {
  * @param $c ID列，默认为id
  * @param $n 取多少个
  * @param $w 条件语句
- * @return 取1个直接返回结果数组，取>1个返回多维数组，用foreach取出
+ * @param $f bool 是否强制以多维数组形式返回，默认false
+ * @return array 取1个直接返回结果数组(除非$f为true)，取>1个返回多维数组，用foreach取出
  */
-function rand_row($t , $c = 'id' , $n = '1', $w = '') {
+function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false) {
 	global $m;
 	if (!empty($w)) {
 		$w = ' AND '.$w;
@@ -114,14 +115,24 @@ function rand_row($t , $c = 'id' , $n = '1', $w = '') {
 	$sql = "SELECT * FROM `{$t}` AS r1 JOIN (SELECT (RAND() * (SELECT MAX(`{$c}`) FROM `{$t}`)) AS {$c}) AS r2 WHERE r1.{$c} >= r2.{$c} {$w} ORDER BY r1.{$c} ASC LIMIT 1;";
 	if ($n == '1') {
 		$r =  $m->once_fetch_array($sql);
-		$r['id'] = intval($r['id']);
-		return $r;
+		if (!empty($r)) {
+			$r['id'] = intval($r['id']) + 1;
+			if ($f === false) {
+				return $r;
+			} else {
+				return array($r);
+			}
+		} else {
+			return array();
+		}
 	} else {
 		$r = array();
 		for ($i=0; $i < $n; $i++) { 
 			$r1 = $m->once_fetch_array($sql);
-			$r1['id'] = intval($r1['id']);
-			$r[] = $r1;
+			if (!empty($r1)) {
+				$r1['id'] = intval($r1['id']) + 1;
+				$r[] = $r1;
+			}
 		}
 		return $r;
 	}
@@ -521,8 +532,7 @@ function easy_match_all($exp, $str, $pat = 0, $flags = PREG_PATTERN_ORDER) {
  */
 
 function sfc_error($errno, $errstr, $errfile, $errline) {
-	if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
-		switch ($errno) {
+	switch ($errno) {
 		    case E_USER_ERROR:          $errnoo = 'User Error'; break;
 		    case E_USER_WARNING:        $errnoo = 'User Warning'; break;
 		    case E_ERROR:               $errnoo = 'Error'; break;
@@ -535,7 +545,8 @@ function sfc_error($errno, $errstr, $errfile, $errline) {
 	        case E_COMPILE_WARNING:     $errnoo = 'Compile Warning'; break;
 	        case E_STRICT:              $errnoo = 'Strict Warning'; break;
 		    default:                    $errnoo = 'Unknown Error [ #'.$errno.' ]';  break;
-   		}
+   	}
+	if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
 		echo '<div class="alert alert-danger alert-dismissable"><strong>[ StusGame Framework ] '.$errnoo.':</strong> [ Line: '.$errline.' ]<br/>'.$errstr.'<br/>File: '.$errfile.'</div>';
 	}
 	doAction('error', $errno, $errstr, $errfile, $errline, $errnoo);
