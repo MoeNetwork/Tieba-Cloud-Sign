@@ -47,6 +47,10 @@ switch (SYSTEM_PAGE) {
 		$c->close();
 		if($data!=""){
 			$t="";
+			//预先提供文件夹列表
+			foreach ($data->items->dir as $dir) {
+				echo '<input type="hidden" name="dir[]" value="'.$dir.'">';
+			}
 			//是否有升级脚本
 			if(isset($data->updatefile)){ echo "<input type=\"hidden\" name=\"updatefile\" value=\"{$data->updatefile}\">"; }
 			//检测文件是否存在以及MD5是否相同
@@ -54,18 +58,10 @@ switch (SYSTEM_PAGE) {
 				if(file_exists(SYSTEM_ROOT.$file->path)){
 					$md5=md5(file_get_contents(SYSTEM_ROOT.$file->path));
 					if($file->md5!=$md5){
-						$t.="- {$file->path} <input type=\"hidden\" name=\"file[]\" value=\"{$file->path}\"><br/>";
+						$t.="<input type=\"checkbox\" name=\"file[]\" value=\"{$file->path}\" checked> {$file->path} <br/>";
 					}
 				} else {
-					$t.="- {$file->path} <input type=\"hidden\" name=\"file[]\" value=\"{$file->path}\"><br/>";
-				}
-			}
-			//检测文件夹是否缺失
-			if($t!=""){
-				foreach ($data->items->dir as $dir) {
-					if(!is_dir(SYSTEM_ROOT.$dir)){
-						$t.="<input type=\"hidden\" name=\"dir[]\" value=\"{$dir}\">";
-					}
+					$t.="<input type=\"checkbox\" name=\"file[]\" value=\"{$file->path}\" checked> {$file->path} <br/>";
 				}
 			}
 			echo $t;
@@ -73,12 +69,9 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:update:updnow':
-		if (!is_dir(SYSTEM_ROOT.'/setup/update_cache')) {
-			mkdir(SYSTEM_ROOT.'/setup/update_cache');
-		}
 		if(isset($_POST['dir'])){//如果需要创建目录
 			foreach ($_POST['dir'] as $dir) {
-				mkdir(SYSTEM_ROOT.'/setup/update_cache'.$dir);
+				mkdir(SYSTEM_ROOT.'/setup/update_cache'.$dir , 0777 , true);
 			}
 		}
 		foreach ($_POST['file'] as $file) {
