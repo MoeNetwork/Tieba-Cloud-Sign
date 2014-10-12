@@ -333,11 +333,11 @@ switch (SYSTEM_PAGE) {
 			break;
 
 	case 'testmail':
-		$x = misc::mail(option::get('mail_name'), SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','本测试邮件还包含一个附件',array(SYSTEM_ROOT.'/README.md'));
-		if($x == true) {
+		$x = misc::mail(option::get('mail_name'), SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL);
+		if($x === true) {
 			Redirect(SYSTEM_URL.'index.php?mod=admin:set&mailtestok');
 		} else {
-			msg('邮件发送失败：'.$x);
+			msg('邮件发送失败，发件日志：<br/>'.$x);
 		}
 		break;
 }
@@ -346,4 +346,3 @@ if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
 	option::set('plugin_'.$i['mode'][1] , addslashes(serialize($_POST)));
 	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
 }
-?>

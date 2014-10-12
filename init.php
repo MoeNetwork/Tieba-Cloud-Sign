@@ -12,7 +12,7 @@ date_default_timezone_set('Asia/Shanghai');
 require SYSTEM_ROOT.'/setup/msg.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/lib/mysql_autoload.php';
-require SYSTEM_ROOT.'/lib/PHPMailerAutoload.php';
+require SYSTEM_ROOT.'/lib/class.smtp.php';
 require SYSTEM_ROOT.'/lib/reg.php';
 define('SYSTEM_URL',option::get('system_url'));
 define('SYSTEM_NAME', option::get('system_name'));
@@ -23,4 +23,3 @@ if (option::get('protector') == 1) {
 	require SYSTEM_ROOT.'/lib/protector.php';
 }
 require SYSTEM_ROOT.'/lib/plugins.php';
-?>

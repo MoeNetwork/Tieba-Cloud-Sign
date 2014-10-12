@@ -11,10 +11,9 @@ class misc {
 	 * @param $to 收件人
 	 * @param $sub 邮件主题
 	 * @param $msg 邮件内容
-	 * @param $att 数组，附件的路径，可以多个附件，例如array('/plugins/wmzz_mailer/demo.jpg','/plugins/wmzz_mailer/f.jpg')
 	 * @return 成功:true 失败：错误消息
 	 */
-	public static function mail($to, $sub = '无主题', $msg = '无内容', $att = array()) {
+	public static function mail($to, $sub = '无主题', $msg = '无内容') {
         if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')){
             $mail = new SaeMail();
             $mail->setOpt(array(
@@ -30,42 +29,41 @@ class misc {
            ));
             $mail->setAttach( $att );
             $mail->send();
-            if ($ret === false)
-                return (var_dump($mail->errno(), $mail->errmsg()));
-            else return true;
-        }
-        else {
-		$mail = new PHPMailer();
-		if (option::get('mail_mode') == 'SMTP') {
-			$mail->isSMTP();
-			$mail->Mailer = 'SMTP';
-			$mail->SMTPDebug = 0;
-			$mail->Debugoutput = 'html';
-			$mail->Host = option::get('mail_host');
-			$mail->Port = option::get('mail_port');
-			$mail->SMTPAuth = (boolean) option::get('mail_auth');
-			$mail->Username = option::get('mail_smtpname');
-			$mail->Password = option::get('mail_smtppw');
-		} else {
-			$mail->Mailer = 'MAIL';
-		}
-			$mail->CharSet = "UTF-8"; //核心代码，可以解决乱码问题
-			$mail->setFrom(option::get('mail_name'), option::get('mail_yourname'));
-			$mail->addReplyTo(option::get('mail_name'), option::get('mail_yourname'));
-			$mail->addAddress($to, $to);
-			$mail->Subject = $sub;
-			$mail->Body = $msg;
-			$mail->msgHTML = $msg;
-			$mail->AltBody = $msg;
-			foreach ($att as $value) {
-				$mail->addAttachment($value);
+            if ($ret === false) {
+                return var_dump($mail->errno(), $mail->errmsg());
+            } else {
+            	return true;
+            }
+        } else {
+        	$From = option::get('mail_name');
+			if (option::get('mail_mode') == 'SMTP') {
+				$Host = option::get('mail_host');
+				$Port = intval(option::get('mail_port'));
+				$SMTPAuth = (boolean) option::get('mail_auth');
+				$Username = option::get('mail_smtpname');
+				$Password = option::get('mail_smtppw');
+				$mail = new SMTP($Host , $Port , $SMTPAuth , $Username , $Password);
+				if($mail->send($to , $From , $sub , $msg)) {
+					return true;
+				} else {
+					return $mail->log;
+				}
+			} else {
+				$header .= "MIME-Version:1.0\r\n";
+		        $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+		        $header .= "To: " . $to . "\r\n";
+		        $header .= "From: " . $From . "\r\n";
+		        $header .= "Subject: " . $sub . "\r\n";
+		        $header .= 'Reply-To: ' . $From . "\r\n";
+		        $header .= "Date: " . date("r") . "\r\n";
+				return mail(
+					$to,
+					$sub,
+					$msg,
+					$header
+				);
 			}
-		    if(!$mail->Send()) {
-		        return $mail->ErrorInfo;
-		    } else {
-		       	return true;
-		    }
-        }
+	    }
 	}
 
 	/** 
