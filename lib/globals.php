@@ -3,8 +3,8 @@
  * 全局用户控制
  */
 if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
-	$name = isset($_COOKIE['wmzz_tc_user']) ? strip_tags($_COOKIE['wmzz_tc_user']) : '';
-	$pw = isset($_COOKIE['wmzz_tc_pw']) ? strip_tags($_COOKIE['wmzz_tc_pw']) : '';
+	$name = isset($_COOKIE['wmzz_tc_user']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_user'])) : '';
+	$pw = isset($_COOKIE['wmzz_tc_pw']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_pw'])) : '';
 	$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE name = '{$name}' LIMIT 1");
 	if($m->num_rows($osq) == 0) {
 		$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE email = '{$name}' LIMIT 1");
@@ -56,8 +56,8 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 if (SYSTEM_PAGE == 'admin:login') {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
-	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';
+	$name = isset($_POST['user']) ? addslashes(strip_tags($_POST['user'])) : '';
+	$pw = isset($_POST['pw']) ? addslashes(strip_tags($_POST['pw'])) : '';
 	if (empty($name) || empty($pw)) {
 		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('请填写账户或密码'));die;
 	}
@@ -93,10 +93,10 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
 	}
-	$name = isset($_POST['user']) ? strip_tags($_POST['user']) : '';
-	$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';
-	$pw = isset($_POST['pw']) ? strip_tags($_POST['pw']) : '';
-	$yr = isset($_POST['yr']) ? strip_tags($_POST['yr']) : '';
+	$name = isset($_POST['user']) ? addslashes(strip_tags($_POST['user'])) : '';
+	$mail = isset($_POST['mail']) ? addslashes(strip_tags($_POST['mail'])) : '';
+	$pw = isset($_POST['pw']) ? addslashes(strip_tags($_POST['pw'])) : '';
+	$yr = isset($_POST['yr']) ? addslashes(strip_tags($_POST['yr'])) : '';
 	if (empty($name) || empty($mail) || empty($pw)) {
 		msg('注册失败：请正确填写账户、密码或邮箱');
 	}
