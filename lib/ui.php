@@ -9,14 +9,14 @@ function loadhead() {
 	echo '<title>'.SYSTEM_NAME.'</title>';
 	echo '<meta name="generator" content="Tieba-Cloud-Sign Ver.'.SYSTEM_VER.'" />';
 	echo '<meta name="author" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
-	echo '<script src="'.SYSTEM_URL.'source/js/jquery.min.js"></script>';
-	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'source/css/bootstrap.min.css">';
-	echo '<script src="'.SYSTEM_URL.'source/js/bootstrap.min.js"></script>';
+	echo '<script src="source/js/jquery.min.js"></script>';
+	echo '<link rel="stylesheet" href="source/css/bootstrap.min.css">';
+	echo '<script src="source/js/bootstrap.min.js"></script>';
 	echo '<style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style>';
-	echo '<script type="text/javascript" src="'.SYSTEM_URL.'source/js/js.js"></script>';
-	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'source/css/ui.css">';
-	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'source/css/my.css">';
-	echo '<script type="text/javascript" src="'.SYSTEM_URL.'source/js/my.js"></script>';
+	echo '<script type="text/javascript" src="source/js/js.js"></script>';
+	echo '<link rel="stylesheet" href="source/css/ui.css">';
+	echo '<link rel="stylesheet" href="source/css/my.css">';
+	echo '<script type="text/javascript" src="source/js/my.js"></script>';
 	doAction('header');
 	if (option::get('trigger') == 1) {
 		echo "<script>$.ajax({ async:true, url: '".SYSTEM_URL."do.php', type: 'GET', data : {},dataType: 'HTML'});</script>";

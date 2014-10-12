@@ -165,6 +165,9 @@ class misc {
 	 */
 	public static function getCookie($pid) {
 		global $m;
+		if (empty($pid)) {
+			return false;
+		}
 		$temp = $m->fetch_array($m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `id` = {$pid} LIMIT 1"));
 		return $temp['bduss'];
 	}
@@ -289,44 +292,69 @@ class misc {
 		global $m,$i;
 		$today = date('Y-m-d');
 
-		//处理所有未签到的贴吧
-		if (option::get('cron_limit') == 0) {
-			$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() ");
-		} else {
-			$limit = option::get('cron_limit');
-			$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."' ORDER BY RAND() LIMIT 0 , ".$limit);
-		}
-
 		if (date('H') <= 0) {
-			die ('0点时忽略签到');	
+			return '0点时忽略签到';	
 		}
 
-		while ($x=$m->fetch_array($q)) {
-			DoSign_All($x['uid'],$x['tieba'],$x['id'],$table,$sign_mode,$x['pid'],$x['fid']);
-		}
+		$limit = option::get('cron_limit');
 
-		//重新尝试签到出错的贴吧
-		if (option::get('cron_limit') == 0) {
-			$sign_again = unserialize(option::get('cron_sign_again'));
-			if (option::get('retry_max') == '0') {
-				$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
+		//处理所有未签到的贴吧
+		if ($limit == 0) {
+			$q  = array();
+			$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."'");
+			while ($qss = $m->fetch_array($qs)) {
+				$q[] = array(
+					'id'     => $qss['id'],
+					'uid'    => $qss['uid'],
+					'pid'    => $qss['pid'],
+					'fid'    => $qss['fid'],
+					'tieba'  => $qss['tieba'],
+					'no'     => $qss['no'],
+					'status' => $qss['status'],
+					'lastdo' => $qss['lastdo'],
+					'last_error'    => $qss['last_error']
+				);
 			}
-			elseif ($sign_again['lastdo'] == $today && $sign_again['num'] <= option::get('retry_max') && option::get('retry_max') != '-1') {
-				$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
+			shuffle($q);
+		} else {
+			$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `lastdo` != '{$today}'" , true );
+		}
+		
+		foreach ($q as $x) {
+			DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+		}
+
+		$sign_again = unserialize(option::get('cron_sign_again'));
+		$retry_max  = option::get('retry_max');
+		$q = array();
+		$x = array();
+		//重新尝试签到出错的贴吧
+		if ($limit == 0) {
+			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+				$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+				while ($qss = $m->fetch_array($qs)) {
+					$q[] = array(
+						'id'     => $qss['id'],
+						'uid'    => $qss['uid'],
+						'pid'    => $qss['pid'],
+						'fid'    => $qss['fid'],
+						'tieba'  => $qss['tieba'],
+						'no'     => $qss['no'],
+						'status' => $qss['status'],
+						'lastdo' => $qss['lastdo'],
+						'last_error'    => $qss['last_error']
+					);
+				}
+				shuffle($q);
 			}
 		} else {
-			$limit=option::get('cron_limit');
-			$sign_again = unserialize(option::get('cron_sign_again'));
-			if (option::get('retry_max') == '0') {
-				$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
-			}
-			elseif ($sign_again['lastdo'] == $today && $sign_again['num'] <= option::get('retry_max') && option::get('retry_max') != '-1') {
-				$q=$m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0' ORDER BY RAND()");
+			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `lastdo` = '{$today}'" , true );
 			}
 		}
 
-		while ($x=$m->fetch_array($q)) {
-			DoSign_All($x['uid'],$x['tieba'],$x['id'],$table,$sign_mode,$x['pid'],$x['fid']);
+		foreach ($q as $x) {
+			DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
 		}
 	}
 

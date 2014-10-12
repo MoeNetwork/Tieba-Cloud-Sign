@@ -58,5 +58,6 @@ if(<?php echo $writable; ?>==1){
 	});
 }
 </script>
+检查更新功能仅在支持写入的主机下可用
 <?php doAction('admin_tools_2'); ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>

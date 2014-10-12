@@ -60,9 +60,9 @@ function getRandStr($length = 12, $special_chars = false) {
  * @param $d default avatar
  * @param $g
  */
-function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = '2') {
+function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
 	$hash = md5($email);
-	$avatar = "http://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
+	$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
 	return $avatar;
 }
 
