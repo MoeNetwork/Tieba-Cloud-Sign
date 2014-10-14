@@ -5,7 +5,7 @@ if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">设置保存成功</div>';
 }
 elseif(isset($_GET['mailtestok'])) {
-	echo '<div class="alert alert-success">一封包含附件 ( README.md ) 的邮件已经发送到您的邮箱 '.option::get('mail_name').'，请查收</div>';
+	echo '<div class="alert alert-success">一封邮件已经发送到您的邮箱 '.option::get('mail_name').'，请查收</div>';
 }
 function addset($name,$type,$x,$other = '',$text = '') {
 	if ($type == 'checkbox') {

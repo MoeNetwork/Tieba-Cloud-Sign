@@ -6,4 +6,3 @@ if (!isset($_GET['plugin'])) {
 	template('control');
 	loadfoot();
 }
-?>

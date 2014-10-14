@@ -2,7 +2,6 @@
 define('SYSTEM_DO_NOT_LOGIN', true);
 require dirname(__FILE__).'/init.php';
 global $m,$today,$i;
-require SYSTEM_ROOT.'/sign.functions.php';
 set_time_limit(0);
 $sign_multith = option::get('sign_multith');
 if (!isset($_GET['donnot_sign_multith']) && !empty($sign_multith) && function_exists('fsockopen')) {
