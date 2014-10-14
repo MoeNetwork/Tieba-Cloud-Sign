@@ -248,13 +248,13 @@ class misc {
 		}
 
 		if(!empty($sign_mode) && in_array('1',$sign_mode)) {
-			$v = json_decode(DoSign_Client($uid,$kw,$id,$pid,$fid),true);
+			$v = json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid),true);
 		}
 		if(!empty($sign_mode) && in_array('2',$sign_mode)) {
-			$s = json_decode(DoSign_Default($uid,$kw,$id,$pid,$fid),true);
+			$s = json_decode(self::DoSign_Default($uid,$kw,$id,$pid,$fid),true);
 		}
 		if(!empty($sign_mode) && in_array('3',$sign_mode)) {
-			$r = json_decode(DoSign_Mobile($uid,$kw,$id,$pid,$fid),true);
+			$r = json_decode(self::DoSign_Mobile($uid,$kw,$id,$pid,$fid),true);
 		}
 
 		if (!isset($s['error_code']) && !isset($r['no']) && !isset($v['error_code'])) {
@@ -319,7 +319,7 @@ class misc {
 		}
 		
 		foreach ($q as $x) {
-			DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+			self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
 		}
 
 		$sign_again = unserialize(option::get('cron_sign_again'));
@@ -352,7 +352,7 @@ class misc {
 		}
 
 		foreach ($q as $x) {
-			DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+			self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
 		}
 	}
 
