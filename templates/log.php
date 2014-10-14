@@ -15,7 +15,8 @@ while ($x=$m->fetch_array($q)) {
 		$s = '<font color="blue">忽略</font>';
 	}
 	elseif ($x['status'] != 0) {
-		$s = '<font color="red">异常</font>';
+		$s = '<font color="red">异常</font><br/>#' . $x['status'];
+		$x['tieba'] .= '<br/><b>错误:</b>' . $x['last_error'];
 	}
 	elseif ($x['lastdo'] != $today) {
 		$s = '<font color="black">待签</font>';

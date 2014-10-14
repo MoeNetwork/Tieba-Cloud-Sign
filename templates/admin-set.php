@@ -43,10 +43,10 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		</td>
 		</tr>
 		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
-		<tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多<br/>闪电签到需要fsockopen支持</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
+		<tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
 		<input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>
-		<input type="checkbox" name="sign_mode[]" value="2" <?php if(!empty($sign_mode) && in_array('2',$sign_mode)) { echo 'checked'; } ?>> 网页签到<br/>
-		<input type="checkbox" name="sign_mode[]" value="3" <?php if(!empty($sign_mode) && in_array('3',$sign_mode)) { echo 'checked'; } ?>> 手机网页签到
+		<input type="checkbox" name="sign_mode[]" value="3" <?php if(!empty($sign_mode) && in_array('3',$sign_mode)) { echo 'checked'; } ?>> 手机网页签到<br/>
+		<input type="checkbox" name="sign_mode[]" value="2" <?php if(!empty($sign_mode) && in_array('2',$sign_mode)) { echo 'checked'; } ?>> 网页签到
 		</td>
 		</tr>
 		<tr><td>任务运行顺序<br/>签到任务先运行可能导致计划任务被阻塞</td><td>

@@ -173,9 +173,8 @@ class misc {
 	/**
 	 * 手机网页签到
 	 */
-	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid) {
+	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
 		//没问题了
-		$ck = misc::getCookie($pid);
 		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
 		$ch->addcookie("BDUSS=".$ck);
 		return $ch->exec();
@@ -184,9 +183,8 @@ class misc {
 	/**
 	 * 网页签到
 	 */
-	public static function DoSign_Default($uid,$kw,$id,$pid,$fid) {
+	public static function DoSign_Default($uid,$kw,$id,$pid,$fid,$ck) {
 		global $m,$today;
-		$ck = misc::getCookie($pid);
 		$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 		$ch->addcookie("BDUSS=".$ck);
 		$s  = $ch->exec();
@@ -203,16 +201,14 @@ class misc {
 			$ch->exec();
 			$ch->close();
 		} else {
-			$s = '{"c":"err"}';
+			return true;
 		}
-		return $s;
 	}
 
 	/**
 	 * 客户端签到
 	 */
-	public static function DoSign_Client($uid,$kw,$id,$pid,$fid){
-		$ck = misc::getCookie($pid);
+	public static function DoSign_Client($uid,$kw,$id,$pid,$fid,$ck){
 		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded','User-Agent: Fucking iPhone/1.0 BadApple/99.1'));
 		$ch->addcookie("BDUSS=".$ck);
 		$temp = array(
@@ -235,10 +231,16 @@ class misc {
 	}
 
 	/**
-	 * 对一个UID执行完整的签到任务
+	 * 对一个贴吧执行完整的签到任务
 	 */
 	public static function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) {
 		global $m;
+		$again_error_id     = 160002; //重复签到错误代码
+		$again_error_id_2   = 1101; //特殊的重复签到错误代码！！！签到过快=已签到
+		$again_error_id_3   = 1102; //特殊的重复签到错误代码！！！签到过快=已签到
+		$status_succ    = false;
+
+		$ck = misc::getCookie($pid);
 		$kw = addslashes($kw);
 		$today = date('Y-m-d');
 
@@ -247,37 +249,36 @@ class misc {
 			$m->query("UPDATE  `".DB_PREFIX.$table."` SET  `fid` =  '{$fid}' WHERE  `".DB_PREFIX.$table."`.`id` = '{$id}';",true);
 		}
 
-		if(!empty($sign_mode) && in_array('1',$sign_mode)) {
-			$v = json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid),true);
-		}
-		if(!empty($sign_mode) && in_array('2',$sign_mode)) {
-			$s = json_decode(self::DoSign_Default($uid,$kw,$id,$pid,$fid),true);
-		}
-		if(!empty($sign_mode) && in_array('3',$sign_mode)) {
-			$r = json_decode(self::DoSign_Mobile($uid,$kw,$id,$pid,$fid),true);
+		if(!empty($sign_mode) && in_array('1',$sign_mode) && $status_succ === false) {
+			$v = json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck),true);
+			if (empty($v['error_code']) || $v['error_code'] == $again_error_id) {
+				$status_succ = true;
+			} else {
+				$error_code = $v['error_code'];
+				$error_msg  = $v['error_msg'];
+			}
 		}
 
-		if (!isset($s['error_code']) && !isset($r['no']) && !isset($v['error_code'])) {
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
+		if(!empty($sign_mode) && in_array('3',$sign_mode) && $status_succ === false) {
+			$r = json_decode(self::DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck),true);
+			if (empty($r['no']) || $r['no'] == $again_error_id_2 || $r['no'] == $again_error_id_3) {
+				$status_succ = true;
+			} else {
+				$error_code  = $r['no'];
+				$error_msg   = $r['error'];
+			}
 		}
-		else {
-			if (isset($s['error_code'])) {
-				$error = $s['error_code'];
-				$errorid = 2;
+
+		if(!empty($sign_mode) && in_array('2',$sign_mode) && $status_succ === false) {
+			if(self::DoSign_Default($uid,$kw,$id,$pid,$fid,$ck) === true) {
+				$status_succ = true;
 			}
-			elseif (isset($r['no'])) {
-				$error = $r['no'];
-				$errorid = 3;
-			}
-			elseif (isset($v['error_code'])) {
-				$error = $v['error_code'];
-				$errorid = 4;
-			}
-			else {
-				$errorid = '1';
-				$error = '1';
-			}
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '".$errorid."',`last_error` = '".$error."' WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
+		}
+
+		if ($status_succ === true) {
+			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
+		} else {
+			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '".$error_code."',`last_error` = '".$error_msg."' WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
 		}
 	}
 
