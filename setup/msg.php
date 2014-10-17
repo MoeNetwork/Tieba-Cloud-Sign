@@ -10,7 +10,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php echo $sysname ?> - 提示信息</title>
+        <title><?php echo strip_tags($sysname) ?> - 提示信息</title>
         <style type="text/css">
             html {
                 background: #eee;
@@ -112,8 +112,8 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
     <body id="error-page">
         <h3><?php echo $sysname ?> - 提示信息</h3>
         <?php echo $msg ?>
-        <?php if ($url != false) {
-            if ($url == true) {
+        <?php if ($url !== false) {
+            if ($url === true) {
                 echo '<br/><br/><a href="javascript:history.back(-1)"><< 返回上一页</a>';
             } else {
                 echo '<br/><br/><a href="'.$url.'"><< 返回上一页</a>';
