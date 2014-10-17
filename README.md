@@ -1,3 +1,5 @@
+#百度贴吧云签到
+详细了解本程序请前往：http://www.stus8.com/forum.php?mod=viewthread&tid=2141
 ##常见问题解决方案
 #####1.如何安装程序
 上传此程序到您的网站，然后网页访问 /setup/install.php   
