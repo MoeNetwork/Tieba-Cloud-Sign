@@ -65,6 +65,7 @@ switch (SYSTEM_PAGE) {
 		@option::set('pwdmode',$sou['pwdmode']);
 		@option::set('retry_max',$sou['retry_max']);
 		@option::set('cron_order',$sou['cron_order']);
+		@option::set('face_img',$sou['face_img']);
 		@option::set('sign_multith',$sou['sign_multith']);
 		@option::set('cktime',$sou['cktime']);
 		if (empty($sou['fb_tables'])) {
@@ -81,6 +82,10 @@ switch (SYSTEM_PAGE) {
 				$fb_tab[$n] .= trim($value);
 			}
 			@option::set('fb_tables', serialize($fb_tab));
+		}
+	//如果使用贴吧头像
+		if($sou['face_img']){
+			@option::set('face_baiduid',$sou['face_baiduid']);
 		}
 		doAction('admin_set_save');
 		Redirect(SYSTEM_URL.'index.php?mod=admin:set&ok');

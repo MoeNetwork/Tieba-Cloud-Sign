@@ -51,6 +51,8 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		</tr>
 		<tr><td>任务运行顺序<br/>签到任务先运行可能导致计划任务被阻塞</td><td>
 		<input type="radio" name="cron_order" value="1" <?php if (option::get('cron_order') == '1') { echo 'checked'; } ?>> 计划任务优先运行<br/><input type="radio" name="cron_order" value="0" <?php if (option::get('cron_order') == '0') { echo 'checked'; } ?>> 签到任务优先运行<br/><input type="radio" name="cron_order" value="2" <?php if (option::get('cron_order') == '2') { echo 'checked'; } ?>> 都不运行
+		<tr><td>首页头像设置<br/>使用Gravatar头像或贴吧头像</td><td>
+		<input type="radio" name="face_img" value="0" <?php if (option::get('face_img') == '0') { echo 'checked'; } ?>> 使用Gravatar头像<br/><input type="radio" name="face_img" value="1" <?php if (option::get('face_img') == '1') { echo 'checked'; } ?>> 使用贴吧头像（推荐） 贴吧用户名：<input type="text" name="face_baiduid" value="<?php if (option::get('face_baiduid')) { echo option::get('face_baiduid'); } ?>" class="form-control" >
 		<tr><td>贴吧数据分表<br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所有请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">记录超过此行数时分表</span>

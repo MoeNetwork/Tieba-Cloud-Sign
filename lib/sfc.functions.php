@@ -53,7 +53,24 @@ function getRandStr($length = 12, $special_chars = false) {
 }
 
 /**
- * 获取Gravatar头像
+ * 获取两段文本之间的文本
+ *
+ * @param 完整的文本
+ * @param 左边文本
+ * @param 右边文本
+ * 返回“左边文本”与“右边文本”之间的文本
+ */
+function textMiddle($text, $left, $right) {
+	$loc1 = stripos($text, $left);
+	if (is_bool($loc1)) { return ""; }
+	$loc1 += strlen($left);
+	$loc2 = stripos($text, $right, $loc1);
+	if (is_bool($loc2)) { return ""; }
+	return substr($text, $loc1, $loc2 - $loc1);
+}
+
+/**
+ * 获取Gravatar头像（或贴吧头像）
  * http://en.gravatar.com/site/implement/images/
  * @param $email
  * @param $s size
@@ -61,9 +78,18 @@ function getRandStr($length = 12, $special_chars = false) {
  * @param $g
  */
 function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
-	$hash = md5($email);
-	$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
-	return $avatar;
+	if(option::get("face_img")) {
+		if(option::get("face_baiduid") != ""){
+			$data = new wcurl('http://www.baidu.com/p/'.option::get("face_baiduid"));
+			return stripslashes(textMiddle($data->get(),'<img class=portrait-img src=\x22','\x22>'));
+		} else {
+			return 'http://tb.himg.baidu.com/sys/portrait/item/';
+		}
+	} else {
+		$hash = md5($email);
+		$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
+		return $avatar;
+	}
 }
 
 /**
