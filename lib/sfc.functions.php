@@ -80,8 +80,10 @@ function textMiddle($text, $left, $right) {
 function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
 	if(option::uget("face_img")) {
 		if(option::uget("face_baiduid") != ""){
-			$data = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
-			return stripslashes(textMiddle($data->get(),'<img class=portrait-img src=\x22','\x22>'));
+			$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+			$data = $c->get();
+			$c->close();
+			return stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
 		} else {
 			return 'http://tb.himg.baidu.com/sys/portrait/item/';
 		}
