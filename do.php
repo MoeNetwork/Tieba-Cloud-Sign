@@ -3,6 +3,12 @@ define('SYSTEM_DO_NOT_LOGIN', true);
 require dirname(__FILE__).'/init.php';
 global $m,$today,$i;
 set_time_limit(0);
+$cron_pw      = option::get('cron_pw');
+if (!empty($cron_pw)) {
+	if (empty($_REQUEST['pw']) || $_REQUEST['pw'] != $cron_pw) {
+		msg('计划任务执行失败：密码错误<br/><br/>你需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务',false);
+	}
+}
 $sign_multith = option::get('sign_multith');
 if (!isset($_GET['donnot_sign_multith']) && !empty($sign_multith) && function_exists('fsockopen')) {
 	for ($ii=0; $ii < $sign_multith; $ii++) { 
@@ -16,37 +22,8 @@ if (!isset($_GET['donnot_sign_multith']) && !empty($sign_multith) && function_ex
 		option::set('cron_last_do_time',$today);
 		option::set('cron_last_do','0');
 	}
-
-	$sign_again = unserialize(option::get('cron_sign_again'));
-	if ($sign_again['lastdo'] != $today) {
-		option::set('cron_sign_again',serialize(array('num' => 0, 'lastdo' => $today)));
-	}
-	/////////////// RUN ALL TASK IN THE CRON TABLE
-	if (option::get('cron_order') == '1') {
-		cron::runall();
-	}
-	/////////////// RUN ALL SIGN TASK
-
-	$sign_mode = unserialize(option::get('sign_mode'));
-
-	if (option::get('cron_order') != '2') {
-		$time = time();
-		$tcc = 1;
-		foreach ($i['table'] as $value) {
-			$return = misc::DoSign($value,$sign_mode);
-			$tcc++;
-		}
-
-		$sign_again_num = empty($sign_again['num']) ? 1 : $sign_again['num'] + 1;
-		option::set('cron_sign_again',serialize(array('num' => $sign_again_num, 'lastdo' => $today)));
-	}
-
-	doAction('cron_3');
-
-	/////////////// RUN ALL TASK IN THE CRON TABLE
-	if (option::get('cron_order') == '0') {
-		cron::runall();
-	}
+	
+	cron::runall();
 
 	doAction('cron_2');
 	/////////////// EXIT

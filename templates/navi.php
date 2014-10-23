@@ -81,13 +81,13 @@ global $i;
                 <li <?php if($i['mode'][0] == 'baiduid' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
-                <li <?php if(SYSTEM_PAGE == 'admin:tools' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:users' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:update' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'tools' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'users' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'update' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
                 <li <?php if(isset($i['mode'][1]) && $i['mode'][1] == 'stat' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:cron' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
-                <li <?php if(SYSTEM_PAGE == 'admin:plugins' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'cron' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'plugins' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>

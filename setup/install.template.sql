@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}baiduid`;
 
 CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}cron` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(1000) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `orde` int(10) NOT NULL DEFAULT '0',
   `file` varchar(1000) DEFAULT NULL,
   `no` int(10) NOT NULL DEFAULT '0',
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}cron` (
   `lastdo` varchar(100) DEFAULT NULL,
   `log` text,
   PRIMARY KEY (`id`),
-  FULLTEXT KEY `name` (`name`)
+  UNIQUE INDEX `name` (`name`) USING BTREE 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}options` (
@@ -47,14 +47,12 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}users` (
   `name` varchar(200) NOT NULL,
   `pw` varchar(500) NOT NULL,
   `email` varchar(500) NOT NULL,
-  `role` varchar(100) NOT NULL DEFAULT 'user',
+  `role`  enum('banned','vip','user','admin') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'user' ,
   `t` varchar(200) NOT NULL DEFAULT 'tieba',
   `options` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `id_3` (`id`),
-  KEY `id` (`id`),
-  KEY `id_2` (`id`)
+  UNIQUE INDEX `name` (`name`) USING BTREE ,
+  UNIQUE INDEX `id` (`id`) USING BTREE 
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}baiduid` (
@@ -74,7 +72,7 @@ INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
 ('sign_mode', 'a:1:{i:0;s:1:"1";}'),
 ('footer', ''),
 ('enable_reg', '1'),
-('protect_reg', ''),
+('protect_reg', '1'),
 ('yr_reg', ''),
 ('icp', ''),
 ('trigger', ''),
@@ -97,4 +95,8 @@ INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
 ('cron_last_do_time', '0'),
 ('cron_last_do', '0'),
 ('cron_isdoing','0'),
+('cron_pw',''),
+('sign_sleep','0'),
 ('cktime','999999');
+
+INSERT INTO `{VAR-PREFIX}cron` (`name`, `orde`, `file`, `no`, `status`, `freq`, `lastdo`, `log`) VALUES ('system_sign', 0, 'lib/cron_system_sign.php', 0, 0, 0, '0', NULL);

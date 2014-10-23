@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足!'); }
-global $m;
+global $m,$i;
 
 if (isset($_GET['add'])) {
 ?>
@@ -29,6 +29,10 @@ if (isset($_GET['add'])) {
 			<td><input type="radio" name="status" value="0" required="" checked> 正常&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="status" value="1" required="">错误</td>
 		</tr>
 		<tr>
+			<td>执行间隔<br/>单位为秒，0为始终执行</td>
+			<td><input type="number" name="freq" class="form-control" required="" value="0"></td>
+		</tr>
+		<tr>
 			<td>上次执行<br/>Unix 时间戳</td>
 			<td><input type="number" name="lastdo" class="form-control" required="" value="<?php echo time(); ?>"></td>
 		</tr>
@@ -43,9 +47,8 @@ if (isset($_GET['add'])) {
 </form>
 <?php
 } else {
-$query = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."cron` ORDER BY  `orde` ASC");
 $cron  = '';
-while ($cs = $m->fetch_array($query)) {
+foreach ($i['cron'] as $cs) {
 	if ($cs['freq'] == '-1') {
 		$freq = '一次性任务';
 	}
@@ -67,12 +70,12 @@ while ($cs = $m->fetch_array($query)) {
 		if ($cs['status'] != 0) {
 			$status = '<font color="red">异常</font>';
 		}
-		$status .= ' | <a href="setting.php?mod=admin:cron&dis='.$cs['id'].'">忽略任务</a>';
+		$status .= ' | <a href="setting.php?mod=admin:cron&dis='.$cs['name'].'">忽略任务</a>';
 	} else {
-		$status = '<font color="blue">忽略</font> | <a href="setting.php?mod=admin:cron&act='.$cs['id'].'">取消忽略</a>';
+		$status = '<font color="blue">忽略</font> | <a href="setting.php?mod=admin:cron&act='.$cs['name'].'">取消忽略</a>';
 	}
 	$status .= '<br/><a href="setting.php?mod=admin:cron&run='.$cs['name'].'&file='.$cs['file'].'">运行</a>';
-	$status .= ' | <a href="setting.php?mod=admin:cron&uninst='.$cs['id'].'" onclick="return confirm(\'你确实要卸载此计划任务吗？\');">卸载</a>';
+	$status .= ' | <a href="setting.php?mod=admin:cron&uninst='.$cs['name'].'" onclick="return confirm(\'你确实要卸载此计划任务吗？\');">卸载</a>';
 	if (empty($cs['log'])) {
 		$status .= '<br/>没有日志可查看';
 	} else {
@@ -80,7 +83,7 @@ while ($cs = $m->fetch_array($query)) {
 		$status .= '<br/><a href="javascript:;" onclick="alert(system_cron_log);">点击查看此任务的日志</a>';
 	}
 
-	$cron .= '<input type="hidden" value="'.$cs['id'].'" name="ids[]"><tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'<br/>运行顺序：<input required style="width:30%" type="number" name="order[]" value="'.$cs['orde'].'"></td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'<br/>ID：'.$cs['id'].'</td><td style="width:40%">'.$status.'</td></tr>';
+	$cron .= '<input type="hidden" value="'.$cs['name'].'" name="ids[]"><tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'<br/>运行顺序：<input required style="width:30%" type="number" name="order['.$cs['name'].']" value="'.$cs['orde'].'"></td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'<br/>ID：'.$cs['id'].'</td><td style="width:40%">'.$status.'</td></tr>';
 }
 
 if (isset($_GET['ok'])) {
@@ -89,8 +92,8 @@ if (isset($_GET['ok'])) {
 
 $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` ");
 ?>
-<div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] + 1 ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">点击这里可以添加一个计划任务到系统</a></div>
-<form action="setting.php?mod=admin:cron&order" method="post">
+<div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] + 1 ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">添加新计划任务</a> | <a href="do.php">运行全部计划任务</a></div>
+<form action="setting.php?mod=admin:cron&xorder" method="post">
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -101,9 +104,6 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 	</thead>
 	<tobdy>
 		<?php echo $cron ?>
-		<td style="width:30%"><b>签到所有贴吧</b><br/>do.php</td>
-		<td style="width:30%">始终运行的任务<br/>上次执行：<?php echo option::get('cron_last_do_time') ?></td>
-		<td style="width:40%"><a href="do.php">运行全部</a></td>
 	</tbody>
 </table>
 <input type="submit" class="btn btn-primary" value="提交更改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button>

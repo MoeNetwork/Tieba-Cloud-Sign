@@ -6,7 +6,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
  */
 class cron Extends option {
 	/**
-	 * 获取计划任务名称
+	 * 获取计划任务所有数据
 	 * $name 计划任务名称
 	 * @return array
 	*/
@@ -18,8 +18,78 @@ class cron Extends option {
 	}
 
 	/**
+	 * 获取计划任务指定数据
+	 * @param $name 计划任务名称
+	 * @param $set  设置项名
+	 */
+	public static function sget($name,$set) {
+		global $i;
+		if (isset($i['cron'][$name][$set])) {
+			return $i['cron'][$name][$set];
+		}
+	}
+
+	/**
+	 * 通过数组改变或添加计划任务 (不存在时自动添加)
+	 * @param $name string 全局唯一计划任务名称
+	 * @param $set  array 设置项
+	 */
+	public static function aset($name, $set) {
+		global $m;
+
+		$set = adds($set);
+
+		$sql = "INSERT INTO  `".DB_PREFIX."cron` (`name`";
+		$a = '';
+		$b = "'{$name}'";
+		$c = "`name` = '{$name}'";
+
+		if (isset($set['file'])) {
+			$a .= ', `file`';
+			$b .= ", '{$set['file']}'";
+			$c .= ", `file` = '{$set['file']}'";
+		}
+		if (isset($set['no'])) {
+			$a .= ', `no`';
+			$b .= ", '{$set['no']}'";
+			$c .= ", `no` = '{$set['no']}'";
+		}
+		if (isset($set['status'])) {
+			$a .= ', `status`';
+			$b .= ", '{$set['status']}'";
+			$c .= ", `status` = '{$set['status']}'";
+		}
+		if (isset($set['freq'])) {
+			$a .= ', `freq`';
+			$b .= ", '{$set['freq']}'";
+			$c .= ", `freq` = '{$set['freq']}'";
+		}
+		if (isset($set['lastdo'])) {
+			$a .= ', `lastdo`';
+			$b .= ", '{$set['lastdo']}'";
+			$c .= ", `lastdo` = '{$set['lastdo']}'";
+		}
+		if (isset($set['orde'])) {
+			$a .= ', `orde`';
+			$b .= ", '{$set['orde']}'";
+			$c .= ", `orde` = '{$set['orde']}'";
+		}
+		if (isset($set['log'])) {
+			$a .= ', `log`';
+			$b .= ", '{$set['log']}'";
+			$c .= ", `log` = '{$set['log']}'";
+		}
+
+		$sql .= $a . ' ) VALUES (' . $b . ') ON DUPLICATE KEY UPDATE '. $c . ';';
+		
+		$m->query($sql);
+
+	}
+
+	/**
 	 * 改变或添加计划任务 (不存在时自动添加)
-	 * $name 计划任务名称
+	 * WARNING:请使用更先进的 aset() 代替他
+	 * $name 全局唯一计划任务名称
 	 * $file 计划任务文件，执行时以include方式执行function，function名称为cron_计划任务名称
 	 * $no 忽略任务
 	 * $status 计划任务状态，系统会写入
@@ -32,12 +102,71 @@ class cron Extends option {
 	*/
 	public static function set($name, $file = '', $no = 0, $status = 0, $freq = 0, $lastdo = '', $log = '') {
 		global $m;
-		$x = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `name` = '{$name}'");
-		if ($x['ffffff'] <= 0) {
-			$m->query("INSERT INTO  `".DB_NAME."`.`".DB_PREFIX."cron` (`id`, `name`, `file`, `no`, `status`, `freq`, `lastdo`, `log`) VALUES (NULL, '{$name}', '{$file}', '{$no}', '{$status}', '{$freq}', '{$lastdo}', '{$log}');");	
-		} else {
-			$m->query("UPDATE  `".DB_NAME."`.`".DB_PREFIX."cron` SET  `name` =  '{$name}',`file` =  '{$file}',`no` =  '{$no}',`status` =  '{$status}',`freq` =  '{$freq}',`lastdo` =  '{$lastdo}',`log` =  '{$log}'  WHERE `name` = '{$name}'");
+		$set = array();
+
+		if (!empty($file)) {
+			$set['file'] = $file;
 		}
+		if (!empty($no)) {
+			$set['no'] = $no;
+		}
+		if (!empty($status)) {
+			$set['status'] = $status;
+		}
+		if (!empty($freq)) {
+			$set['freq'] = $freq;
+		}
+		if (!empty($lastdo)) {
+			$set['lastdo'] = $lastdo;
+		}
+		if (!empty($log)) {
+			$set['log'] = $log;
+		}
+
+		self::aset($name , $set);
+	}
+
+	/**
+	 * 直接添加一个计划任务
+	 * @param $name 计划任务名
+	 * @param $set  任务设置
+	 */
+	public static function add($name , $set) {
+		global $m;
+
+		$set = adds($set);
+
+		$sql = "INSERT IGNORE INTO  `".DB_PREFIX."cron` (`name`";
+		$a = '';
+		$b = "'{$name}'";
+
+		if (isset($set['file'])) {
+			$a .= ', `file`';
+			$b .= ", '{$set['file']}'";
+		}
+		if (isset($set['no'])) {
+			$a .= ', `no`';
+			$b .= ", '{$set['no']}'";
+		}
+		if (isset($set['status'])) {
+			$a .= ', `status`';
+			$b .= ", '{$set['status']}'";
+		}
+		if (isset($set['freq'])) {
+			$a .= ', `freq`';
+			$b .= ", '{$set['freq']}'";
+		}
+		if (isset($set['lastdo'])) {
+			$a .= ', `lastdo`';
+			$b .= ", '{$set['lastdo']}'";
+		}
+		if (isset($set['log'])) {
+			$a .= ', `log`';
+			$b .= ", '{$set['log']}'";
+		}
+
+		$sql .= $a . ' ) VALUES (' . $b . ')';
+		$m->query($sql);
 	}
 
 	/**

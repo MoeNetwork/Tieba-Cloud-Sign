@@ -280,6 +280,8 @@ class misc {
 		} else {
 			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '".$error_code."',`last_error` = '".$error_msg."' WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
 		}
+
+		sleep(option::get('sign_sleep'));
 	}
 
 	/**

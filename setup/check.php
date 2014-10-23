@@ -101,10 +101,16 @@ function checkclass($f,$m = false) {
 			<td>Zip 解包和压缩</td>
 		</tr>
 		<tr>
+			<td>写入权限</td>
+			<td>推荐</td>
+			<td><?php if (is_writable(SYSTEM_ROOT)) { echo '<font color="green">可用</font>'; } else { echo '<font color="black">不支持</font>'; } ?></td>
+			<td>写入文件(1/2)</td>
+		</tr>
+		<tr>
 			<td>file_put_contents()</td>
 			<td>推荐</td>
 			<td><?php echo checkfunc('file_put_contents'); ?></td>
-			<td>写入文件</td>
+			<td>写入文件(2/2)</td>
 		</tr>
 		<tr>
 			<td>MySQL: mysql_connect()</td>
@@ -144,7 +150,7 @@ function checkclass($f,$m = false) {
 		</tr>
 		<tr>
 			<td>Zend Guard Loader</td>
-			<td>推荐</td>
+			<td>可选</td>
 			<td>未知</td>
 			<td>安装 Zend 加密的插件，程序本身没有加密</td>
 		</tr>

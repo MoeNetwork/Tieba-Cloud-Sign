@@ -4,8 +4,53 @@ global $m,$i;
 if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">应用成功</div>';
 }
-doAction('admin_tools_1');
+doAction('admin_update_1');
+if (isset($i['mode'][2])) {
+	?>
+<ul class="nav nav-tabs" role="tablist">
+  <li><a href="index.php?mod=admin:update">检查更新</a></li>
+  <li class="active"><a href="index.php?mod=admin:update:back">更新回滚</a></li>
+</ul>
+<br/>
+	<?php
+$xc = scandir(SYSTEM_ROOT . '/setup/update_backup',1);
+$count = count($xc) - 2;
+if($count <= 0) {
+	echo '<div class="alert alert-danger" role="alert">现在无备份可供回滚，当您对云签到进行升级时，会自动生成备份以供回滚</div>';	
+} else {
+	echo '<div class="alert alert-info" role="alert">有 '.$count.' 个更新可供回滚，备份文件均位于 /setup/update_backup/实际名称 中</div>
+	<table class="table table-striped">
+	<thead>
+		<tr>
+			<th style="width:15%">实际名称</th>
+			<th style="width:10%">版本</th>
+			<th style="width:20%">备份时间</th>
+			<th style="width:25%">操作</th>
+		</tr>
+	</thead>
+	<tbody>';
+	foreach ($xc as $v) {
+		$ini = parse_ini_file(SYSTEM_ROOT . '/setup/update_backup/' . $v . '/__backup.ini');
 
+		if ($ini !== false) {
+			echo '<tr><td>'.$v.'</td>';
+			echo '<td>'.$ini['ver'].'</td>';
+			echo '<td>'.$ini['time'].'</td>';
+			echo '<td><button type="button" class="btn btn-primary" onclick="if(confirm(\'你确实要将云签到回滚到此版本吗\')) location = \'setting.php?mod=admin:update:back&dir='.$v.'\';">回滚</button> ';
+			echo '<button type="button" class="btn btn-default"  onclick="if(confirm(\'你确实要删除此备份吗\')) location = \'setting.php?mod=admin:update:back&del='.$v.'\';">删除</button></td>';
+			echo '</tr>';
+		}
+	}
+	echo '</tbody></table>';
+}
+} else {
+?>
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="index.php?mod=admin:update">检查更新</a></li>
+  <li><a href="index.php?mod=admin:update:back">更新回滚</a></li>
+</ul>
+<br/>
+<?php
 //检测服务器是否支持写入
 if(is_writable("setup")){
 	echo '<div id="comsys2">
@@ -39,18 +84,13 @@ if(<?php echo $writable; ?>==1){
 	  timeout: 90000, 
 	  success: function(data){
 	    $("#upd_prog").css({'width':'70%'});
-		if (data.length <= 1) {
-			$("#comsys3").html('<div class="alert alert-success">您当前正在使用最新版本的 <?php echo SYSTEM_FN ?>，无需更新</div>');
-		} else {
-			$("#comsys3").html('<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>发现有新版文件，以下文件可以更新</b>：<br/>文件将被临时下载到 <b>/setup/update_cache</b> 文件夹<br/>' + data + '<br/><br/><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"></form></div>');
-		}
-		console.log(data);
+		$("#comsys3").html(data);
 	    $("#upd_info").html('完毕');
 	    $("#upd_prog").css({'width':'100%'});
 	    $("#comsys2").delay(1000).slideUp(500);
 	 },
 	  error: function(error){
-	  	console.log(error)
+	  	console.log(error);
 	  	 $("#upd_info").html('检查更新失败......');
 	     $("#upd_prog").css({'width':'0%'});
 	     $("#comsys").html('<div class="alert alert-danger">版本检查结果：检查更新失败：无法连接到更新服务器<br/>错误已经记录到控制台，打开控制台查看详细<br/>你还可以尝试 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">手动更新</a></div><br/>');
@@ -59,5 +99,5 @@ if(<?php echo $writable; ?>==1){
 }
 </script>
 检查更新功能仅在支持写入的主机下可用
-<?php doAction('admin_tools_2'); ?>
+<?php } doAction('admin_update_2'); ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>

@@ -66,21 +66,44 @@ switch (SYSTEM_PAGE) {
 				}
 			}
 			if (!empty($t)) {
+				echo  '<div class="bs-callout bs-callout-danger">
+  <h4>有更新可用</h4>
+  <br/>最新版本：V'.$data->version.'
+  <span style="float:right">提交时间：'.$data->date.'</span>
+  <br/>更新描述：'.$data->msg.'
+  <br/>上次更新描述：'.$data->lastmsg.'
+  <br/>文件将被临时下载到 /setup/update_cache 文件夹，更新前会自动备份文件以供回滚
+</div>';
+				echo '<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>以下文件可以更新</b>:<br/>';
 				echo $d.$t;
+				echo '</div><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"><br/><br/></form>';
+			} else {
+				echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
 			}
 		}
 		break;
 
 	case 'admin:update:updnow':
-		if(isset($_POST['dir'])){//如果需要创建目录
+		$backup = SYSTEM_ROOT.'/setup/update_backup/' . time() . '-' . getRandStr(7);
+
+		if(isset($_POST['dir'])){ //如果需要创建目录
 			foreach ($_POST['dir'] as $dir) {
 				mkdir(SYSTEM_ROOT.'/setup/update_cache'.$dir , 0777 , true);
+				mkdir($backup.$dir , 0777 , true);
 			}
 		}
+
+		mkdir($backup , 0777 , true); //创建更新备份
+		file_put_contents($backup . '/__backup.ini', '[info]'."\r\n".'
+name='.SYSTEM_NAME."\r\n".'
+ver='.SYSTEM_VER."\r\n".'
+time='.date('Y-m-d H:m:s') ."\r\n");
+
 		foreach ($_POST['file'] as $file) {
 			$c = new wcurl('http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master'.$file);
 			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $c->exec());
 			$c->close();
+			copy(SYSTEM_ROOT . $file , $backup . $file);
 		}
 		ReDirect('ajax.php?mod=admin:update:install&updfile=' . $_POST['updatefile']);
 		break;

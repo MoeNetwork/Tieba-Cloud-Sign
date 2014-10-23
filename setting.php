@@ -20,70 +20,74 @@ switch (SYSTEM_PAGE) {
 	case 'admin:plugins':
 		if (isset($_GET['dis'])) {
 			inactivePlugin($_GET['dis']);
-			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect('index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['act'])) {
 			activePlugin($_GET['act']);
-			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect('index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
-			Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+			Redirect('index.php?mod=admin:plugins&ok');
 		}
-		Redirect(SYSTEM_URL.'index.php?mod=admin:plugins&ok');
+		Redirect('index.php?mod=admin:plugins&ok');
 		break;
 	
 	case 'admin:set':
 		global $m;
 		$sou = adds($_POST);
-		@option::set('system_url',$sou['system_url']);
-		@option::set('system_name',$sou['system_name']);
-		@option::set('cron_limit',$sou['cron_limit']);
-		@option::set('tb_max',$sou['tb_max']);
-		@option::set('sign_mode', serialize($sou['sign_mode']));
-		@option::set('footer',$sou['footer']);
-		@option::set('enable_reg',$sou['enable_reg']);
-		@option::set('protect_reg',$sou['protect_reg']);
-		@option::set('yr_reg',$sou['yr_reg']);
-		@option::set('icp',$sou['icp']);
-		@option::set('protector',$sou['protector']);
-		@option::set('trigger',$sou['trigger']);
-		@option::set('mail_mode',$sou['mail_mode']);
-		@option::set('mail_name',$sou['mail_name']);
-		@option::set('mail_yourname',$sou['mail_yourname']);
-		@option::set('mail_host',$sou['mail_host']);
-		@option::set('mail_port',$sou['mail_port']);
-		@option::set('mail_auth',$sou['mail_auth']);
-		@option::set('mail_smtpname',$sou['mail_smtpname']);
-		@option::set('mail_smtppw',$sou['mail_smtppw']);
-		@option::set('dev',$sou['dev']);
-		@option::set('bduss_num',$sou['bduss_num']);
-		@option::set('fb',$sou['fb']);
-		@option::set('cloud',$sou['cloud']);
-		@option::set('enable_addtieba',$sou['enable_addtieba']);
-		@option::set('dev',$sou['dev']);
-		@option::set('pwdmode',$sou['pwdmode']);
-		@option::set('retry_max',$sou['retry_max']);
-		@option::set('cron_order',$sou['cron_order']);
-		@option::set('sign_multith',$sou['sign_multith']);
-		@option::set('cktime',$sou['cktime']);
-		if (empty($sou['fb_tables'])) {
-			@option::set('fb_tables',NULL);
-		} else {
-			$fb_tables = explode("\n",$sou['fb_tables']);
-			$fb_tab = array();
-			$n= 0;
-			foreach ($fb_tables as $value) {
-				$n++;
-				$value = strtolower($value);
-				$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
-				$m->query($sql);
-				$fb_tab[$n] .= trim($value);
+		if ($_GET['type'] == 'sign') {
+			@option::set('cron_limit',$sou['cron_limit']);
+			@option::set('tb_max',$sou['tb_max']);
+			@option::set('sign_mode', serialize($sou['sign_mode']));
+			@option::set('enable_addtieba',$sou['enable_addtieba']);
+			@option::set('retry_max',$sou['retry_max']);
+			@option::set('fb',$sou['fb']);
+			@option::set('sign_sleep',$sou['sign_sleep']);
+			if (empty($sou['fb_tables'])) {
+				@option::set('fb_tables',NULL);
+			} else {
+				$fb_tables = explode("\n",$sou['fb_tables']);
+				$fb_tab = array();
+				$n= 0;
+				foreach ($fb_tables as $value) {
+					$n++;
+					$value = strtolower($value);
+					$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
+					$m->query($sql);
+					$fb_tab[$n] .= trim($value);
+				}
+				@option::set('fb_tables', serialize($fb_tab));
 			}
-			@option::set('fb_tables', serialize($fb_tab));
+		} else {
+			@option::set('system_url',$sou['system_url']);
+			@option::set('system_name',$sou['system_name']);
+			@option::set('footer',$sou['footer']);
+			@option::set('enable_reg',$sou['enable_reg']);
+			@option::set('protect_reg',$sou['protect_reg']);
+			@option::set('yr_reg',$sou['yr_reg']);
+			@option::set('icp',$sou['icp']);
+			@option::set('protector',$sou['protector']);
+			@option::set('trigger',$sou['trigger']);
+			@option::set('mail_mode',$sou['mail_mode']);
+			@option::set('mail_name',$sou['mail_name']);
+			@option::set('mail_yourname',$sou['mail_yourname']);
+			@option::set('mail_host',$sou['mail_host']);
+			@option::set('mail_port',$sou['mail_port']);
+			@option::set('mail_auth',$sou['mail_auth']);
+			@option::set('mail_smtpname',$sou['mail_smtpname']);
+			@option::set('mail_smtppw',$sou['mail_smtppw']);
+			@option::set('dev',$sou['dev']);
+			@option::set('bduss_num',$sou['bduss_num']);
+			@option::set('cloud',$sou['cloud']);
+			@option::set('dev',$sou['dev']);
+			@option::set('pwdmode',$sou['pwdmode']);
+			@option::set('cron_pw',$sou['cron_pw']);
+			@option::set('sign_multith',$sou['sign_multith']);
+			@option::set('cktime',$sou['cktime']);
 		}
 		doAction('admin_set_save');
-		Redirect(SYSTEM_URL.'index.php?mod=admin:set&ok');
+		Redirect('index.php?mod=admin:set:'. $_GET['type'].'&ok');
 		break;
 
 	case 'admin:tools':
@@ -165,7 +169,7 @@ switch (SYSTEM_PAGE) {
 			msg('未定义操作');
 			break;
 		}
-		Redirect(SYSTEM_URL.'index.php?mod=admin:tools&ok');
+		Redirect('index.php?mod=admin:tools&ok');
 		break;
 
 	case 'admin:users':
@@ -230,43 +234,62 @@ switch (SYSTEM_PAGE) {
 				}
 				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 				doAction('admin_users_add');
-				Redirect(SYSTEM_URL.'index.php?mod=admin:users&ok');
+				Redirect('index.php?mod=admin:users&ok');
 				break;
 
 			default:
 				msg('未定义操作');
 				break;
 			}
-		Redirect(SYSTEM_URL.'index.php?mod=admin:users&ok');
+		Redirect('index.php?mod=admin:users&ok');
 		break;
 
 	case 'admin:cron':
-		if (isset($_GET['act'])) {
-			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['act']}'");
-			cron::set($x['name'], $x['file'], '0', $x['status'], $x['freq'], $x['lastdo'], $x['log']);
+
+		if (!empty($_GET['act'])) {
+			cron::aset($_GET['act'] , array('no' => 0));
 		}
-		elseif (isset($_GET['dis'])) {
-			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['dis']}'");
-			cron::set($x['name'], $x['file'], '1', $x['status'], $x['freq'], $x['lastdo'], $x['log']);
+		elseif (!empty($_GET['dis'])) {
+			cron::aset($_GET['dis'] , array('no' => 1));
 		}
 		elseif (isset($_GET['uninst'])) {
-			$x = $m->once_fetch_array("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `id` = '{$_GET['uninst']}'");
-			cron::del($x['name']);
+			cron::del($_GET['uninst']);
 		}
 		elseif (isset($_GET['add'])) {
-			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['lastdo'], $_POST['log']);
-			Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
+			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
 		}
 		elseif (isset($_GET['run'])) {
 			$return = cron::run($_GET['file'], $_GET['run']);
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '".time()."',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`name` = '".$_GET['run']."'");
+			cron::aset($_GET['run'] , array('lastdo' => time()));
 		}
-		elseif (isset($_GET['order'])) {
-			foreach ($_POST['ids'] as $key => $value) {
-				$m->query("UPDATE `".DB_PREFIX."cron` SET  `orde` =  '{$_POST['order'][$key]}' WHERE  `".DB_PREFIX."cron`.`id` = ". $value);
+		elseif (isset($_GET['xorder'])) {
+			foreach ($_POST['order'] as $key => $value) {
+				cron::aset($key , array('orde' => $value));
 			}
 		}
-		Redirect(SYSTEM_URL.'index.php?mod=admin:cron&ok');
+
+		Redirect('index.php?mod=admin:cron&ok');
+		break;
+
+	case 'admin:update:back':
+		if (isset($_GET['del'])) {
+			if (file_exists(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del'])) {
+				DeleteFile(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del']);
+			}
+			Redirect('index.php?mod=admin:update:back&ok');
+		}
+
+		if (isset($_GET['dir'])) {
+			if (file_exists(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['dir'] . '/__backup.ini')) {
+				if(CopyAll(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['dir'] , SYSTEM_ROOT) !== true) {
+					msg('版本回滚失败');
+				}
+				unlink(SYSTEM_ROOT . '/__backup.ini');
+				msg('版本回滚成功','index.php');
+			} else {
+				msg('版本回滚失败：该备份不存在或不正确');
+			}
+		}
 		break;
 
 	case 'baiduid':
@@ -290,7 +313,7 @@ switch (SYSTEM_PAGE) {
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
 		}
 		doAction('baiduid_set');
-		Redirect(SYSTEM_URL."?mod=baiduid");
+		Redirect("index.php?mod=baiduid");
 		break;
 
 	case 'showtb':
@@ -301,15 +324,15 @@ switch (SYSTEM_PAGE) {
 				preg_match('/(.*)\[(.*)\]/', $x, $v);
 				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.TABLE."` SET `no` =  '{$v[1]}' WHERE  `".DB_PREFIX.TABLE."`.`id` = {$v[2]} ;");
 			}
-			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
+			Redirect('index.php?mod=showtb&ok');
 		}
 		elseif (isset($_GET['ref'])) {
 			$r = misc::scanTiebaByUser();
-			Redirect(SYSTEM_URL.'index.php?mod=showtb');
+			Redirect('index.php?mod=showtb');
 		}
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
-			Redirect(SYSTEM_URL.'index.php?mod=showtb');
+			Redirect('index.php?mod=showtb');
 		}
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
@@ -320,7 +343,7 @@ switch (SYSTEM_PAGE) {
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
 				}
 			}
-			Redirect(SYSTEM_URL.'index.php?mod=showtb&ok');
+			Redirect('index.php?mod=showtb&ok');
 		}
 		doAction('showtb_set');
 		break;
@@ -329,13 +352,13 @@ switch (SYSTEM_PAGE) {
 			doAction('set_save1');
 			option::uset($_POST);
 			doAction('set_save2');
-			Redirect(SYSTEM_URL.'index.php?mod=set&ok');
+			Redirect('index.php?mod=set&ok');
 			break;
 
 	case 'testmail':
 		$x = misc::mail(option::get('mail_name'), SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL);
 		if($x === true) {
-			Redirect(SYSTEM_URL.'index.php?mod=admin:set&mailtestok');
+			Redirect('index.php?mod=admin:set&mailtestok');
 		} else {
 			msg('邮件发送失败，发件日志：<br/>'.$x);
 		}
@@ -344,5 +367,5 @@ switch (SYSTEM_PAGE) {
 
 if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
 	option::set('plugin_'.$i['mode'][1] , addslashes(serialize($_POST)));
-	Redirect(SYSTEM_URL."index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
+	Redirect("index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
 }

@@ -54,6 +54,9 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 	}
 }
 if (SYSTEM_PAGE == 'admin:login') {
+	if (defined('ROLE')) {
+		ReDirect('index.php');
+	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
 	$name = isset($_POST['user']) ? addslashes(strip_tags($_POST['user'])) : '';
@@ -89,6 +92,9 @@ if (SYSTEM_PAGE == 'admin:login') {
 	}
 }
 elseif (SYSTEM_PAGE == 'admin:reg') {
+	if (defined('ROLE')) {
+		ReDirect('index.php');
+	}
 	define('ROLE', 'visitor');
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
@@ -130,6 +136,9 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	header("Location: ".SYSTEM_URL);
 }
 elseif (SYSTEM_PAGE == 'login') { 
+	if (defined('ROLE')) {
+		ReDirect('index.php');
+	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
 	loadplugins();
@@ -138,6 +147,9 @@ elseif (SYSTEM_PAGE == 'login') {
 	die;
 }
 elseif (SYSTEM_PAGE == 'reg') {
+	if (defined('ROLE')) {
+		ReDirect('index.php');
+	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
 	loadplugins();
@@ -146,8 +158,7 @@ elseif (SYSTEM_PAGE == 'reg') {
 	die;
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {
-	define('ROLE', 'visitor');
-	$i['user']['role'] = 'visitor';
+	doAction('logout');
 	setcookie("wmzz_tc_user",'', time() - 3600);
 	setcookie("wmzz_tc_pw",'', time() - 3600);
 	header("Location: ".SYSTEM_URL);
