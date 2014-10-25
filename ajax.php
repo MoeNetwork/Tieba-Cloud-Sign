@@ -66,6 +66,7 @@ switch (SYSTEM_PAGE) {
 				}
 			}
 			if (!empty($t)) {
+				echo '<form method="post" action="ajax.php?mod=admin:update:updnow">';
 				echo  '<div class="bs-callout bs-callout-danger">
   <h4>有更新可用</h4>
   <br/>最新版本：V'.$data->version.'
