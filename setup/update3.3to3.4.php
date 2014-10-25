@@ -14,6 +14,20 @@ if (ROLE == 'admin') {
 		'freq'    => 0,
 		'lastdo'  => 0
 	));
+	$m->query("CREATE TABLE IF NOT EXISTS `".DB_PREFIX."users_options` (
+`id`  int(30) NOT NULL AUTO_INCREMENT ,
+`uid`  int(30) NOT NULL ,
+`name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`value`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+PRIMARY KEY (`id`)
+)
+ENGINE=MyISAM
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=2
+CHECKSUM=0
+ROW_FORMAT=DYNAMIC
+DELAY_KEY_WRITE=0
+;");
 	$m->query("ALTER TABLE `".DB_PREFIX."cron`
 MODIFY COLUMN `name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `id`,
 DROP INDEX `name` ,

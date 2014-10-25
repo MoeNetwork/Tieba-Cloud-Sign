@@ -3,11 +3,10 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 /**
  * 环境准备
  */
-
-$PluginHooks = array();
 $today       = date("Y-m-d");
 $i           = array();
 
+$i['PluginHooks'] = array(); //挂载列表
 //注册全局信息变量 $i
 $i['db']['host'] = DB_HOST;
 $i['db']['user'] = DB_USER;
@@ -63,5 +62,30 @@ if (option::get('dev') != 1 || defined('NO_ERROR')) {
 } else {
 	define('SYSTEM_DEV', true);
 }
-new option();
-?>
+
+/**
+ * Framework 错误处理函数
+ */
+
+function sfc_error($errno, $errstr, $errfile, $errline) {
+	switch ($errno) {
+		    case E_USER_ERROR:          $errnoo = 'User Error'; break;
+		    case E_USER_WARNING:        $errnoo = 'User Warning'; break;
+		    case E_ERROR:               $errnoo = 'Error'; break;
+	        case E_WARNING:             $errnoo = 'Warning'; break;
+	        case E_PARSE:               $errnoo = 'Parse Error'; break;
+			case E_USER_NOTICE:         $errnoo = 'User Notice';	    break;     
+ 			case E_CORE_ERROR:          $errnoo = 'Core Error'; break;
+	        case E_CORE_WARNING:        $errnoo = 'Core Warning'; break;
+	        case E_COMPILE_ERROR:       $errnoo = 'Compile Error'; break;
+	        case E_COMPILE_WARNING:     $errnoo = 'Compile Warning'; break;
+	        case E_STRICT:              $errnoo = 'Strict Warning'; break;
+		    default:                    $errnoo = 'Unknown Error [ #'.$errno.' ]';  break;
+   	}
+	if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
+		echo '<div class="alert alert-danger alert-dismissable"><strong>[ StusGame Framework ] '.$errnoo.':</strong> [ Line: '.$errline.' ]<br/>'.$errstr.'<br/>File: '.$errfile.'</div>';
+	}
+	doAction('error', $errno, $errstr, $errfile, $errline, $errnoo);
+}
+
+set_error_handler('sfc_error');

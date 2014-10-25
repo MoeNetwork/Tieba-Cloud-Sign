@@ -53,7 +53,24 @@ function getRandStr($length = 12, $special_chars = false) {
 }
 
 /**
- * 获取Gravatar头像
+ * 获取两段文本之间的文本
+ *
+ * @param 完整的文本
+ * @param 左边文本
+ * @param 右边文本
+ * 返回“左边文本”与“右边文本”之间的文本
+ */
+function textMiddle($text, $left, $right) {
+	$loc1 = stripos($text, $left);
+	if (is_bool($loc1)) { return ""; }
+	$loc1 += strlen($left);
+	$loc2 = stripos($text, $right, $loc1);
+	if (is_bool($loc2)) { return ""; }
+	return substr($text, $loc1, $loc2 - $loc1);
+}
+
+/**
+ * 获取Gravatar头像（或贴吧头像）
  * http://en.gravatar.com/site/implement/images/
  * @param $email
  * @param $s size
@@ -61,9 +78,20 @@ function getRandStr($length = 12, $special_chars = false) {
  * @param $g
  */
 function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
-	$hash = md5($email);
-	$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
-	return $avatar;
+	if(option::uget("face_img")) {
+		if(option::uget("face_baiduid") != ""){
+			$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+			$data = $c->get();
+			$c->close();
+			return stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+		} else {
+			return 'http://tb.himg.baidu.com/sys/portrait/item/';
+		}
+	} else {
+		$hash = md5($email);
+		$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
+		return $avatar;
+	}
 }
 
 /**
@@ -352,8 +380,8 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
  * @return boolearn
  */
 function addAction($hook, $actionFunc) {
-	global $PluginHooks;
-	$PluginHooks[$hook][] = $actionFunc;
+	global $i;
+	$i['PluginHooks'][$hook][] = $actionFunc;
 	return true;
 }
 
@@ -363,10 +391,10 @@ function addAction($hook, $actionFunc) {
  * @param string $hook
  */
 function doAction($hook) {
-	global $PluginHooks;
+	global $i;
 	$args = array_slice(func_get_args(), 1);
-	if (isset($PluginHooks[$hook])) {
-		foreach ($PluginHooks[$hook] as $function) {
+	if (isset($i['PluginHooks'][$hook])) {
+		foreach ($i['PluginHooks'][$hook] as $function) {
 			$string = call_user_func_array($function, $args);
 		}
 	}
@@ -437,7 +465,7 @@ function adds($s) {
 			if (!is_array($value)) {
 				$r[$k] = addslashes($value);
 			} else {
-				$r[$k] = $value;
+				$r[$k] = adds($value);
 			}
 		}
 		return $r;
@@ -445,6 +473,31 @@ function adds($s) {
 		return addslashes($s);
 	}
 }
+
+/**
+ * 使用反斜线引用字符串或数组以便于SQL查询
+ * 只引用'和\
+ * @param $s 需要转义的
+ * @return 转义结果
+ */
+function sqladds($s) {
+	if (is_array($s)) {
+		$r = array();
+		foreach ($s as $key => $value) {
+			$k = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
+
+			if (!is_array($value)) {
+				$r[$k] = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
+			} else {
+				$r[$k] = sqladds($value);
+			}
+		}
+		return $r;
+	} else {
+		return str_replace('\'','\\\'', str_replace('\\','\\\\',$s));
+	}
+}
+
 
 /**
  * 转为正数或者0
@@ -542,31 +595,3 @@ function DoSign_Client($uid,$kw,$id,$pid,$fid){ misc::DoSign_Client($uid,$kw,$id
 function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) { misc::DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid); }
 
 function DoSign($table,$sign_mode) { misc::DoSign($table,$sign_mode); }
-
-/**
- * Framework 错误处理函数
- */
-
-function sfc_error($errno, $errstr, $errfile, $errline) {
-	switch ($errno) {
-		    case E_USER_ERROR:          $errnoo = 'User Error'; break;
-		    case E_USER_WARNING:        $errnoo = 'User Warning'; break;
-		    case E_ERROR:               $errnoo = 'Error'; break;
-	        case E_WARNING:             $errnoo = 'Warning'; break;
-	        case E_PARSE:               $errnoo = 'Parse Error'; break;
-			case E_USER_NOTICE:         $errnoo = 'User Notice';	    break;     
- 			case E_CORE_ERROR:          $errnoo = 'Core Error'; break;
-	        case E_CORE_WARNING:        $errnoo = 'Core Warning'; break;
-	        case E_COMPILE_ERROR:       $errnoo = 'Compile Error'; break;
-	        case E_COMPILE_WARNING:     $errnoo = 'Compile Warning'; break;
-	        case E_STRICT:              $errnoo = 'Strict Warning'; break;
-		    default:                    $errnoo = 'Unknown Error [ #'.$errno.' ]';  break;
-   	}
-	if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
-		echo '<div class="alert alert-danger alert-dismissable"><strong>[ StusGame Framework ] '.$errnoo.':</strong> [ Line: '.$errline.' ]<br/>'.$errstr.'<br/>File: '.$errfile.'</div>';
-	}
-	doAction('error', $errno, $errstr, $errfile, $errline, $errnoo);
-}
-
-set_error_handler('sfc_error');
-?>

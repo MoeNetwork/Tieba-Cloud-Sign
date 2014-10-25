@@ -26,10 +26,16 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		</tr>
 	</thead>
 	<tbody>
-		<?php
-		addset('签到模式','radio','mode','disabled checked',' 三重签到');
-		doAction('set_2');
-		?>
+		<?php doAction('set_3'); ?>
+		<tr>
+			<td>头像设置<br/>使用Gravatar头像或贴吧头像</td>
+			<td>
+				<input type="radio" name="face_img" value="0" <?php if (option::uget('face_img') == '0') { echo 'checked'; } ?>> 使用Gravatar头像<br/>
+				<input type="radio" name="face_img" value="1" <?php if (option::uget('face_img') == '1') { echo 'checked'; } ?>> 使用贴吧头像（推荐） 贴吧用户名：
+				<input type="text" name="face_baiduid" value="<?php if (option::uget('face_baiduid')) { echo option::uget('face_baiduid'); } ?>" class="form-control" >
+			</td>
+		</tr>
+		<?php doAction('set_2'); ?>
 	</tbody>
 </table><input type="submit" class="btn btn-primary" value="提交更改">
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>

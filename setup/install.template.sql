@@ -62,6 +62,21 @@ CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}baiduid` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `{VAR-PREFIX}users_options` (
+`id`  int(30) NOT NULL AUTO_INCREMENT ,
+`uid`  int(30) NOT NULL ,
+`name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`value`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+PRIMARY KEY (`id`)
+)
+ENGINE=MyISAM
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=2
+CHECKSUM=0
+ROW_FORMAT=DYNAMIC
+DELAY_KEY_WRITE=0
+;
+
 INSERT INTO `{VAR-PREFIX}options` (`name`, `value`) VALUES
 ('system_url', '{VAR-SYSTEM-URL}'),
 ('system_name', '贴吧云签到'),

@@ -35,7 +35,7 @@ switch (SYSTEM_PAGE) {
 	
 	case 'admin:set':
 		global $m;
-		$sou = adds($_POST);
+		$sou = $_POST;
 		if ($_GET['type'] == 'sign') {
 			@option::set('cron_limit',$sou['cron_limit']);
 			@option::set('tb_max',$sou['tb_max']);
@@ -349,8 +349,25 @@ switch (SYSTEM_PAGE) {
 		break;
 
 		case 'set':
+			/*
+			受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
+			具体挂载方法为：
+			global $PostArray;
+			$PostArray[] = '设置名';
+			为了兼容旧版本，可以global以后检查一下是不是空变量，为空则为旧版本
+			*/
+			$PostArray = array(
+				'face_img',
+				'face_baiduid'
+			);
 			doAction('set_save1');
-			option::uset($_POST);
+			$set = array();
+			foreach ($PostArray as $value) {
+				if (!isset($i['post'][$value])) {
+					$i['post'][$value] = '';
+				}
+				@option::uset($value , $i['post'][$value]);
+			}
 			doAction('set_save2');
 			Redirect('index.php?mod=set&ok');
 			break;
@@ -366,6 +383,6 @@ switch (SYSTEM_PAGE) {
 }
 
 if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
-	option::set('plugin_'.$i['mode'][1] , addslashes(serialize($_POST)));
+	option::pset($i['mode'][1] , $_POST);
 	Redirect("index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
 }

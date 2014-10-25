@@ -37,8 +37,12 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 				$bdspid = $bd['id'];
 				$i['user']['bduss'][$bdspid] = $bd['bduss'];
 			}
+			$optss = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE uid = ".UID);
 			$GLOBALS = $i['user'];
-			$i['user']['opt'] = unserialize($p['options']);
+			while ($opts = $m->fetch_array($optss)) {
+				$name = $opts['name'];
+				$i['user']['opt'][$name] = $opts['value'];
+			}
 		}
 		//是否为VIP，管理员和VIP组的用户都为VIP
 		if (ROLE == 'admin' || ROLE == 'vip') {
