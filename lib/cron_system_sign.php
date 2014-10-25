@@ -1,6 +1,11 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
+/**
+ * 云签到内部计划任务
+ *
+ */
+
 function cron_system_sign() {
 	global $i;
 
