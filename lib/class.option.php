@@ -52,7 +52,7 @@ class option {
 	*/
 	public static function del($name) {
 		global $m;
-		$m->query("DELETE FROM `".DB_PREFIX."options` WHERE `name` = `{$name}`");
+		$m->query("DELETE FROM `".DB_PREFIX."options` WHERE `name` = '{$name}'");
 	}
 
 	/**
