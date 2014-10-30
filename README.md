@@ -42,5 +42,5 @@ StusGame GROUP:http://www.stus8.com
 插件商城：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13   
 
 #联系方式
-无名智者:kenvix@loli.com
+无名智者:kenvix@loli.com   
 mokeyjay:longting@longtings.com
