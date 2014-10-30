@@ -19,10 +19,9 @@
 每一个大版本都会有一个升级脚本，运行它即可   
 文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php   
 
-## 贴吧云签到在 SAE/BAE/JAE 下的架设方案
-SAE：[http://www.stus8.com/forum.php?mod=viewthread&tid=2158](http://www.stus8.com/forum.php?mod=viewthread&tid=2158)   
-JAE：[http://www.stus8.com/forum.php?mod=viewthread&tid=2164](http://www.stus8.com/forum.php?mod=viewthread&tid=2164)   
-BAE：[http://www.stus8.com/forum.php?mod=viewthread&tid=2162](http://www.stus8.com/forum.php?mod=viewthread&tid=2162)   
+## 云签到教程
+所有教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163      
+在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204
 
 ##禁止利用该软件来盈利
 #####1.不得要求用户付费
@@ -38,9 +37,8 @@ BAE：[http://www.stus8.com/forum.php?mod=viewthread&tid=2162](http://www.stus8.
 #其他
 StusGame GROUP:http://www.stus8.com   
 博客:http://zhizhe8.net   
-感谢Emlog(http://www.emlog.net)   
 插件商城：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13   
 
-#联系方式
-无名智者:kenvix@loli.com   
-mokeyjay:longting@longtings.com
+#邮箱联系方式
+无名智者：kenvix@vip.qq.com        
+mokeyjay：longting@longtings.com
