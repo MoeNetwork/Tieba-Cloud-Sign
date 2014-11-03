@@ -3,10 +3,11 @@ if (option::get('enable_reg') != 1) {
   msg('该站点已关闭注册');
 }
 loadhead();
+
 ?>
 <div class="panel panel-success" style="margin:5% 15% 5% 15%;">
 	<div class="panel-heading">
-          <h3 class="panel-title">注册 <?php echo SYSTEM_FN ?></h3>
+          <h3 class="panel-title">注册 <?php echo SYSTEM_NAME ?></h3>
     </div>
     <div style="margin:0% 5% 5% 5%;">
 	<div class="login-top"></div><br/><?php doAction('reg_page_1'); ?>
@@ -37,12 +38,9 @@ if (!empty($yr_reg)) { ?>
 </div>
 <?php } ?>
 	<div class="login-button"><br/>
-	<?php doAction('reg_page_2'); if (option::get('enable_reg') == 1) { ?>
-  <button type="submit" class="btn btn-primary" style="width:60%;float:left;">继续注册</button>
-	<button type="button" class="btn btn-success" onclick="location = '<?php echo SYSTEM_URL ?>index.php?mod=login'" style="width:35%;float:right;">已有账号?</button>
-  <?php } else { ?>
-  <button type="submit" class="btn btn-primary" style="width:100%;float:left;">登陆</button>
-  <?php } doAction('reg_page_3'); ?>
+	<?php doAction('reg_page_2'); ?>
+  <button type="submit" class="btn btn-primary" style="width:100%;float:left;">继续注册</button>
+  <?php doAction('reg_page_3'); ?>
 	</div><br/><br/><br/>
 	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>
 	<?php

@@ -15,7 +15,8 @@ global $i;
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
+      <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>
+      <ul class="nav navbar-nav">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list-alt"></span> 功能菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -50,6 +51,19 @@ global $i;
         </ul>
       </li>
       <?php } doAction('navi_4'); ?>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="index.php?mod=admin:logout"><span class="glyphicon glyphicon-off"></span> 退出登录</a></li>
+      <?php doAction('navi_6'); ?>
+    </ul>
+      <?php } else { ?>
+    <ul class="nav navbar-nav">
+	  <li <?php if($i['mode'][0] == 'login' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
+	  <li <?php if($i['mode'][0] == 'reg' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+	  <?php doAction('navi_10'); ?>
+	</ul>
+      <?php } ?>
+    <ul class="nav navbar-nav">
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> 关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -58,12 +72,7 @@ global $i;
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
-    </ul>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="index.php?mod=admin:logout"><span class="glyphicon glyphicon-off"></span> 退出登录</a></li>
-      <?php doAction('navi_6'); ?>
-    </ul>
+  	</ul>
   </div><!-- /.navbar-collapse -->
 </div>
 
@@ -72,7 +81,8 @@ global $i;
       <div class="row">
         <div class="col-md-3">
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
-            <ul class="nav bs-sidenav">                 
+            <ul class="nav bs-sidenav">    
+              <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>         
               <li>
                 <li <?php if($i['mode'][0] == 'default' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
                 <li <?php if($i['mode'][0] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
@@ -93,6 +103,11 @@ global $i;
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
+              <?php } else { ?>
+				<li <?php if($i['mode'][0] == 'login' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
+				<li <?php if($i['mode'][0] == 'reg' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+			    <?php doAction('navi_11'); ?>
+              <?php } ?>
             </ul>
           </div>
         </div>

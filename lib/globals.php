@@ -9,13 +9,14 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 	if($m->num_rows($osq) == 0) {
 		$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE email = '{$name}' LIMIT 1");
 		if($m->num_rows($osq) == 0) {
-			header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
+			ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
 		}
 	}
+	doAction('globals_1');
 	$p = $m->fetch_array($osq);
 	if ($pw != $p['pw']) {
 		setcookie("wmzz_tc_pw",'', time() - 3600);
-		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
+		ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
 	} else {
 		define('LOGIN',true);
 		define('ROLE', $p['role']);
@@ -56,6 +57,7 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 			msg('你已被禁止访问，请联系管理员解封');
 		}
 	}
+	doAction('globals_2');
 }
 if (SYSTEM_PAGE == 'admin:login') {
 	if (defined('ROLE')) {
@@ -63,21 +65,22 @@ if (SYSTEM_PAGE == 'admin:login') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
+	doAction('admin_login_1');
 	$name = isset($_POST['user']) ? addslashes(strip_tags($_POST['user'])) : '';
 	$pw = isset($_POST['pw']) ? addslashes(strip_tags($_POST['pw'])) : '';
 	if (empty($name) || empty($pw)) {
-		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('请填写账户或密码'));die;
+		ReDirect("index.php?mod=login&error_msg=".urlencode('请填写账户或密码'));die;
 	}
 	$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE name = '{$name}' LIMIT 1");
 	if($m->num_rows($osq) == 0) {
 		$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE email = '{$name}' LIMIT 1");
 		if($m->num_rows($osq) == 0) {
-			header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('账户不存在 [ 提示：账户不是昵称，账户可为用户名或者邮箱地址 ]'));die;
+			ReDirect("index.php?mod=login&error_msg=".urlencode('账户不存在 [ 提示：账户不是昵称，账户可为用户名或者邮箱地址 ]'));die;
 		}
 	}
 	$p = $m->fetch_array($osq);
 	if (EncodePwd($pw) != $p['pw']) {
-		header("Location: ".SYSTEM_URL."index.php?mod=login&error_msg=".urlencode('密码错误'));die;
+		ReDirect("index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
 			$cktime = (int) option::get('cktime');
@@ -87,19 +90,21 @@ if (SYSTEM_PAGE == 'admin:login') {
 			}
 			setcookie("wmzz_tc_user",$name, time() + $cktime);
 			setcookie("wmzz_tc_pw",EncodePwd($pw), time() + $cktime);
-			header("Location: ".SYSTEM_URL);
+			ReDirect('index.php');
 		} else {
 			setcookie("wmzz_tc_user",$name);
 			setcookie("wmzz_tc_pw",EncodePwd($pw));
-			header("Location: ".SYSTEM_URL);
+			ReDirect('index.php');
 		}
 	}
+	doAction('admin_login_2');
 }
 elseif (SYSTEM_PAGE == 'admin:reg') {
 	if (defined('ROLE')) {
 		ReDirect('index.php');
 	}
 	define('ROLE', 'visitor');
+	doAction('admin_reg_1');
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
 	}
@@ -133,11 +138,12 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	} else {
 		$role = 'user';
 	}
-
+	doAction('admin_reg_2');
 	$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 	setcookie("wmzz_tc_user",$name);
 	setcookie("wmzz_tc_pw",EncodePwd($pw));
-	header("Location: ".SYSTEM_URL);
+	doAction('admin_reg_3');
+	ReDirect('index.php');
 }
 elseif (SYSTEM_PAGE == 'login') { 
 	if (defined('ROLE')) {
@@ -165,11 +171,11 @@ elseif (SYSTEM_PAGE == 'admin:logout') {
 	doAction('logout');
 	setcookie("wmzz_tc_user",'', time() - 3600);
 	setcookie("wmzz_tc_pw",'', time() - 3600);
-	header("Location: ".SYSTEM_URL);
+	ReDirect('index.php?mod=login');
 }
 elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	header("Location: ".SYSTEM_URL."index.php?mod=login");
+	ReDirect('index.php?mod=login');
 }
 ?>
