@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='IE=edge' http-equiv='X-UA-Compatible'>
+<meta content='代码托管,git,Git@OSC,开源,项目管理,版本控制,开源代码,代码分享,项目协作,开源项目托管,免费代码托管,Git代码托管,Git托管服务' name='Keywords'>
+<meta content='中国源代码托管(Git@OSC)是开源中国社区团队推出的基于Git的快速的、免费的、稳定的在线代码托管平台,不限制私有库和公有库数量.' name='Description'>
+<title>
+代码托管 - 开源中国社区
+</title>
+<link href="/assets/favicon-28020a6101d7a4058376a3e5927c64d5.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<meta content='git.oschina.net/kenvix/Tieba-Cloud-Sign git https://git.oschina.net/kenvix/Tieba-Cloud-Sign.git' name='go-import'>
+<link href="/assets/application-f7c69eba85b02f552f0451ae4b063c5e.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/assets/base-aaa6fc89897ad252ae2d2b0dc3d8b5e9.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="/assets/application-1f6547ebaa95cb6c6db70629bf6ccd9c.js" type="text/javascript"></script>
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="4dHf+peJ8RNXWtuxYR8LxdsDWKKU0Y7tEkH8U/75hV0=" name="csrf-token" />
+<script type="text/javascript">
+//<![CDATA[
+window.gon = {};gon.gravatar_url="http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm";
+//]]>
+</script>
+</head>
+
+<body class='ui_basic application'>
+<header class='navbar navbar-static-top navbar-gitlab'>
+<div class='navbar-inner'>
+<div class='container'>
+<ul class='nav'>
+<div class='nav login-reg'>
+<a href="/login" class="btn-success btn">登录</a>
+<a href="/signup" class="btn">注册</a>
+</div>
+</ul>
+<style>
+  .navbar-inner .container .nav.login-reg{
+    margin-top:2px;
+  }
+</style>
+
+<div class='app_logo'>
+<a href="/"><h1>Git @ OSC</h1>
+</a></div>
+<ul class='nav' id='site-nav' style='float: left;'>
+<li>
+<a href="/explore">发现</a>
+</li>
+<li>
+<a href="/oschina/git-osc/wikis/Home">帮助</a>
+</li>
+<li>
+<a href="/oschina/git-osc/issues">建议</a>
+</li>
+<li>
+<div class='search'>
+<form accept-charset="UTF-8" action="/search" class="navbar-form pull-left" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+<input class="search-input header-search" id="search" name="search" placeholder="搜索" type="text" />
+<input id="group_id" name="group_id" type="hidden" />
+<input id="project_id" name="project_id" type="hidden" value="122655" />
+</form>
+
+</div>
+
+</li>
+</ul>
+
+</div>
+</div>
+</header>
+
+<div class='flash-container'>
+</div>
+
+<div class='container'>
+<div class='content'>
+<center class='padded prepend-top-20'>
+<h1 class='http_status_code'>404</h1>
+<h3 class='page_title'>The resource you were looking for doesn't exist.</h3>
+<hr>
+<p>你可能输错了网址或者页面已经被移动到了一个新的地址。</p>
+
+</center>
+</div>
+</div>
+</body>
+</html>
