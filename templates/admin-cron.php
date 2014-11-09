@@ -79,7 +79,7 @@ foreach ($i['cron'] as $cs) {
 	if (empty($cs['log'])) {
 		$status .= '<br/>没有日志可查看';
 	} else {
-		$status .= '<script type="text/javascript">var system_cron_log = "\''.addslashes($cs['log']).'\'"</script>';
+		$status .= '<script type="text/javascript">var system_cron_log = "'.addslashes($cs['log']).'"</script>';
 		$status .= '<br/><a href="javascript:;" onclick="alert(system_cron_log);">点击查看此任务的日志</a>';
 	}
 

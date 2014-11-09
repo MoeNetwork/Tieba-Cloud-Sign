@@ -260,7 +260,7 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['run'])) {
 			$return = cron::run($_GET['file'], $_GET['run']);
-			cron::aset($_GET['run'] , array('lastdo' => time()));
+			cron::aset($_GET['run'] , array('lastdo' => time() , 'log' => $return));
 		}
 		elseif (isset($_GET['xorder'])) {
 			foreach ($_POST['order'] as $key => $value) {
