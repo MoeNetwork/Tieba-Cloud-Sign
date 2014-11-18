@@ -42,6 +42,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('sign_mode', serialize($sou['sign_mode']));
 			@option::set('enable_addtieba',$sou['enable_addtieba']);
 			@option::set('retry_max',$sou['retry_max']);
+			@option::set('sign_hour',$sou['sign_hour']);
 			@option::set('fb',$sou['fb']);
 			@option::set('sign_sleep',$sou['sign_sleep']);
 			if (empty($sou['fb_tables'])) {
@@ -79,7 +80,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
 			@option::set('bduss_num',$sou['bduss_num']);
-			@option::set('sign_hour',$sou['sign_hour']);
 			@option::set('cloud',$sou['cloud']);
 			@option::set('dev',$sou['dev']);
 			@option::set('pwdmode',$sou['pwdmode']);

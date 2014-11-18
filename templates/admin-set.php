@@ -37,6 +37,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		addset('单表单次签到执行数量<br/>0为一次性全部签到','number','cron_limit','min="0" step="1" class="form-control"','注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数');
 		addset('最大关注贴吧数量<br/>0为不限,对管理员无效','number','tb_max','min="0" step="1" class="form-control"');
 		addset('签到失败重试次数<br/>0为无限，-1为不重试','number','retry_max','min="-1" step="1" class="form-control"');
+		addset('签到开始时间<br/>24小时制。例如设为3，则从凌晨4点开始签到','number','sign_hour','min="0" step="1" max="24" class="form-control"');
 		addset('签到间隔时间<br/>单位为秒，0为不暂停','number','sign_sleep','min="0" step="1" class="form-control"','适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低');
 		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加任何贴吧，添加贴吧时会忽略贴吧数量上限');
 	?>
@@ -93,7 +94,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</tr>
 		<?php
 		addset('最大允许用户绑定账号数<br/>0为无限，-1为禁止绑定，对管理员无效','number','bduss_num','min="-1" step="1" class="form-control"');
-		addset('签到开始时间<br/>24小时制。例如设为3，则从凌晨4点开始签到','number','sign_hour','min="0" step="1" max="24" class="form-control"');
 		addset('计划任务线程数<br/>0单线程，此为模拟多线程','number','sign_multith','min="0" step="1" class="form-control"');
 		addset('计划任务密码<br/>留空为无密码，启用密码后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','text','cron_pw',' class="form-control"');
 		?>
