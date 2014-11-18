@@ -80,7 +80,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
 			@option::set('bduss_num',$sou['bduss_num']);
-			@option::set('cloud',$sou['cloud']);
 			@option::set('dev',$sou['dev']);
 			@option::set('pwdmode',$sou['pwdmode']);
 			@option::set('cron_pw',$sou['cron_pw']);

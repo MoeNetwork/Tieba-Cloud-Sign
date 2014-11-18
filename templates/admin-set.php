@@ -160,14 +160,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</td>
 		</td>
 		</tr>
-		<tr><td>云平台级别设置<br/>强烈建议选择第一项</td><td>
-		<select name="cloud" class="form-control">
-			<option value="1" <?php if(option::get('cloud') == '1') { echo 'selected'; } ?>>高级会员 [ 提供完整的云服务 ]</option>
-			<option value="2" <?php if(option::get('cloud') == '2') { echo 'selected'; } ?>>普通成员 [ 提供部分的云服务 ]</option>
-			<option value="0" <?php if(option::get('cloud') == '0') { echo 'selected'; } ?>>拒绝加入 [ 不提供任何云服务 ]</option>
-		</select>
-		</td>
-		</tr>
 		<?php
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
 		addset('依靠访客触发任务','checkbox','trigger',null,' 建议仅在不支持计划任务并拒绝加入云平台时使用');
