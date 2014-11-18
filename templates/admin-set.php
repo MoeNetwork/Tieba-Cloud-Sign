@@ -93,6 +93,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</tr>
 		<?php
 		addset('最大允许用户绑定账号数<br/>0为无限，-1为禁止绑定，对管理员无效','number','bduss_num','min="-1" step="1" class="form-control"');
+		addset('签到开始时间<br/>24小时制。例如设为3，则从凌晨4点开始签到','number','sign_hour','min="0" step="1" max="24" class="form-control"');
 		addset('计划任务线程数<br/>0单线程，此为模拟多线程','number','sign_multith','min="0" step="1" class="form-control"');
 		addset('计划任务密码<br/>留空为无密码，启用密码后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','text','cron_pw',' class="form-control"');
 		?>

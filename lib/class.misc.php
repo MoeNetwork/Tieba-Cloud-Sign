@@ -293,8 +293,8 @@ class misc {
 		global $m,$i;
 		$today = date('Y-m-d');
 
-		if (date('H') <= 0) {
-			return '0点时忽略签到';	
+		if (date('H') <= option::get('sign_hour')) {
+			return option::get('sign_hour').'点时忽略签到';	
 		}
 
 		$limit = option::get('cron_limit');

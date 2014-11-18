@@ -79,6 +79,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
 			@option::set('bduss_num',$sou['bduss_num']);
+			@option::set('sign_hour',$sou['sign_hour']);
 			@option::set('cloud',$sou['cloud']);
 			@option::set('dev',$sou['dev']);
 			@option::set('pwdmode',$sou['pwdmode']);
