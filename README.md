@@ -8,17 +8,16 @@
 ## 代码库列表
 云签到在多个代码库均有副本，当某个代码库不可用时，您可以尝试通过其他代码库下载云签到      
 #### 代码库地址
-Git@OSC : https://git.oschina.net/kenvix/Tieba-Cloud-Sign      
+OSCGit  : https://git.oschina.net/kenvix/Tieba-Cloud-Sign      
 Github  : https://github.com/kenvix/Tieba-Cloud-Sign      
 Coding  : https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git      
 Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign
 #### 直接下载最新版压缩包地址
-Git@OSC : https://git.oschina.net/kenvix/Tieba-Cloud-Sign/repository/archive?ref=master      
+OSCGit  : https://git.oschina.net/kenvix/Tieba-Cloud-Sign/repository/archive?ref=master      
 Github  : https://github.com/kenvix/Tieba-Cloud-Sign/archive/master.zip      
 Coding  : https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git/archive/master      
 Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 
-Git@OSC : 
 ##常见问题解决方案
 #####1.如何安装程序
 上传此程序到您的网站，然后网页访问 /setup/install.php   
