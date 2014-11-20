@@ -1,5 +1,24 @@
 #百度贴吧云签到
-详细了解本程序请前往：http://www.stus8.com/forum.php?mod=viewthread&tid=2141
+详细了解本程序请前往：http://www.stus8.com/forum.php?mod=viewthread&tid=2141 
+
+## 云签到教程
+所有教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163      
+在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204
+
+## 代码库列表
+云签到在多个代码库均有副本，当某个代码库不可用时，您可以尝试通过其他代码库下载云签到      
+#### 代码库地址
+Git@OSC : https://git.oschina.net/kenvix/Tieba-Cloud-Sign      
+Github  : https://github.com/kenvix/Tieba-Cloud-Sign      
+Coding  : https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git      
+Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign
+#### 直接下载最新版压缩包地址
+Git@OSC : https://git.oschina.net/kenvix/Tieba-Cloud-Sign/repository/archive?ref=master      
+Github  : https://github.com/kenvix/Tieba-Cloud-Sign/archive/master.zip      
+Coding  : https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git/archive/master      
+Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
+
+Git@OSC : 
 ##常见问题解决方案
 #####1.如何安装程序
 上传此程序到您的网站，然后网页访问 /setup/install.php   
@@ -17,11 +36,7 @@
 #####6.如何安装新版本
 若需要安装新版本，直接下载 Zip，删除压缩包内的 config.php ，然后上传到您的网站即可   
 每一个大版本都会有一个升级脚本，运行它即可   
-文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php   
-
-## 云签到教程
-所有教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163      
-在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204
+文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php  
 
 ##禁止利用该软件来盈利
 #####1.不得要求用户付费
