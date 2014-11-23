@@ -30,8 +30,13 @@ class option {
 		global $m;
 		$name = sqladds($name);
 		$value = sqladds($value);
-		$m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';");
-		return true;
+		if($m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';")){
+			global $i;
+			$i['opt'][$name] = $value;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
