@@ -1,5 +1,6 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+ob_start();
 function loadhead() {
 	doAction('top');
 	echo '<!DOCTYPE html><html><head>';

@@ -120,6 +120,7 @@ function UnZip($zipfile, $path, $type = 'tpl') {
 }
 /**
  * 清空缓冲区的内容
+ * @note 已修复无法清除缓冲区的bug
  */
 function Clean() {
 	ob_clean();

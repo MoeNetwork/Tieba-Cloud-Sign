@@ -320,9 +320,14 @@ switch (SYSTEM_PAGE) {
 		if (isset($_GET['set'])) {
 			$x=$m->fetch_array($m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' LIMIT 1'));
 			$f=$x['tieba'];
-			foreach ($_POST['no'] as $x) {
-				preg_match('/(.*)\[(.*)\]/', $x, $v);
-				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.TABLE."` SET `no` =  '{$v[1]}' WHERE  `".DB_PREFIX.TABLE."`.`id` = {$v[2]} ;");
+			foreach ($_POST['no'] as $k => $x) {
+				$id = intval($k);
+				if ($x == '0') {
+					$xv = '0';
+				} else {
+					$xv = '1';
+				}
+				$m->query("UPDATE `".DB_PREFIX.TABLE."` SET `no` =  '{$xv}' WHERE  `id` = '{$id}' AND `uid` = '".UID."' ;");
 			}
 			Redirect('index.php?mod=showtb&ok');
 		}

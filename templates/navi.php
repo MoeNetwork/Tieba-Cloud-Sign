@@ -22,9 +22,8 @@ global $i;
         <ul class="dropdown-menu">
           <li><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
           <li><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
-          <li><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
-          <li><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
           <li><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
+          <li><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
           <?php doAction('navi_1'); ?>
         </ul>
       </li>
@@ -86,9 +85,8 @@ global $i;
               <li>
                 <li <?php if($i['mode'][0] == 'default' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
                 <li <?php if($i['mode'][0] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
-                <li <?php if($i['mode'][0] == 'showtb' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-cloud"></span> 设置云签到</a></li>
-                <li <?php if($i['mode'][0] == 'log' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=log"><span class="glyphicon glyphicon-calendar"></span> 签到执行日志</a></li>
                 <li <?php if($i['mode'][0] == 'baiduid' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
+                <li <?php if($i['mode'][0] == 'showtb' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
                 <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'tools' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>

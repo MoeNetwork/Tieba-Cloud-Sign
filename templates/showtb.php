@@ -1,6 +1,10 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-global $m;
-global $i;
+global $m,$i,$today;
+
+$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
+$count1 = $count1[0];
+$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
+$count2 = $count2[0];
 
 if (!empty($i['user']['bduss'])) {
 	if (isset($_GET['ok'])) {
@@ -44,25 +48,44 @@ if (!empty($i['user']['bduss'])) {
 	<?php
 	while($x=$m->fetch_array($ex)) {
 		$num++;
-		if ($x['no'] == 1) {
-			$no = '<input type="radio" name="no['.$x['id'].']" value="1['.$x['id'].']" checked> 是 <input type="radio" name="no['.$x['id'].']" value="0['.$x['id'].']"> 否';
+		if ($x['lastdo'] == 0) {
+			$lastdo = '从未';
 		} else {
-			$no = '<input type="radio" name="no['.$x['id'].']" value="1['.$x['id'].']"> 是 <input type="radio" name="no['.$x['id'].']" value="0['.$x['id'].']" checked> 否';
+			$lastdo = $x['lastdo'];
 		}
-		$f .= '<tr><td>'.$x['id'].'</td><td>'.$x['pid'].'</td><td>'.$x['tieba'].'</td><td>'.$no.'</td></tr>';
+		if ($x['no'] == '0') {
+			$no = '<input type="radio" name="no['.$x['id'].']" value="1"> 是 <input type="radio" name="no['.$x['id'].']" value="0" checked> 否';
+		} else {
+			$no = '<input type="radio" name="no['.$x['id'].']" value="1" checked> 是 <input type="radio" name="no['.$x['id'].']" value="0"> 否';
+		}
+		$f .= '<tr><td>'.$x['id'].'</td><td>'.$x['pid'].'</td><td>'.$x['fid'].'</td>';
+		$f .= '<td class="wrap"><a title="'.$x['tieba'].'" href="http://tieba.baidu.com/f?ie=utf-8&kw='.$x['tieba'].'" target="_blank">'. mb_substr($x['tieba'] , 0 , 30 , 'UTF-8') .'</a>';
+		if ($x['status'] != 0) {
+			$f .= '<br/><b>错误:</b>' . $x['last_error'] . '</td>';
+			$f .= '<td><font color="red">异常</font><br/>#' . $x['status'];
+		}
+		elseif ($x['lastdo'] != $today) {
+			$f .= '</td><td><font color="black">待签</font>';
+		}
+		else {
+			$f .= '</td><td><font color="green">正常</font>';
+		}
+		$f .= '</td><td>'.$lastdo.'</td><td>'.$no.'</td></tr>';
 	}
-	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧，PID 即为 账号ID<br/>功能：<a href="setting.php?mod=showtb&ref" onclick="$(\'#tb_num\').html(\'正在刷新贴吧列表，可能需要较长时间，请耐心等待...\')">刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean" onclick="return confirm(\'你真的要清空所有贴吧吗？\');">清空列表</a>';
+	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧。已签到 '.$count1.' 个贴吧，还有 '.$count2.' 个贴吧等待签到<br/>PID 即为 账号ID，移动设备可能需要左右滑动表格才能显示所有内容<br/>功能：<a href="setting.php?mod=showtb&ref" onclick="$(\'#tb_num\').html(\'正在刷新贴吧列表，可能需要较长时间，请耐心等待...\')">刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean" onclick="return confirm(\'你真的要清空所有贴吧吗？\');">清空列表</a>';
 	if (option::get('enable_addtieba') == 1) {
 		echo ' | <a href="javascript:;" data-toggle="modal" data-target="#AddTieba">手动添加贴吧</a>';
 	}
-	echo '</div>';
+	echo ' | <a href="javascript:;" onclick="go(\'submit_button\');">前往底部</a></div>';
 	echo '<form action="setting.php?mod=showtb&set" method="post">';
-	echo '<table class="table"><thead><tr>';
+	echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
 	echo '<th>ID</th>';
-	echo '<th>PID</th>';
-	echo '<th style="width:62%">贴吧名称</th>';
-	echo '<th style="width:30%">忽略签到</th></thead><tbody>';
-	echo $f.'</tbody></table><input type="submit" class="btn btn-primary" value="提交更改"></form>';
+	echo '<th>PID</th><th>FID</th>';
+	echo '<th>贴吧名称</th>';
+	echo '<th>状态</th>';
+	echo '<th>上次签到</th>';
+	echo '<th>忽略签到</th></thead><tbody>';
+	echo $f.'</tbody></table></div><input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
 } else {
 	echo '<div class="alert alert-danger">无法列出贴吧列表，因为当前没有绑定百度账号</div>';
 }

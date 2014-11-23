@@ -33,3 +33,7 @@
 .bs-callout-danger h4 {
 	color: #d9534f;
 }
+.wrap{ 
+	word-wrap: break-word !important; 
+	word-break: break-all !important; 
+}

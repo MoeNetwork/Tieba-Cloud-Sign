@@ -8,7 +8,9 @@ switch ($i['mode'][0]) {
 		template('showtb');
 		break;
 	case 'log':
-		template('log');
+		//兼容老版本插件，重定向到showtb
+		Clean();
+		ReDirect('index.php?mod=showtb');
 		break;
 	case 'set':
 		template('set');

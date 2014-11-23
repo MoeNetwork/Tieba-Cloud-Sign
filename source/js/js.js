@@ -8,6 +8,11 @@ if(title != null) {document.getElementById('watitle').innerHTML = title;} else {
 $("#wabutton").click();
 }
 
+function go(index,time){
+  if (time == null) { var time = 555; }
+  $("html,body").animate({scrollTop: $("#"+index).offset().top}, time);
+}
+
 function view_status(e) { 
 		e.innerHTML = '正在读取，请稍候...';
 		$.ajax({ 

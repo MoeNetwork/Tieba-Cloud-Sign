@@ -35,7 +35,11 @@ Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 #####6.如何安装新版本
 若需要安装新版本，直接下载 Zip，删除压缩包内的 config.php ，然后上传到您的网站即可   
 每一个大版本都会有一个升级脚本，运行它即可   
-文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php  
+文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php   
+
+## 云签到教程
+所有教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163      
+在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204
 
 ##禁止利用该软件来盈利
 #####1.不得要求用户付费
