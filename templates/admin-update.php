@@ -13,8 +13,12 @@ if (isset($i['mode'][2])) {
 </ul>
 <br/>
 	<?php
-$xc = scandir(SYSTEM_ROOT . '/setup/update_backup',1);
-$count = count($xc) - 2;
+if (file_exists(SYSTEM_ROOT . '/setup/update_backup') && is_dir(SYSTEM_ROOT . '/setup/update_backup')) {
+	$xc = scandir(SYSTEM_ROOT . '/setup/update_backup',1);
+	$count = count($xc) - 2;
+} else {
+	$count = 0;
+}
 if($count <= 0) {
 	echo '<div class="alert alert-danger" role="alert">现在无备份可供回滚，当您对云签到进行升级时，会自动生成备份以供回滚</div>';	
 } else {

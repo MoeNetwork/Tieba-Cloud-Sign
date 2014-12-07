@@ -17,19 +17,51 @@ global $i;
 global $m;
 
 switch (SYSTEM_PAGE) {
+	case 'admin:plugins:install':
+		doAction('plugin_install_1');
+		if (!class_exists('ZipArchive')) {
+			msg('插件安装失败：你的主机不支持 ZipArchive 类，请返回');
+		}
+		if (!is_writable(SYSTEM_ROOT . '/plugins')) {
+			msg('插件安装失败：你的主机不支持文件写入，请手动安装插件');
+		}
+		if (!isset($_FILES['plugin'])) {
+			msg('若要安装插件，请上传插件包');
+		}
+		$file = $_FILES['plugin'];
+		if (!empty($file['error'])) {
+			msg('插件安装失败：在上传文件时发生错误：代码：' . $file['error']);
+		}
+		if (empty($file['size'])) {
+			msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
+		}
+		$z    = new ZipArchive();
+		if(!$z->open($file['tmp_name'])) {
+			msg('插件安装失败：无法打开压缩包');
+		}
+		$rd = explode('/', $z->getNameIndex(0), 2)[0];
+		if($z->getFromName($rd . '/' . $rd . '.php') === false) {
+			msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
+		}
+		if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
+			msg('插件安装失败：解压缩失败');
+		}
+		doAction('plugin_install_2');
+		msg('插件安装成功');
+		break;
+
 	case 'admin:plugins':
+		doAction('plugin_setting_1');
 		if (isset($_GET['dis'])) {
 			inactivePlugin($_GET['dis']);
-			Redirect('index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['act'])) {
 			activePlugin($_GET['act']);
-			Redirect('index.php?mod=admin:plugins&ok');
 		}
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
-			Redirect('index.php?mod=admin:plugins&ok');
 		}
+		doAction('plugin_setting_2');
 		Redirect('index.php?mod=admin:plugins&ok');
 		break;
 	
@@ -169,6 +201,7 @@ switch (SYSTEM_PAGE) {
 			msg('未定义操作');
 			break;
 		}
+		doAction('admin_tools_doing');
 		Redirect('index.php?mod=admin:tools&ok');
 		break;
 
@@ -245,7 +278,7 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:cron':
-
+		doAction('cron_setting_1');
 		if (!empty($_GET['act'])) {
 			cron::aset($_GET['act'] , array('no' => 0));
 		}
@@ -267,7 +300,7 @@ switch (SYSTEM_PAGE) {
 				cron::aset($key , array('orde' => $value));
 			}
 		}
-
+		doAction('cron_setting_2');
 		Redirect('index.php?mod=admin:cron&ok');
 		break;
 

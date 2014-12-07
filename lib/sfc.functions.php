@@ -101,7 +101,7 @@ function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
  * @param type $type
  * @return int
  */
-function UnZip($zipfile, $path, $type = 'tpl') {
+function UnZip($zipfile, $path) {
 	if (!class_exists('ZipArchive', FALSE)) {
 		return 3;//zip模块问题
 	}
@@ -109,8 +109,6 @@ function UnZip($zipfile, $path, $type = 'tpl') {
 	if (@$zip->open($zipfile) !== TRUE) {
 		return 2;//文件权限问题
 	}
-	$r = explode('/', $zip->getNameIndex(0), 2);
-	$dir = isset($r[0]) ? $r[0] . '/' : '';
 	if (true === @$zip->extractTo($path)) {
 		$zip->close();
 		return 0;
