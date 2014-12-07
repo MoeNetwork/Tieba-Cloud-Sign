@@ -175,6 +175,18 @@ function rand_array($a) {
 }
 
 /**
+ * 随机生成一个指定长度的正整数
+ * @param int $l 长度
+ */
+function rand_int($l) {
+	$int = null;
+	for ($i=0; $i < $l; $i++) { 
+		$int .= mt_rand(0,9);
+	}
+	return $int;
+}
+
+/**
  * 获取空闲的贴吧记录表
  *
  */
