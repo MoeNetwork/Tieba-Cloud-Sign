@@ -39,7 +39,8 @@ switch (SYSTEM_PAGE) {
 		if(!$z->open($file['tmp_name'])) {
 			msg('插件安装失败：无法打开压缩包');
 		}
-		$rd = explode('/', $z->getNameIndex(0), 2)[0];
+		$rdc = explode('/', $z->getNameIndex(0), 2);
+		$rd  = $rdc[0];
 		if($z->getFromName($rd . '/' . $rd . '.php') === false) {
 			msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
 		}
