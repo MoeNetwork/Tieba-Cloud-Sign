@@ -116,9 +116,13 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 		msg('注册失败：请正确填写账户、密码或邮箱');
 	}
 	$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
+	$z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$name}'");
 	$y=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users`");
 	if ($x['total'] > 0) {
 		msg('注册失败：用户名已经存在');
+	}
+	if ($z['total'] > 0) {
+		msg('注册失败：邮箱已经存在');
 	}
 	if (!checkMail($mail)) {
 		msg('注册失败：邮箱格式不正确');
