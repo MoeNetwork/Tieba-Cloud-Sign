@@ -312,6 +312,36 @@ function CopyAll($source,$destination){
 }   
 
 /**
+ * 备份指定表的数据结构和所有数据
+ *
+ * @param string $table 数据库表名
+ * @return string
+ */
+function dataBak($table) {
+	global $m;
+	$sql = "DROP TABLE IF EXISTS `$table`;\n";
+	$createtable = $m->query("SHOW CREATE TABLE $table");
+	$create = $m->fetch_row($createtable);
+	$sql .= $create[1].";\n\n";
+
+	$rows = $m->query("SELECT * FROM $table");
+	$numfields = $m->num_fields($rows);
+	$numrows = $m->num_rows($rows);
+	while ($row = $m->fetch_row($rows)) {
+		$comma = '';
+		$sql .= "INSERT INTO `$table` VALUES(";
+		for ($i = 0; $i < $numfields; $i++) {
+			$sql .= $comma."'" . $m->escape_string($row[$i]) . "'";
+			$comma = ',';
+		}
+		$sql .= ");\n";
+	}
+	$sql .= "\n";
+	return $sql;
+}
+
+
+/**
  * fosckopen 改进版
  */
 

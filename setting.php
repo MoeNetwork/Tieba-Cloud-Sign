@@ -153,6 +153,37 @@ switch (SYSTEM_PAGE) {
 			}
 			break;
 
+		case 'backup':
+			global $m;
+			$list  = !empty($_POST['tab']) ? array_map('addslashes', $_POST['tab']) : msg('请至少选择一个需要导出的表');
+			$dump  = '#Warning: Do not change the comments!!!'  . "\n";
+			$dump .= '#Tieba-Cloud-Sign Database Backup' . "\n";
+			$dump .= '#Version:' . SYSTEM_VER . "\n";
+			$dump .= '#Date:' . date('Y-m-d H:m:s') . "\n";
+			$dump .= '############## Start ##############' . "\n";
+			foreach ($list as $table) {
+				$dump .= dataBak($table);
+			}
+			$dump .= "\n" . '############## End ##############';
+			$file  = 'cloud_sign_' . date('Y-m-d_H-m-s') . '.sql';
+			if (!empty($_POST['zip'])) {
+				if (!is_dir(SYSTEM_ROOT.'/source/cache')) {
+					mkdir(SYSTEM_ROOT.'/source/cache' , 0777 , true);
+				}
+				if(CreateZip($file , $dump , SYSTEM_ROOT.'/source/cache/' . $file . '.zip') === true) {
+					header('Content-Type: application/zip');
+					header('Content-Disposition: attachment; filename=' . $file . '.zip');
+					echo file_get_contents(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
+					unlink(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
+					die;
+				}
+			}
+			header('Content-Type: text/x-sql');
+			header('Content-Disposition: attachment; filename=' . $file);
+			echo $dump;
+			die;
+			break;
+
 		case 'remtab':
 			global $m;
 			if (!empty($_POST['tab'])) {
@@ -160,6 +191,13 @@ switch (SYSTEM_PAGE) {
 			}
 			break;
 
+		case 'truntab':
+			if (!empty($_POST['tab'])) {
+				$m->query('TRUNCATE TABLE `'.$_POST['tab'].'`');
+			}
+			break;
+
+		/*
 		case 'updatefid':
 			global $m;
 			global $i;
@@ -197,6 +235,7 @@ switch (SYSTEM_PAGE) {
 				msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='.$step.'&in='.$next.'" />已经更新表：'.DB_PREFIX.$next.' / 即将更新表：'.DB_PREFIX.$next.'<br/><br/>当前进度：'.$step.' / '.$c['x'].' <progress style="width:60%" value="'.$step.'" max="'.$c['x'].'"></progress><br/><br/>切勿关闭浏览器，程序将自动继续<br/><br/><a href="setting.php?mod=updatefid&step='.$step.'&in='.$next.'">如果你的浏览器没有自动跳转，请点击这里</a>',false);
 				}
 			break;
+			*/
 
 		default:
 			msg('未定义操作');
