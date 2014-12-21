@@ -74,7 +74,7 @@ class misc {
 	public static function isvip($uid) {
 		global $m;
 		$x = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users` WHERE `id` = '{$uid}';");
-		if ($x['role'] == 'vip' && $x['role'] == 'admin') {
+		if ($x['role'] == 'vip' || $x['role'] == 'admin') {
 			return true;
 		} else {
 			return false;
