@@ -427,6 +427,13 @@ switch (SYSTEM_PAGE) {
 		break;
 
 		case 'set':
+			// 获取头像的url
+			if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
+				$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+				$data = $c->get();
+				$c->close();
+				$i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+			}
 			/*
 			受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
 			具体挂载方法为：
@@ -436,7 +443,8 @@ switch (SYSTEM_PAGE) {
 			*/
 			$PostArray = array(
 				'face_img',
-				'face_baiduid'
+				'face_baiduid',
+				'face_url'
 			);
 			doAction('set_save1');
 			$set = array();

@@ -1,6 +1,6 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } ?>
 <div id="guide_page_1">
-<span id="avatar" style="float:right;"><img src="<?php echo getGravatar(EMAIL,140) ?>" alt="您的头像" title="您的头像" class="img-thumbnail" onerror="$('#avatar').html('无法加载头像');"></span>
+<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-thumbnail" onerror="$('#avatar').html('无法加载头像');"></span>
 <?php global $m,$i; doAction('index_1'); echo NAME ;?>，你好，欢迎使用 百度贴吧云签到<br><br>
 点击上方导航栏的 功能菜单 可以列出所有功能
 <br/><br/>

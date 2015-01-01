@@ -77,18 +77,15 @@ function textMiddle($text, $left, $right) {
  * @param $d default avatar
  * @param $g
  */
-function getGravatar($email, $s = 40, $d = 'mm', $g = 'g', $site = 'secure') {
-	if(option::uget("face_img")) {
-		if(option::uget("face_baiduid") != ""){
-			$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
-			$data = $c->get();
-			$c->close();
-			return stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
+	if(option::uget('face_img') == 1) {
+		if(option::uget('face_url') != ''){
+			return option::uget('face_url');
 		} else {
 			return 'http://tb.himg.baidu.com/sys/portrait/item/';
 		}
 	} else {
-		$hash = md5($email);
+		$hash = md5(EMAIL);
 		$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
 		return $avatar;
 	}
