@@ -16,21 +16,21 @@ class misc {
 	public static function mail($to, $sub = '无主题', $msg = '无内容') {
         if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')){
             $mail = new SaeMail();
-            $mail->setOpt(array(
-              'from'=>option::get('mail_name'),//来源
-              'to'=>$to,//接收者Mail
-              'smtp_host'=>option::get('mail_host'),
-              'smtp_port'=>option::get('mail_port'),//端口号（默认为25，一般不需修改）
-              'smtp_username'=>option::get('mail_smtpname'),//发送账号
-              'smtp_password'=>option::get('mail_smtppw'),//发送密码
-              'subject'=>$sub,//邮件标题
-              'content'=>$msg,//邮件内容
-              'content_type'=>"HTML",//HTML格式发送
-           ));
-            $mail->setAttach( $att );
-            $mail->send();
+            $options = Array(
+				'from'          => option::get('mail_name'),
+				'to'            => $to,
+				'smtp_host'     => option::get('mail_host'),
+				'smtp_port'     => option::get('mail_port'), //端口号（默认为25，一般不需修改）
+				'smtp_username' => option::get('mail_smtpname'), //smtp账号
+				'smtp_password' => option::get('mail_smtppw'), //smtp密码
+				'subject'       => $sub, //邮件标题
+				'content'       => $msg, //邮件内容
+				'content_type'  => 'HTML' //HTML格式发送
+            );
+            $mail->setOpt($options);
+            $ret = $mail->send();
             if ($ret === false) {
-                return var_dump($mail->errno(), $mail->errmsg());
+                return 'Mail Send Error: #'.$mail->errno().' - '.$mail->errmsg();
             } else {
             	return true;
             }
