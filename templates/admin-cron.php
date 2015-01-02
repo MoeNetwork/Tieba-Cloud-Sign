@@ -60,7 +60,7 @@ foreach ($i['cron'] as $cs) {
 	}
 
 	if (!empty($cs['lastdo'])) {
-		$lastdo = date('Y-m-d H:m:s',$cs['lastdo']);
+		$lastdo = date('Y-m-d H:i:s',$cs['lastdo']);
 	} else {
 		$lastdo = '从未运行';
 	}
