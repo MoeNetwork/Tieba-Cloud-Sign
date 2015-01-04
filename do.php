@@ -3,9 +3,10 @@ define('SYSTEM_DO_NOT_LOGIN', true);
 require dirname(__FILE__).'/init.php';
 global $m,$today,$i;
 set_time_limit(0);
-$cron_pw      = option::get('cron_pw');
+$cron_pw = option::get('cron_pw');
+$cmd_pw = getopt("p:");
 if (!empty($cron_pw)) {
-	if (empty($_REQUEST['pw']) || $_REQUEST['pw'] != $cron_pw) {
+	if ((empty($_REQUEST['pw']) || $_REQUEST['pw'] != $cron_pw) && ($cmd_pw === false || $cmd_pw['p'] != $cron_pw)) {
 		msg('计划任务执行失败：密码错误<br/><br/>你需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务',false);
 	}
 }
