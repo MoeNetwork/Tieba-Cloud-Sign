@@ -326,10 +326,19 @@ switch (SYSTEM_PAGE) {
 			cron::aset($_GET['dis'] , array('no' => 1));
 		}
 		elseif (isset($_GET['uninst'])) {
-			cron::del($_GET['uninst']);
+			if($_GET['uninst'] == 'system_sign'){
+				msg('该任务为签到系统核心任务，无法卸载');
+			} else {
+				cron::del($_GET['uninst']);
+			}
 		}
 		elseif (isset($_GET['add'])) {
-			cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
+			if(stripos($_POST['file'],'do.php') !== false){
+				msg('<h4>请不要将do.php加入到云签的计划任务中来</h4>若需签到，请用云监控监控<br/>'.SYSTEM_URL.'do.php<br/>即可实现计划任务(cron)的效果<br/><br/>推荐云监控:<a href="http://www.aliyun.com/product/jiankong/" target="_blank">阿里云监控</a> 或 <a href="http://jk.cloud.360.cn/" target="_blank">360网站服务监控</a> 或 <a href="http://ce.baidu.com/" target="_blank">百度云观测</a><br/>如果你的服务器在国外且国内访问较慢，则推荐使用:<a href="http://www.mywebcron.com/" target="_blank">Free Web Cron Service </a>',SYSTEM_URL.'index.php?mod=admin:cron');
+			} else {
+				cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
+			}
+			
 		}
 		elseif (isset($_GET['run'])) {
 			$return = cron::run($_GET['file'], $_GET['run']);
