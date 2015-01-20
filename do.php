@@ -28,5 +28,5 @@ if (!isset($_GET['donnot_sign_multith']) && !empty($sign_multith) && function_ex
 
 	doAction('cron_2');
 	/////////////// EXIT
-	msg('本次计划任务完毕',false,false);
+	msg('本次计划任务完成',false,false);
 ?>

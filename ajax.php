@@ -2,6 +2,37 @@
 require dirname(__FILE__).'/init.php';
 
 switch (SYSTEM_PAGE) {
+	case 'runcron':
+		global $today;
+		global $m;
+		set_time_limit(0);
+		$cron = isset($_GET['cron']) ? sqladds(strip_tags($_GET['cron'])) : msg('运行失败：计划任务未指定');
+		$pw   = isset($_GET['pw'])   ? md5($_GET['pw'])                   : '';
+		$cpw  = option::get('cron_pw');
+
+		if (!empty($cpw) && $pw != md5($cpw)) {
+			msg('运行失败：计划任务密码错误');
+		}
+
+		$x    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."cron` WHERE `name` = '{$cron}';");
+		if (empty($x['id'])) {
+			msg('运行失败：此计划任务不存在');
+		}
+
+		$log = cron::run($x['file'] , $x['name']);
+
+		if ($x['freq'] == '-1') {
+			cron::del($x['name']);
+		} else {
+			cron::aset($x['name'] , 
+				array(
+					'lastdo' => time(),
+					'log'    => $log
+				)
+			);
+		}
+		break;
+
     case 'ajax:status':
 		global $today;
 		global $m;
@@ -173,5 +204,10 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 		} else {
 			echo '{"error":"0","bduss":"'.$y[2].'"}';
 		}
+		break;
+
+	default:
+		msg('未定义操作');
+		break;
 }
 ?>

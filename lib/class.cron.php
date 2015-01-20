@@ -4,7 +4,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 /**
  * cron 计划任务操作类
  */
-class cron Extends option {
+class cron {
 	/**
 	 * 获取计划任务所有数据
 	 * $name 计划任务名称
@@ -196,22 +196,43 @@ class cron Extends option {
 	}
 
 	/**
+	 * 异步执行计划任务（伪）
+	 * @param $name 计划任务名称
+	 */
+	public static function arun($name) {
+		$url = SYSTEM_URL . 'ajax.php?mod=runcron&cron=' . $name;
+		$cpw = option::get('cron_pw');
+		if (!empty($cpw)) {
+			$url .= '&pw=' . md5($cpw);
+		}
+		XFSockOpen($url ,1,'','',false,'',0);
+	}
+
+	/**
 	 * 按运行顺序运行所有计划任务
 	 *
 	 */
 	public static function runall() {
 		global $m;
-		$time = time();
 		$cron = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` ORDER BY  `orde` ASC ");
 		while ($cs = $m->fetch_array($cron)) {
 			if ($cs['no'] != '1') {
-				if ($cs['freq'] == '-1') {
-					self::run($cs['file'],$cs['name']);
-					$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."cron` WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
-				}
-				elseif ( empty($cs['freq']) || empty($cs['lastdo']) || $cs['lastdo'] - $cs['freq'] >= $cs['freq'] ) {
-					$return=self::run($cs['file'],$cs['name']);
-					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."cron` SET `lastdo` =  '{$time}',`log` = '{$return}' WHERE `".DB_PREFIX."cron`.`id` = ".$cs['id']);
+				if (option::get('cron_asyn')) {
+					self::arun($cs['name']);
+				} else {
+					if ($cs['freq'] == '-1') {
+						self::run($cs['file'],$cs['name']);
+						self::del($cs['name']);
+					}
+					elseif ( empty($cs['freq']) || empty($cs['lastdo']) || $cs['lastdo'] - $cs['freq'] >= $cs['freq'] ) {
+						$return=self::run($cs['file'],$cs['name']);
+						cron::aset($cs['name'] , 
+							array(
+								'lastdo' => time(),
+								'log'    => $return
+							)
+						);
+					}
 				}
 			}
 		}

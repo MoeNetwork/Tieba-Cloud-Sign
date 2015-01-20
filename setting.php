@@ -116,6 +116,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('dev',$sou['dev']);
 			@option::set('pwdmode',$sou['pwdmode']);
 			@option::set('cron_pw',$sou['cron_pw']);
+			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
 		}
