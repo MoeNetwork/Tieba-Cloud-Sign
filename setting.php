@@ -109,6 +109,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_host',$sou['mail_host']);
 			@option::set('mail_port',$sou['mail_port']);
 			@option::set('mail_auth',$sou['mail_auth']);
+			@option::set('mail_ssl',$sou['mail_ssl']);
 			@option::set('mail_smtpname',$sou['mail_smtpname']);
 			@option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
@@ -461,6 +462,14 @@ switch (SYSTEM_PAGE) {
 				'face_url'
 			);
 			doAction('set_save1');
+			//更改邮箱
+			$mail = !empty($_POST['mail']) ? $_POST['mail'] : msg('邮箱地址不能为空');
+			if (checkMail($mail)) {
+				$mail = sqladds($mail);
+				$m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
+			} else {
+				msg('邮箱格式有误，请检查');
+			}
 			$set = array();
 			foreach ($PostArray as $value) {
 				if (!isset($i['post'][$value])) {
@@ -473,7 +482,8 @@ switch (SYSTEM_PAGE) {
 			break;
 
 	case 'testmail':
-		$x = misc::mail(option::get('mail_name'), SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL);
+		global $i;
+		$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL);
 		if($x === true) {
 			Redirect('index.php?mod=admin:set&mailtestok');
 		} else {

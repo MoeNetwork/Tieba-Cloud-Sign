@@ -18,10 +18,15 @@ class SMTP {
     public $sock;
     public $log;
     public $error;
+    public $ssl = false;
 
-    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass) {
+    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass , $ssl = false) {
         $this ->debug = false;
         $this ->smtp_port = $smtp_port;
+        if ($ssl == true) {
+            $this->ssl = true;
+            $relay_host = 'ssl://' . $relay_host;
+        }
         $this ->relay_host = $relay_host;
         $this ->time_out = 30;
         $this ->auth = $auth;
@@ -29,7 +34,6 @@ class SMTP {
         $this ->pass = $pass;
         $this ->host_name = "localhost";
         $this ->log_file = "";
-        $this ->sock = false;
     }
 
     public function send($to, $from, $subject = "", $body = "", $reply = '', $mailtype = 'HTML', $cc = "", $bcc = "", $additional_headers = "") {

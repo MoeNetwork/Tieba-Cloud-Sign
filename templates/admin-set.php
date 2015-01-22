@@ -5,7 +5,7 @@ if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">设置保存成功</div>';
 }
 elseif(isset($_GET['mailtestok'])) {
-	echo '<div class="alert alert-success">一封邮件已经发送到您的邮箱 '.option::get('mail_name').'，请查收</div>';
+	echo '<div class="alert alert-success">一封邮件已经发送到您的邮箱 '.$i['user']['email'].'，请查收</div>';
 }
 function addset($name,$type,$x,$other = '',$text = '') {
 	if ($type == 'checkbox') {
@@ -105,8 +105,10 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</tr>
 		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
 		<tr><td>邮件综合设置
-		<br/><br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testmail'" value="测试邮件发送">
+		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testmail'" value="测试邮件发送">
 		<br/><br/>测试前请先保存设置
+		<br/><br/>无加密的SMTP服务器端口号通常为 25
+		<br/>SSL加密的SMTP服务器端口号通常为 465
 		</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">邮件发送模式</span>
@@ -136,8 +138,14 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 					<span class="input-group-addon">SMTP服务器端口</span>
 					<input type="number" name="mail_port" class="form-control"  value="<?php echo option::get('mail_port') ?>">
 				</div><br/>
-
 				<div class="input-group">
+					<span class="input-group-addon">SSL 加密</span>
+					<select name="mail_ssl" class="form-control">
+				  	<option value="0" <?php if(option::get('mail_ssl') == '0') { echo 'selected'; } ?>>否</option>
+				  	<option value="1" <?php if(option::get('mail_ssl') == '1') { echo 'selected'; } ?>>是</option>
+				  </select>
+				</div>
+				<br/><div class="input-group">
 				  <span class="input-group-addon">需要身份验证</span>
 				  <select name="mail_auth" class="form-control"  onchange="if(this.value == '1') { $('#smtp_set_auth').show(); } else { $('#smtp_set_auth').hide(); }">
 				  	<option value="1" <?php if(option::get('mail_auth') == '1') { echo 'selected'; } ?>>是</option>

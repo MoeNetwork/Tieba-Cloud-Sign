@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-global $m;
+global $m,$i;
 
 if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">设置保存成功</div>';
@@ -33,6 +33,12 @@ function addset($name,$type,$x,$other = '',$text = '') {
 				<input type="radio" name="face_img" value="0" <?php if (option::uget('face_img') == '0') { echo 'checked'; } ?>> 使用Gravatar头像<br/>
 				<input type="radio" name="face_img" value="1" <?php if (option::uget('face_img') == '1') { echo 'checked'; } ?>> 使用贴吧头像（推荐） 贴吧用户名：
 				<input type="text" name="face_baiduid" value="<?php if (option::uget('face_baiduid')) { echo option::uget('face_baiduid'); } ?>" class="form-control" >
+			</td>
+		</tr>
+		<tr>
+			<td>邮箱设置<br/>更改你在本站设置的邮箱地址</td>
+			<td>
+				<input type="text" name="mail" value="<?php echo $i['user']['email'] ?>" class="form-control" required>
 			</td>
 		</tr>
 		<?php doAction('set_2'); ?>

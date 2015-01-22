@@ -9,12 +9,7 @@
 </div>
 <?php
 doAction('index_3');
-if (empty($i['user']['bduss'])) {
-	echo '<br/><br/><b>配置状态：</b>无法自动签到 - 云签到未配置';
-} else {
 	$today = date('Y-m-d');
-	echo '<br/><br/><b>配置状态：</b>云签到已配置，<a href="index.php?mod=log">点击查看签到日志</a>';
-}
 	echo '<br/><br/><div id="stat" onclick="view_status(this);"><button type="button" class="btn btn-info">点击查看签到状态统计信息</button></div>';
 	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
@@ -29,7 +24,12 @@ if (empty($i['user']['bduss'])) {
 	}
 	echo '<br/><br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
 	if (ROLE == 'admin') {
-		echo '<!--QQ邮件列表订阅嵌入代码--><br/><br/><script>var nId = "f752182ed774de32ef9ee39fbb5e44e38261368b16e7ea44",nWidth="auto",sColor="light",sText="请填写您的邮件地址，订阅 StusGame 云签到官方订阅，以便于及时接收关于云签到程序的更新与重要通知：" ;</script><script src="https://list.qq.com/zh_CN/htmledition/js/qf/page/qfcode.js" charset="gb18030"></script>';
+		echo '<br/><br/>';
+		echo '<div class="well"><p class="info">请填写您的邮件地址，订阅 StusGame 云签到官方订阅，以便于及时接收关于云签到程序的更新与重要通知：</p><div class="mailInput"><form action="https://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post"><input type="hidden" name="t" value="qf_booked_feedback"><input type="hidden" name="id" value="f752182ed774de32ef9ee39fbb5e44e38261368b16e7ea44"><div class="input-group">
+  <input type="hidden" name="mod" value="baiduid">
+  <span class="input-group-addon">输入邮箱地址</span>
+  <input type="text" class="form-control" name="to">
+  <span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击订阅"></span></div></form></div></div>';
 	}
 doAction('index_2');
 ?>

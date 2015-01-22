@@ -42,7 +42,12 @@ class misc {
 				$SMTPAuth = (boolean) option::get('mail_auth');
 				$Username = option::get('mail_smtpname');
 				$Password = option::get('mail_smtppw');
-				$mail = new SMTP($Host , $Port , $SMTPAuth , $Username , $Password);
+				if (option::get('mail_ssl') == '1') {
+					$SSL = true;
+				} else {
+					$SSL = false;
+				}
+				$mail = new SMTP($Host , $Port , $SMTPAuth , $Username , $Password , $SSL);
 				if($mail->send($to , $From , $sub , $msg)) {
 					return true;
 				} else {
