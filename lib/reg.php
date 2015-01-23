@@ -22,7 +22,7 @@ while ($wsr = $m->fetch_array($ws)) {
 	$key = $wsr['name'];
 	$i['opt'][$key] = $wsr['value'];
 }
-$rs = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
+$rs = $m->query("SELECT *  FROM `".DB_NAME."`.`".DB_PREFIX."cron` ORDER BY `orde` ASC");
 while ($rsr = $m->fetch_array($rs)) {
 	$key = $rsr['name'];
 	$i['cron'][$key] = $rsr;
