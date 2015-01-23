@@ -54,10 +54,10 @@ class cron {
 			$b .= ", '{$set['no']}'";
 			$c .= ", `no` = '{$set['no']}'";
 		}
-		if (isset($set['status'])) {
-			$a .= ', `status`';
-			$b .= ", '{$set['status']}'";
-			$c .= ", `status` = '{$set['status']}'";
+		if (isset($set['desc'])) {
+			$a .= ', `desc`';
+			$b .= ", '{$set['desc']}'";
+			$c .= ", `desc` = '{$set['desc']}'";
 		}
 		if (isset($set['freq'])) {
 			$a .= ', `freq`';
@@ -92,7 +92,7 @@ class cron {
 	 * $name 全局唯一计划任务名称
 	 * $file 计划任务文件，执行时以include方式执行function，function名称为cron_计划任务名称
 	 * $no 忽略任务
-	 * $status 计划任务状态，系统会写入
+	 * $desc 计划任务描述
 	 * $freq 执行频率
 	 *       -1：一次性任务，执行完毕后系统会删除
 	 *       0 ：默认，当do.php被执行时，该任务始终被运行
@@ -100,7 +100,7 @@ class cron {
 	 * $lastdo 上次执行，系统会写入
 	 * $log 执行日志，系统会写入
 	*/
-	public static function set($name, $file = '', $no = 0, $status = 0, $freq = 0, $lastdo = '', $log = '') {
+	public static function set($name, $file = '', $no = 0, $desc = '', $freq = 0, $lastdo = '', $log = '') {
 		global $m;
 		$set = array();
 
@@ -110,8 +110,8 @@ class cron {
 		if (!empty($no)) {
 			$set['no'] = $no;
 		}
-		if (!empty($status)) {
-			$set['status'] = $status;
+		if (!empty($desc)) {
+			$set['desc'] = $desc;
 		}
 		if (!empty($freq)) {
 			$set['freq'] = $freq;
@@ -148,9 +148,9 @@ class cron {
 			$a .= ', `no`';
 			$b .= ", '{$set['no']}'";
 		}
-		if (isset($set['status'])) {
-			$a .= ', `status`';
-			$b .= ", '{$set['status']}'";
+		if (isset($set['desc'])) {
+			$a .= ', `desc`';
+			$b .= ", '{$set['desc']}'";
 		}
 		if (isset($set['freq'])) {
 			$a .= ', `freq`';

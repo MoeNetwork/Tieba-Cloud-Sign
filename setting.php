@@ -328,11 +328,7 @@ switch (SYSTEM_PAGE) {
 			cron::aset($_GET['dis'] , array('no' => 1));
 		}
 		elseif (isset($_GET['uninst'])) {
-			if($_GET['uninst'] == 'system_sign'){
-				msg('该任务为签到系统核心任务，无法卸载');
-			} else {
-				cron::del($_GET['uninst']);
-			}
+			cron::del($_GET['uninst']);
 		}
 		elseif (isset($_GET['add'])) {
 			if(stripos($_POST['file'],'do.php') !== false){

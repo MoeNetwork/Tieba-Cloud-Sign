@@ -292,10 +292,10 @@ class misc {
 	/**
 	 * 执行一个表的签到任务
 	 * @param $table 表
-	 * @param $sign_mode option::get('sign_mode')
 	 */
-	public static function DoSign($table,$sign_mode) {
+	public static function DoSign($table) {
 		global $m,$i;
+		$sign_mode = unserialize(option::get('sign_mode'));
 		$today = date('Y-m-d');
 
 		if (date('H') <= option::get('sign_hour')) {
@@ -329,7 +329,20 @@ class misc {
 		foreach ($q as $x) {
 			self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
 		}
+	}
 
+	/**
+	 * 执行一个表的签到重試任务
+	 * @param $table 表
+	 */
+	function DoSign_retry($table) {
+		global $m,$i;
+		$today = date('Y-m-d');
+		if (date('H') <= option::get('sign_hour')) {
+			return option::get('sign_hour').'点时忽略签到';	
+		}
+		$limit = option::get('cron_limit');
+		$sign_mode = unserialize(option::get('sign_mode'));
 		$sign_again = unserialize(option::get('cron_sign_again'));
 		$retry_max  = option::get('retry_max');
 		$q = array();
@@ -337,7 +350,7 @@ class misc {
 		//重新尝试签到出错的贴吧
 		if ($limit == 0) {
 			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$q = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
+				$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
 				while ($qss = $m->fetch_array($qs)) {
 					$q[] = array(
 						'id'     => $qss['id'],

@@ -3,10 +3,10 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 
 /**
  * 云签到内部计划任务
- * [贴吧签到]
+ * [重新尝试签到出错的贴吧]
  */
 
-function cron_system_sign() {
+function cron_system_sign_retry() {
 	global $i;
 
 	$today = date('Y-m-d');
@@ -17,7 +17,7 @@ function cron_system_sign() {
 	}
 
 	foreach ($i['table'] as $value) {
-		$return = misc::DoSign($value);
+		$return = misc::DoSign_retry($value);
 	}
 	return $return;
 }

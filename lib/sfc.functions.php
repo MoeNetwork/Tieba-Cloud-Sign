@@ -156,6 +156,8 @@ function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false) {
 			if (!empty($r1)) {
 				$r1['id'] = intval($r1['id']) + 1;
 				$r[] = $r1;
+			} else {
+				break;
 			}
 		}
 		return $r;
