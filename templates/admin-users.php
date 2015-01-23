@@ -8,11 +8,12 @@ if (isset($_GET['add'])) {	?>
 
 <form action="setting.php?mod=admin:users" method="post">
 <input type="hidden" name="do" value="add">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:35%">参数</th>
-			<th style="width:65%">值</th>
+			<th>参数</th>
+			<th>值</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,6 +35,7 @@ if (isset($_GET['add'])) {	?>
 		</tr>
 	</tbody>
 </table>
+</div>
 <input type="submit" class="btn btn-primary" value="提交更改">
 </form>
 
@@ -49,18 +51,20 @@ while ($x = $m->fetch_array($s)) {
 ?>
 <div class="alert alert-info">目前共有 <?php echo $userc[0]; ?> 名用户。点击 UID 下面的复选框表示对该用户进行操作<br/><a href="index.php?mod=admin:users&add">点击此处可以添加一名用户</a></div>
 <form action="setting.php?mod=admin:users" method="post" onsubmit="return confirm('此操作不可逆，你确定要执行吗？');">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:7%">UID</th>
-			<th style="width:40%">用户名/用户组</th>
-			<th style="width:25%">电子邮箱/数据表</th>
+			<th>UID</th>
+			<th>用户名/用户组</th>
+			<th>电子邮箱/数据表</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php echo $users; ?>
 	</tbody>
 </table>
+</div>
 选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; 
 <input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; 
 <input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp; 

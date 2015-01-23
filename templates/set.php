@@ -18,11 +18,12 @@ function addset($name,$type,$x,$other = '',$text = '') {
 }
 ?><form action="setting.php?mod=set" method="post">
 <?php doAction('set_1'); ?>
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:35%">参数</th>
-			<th style="width:65%">值</th>
+			<th style="width:40%">参数</th>
+			<th>值</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -43,5 +44,5 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		</tr>
 		<?php doAction('set_2'); ?>
 	</tbody>
-</table><input type="submit" class="btn btn-primary" value="提交更改">
+</table></div><input type="submit" class="btn btn-primary" value="提交更改">
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>

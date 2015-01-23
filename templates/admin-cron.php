@@ -4,12 +4,13 @@ global $m,$i;
 if (isset($_GET['add'])) {
 ?>
 <form action="setting.php?mod=admin:cron&add" method="post">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:40%">参数</th>
-			<th style="width:60%">值</th>
-		<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></tr>
+			<th style="width:25%">参数</th>
+			<th>值</th>
+		</tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -21,12 +22,12 @@ if (isset($_GET['add'])) {
 			<td><input type="text" name="file" class="form-control" required=""></td>
 		</tr>
 		<tr>
-			<td>忽略任务</td>
-			<td><input type="radio" name="no" value="0" required="" checked> 否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="no" value="1" required=""> 是</td>
+			<td>任务描述<br/>描述这个任务</td>
+			<td><textarea class="form-control" name="desc"></textarea></td>
 		</tr>
 		<tr>
-			<td>任务状态</td>
-			<td><input type="radio" name="status" value="0" required="" checked> 正常&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="status" value="1" required="">错误</td>
+			<td>忽略任务</td>
+			<td><input type="radio" name="no" value="0" required="" checked> 否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="no" value="1" required=""> 是</td>
 		</tr>
 		<tr>
 			<td>执行间隔<br/>单位为秒，0为始终执行</td>
@@ -42,6 +43,7 @@ if (isset($_GET['add'])) {
 		</tr>
 	</tbody>
 </table>
+</div>
 <br/><button type="submit" class="btn btn-primary">提交更改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:cron'">取消</button>
 </form>
@@ -82,8 +84,8 @@ foreach ($i['cron'] as $cs) {
 		$status .= '<script type="text/javascript">var system_cron_log = "'.addslashes($cs['log']).'"</script>';
 		$status .= '<br/><a href="javascript:;" onclick="alert(system_cron_log);">点击查看此任务的日志</a>';
 	}
-
-	$cron .= '<input type="hidden" value="'.$cs['name'].'" name="ids[]"><tr><td style="width:30%"><b>'.$cs['name'].'</b><br/>'.$cs['file'].'<br/>运行顺序：<input required style="width:30%" type="number" name="order['.$cs['name'].']" value="'.$cs['orde'].'"></td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'<br/>ID：'.$cs['id'].'</td><td style="width:40%">'.$status.'</td></tr>';
+	$status .= '<br/>运行顺序：<input required style="width:30%" type="number" name="order['.$cs['name'].']" value="'.$cs['orde'].'">';
+	$cron .= '<input type="hidden" value="'.$cs['name'].'" name="ids[]"><tr><td style="width:30%"><b>'. $cs['name'] . '</b><br/>'.$cs['file'].'<br/>'. str_replace("\n", '<br/>', $cs['desc']) .'</td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'<br/>ID：'.$cs['id'].'</td><td style="width:40%">'.$status.'</td></tr>';
 }
 
 if (isset($_GET['ok'])) {
@@ -94,18 +96,20 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 ?>
 <div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] + 1 ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">添加新计划任务</a> | <a href="do.php">运行全部计划任务</a></div>
 <form action="setting.php?mod=admin:cron&xorder" method="post">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:30%">任务描述/文件</th>
-			<th style="width:30%">其他信息</th>
-			<th style="width:40%">状态/操作</th>
+			<th>任务描述/文件</th>
+			<th>其他信息</th>
+			<th>状态/操作</th>
 		</tr>
 	</thead>
 	<tobdy>
 		<?php echo $cron ?>
 	</tbody>
 </table>
+</div>
 <input type="submit" class="btn btn-primary" value="提交更改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button>
 </form>
 <br/><?php } ?>

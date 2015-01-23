@@ -25,11 +25,12 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
   <li class="active"><a href="index.php?mod=admin:set:sign">签到设置</a></li>
 </ul>
 <form action="setting.php?mod=admin:set&type=sign" method="post">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
 			<th style="width:40%">参数</th>
-			<th style="width:60%">值</th>
+			<th>值</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -66,6 +67,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	</tr>
 	</tbody>
 </table>
+</div>
 <input type="submit" class="btn btn-primary" value="提交更改">
 </form>
 <?php
@@ -76,11 +78,12 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
   <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
 </ul>
 <form action="setting.php?mod=admin:set&type=system" method="post">
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
 			<th style="width:40%">参数</th>
-			<th style="width:60%">值</th>
+			<th>值</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -180,6 +183,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		?>
 	</tbody>
 </table>
+</div>
 <input type="submit" class="btn btn-primary" value="提交更改">
 </form>
 <?php } ?>

@@ -56,18 +56,20 @@ doAction('admin_plugins');
 <br/>插件手工安装方法：直接解包插件并上传到 /plugins/ 即可
 <br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">点击这里上传安装插件</a> | <a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a>
 </div>
-<table class="table table-striped">
+<div class="table-responsive">
+<table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:40%">插件信息</th>
-			<th style="width:30%">作者/标识符</th>
-			<th style="width:30%">状态/操作</th>
+			<th>插件信息</th>
+			<th>作者/标识符</th>
+			<th>状态/操作</th>
 		</tr>
 	</thead>
 	<tobdy>
 		<?php echo $plugins; ?>
 	</tbody>
 </table>
+</div>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>
 
 <div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">

@@ -188,8 +188,8 @@ global $m;
 </form>
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
 <div class="panel panel-default">
-  <div class="panel-heading"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 推荐绑定方法</h3></div>
-  <div class="panel-body">
+  <div class="panel-heading" onclick="$('#baidumusic_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 推荐绑定方法</h3></div>
+  <div class="panel-body" id="baidumusic_bduss">
       1.<a href="https://passport.baidu.com/v2/?login" target="_blank">登录需要绑定的百度账号</a>
       <br/><br/>2.<a href="http://musicmini.baidu.com/app/passport/getBDUSS.php" target="_blank">点击此处</a>获取BDUSS
       <br/><br/>3.复制你看到的那一大串英文和数字（不包括双引号"），粘贴到上方的输入框中
