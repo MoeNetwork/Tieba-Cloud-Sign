@@ -62,6 +62,9 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
 		}
+		elseif (isset($_GET['install'])) {
+			installPlugin($_GET['install']);
+		}
 		doAction('plugin_setting_2');
 		Redirect('index.php?mod=admin:plugins&ok');
 		break;
@@ -120,6 +123,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
+			@option::set('isapp',$sou['isapp']);
 		}
 		doAction('admin_set_save');
 		Redirect('index.php?mod=admin:set:'. $_GET['type'].'&ok');
@@ -491,4 +495,6 @@ switch (SYSTEM_PAGE) {
 if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
 	option::pset($i['mode'][1] , $_POST);
 	Redirect("index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
+} elseif (ROLE == 'admin' && $i['mode'][0] == 'setplugin') {
+	settingPlugin($i['mode'][1]);
 }

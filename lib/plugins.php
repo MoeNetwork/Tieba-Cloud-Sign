@@ -1,12 +1,12 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-
+global $i;
 //加载所有激活的插件
 loadplugins();
 
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
 	$plug=strip_tags($_GET['plugin']);
-	if (in_array($plug, unserialize(option::get('actived_plugins')))) {
+	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php')) {
 			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php';
 		} else {
@@ -15,7 +15,7 @@ if (isset($_GET['plugin'])) {
 	}
 } elseif (isset($_GET['vip_plugin'])) {
 	$plug=strip_tags($_GET['vip_plugin']);
-	if (in_array($plug, unserialize(option::get('actived_plugins')))) {
+	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_vip.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_vip.php')) {
 			if (ISVIP) {
 				require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_vip.php';
@@ -28,7 +28,7 @@ if (isset($_GET['plugin'])) {
 	}
 } elseif (isset($_GET['pri_plugin'])) {
 	$plug=strip_tags($_GET['pri_plugin']);
-	if (in_array($plug, unserialize(option::get('actived_plugins')))) {
+	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_private.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_private.php')) {
 			if (ROLE == 'admin') {
 				require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_private.php';
@@ -41,126 +41,160 @@ if (isset($_GET['plugin'])) {
 		}
 	}
 }
+
 /**
-* 激活插件
-*/
+ * 激活插件
+ * @return bool
+ */
 function activePlugin($plugin) {
-		$active_plugins = unserialize(option::get('actived_plugins'));
-
-		$ret = false;
-
-		if (in_array($plugin, $active_plugins)) {
-			$ret = true;
-		} else {
-			$active_plugins[] = $plugin;
-			$active_plugins = serialize($active_plugins);
-			option::set('actived_plugins', $active_plugins);
-			$ret = true;
-		}
-
-		//run init callback functions
-		$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
-		if (true === $ret && file_exists($callback_file)) {
+	global $m;
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+		$m->query("UPDATE `" . DB_PREFIX . "plugins` SET `status` = '1' WHERE `name` = '{$plugin}';");
+		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
+		if (file_exists($callback_file)) {
 			require_once $callback_file;
 			if (function_exists('callback_init')) {
 				callback_init();
 			}
 		}
-		return $ret;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /**
  * 禁用插件
-*/
-	function inactivePlugin($plugin) {
-		$active_plugins = unserialize(option::get('actived_plugins'));
-		if (in_array($plugin, $active_plugins)) {
-			$key = array_search($plugin, $active_plugins);
-			unset($active_plugins[$key]);
-		} else {
-			return;
-		}
-		$active_plugins = serialize($active_plugins);
-		option::set('actived_plugins', $active_plugins);
-
-		//run inactive callback functions
-		$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
+ * @return bool
+ */
+function inactivePlugin($plugin) {
+	global $m;
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+		$m->query("UPDATE `" . DB_PREFIX . "plugins` SET `status` = '0' WHERE `name` = '{$plugin}';");
+		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
 			require_once $callback_file;
 			if (function_exists('callback_inactive')) {
 				callback_inactive();
 			}
 		}
+		return true;
+	} else {
+		return false;
 	}
+}
+
 /**
-* 获取所有插件列表，未定义插件名称的插件将不予获取
-* 插件目录：/plugins
-* 仅识别 插件目录/插件/插件.php 目录结构的插件
-* @return array
-*/
-	function getPlugins() {
-		global $PluginsList;
-		if (isset($PluginsList)) {
-			return $PluginsList;
-		}
-		$PluginsList = array();
-		$pluginFiles = array();
-		$pluginPath = SYSTEM_ROOT . '/plugins';
-		$pluginDir = @ dir($pluginPath);
-		if ($pluginDir) {
-			while(($file = $pluginDir->read()) !== false) {
-				if (preg_match('|^\.+$|', $file)) {
-					continue;
-				}
-				if (is_dir($pluginPath . '/' . $file)) {
-					$pluginsSubDir = @ dir($pluginPath . '/' . $file);
-					if ($pluginsSubDir) {
-						while(($subFile = $pluginsSubDir->read()) !== false) {
-							if (preg_match('|^\.+$|', $subFile)) {
-								continue;
-							}
-							if ($subFile == $file.'.php') {
-								$pluginFiles[] = "$file/$subFile";
-							}
-						}
-					}
-				}
+ * 安装插件
+ * @return  bool	
+ */
+function installPlugin($plugin) {
+	global $m;
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+		$m->query("INSERT IGNORE INTO `" . DB_PREFIX . "plugins` (`name`,`status`,`options`) VALUES ('{$plugin}','0','');");
+		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
+		if (file_exists($callback_file)) {
+			require_once $callback_file;
+			if (function_exists('callback_install')) {
+				callback_install();
 			}
 		}
-		if (!$pluginDir || !$pluginFiles) {
-			return $PluginsList;
-		}
-		sort($pluginFiles);
-		foreach ($pluginFiles as $pluginFile) {
-			$pluginData = getPluginData($pluginFile);
-			if (empty($pluginData['Name'])) {
-				continue;
-			}
-			$PluginsList[$pluginFile] = $pluginData;
-		}
-		return $PluginsList;
+		return true;
+	} else {
+		return false;
 	}
+}
+
 /**
-* 卸载插件
-*/
+ * 卸载插件
+ * @return bool 
+ */
 function uninstallPlugin($plugin) {
+	global $m;
 	inactivePlugin($plugin);
-	//run remove callback functions
-	$callback_file = SYSTEM_ROOT."/plugins/$plugin/{$plugin}_callback.php";
+	$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 	if (file_exists($callback_file)) {
 		require_once $callback_file;
 		if (function_exists('callback_remove')) {
 			callback_remove();
 		}
 	}
-	DeleteFile(SYSTEM_ROOT.'/plugins/'.$plugin);
+	$m->query("DELETE FROM `" . DB_PREFIX . "plugins` WHERE `name` = '{$plugin}';");
+	if (!option::get('isapp')) {
+		DeleteFile(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin);
+	}
+}
+
+/**
+ * 调用插件自定义保存设置函数
+ * 插件调用方法：setting.php?mod=setplugin:插件名称
+ * 然后系统会调用 插件名_callback.php 的 callback_setting()
+ */
+function settingPlugin($plugin) {
+	global $m;
+	$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
+	if (file_exists($callback_file)) {
+		require_once $callback_file;
+		if (function_exists('callback_setting')) {
+			callback_setting();
+		}
+	}
+}
+
+/**
+* 获取所有插件列表，未定义插件名称的插件将不予获取
+* 插件目录：/plugins
+* 仅识别 插件目录/插件/插件.php 目录结构的插件
+* @return array
+*/
+function getPlugins() {
+	global $PluginsList;
+	if (isset($PluginsList)) {
+		return $PluginsList;
+	}
+	$PluginsList = array();
+	$pluginFiles = array();
+	$pluginPath = SYSTEM_ROOT . '/plugins';
+	$pluginDir = @ dir($pluginPath);
+	if ($pluginDir) {
+		while(($file = $pluginDir->read()) !== false) {
+			if (preg_match('|^\.+$|', $file)) {
+				continue;
+			}
+			if (is_dir($pluginPath . '/' . $file)) {
+				$pluginsSubDir = @ dir($pluginPath . '/' . $file);
+				if ($pluginsSubDir) {
+					while(($subFile = $pluginsSubDir->read()) !== false) {
+						if (preg_match('|^\.+$|', $subFile)) {
+							continue;
+						}
+						if ($subFile == $file.'.php') {
+							$pluginFiles[] = "$file/$subFile";
+						}
+					}
+				}
+			}
+		}
+	}
+	if (!$pluginDir || !$pluginFiles) {
+		return $PluginsList;
+	}
+	sort($pluginFiles);
+	foreach ($pluginFiles as $pluginFile) {
+		$pluginData = getPluginData($pluginFile);
+		if (empty($pluginData['Name'])) {
+			continue;
+		}
+		$PluginsList[$pluginFile] = $pluginData;
+	}
+	return $PluginsList;
 }
 
 /**
  * 获取插件信息
  */
 function getPluginData($pluginFile) {
-        $pluginPath = SYSTEM_ROOT . '/plugins/';
+        $pluginPath = SYSTEM_ROOT . '/plugins/' . $plugin . '/';
 		$pluginData = implode('', file($pluginPath . $pluginFile));
 		preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
 		preg_match("/Version:(.*)/i", $pluginData, $version);
@@ -175,15 +209,15 @@ function getPluginData($pluginFile) {
         $plugin = $ret[0];
         @$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $active_plugins)) ? true : false;
 
-        $plugin_name = isset($plugin_name[1]) ? strip_tags(trim($plugin_name[1])) : '';
-		$version = isset($version[1]) ? strip_tags(trim($version[1])) : '';
-		$description = isset($description[1]) ? strip_tags(trim($description[1])) : '';
-		$plugin_url = isset($plugin_url[1]) ? strip_tags(trim($plugin_url[1])) : '';
-		$author = isset($author_name[1]) ?strip_tags( trim($author_name[1])) : '';
-		$For = isset($For[1]) ? strip_tags(trim($For[1])) : '';
-		$author_url = isset($author_url[1]) ? strip_tags(trim($author_url[1])) : '';
+    $plugin_name = isset($plugin_name[1]) ? strip_tags(trim($plugin_name[1])) : '';
+	$version = isset($version[1]) ? strip_tags(trim($version[1])) : '';
+	$description = isset($description[1]) ? strip_tags(trim($description[1])) : '';
+	$plugin_url = isset($plugin_url[1]) ? strip_tags(trim($plugin_url[1])) : '';
+	$author = isset($author_name[1]) ?strip_tags( trim($author_name[1])) : '';
+	$For = isset($For[1]) ? strip_tags(trim($For[1])) : '';
+	$author_url = isset($author_url[1]) ? strip_tags(trim($author_url[1])) : '';
 
-		return array(
+	return array(
 		'Name' => $plugin_name,
 		'Version' => $version,
 		'Description' => $description,
@@ -193,6 +227,6 @@ function getPluginData($pluginFile) {
 		'AuthorUrl' => $author_url,
         'Setting' => $setting,
         'Plugin' => $plugin,
-		);
+	);
 }
 ?>

@@ -176,7 +176,7 @@ elseif (isset($_GET['pub_plugin'])) {
 	$i['user']['role'] = 'visitor';
 	loadplugins();
 	$plug = strip_tags($_GET['pub_plugin']);
-	if (in_array($plug, unserialize(option::get('actived_plugins')))) {
+	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php')) {
 			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php';
 		} else {

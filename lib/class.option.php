@@ -13,6 +13,12 @@ class option {
 	public static function get($name) {
 		global $m;
 		global $i;
+		//用于兼容旧插件
+		if (stripos($name, 'plugin_') === 0) {
+			$plug = substr($name, '7');
+			$set = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."plugins` WHERE `name` = '{$plug}';");
+			return $set['options'];
+		}
 		if (!isset($i['opt'][$name])) {
 			self::set($name,'0');
 			return 0;
@@ -28,6 +34,12 @@ class option {
 	*/
 	public static function set($name,$value) {
 		global $m;
+		//用于兼容旧插件
+		if (stripos($name, 'plugin_') === 0) {
+			$plug = substr($name, '7');
+			$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . $value . "' WHERE `name` = '{$plug}';");
+			return true;
+		}
 		$name = sqladds($name);
 		$value = sqladds($value);
 		if($m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';")){
@@ -160,27 +172,85 @@ class option {
 
 	/**
 	 * 获取插件的所有设置
+	 * 其实我建议保存到options表
 	 * @param 插件标识符
 	 * @return array 设置数组
 	*/
 	public static function pget($plug) {
-		return unserialize(self::get('plugin_'.$plug));
+		global $i;
+		return $i['plugins']['info'][$plug]['options'];
 	}
 
 	/**
-	 * 保存插件的设置
+	 * 保存插件的所有设置
 	 * @param $plug 插件标识符
 	 * @param $value array 设置数组
 	*/
 	public static function pset($plug , $value) {
-		self::set('plugin_'.$plug , serialize($value));
+		global $m;
+		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($value) . "' WHERE `name` = '{$plug}';");
 	}
 
 	/**
-	 * 删除插件的设置
+	 * 删除插件的所有设置
 	 * @param $plug 插件标识符
 	*/
 	public static function pdel($plug) {
-		self::del('plugin_'.$plug);
+		global $m;
+		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '' WHERE `name` = '{$plug}';");
+	}
+
+	/**
+	 * 获取插件的一条设置
+	 * @param 插件标识符
+	 * @return string 设置值
+	*/
+	public static function xget($plug) {
+		global $i;
+		return $i['plugins']['info'][$plug]['options'][$plug];
+	}
+
+	/**
+	 * 保存插件的一条设置，不存在则添加之
+	 * 注意：需要大量修改的请直接将设置保存到options表
+	 * @param $plug 插件标识符
+	 * @param $name 设置项名称
+	 * @param $value 值
+	 */
+	public static function xset($plug , $name , $value) {
+		global $m;
+		$a = self::pget($plug);
+		$a[$name] = $value;
+		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
+	}
+
+	/**
+	 * 删除插件的一条设置
+	 * @param $plug 插件标识符
+	 * @param $name 设置项名称
+	 */
+	public static function xdel($plug , $name ) {
+		global $m;
+		$a = self::pget($plug);
+		unset($a[$name]);
+		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
+	}
+
+	/**
+	 * 直接添加插件的一条设置，已存在则跳过
+	 * 注意：需要大量修改的请直接将设置保存到options表
+	 * @param $plug 插件标识符
+	 * @param $name 设置项名称
+	 * @param $value 值
+	 */
+	public static function xadd($plug , $name , $value) {
+		global $m;
+		$a = self::pget($plug);
+		if (!isset($a[$name])) {
+			$a[$name] = $value;
+		} else {
+			return;
+		}
+		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
 	}
 }

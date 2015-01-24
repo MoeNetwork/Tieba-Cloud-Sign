@@ -179,6 +179,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		addset('记住密码有效期<br/>单位为秒，过大会导致浏览器无法记录','number','cktime',' class="form-control" step="1" min="1"');
 		addset('密码保存模式<br/>支持PHP，无需加 &lt?php 或 ?&gt 使用 $pwd 表示变量密码，填写\'或者"需要加上转义符\\，只能写一条语句，后面不需要带 ;','text','pwdmode',' class="form-control"','<br/>结果：'.highlight_string('<?php '.option::get('pwdmode').'; ?>',true));
 		doAction('admin_set');
+		addset('环境为引擎','checkbox','isapp',null,' 如果您的主机不支持写入或者为应用引擎，请选择此项');
 		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');
 		?>
 	</tbody>

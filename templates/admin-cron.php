@@ -69,9 +69,6 @@ foreach ($i['cron'] as $cs) {
 
 	if ($cs['no'] != 1) {
 		$status = '<font color="green">有效</font>';
-		if ($cs['status'] != 0) {
-			$status = '<font color="red">异常</font>';
-		}
 		$status .= ' | <a href="setting.php?mod=admin:cron&dis='.$cs['name'].'">忽略任务</a>';
 	} else {
 		$status = '<font color="blue">忽略</font> | <a href="setting.php?mod=admin:cron&act='.$cs['name'].'">取消忽略</a>';

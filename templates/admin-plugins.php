@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } if (ROLE != 'admin') { msg('权限不足！'); }
-
+global $i;
 if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">插件操作成功</div>';
 }
@@ -38,15 +38,19 @@ foreach($x as $key=>$val) {
 	} else {
 		$fortc = '<br/>适用版本：不限';
 	}
-
-	if (in_array($val['Plugin'], unserialize(option::get('actived_plugins')))) {
-		$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
-		if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
-			$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
+	if (in_array($val['Plugin'], $i['plugins']['all'])) {
+		if ($i['plugins']['info'][$val['Plugin']]['status'] == '1') {
+			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
+			if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
+				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
+			}
+		} else {
+			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
 		}
 	} else {
-		$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
+		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['Plugin'].'">安装插件</a><br/>';
 	}
+
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="setting.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
 }
 
@@ -54,15 +58,19 @@ doAction('admin_plugins');
 ?>
 <div class="alert alert-info" id="tb_num">当前有 <?php echo sizeof(unserialize(option::get('actived_plugins'))); ?> 个已激活的插件，总共有 <?php echo $stat ?> 个插件
 <br/>插件手工安装方法：直接解包插件并上传到 /plugins/ 即可
+<?php if (option::get('isapp')) {
+	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';
+}
+?>
 <br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">点击这里上传安装插件</a> | <a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a>
 </div>
 <div class="table-responsive">
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th>插件信息</th>
-			<th>作者/标识符</th>
-			<th>状态/操作</th>
+			<th style="width:50%">插件信息</th>
+			<th style="width:30%">作者/标识符</th>
+			<th style="width:30%">状态/操作</th>
 		</tr>
 	</thead>
 	<tobdy>
