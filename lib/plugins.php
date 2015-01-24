@@ -194,7 +194,7 @@ function getPlugins() {
  * 获取插件信息
  */
 function getPluginData($pluginFile) {
-        $pluginPath = SYSTEM_ROOT . '/plugins/' . $plugin . '/';
+        $pluginPath = SYSTEM_ROOT . '/plugins/';
 		$pluginData = implode('', file($pluginPath . $pluginFile));
 		preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
 		preg_match("/Version:(.*)/i", $pluginData, $version);
