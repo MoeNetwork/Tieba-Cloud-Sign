@@ -46,9 +46,13 @@ function template($file) {
  * 加载所有激活的插件
  */
 function loadplugins() {
+	if (defined('SYSTEM_PLUGINS_LOADED')) {
+		return;
+	}
 	foreach (unserialize(option::get('actived_plugins')) as $value) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
 			include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
 		}
 	}
+	define('SYSTEM_PLUGINS_LOADED', true);
 }
