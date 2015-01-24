@@ -174,4 +174,4 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 <input type="submit" class="btn btn-primary" value="提交更改">
 </form>
 <?php } ?>
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
