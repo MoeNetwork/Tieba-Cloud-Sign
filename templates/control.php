@@ -38,7 +38,7 @@ switch ($i['mode'][0]) {
 				break;
 			case 'setplug':
 				$plug = strip_tags($_GET['plug']);
-				if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], unserialize(option::get('actived_plugins')))) {
+				if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], $i['plugins']['actived'])) {
 					require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php';
 				} else {
 					echo '<b>插件设置页面不存在</b>';
