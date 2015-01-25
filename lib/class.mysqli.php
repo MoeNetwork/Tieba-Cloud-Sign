@@ -35,15 +35,15 @@ class wmysql {
 	/**
 	 * 构造函数
 	 */
-	public function __construct() {
+	public function __construct($host , $user , $pw , $name) {
 		if (!class_exists('mysqli')) {
 			msg('服务器不支持MySqli类');
 		}
-		if (stristr(DB_HOST, ':')) {
-			preg_match('/(.*):(.*)/', DB_HOST, $coninfo);
-			@$this->conn = new mysqli($coninfo[1], DB_USER, DB_PASSWD, DB_NAME, $coninfo[2]);
+		$coninfo = strpos($host, ':');
+		if ($coninfo === false) {
+			@$this->conn = new mysqli($host, $user, $pw, $name);
 		} else {
-			@$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASSWD, DB_NAME);
+			@$this->conn = new mysqli(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
 		}
 
 		if ($this->conn->connect_error) {

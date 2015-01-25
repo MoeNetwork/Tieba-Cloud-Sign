@@ -35,11 +35,11 @@ class wmysql {
 	/**
 	 * 构造函数
 	 */
-	public function __construct() {
+	public function __construct($host , $user , $pw , $name) {
 		if (!function_exists('mysql_connect')) {
 			msg('服务器PHP不支持MySql数据库');
 		}
-		if (!$this->conn = @mysql_connect(DB_HOST, DB_USER, DB_PASSWD)) {
+		if (!$this->conn = @mysql_connect($host , $user , $pw)) {
             switch ($this->geterrno()) {
                 case 2005:
                     msg("连接数据库失败，数据库地址错误或者数据库服务器不可用");
@@ -61,7 +61,7 @@ class wmysql {
 		if ($this->getMysqlVersion() > '4.1') {
 			mysql_query("SET NAMES 'utf8'");
 		}
-		@mysql_select_db(DB_NAME, $this->conn) OR msg("连接数据库失败，未找到您填写的数据库");
+		@mysql_select_db($name, $this->conn) OR msg("连接数据库失败，未找到您填写的数据库");
 		self::$instance = $this->conn;
 		return self::$instance;
 	}
