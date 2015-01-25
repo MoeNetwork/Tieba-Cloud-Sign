@@ -48,7 +48,7 @@ if (isset($_GET['plugin'])) {
  */
 function activePlugin($plugin) {
 	global $m;
-	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
 		$m->query("UPDATE `" . DB_PREFIX . "plugins` SET `status` = '1' WHERE `name` = '{$plugin}';");
 		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
@@ -69,7 +69,7 @@ function activePlugin($plugin) {
  */
 function inactivePlugin($plugin) {
 	global $m;
-	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
 		$m->query("UPDATE `" . DB_PREFIX . "plugins` SET `status` = '0' WHERE `name` = '{$plugin}';");
 		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
@@ -90,7 +90,7 @@ function inactivePlugin($plugin) {
  */
 function installPlugin($plugin) {
 	global $m;
-	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '/' . $plugin . '.php')) {
+	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
 		$m->query("INSERT IGNORE INTO `" . DB_PREFIX . "plugins` (`name`,`status`,`options`) VALUES ('{$plugin}','0','');");
 		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
