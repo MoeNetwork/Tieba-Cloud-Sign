@@ -120,8 +120,9 @@ function uninstallPlugin($plugin) {
 		}
 	}
 	$m->query("DELETE FROM `" . DB_PREFIX . "plugins` WHERE `name` = '{$plugin}';");
-	if (!option::get('isapp')) {
-		DeleteFile(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin);
+	$isapp = option::get('isapp');
+	if (empty($isapp)) {
+		DeleteFile(SYSTEM_ROOT . '/plugins/' . $plugin);
 	}
 }
 
