@@ -112,6 +112,8 @@ switch (SYSTEM_PAGE) {
 			} else {
 				echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
 			}
+		} else {
+			echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
 		}
 		break;
 
