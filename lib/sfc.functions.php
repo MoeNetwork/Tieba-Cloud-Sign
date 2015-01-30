@@ -476,7 +476,7 @@ function getrole($role) {
 function Redirect($url) {
 	Clean();
 	header("Location: ".$url);
-	msg('<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'" />请稍候......<br/><br/>如果您的浏览器没有自动跳转，请点击下面的链接',htmlspecialchars($url),false);
+	msg('<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'" />请稍候......<br/><br/>如果您的浏览器没有自动跳转，请点击下面的链接',htmlspecialchars($url));
 }
 
 /**
