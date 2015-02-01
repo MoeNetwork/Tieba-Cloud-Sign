@@ -41,6 +41,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		addset('签到开始时间<br/>24小时制。例如设为3，则从凌晨4点开始签到','number','sign_hour','min="0" step="1" max="24" class="form-control"');
 		addset('签到间隔时间<br/>单位为秒，0为不暂停','number','sign_sleep','min="0" step="1" class="form-control"','适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低');
 		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加任何贴吧，添加贴吧时会忽略贴吧数量上限');
+		addset('在绑定百度账号时记录用户名','checkbox','baidu_name');
 	?>
 	<tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
 		<input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>
@@ -174,10 +175,9 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</tr>
 		<?php
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
-		addset('依靠访客触发任务','checkbox','trigger',null,' 建议仅在不支持计划任务并拒绝加入云平台时使用');
+		addset('依靠访客触发任务','checkbox','trigger',null,' 建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效');
 		addset('启用安全保护模块','checkbox','protector',null,' 建议开启');
 		addset('记住密码有效期<br/>单位为秒，过大会导致浏览器无法记录','number','cktime',' class="form-control" step="1" min="1"');
-		addset('密码保存模式<br/>支持PHP，无需加 &lt?php 或 ?&gt 使用 $pwd 表示变量密码，填写\'或者"需要加上转义符\\，只能写一条语句，后面不需要带 ;','text','pwdmode',' class="form-control"','<br/>结果：'.highlight_string('<?php '.option::get('pwdmode').'; ?>',true));
 		doAction('admin_set');
 		addset('环境为引擎','checkbox','isapp',null,' 如果您的主机不支持写入或者为应用引擎，请选择此项');
 		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');

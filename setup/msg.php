@@ -10,6 +10,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo strip_tags($sysname) ?> - 提示信息</title>
         <style type="text/css">
             html {
@@ -106,8 +107,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 -webkit-box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
                 box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
             }
-
-                </style>
+        </style>
     </head>
     <body id="error-page">
         <h3><?php echo $sysname ?> - 提示信息</h3>

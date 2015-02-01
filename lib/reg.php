@@ -56,6 +56,18 @@ if (!empty($_REQUEST['mod'])) {
 	$i['mode'][0] = 'default';
 }
 
+if(SYSTEM_VER != $i['opt']['core_version'] && !defined('SYSTEM_NO_CHECK_VER')) {
+	if (empty($i['opt']['core_version'])) {
+		$i['opt']['core_version'] = '3.45';
+	}
+	if (file_exists(SYSTEM_ROOT . '/setup/update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php')) {
+		$updatefile = '<a href="setup/update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php">请点击运行: ' . 'update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php</a>';
+	} else {
+		$updatefile = '';
+	}
+	msg('严重错误：数据库中的云签到版本与文件版本不符，是否已运行升级脚本？<br/><br/>' . $updatefile);
+}
+
 //autoload
 function class_autoload($c) {
 	$c = strtolower($c);
@@ -72,10 +84,6 @@ if (option::get('dev') != 1 || defined('NO_ERROR')) {
 } else {
 	define('SYSTEM_DEV', true);
 }
-
-/**
- * Framework 错误处理函数
- */
 
 function sfc_error($errno, $errstr, $errfile, $errline) {
 	switch ($errno) {

@@ -2,6 +2,7 @@
 define('SYSTEM_NO_ERROR', true);
 define('SYSTEM_DO_NOT_REMIND_INSTALL', true);
 require '../init.php';
+global $i;
 if (ROLE != 'admin') {
   msg('您需要先登录旧版本的云签到，才能继续升级');
 }
@@ -15,7 +16,7 @@ foreach ($x as $value) {
   if (!isset($g[2])) {
     continue;
   }
-  if (SYSTEM_VER > $g[2]) {
+  if (SYSTEM_VER > $g[2] || SYSTEM_VER == $i['opt']['core_version']) {
     $other = '[ <font color="red">已安装</font> ] ';
   } else {
     $other = '';

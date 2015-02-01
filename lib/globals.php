@@ -37,6 +37,7 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 			while ($bd = $m->fetch_array($bds)) {
 				$bdspid = $bd['id'];
 				$i['user']['bduss'][$bdspid] = $bd['bduss'];
+				$i['user']['baidu'][$bdspid] = $bd['name'] ;
 			}
 			$optss = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE uid = ".UID);
 			$GLOBALS = $i['user'];

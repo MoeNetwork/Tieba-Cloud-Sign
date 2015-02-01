@@ -37,15 +37,23 @@ global $m;
 <table class="table table-striped">
   <thead>
     <tr>
-      <th style="width:10%">PID</th>
-      <th style="width:90%">BDUSS Cookie</th>
+      <th>PID</th>
+      <?php if (option::get('baidu_name') == '1') {
+        echo '<th style="width:25%">百度名称</th>';
+      }
+      ?>
+      <th style="width:65%">BDUSS Cookie</th>
       <th>操作</th>
     </tr>
   </thead>
   <tbody>
    <?php
     foreach ($i['user']['bduss'] as $key => $value) {
-      echo '<tr><td>'.$key.'</td><td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解除绑定</a></td></tr>';
+      echo '<tr><td>'.$key.'</td>';
+      if (option::get('baidu_name') == '1') {
+          echo '<td>'.$i['user']['baidu'][$key].'</td>';
+      }
+      echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
     }
    ?>
   </tbody>

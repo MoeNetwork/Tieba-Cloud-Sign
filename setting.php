@@ -79,6 +79,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('enable_addtieba',$sou['enable_addtieba']);
 			@option::set('retry_max',$sou['retry_max']);
 			@option::set('sign_hour',$sou['sign_hour']);
+			@option::set('baidu_name',$sou['baidu_name']);
 			@option::set('fb',$sou['fb']);
 			@option::set('sign_sleep',$sou['sign_sleep']);
 			if (empty($sou['fb_tables'])) {
@@ -118,7 +119,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('dev',$sou['dev']);
 			@option::set('bduss_num',$sou['bduss_num']);
 			@option::set('dev',$sou['dev']);
-			@option::set('pwdmode',$sou['pwdmode']);
 			@option::set('cron_pw',$sou['cron_pw']);
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
@@ -389,10 +389,15 @@ switch (SYSTEM_PAGE) {
 				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号'); 
 			}
 			// 去除双引号和bduss
-			$_GET['bduss'] = str_replace('"', '', $_GET['bduss']);
-			$_GET['bduss'] = str_replace('BDUSS=', '', $_GET['bduss']);
-			$_GET['bduss'] = str_replace('bduss=', '', $_GET['bduss']);
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`) VALUES  (".UID.", '{$_GET['bduss']}' )");
+			$bduss = str_replace('"', '', $_GET['bduss']);
+			$bduss = str_ireplace('BDUSS=', '', $bduss);
+			$bduss = sqladds($bduss);
+			if (option::get('baidu_name') == '1') {
+				$baidu_name = sqladds(getBaiduId($_GET['bduss']));
+			} else {
+				$baidu_name = '';
+			}
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
 		}
 		elseif (isset($_GET['del'])) {
 			$del = (int) $_GET['del'];

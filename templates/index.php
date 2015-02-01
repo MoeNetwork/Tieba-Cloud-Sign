@@ -7,6 +7,7 @@
 此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> (@ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>)
 <br/><br/>本站 [ <?php echo SYSTEM_URL ?> ] 保留所有权利
 </div>
+
 <?php
 doAction('index_3');
 	$today = date('Y-m-d');

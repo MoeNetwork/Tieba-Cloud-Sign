@@ -20,8 +20,7 @@ class option {
 			return $set['options'];
 		}
 		if (!isset($i['opt'][$name])) {
-			self::set($name,'0');
-			return 0;
+			return;
 		} else {
 			return $i['opt'][$name];
 		}
