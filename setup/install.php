@@ -13,7 +13,7 @@ if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 }
 
 	echo '<!DOCTYPE html><html><head>';
-	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	echo '<link href="../favicon.ico" rel="shortcut icon"/>';
 	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
 	echo '<script src="../source/js/jquery.min.js"></script>';
@@ -42,19 +42,14 @@ if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 <div style="width:90%;margin: 0 auto;overflow: hidden;position: relative;">
 <?php
 	if (!isset($_GET['step']) || $_GET['step'] == 0) {
-		echo '<h2>准备安装: 功能检查</h2><br/>';
-		echo '<div class="progress progress-striped">
-  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-    <span class="sr-only">10%</span>
-  </div>
-</div>';
-		define('DO_NOT_LOAD_UI', TRUE);
-		include SYSTEM_ROOT2.'/check.php';
-		echo '<input type="button" onclick="location = \'install.php?step=1\'" class="btn btn-success" value="下一步 >>">';
+		echo '<h2>阅读许可协议</h2><br/>';
+		echo '<iframe src="../license.html" style="width:100%;height:450px"></iframe>';
+		echo '<br/><br/><input type="button" onclick="location = \'install.php?step=1\'" class="btn btn-default" value="我接受">&nbsp;&nbsp;&nbsp;';
+		echo '<input type="button" onclick=";alert(\'请关闭本窗口，并立即卸载本程序\');self.close();console.log(\'滚蛋吧你\');" class="btn btn-default" value="我拒绝">';
 	} else {
 		switch (strip_tags($_GET['step'])) {
 			case '100':
-				echo '<h2>(BAE/SAE/JAE) 手动修改配置</h2><br/>';
+				echo '<h2>手动修改配置</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
     <span class="sr-only">25%</span>
@@ -79,22 +74,34 @@ define(\'DB_NAME\',\'tiebacloud\');
 define(\'DB_PREFIX\',\'tc_\');
 </pre></div>';
 				echo '<b>参考文档：</b>BAE | SAE | JAE';
-				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=2&bae\'" class="btn btn-success" value="下一步 >>">';
+				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=3&bae\'" class="btn btn-success" value="下一步 >>">';
 				break;
 
 			case '1':
+				echo '<h2>准备安装: 功能检查</h2><br/>';
+				echo '<div class="progress progress-striped">
+			  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
+			    <span class="sr-only">10%</span>
+			  </div>
+			</div>';
+		define('DO_NOT_LOAD_UI', TRUE);
+		include SYSTEM_ROOT2.'/check.php';
+		echo '<input type="button" onclick="location = \'install.php?step=2\'" class="btn btn-success" value="下一步 >>">';
+				break;
+
+			case '2':
 				echo '<h2>准备安装: 设置运行环境</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
     <span class="sr-only">20%</span>
   </div>
 </div>';
-				echo '<h4>你是在 BAE/SAE/JAE 上使用本程序吗？</h4><br/>';
-				echo '<li><a href="install.php?step=2">不，我不是</a></li><br/>';
+				echo '<h4>你是在应用引擎或者不可写的主机上使用本程序吗？</h4><br/>';
+				echo '<li><a href="install.php?step=3">不，我不是</a></li><br/>';
 				echo '<li><a href="install.php?step=100">是的，我是</a></li>';
 				break;
 
-			case '2':
+			case '3':
 				echo '<h2>设置所需信息</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
@@ -102,7 +109,7 @@ define(\'DB_PREFIX\',\'tc_\');
   </div>
 </div>';
 				echo '<h4>数据库信息</h4><br/>';
-				echo '<form action="install.php?step=3" method="post">';
+				echo '<form action="install.php?step=4" method="post">';
 				if (isset($_GET['isbae']) || isset($_GET['bae'])) {
 					echo '<input type="hidden" name="isbae" value="1">';
 				}
@@ -122,7 +129,7 @@ define(\'DB_PREFIX\',\'tc_\');
 				echo '<br/><br/><input type="submit" class="btn btn-success" value="下一步 >>"></form>';
 				break;
 
-			case '3':
+			case '4':
 				$errorhappen = '';
 				if ($_SERVER['HTTPS'] == 'on') {
 					$http = 'https://';
@@ -180,18 +187,18 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
   </div>
 </div>';
 					echo $errorhappen;
-					echo '完成上述操作后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=4\'" class="btn btn-success" value="下一步 >>">';
+					echo '完成上述操作后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=5\'" class="btn btn-success" value="下一步 >>">';
 				} else {
 					echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
     <span class="sr-only">60%</span>
   </div>
 </div>';
-					echo '<meta http-equiv="refresh" content="0;url=install.php?step=4"><h2>请稍候</h2><br/>正在完成安装...';
+					echo '<meta http-equiv="refresh" content="0;url=install.php?step=5"><h2>请稍候</h2><br/>正在完成安装...';
 				}
 				break;
 
-			case '4':
+			case '5':
 				echo '<h2>安装完成</h2><br/>';
 				echo '<div class="progress progress-striped">
   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
