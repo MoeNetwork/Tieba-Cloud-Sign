@@ -49,7 +49,8 @@ Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 #####3.只要涉及收费就禁止
 总之：禁止贩售程序，禁止去版权，禁止要求用户付费      
 可以：摆放一个捐赠链接（必须是用户自愿，不得强制要求捐赠），挂广告
-
+##许可协议
+请访问该地址阅读：http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/dev/license.html
 #####不要尝试去违反协议或用于盈利
 
 #其他
