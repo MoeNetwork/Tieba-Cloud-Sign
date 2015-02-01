@@ -70,6 +70,22 @@ function textMiddle($text, $left, $right) {
 }
 
 /**
+ * 获取一个bduss对应的百度用户名
+ *
+ * @param bduss
+ * 返回百度用户名，失败返回空
+ */
+function getBaiduId($bduss){
+	global $m;
+	$header[] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8';
+	$header[] = 'Cookie: BDUSS='.$bduss;
+	$c = new wcurl('http://wapp.baidu.com/',$header);
+	$data = $c->get();
+	$c->close();
+	return urldecode(textMiddle($data,'i?un=','">'));
+}
+
+/**
  * 获取Gravatar头像（或贴吧头像）
  * http://en.gravatar.com/site/implement/images/
  * @param $email
