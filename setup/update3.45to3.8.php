@@ -53,6 +53,7 @@ DELAY_KEY_WRITE=0
 		'freq'    => '0'
 	));
 	$m->query("ALTER TABLE `".DB_PREFIX."baiduid` ADD COLUMN `name`  varchar(40) NULL AFTER `bduss`;");
+	unlink(__FILE__);
 	msg('您的云签到已成功升级到 V3.8 版本，请立即删除 /setup/update3.45to3.8.php，谢谢');
 } else {
 	msg('您需要先登录旧版本的云签到，才能继续升级');
