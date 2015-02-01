@@ -36,18 +36,6 @@ if (!empty($i['tabpart'])) {
 		$i['table'][] = $value;
 	}
 }
-//所有插件列表
-$i['plugins'] = array('all' => array() , 'actived' => array() , 'info' => array());
-$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins`");
-$plugin_active_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` WHERE `status` = '1'");
-while ($plugin_all_var = $m->fetch_array($plugin_all_query)) {
-	$i['plugins']['all'][] = $plugin_all_var['name']; 
-	$i['plugins']['info'][$plugin_all_var['name']] = $plugin_all_var; 
-	$i['plugins']['info'][$plugin_all_var['name']]['options'] = empty($plugin_all_var['options']) ? array() : unserialize($plugin_all_var['options']);
-}
-while ($plugin_active_var = $m->fetch_array($plugin_active_query)) {
-	$i['plugins']['actived'][] = $plugin_active_var['name'];
-}
 
 //当前页面/模式, $i['mode'][0] 一般表示页面
 if (!empty($_REQUEST['mod'])) {
@@ -68,6 +56,20 @@ if(SYSTEM_VER != $i['opt']['core_version'] && !defined('SYSTEM_NO_CHECK_VER')) {
 	msg('严重错误：数据库中的云签到版本与文件版本不符，是否已运行升级脚本？<br/><br/>' . $updatefile);
 }
 
+if (!defined('SYSTEM_NO_PLUGIN')) {
+	//所有插件列表
+	$i['plugins'] = array('all' => array() , 'actived' => array() , 'info' => array());
+	$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins`");
+	$plugin_active_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` WHERE `status` = '1'");
+	while ($plugin_all_var = $m->fetch_array($plugin_all_query)) {
+		$i['plugins']['all'][] = $plugin_all_var['name']; 
+		$i['plugins']['info'][$plugin_all_var['name']] = $plugin_all_var; 
+		$i['plugins']['info'][$plugin_all_var['name']]['options'] = empty($plugin_all_var['options']) ? array() : unserialize($plugin_all_var['options']);
+	}
+	while ($plugin_active_var = $m->fetch_array($plugin_active_query)) {
+		$i['plugins']['actived'][] = $plugin_active_var['name'];
+	}
+}
 //autoload
 function class_autoload($c) {
 	$c = strtolower($c);

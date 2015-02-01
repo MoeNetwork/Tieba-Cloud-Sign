@@ -2,6 +2,7 @@
 define('SYSTEM_NO_ERROR', true);
 define('SYSTEM_NO_CHECK_VER', true);
 define('SYSTEM_ONLY_CHECK_LOGIN', true);
+define('SYSTEM_NO_PLUGIN', true);
 require '../init.php';
 global $m;
 error_reporting(0);
