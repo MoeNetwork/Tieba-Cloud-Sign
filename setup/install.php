@@ -136,9 +136,15 @@ define(\'DB_PREFIX\',\'tc_\');
 				} else {
 					$http = 'http://';
 				}
+				if (isset($_POST['isbae'])) {
+					$isapp = '1';
+				} else {
+					$isapp = '0';
+				}
 				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
 				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
 				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
+				$sql  = str_ireplace('{VAR-ISAPP}', $isapp, $sql);
 				$sql  = str_ireplace('{VAR-SYSTEM-URL}', $http . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				if($_POST['from_config'] == 1) {
 					require SYSTEM_ROOT2.'/../config.php';
