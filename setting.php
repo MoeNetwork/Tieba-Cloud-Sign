@@ -388,11 +388,14 @@ switch (SYSTEM_PAGE) {
 				$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号'); 
 			}
-			// 去除双引号和bduss
-			$_GET['bduss'] = str_replace('"', '', $_GET['bduss']);
-			$_GET['bduss'] = str_replace('BDUSS=', '', $_GET['bduss']);
-			$_GET['bduss'] = str_replace('bduss=', '', $_GET['bduss']);
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`) VALUES  (".UID.", '{$_GET['bduss']}' )");
+			//防止用户复制粘贴bduss不慎混入奇♂怪的东西，加个过滤（过滤大小写的bduss=以及双引号）
+			$bduss = $_GET['bduss'];
+			$bduss = str_replace('"', '', $bduss);
+			$bduss = str_replace('BDUSS=', '', $bduss);
+			$bduss = str_replace('bduss=', '', $bduss);
+			$bdid = getBaiduId($bduss);//获取百度用户名
+			if($bdid === ''){ msg('无法获取到用户名，绑定失败'); }
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`bdid`) VALUES  (".UID.", '{$bduss}' , '{$bdid}')");
 		}
 		elseif (isset($_GET['del'])) {
 			$del = (int) $_GET['del'];
