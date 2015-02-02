@@ -393,7 +393,7 @@ switch (SYSTEM_PAGE) {
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = sqladds($bduss);
 			if (option::get('baidu_name') == '1') {
-				$baidu_name = sqladds(getBaiduId($_GET['bduss']));
+				$baidu_name = sqladds(getBaiduId($bduss));
 			} else {
 				$baidu_name = '';
 			}
