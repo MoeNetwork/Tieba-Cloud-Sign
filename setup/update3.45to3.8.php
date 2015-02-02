@@ -38,7 +38,7 @@ DELAY_KEY_WRITE=0
 		} else {
 			$set = '';
 		}
-		$m->query("INSERT INGORE INTO `plugins` (`name`,`status`,`options`) VALUES ('{$plug}','1','{$set}');");
+		$m->query("INSERT IGNORE INTO `plugins` (`name`,`status`,`options`) VALUES ('{$plug}','1','{$set}');");
 	}
 	$m->query("ALTER TABLE `".DB_PREFIX."cron` ADD COLUMN `desc` text NULL AFTER `no`;");
 	$m->query("ALTER TABLE `".DB_PREFIX."cron` DROP COLUMN `status`;",true);
