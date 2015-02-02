@@ -16,7 +16,7 @@ doAction('index_3');
 	if (ROLE == 'admin') {
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		if (time() - strtotime(option::get('cron_last_do_time')) > 86400) {
-			echo '<br/><br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>警告：</b></font>计划任务今天尚未运行，是否已设置 <b>do.php</b> 到您的主机的计划任务？</font>';
+			echo '<br/><br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>警告：</b></font>计划任务今天尚未运行，是否已设置 <b>do.php</b> 到您的主机的计划任务？';
 		}
 		echo '<br/><br/><b>关注贴吧配额限制：</b>无限制(管理员)';
 	}
