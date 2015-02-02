@@ -394,6 +394,9 @@ switch (SYSTEM_PAGE) {
 			$bduss = sqladds($bduss);
 			if (option::get('baidu_name') == '1') {
 				$baidu_name = sqladds(getBaiduId($bduss));
+				if (empty($baidu_name)) {
+					msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
+				}
 			} else {
 				$baidu_name = '';
 			}
