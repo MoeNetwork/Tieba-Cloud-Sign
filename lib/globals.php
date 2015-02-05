@@ -199,4 +199,5 @@ elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	$i['user']['role'] = 'visitor';
 	ReDirect('index.php?mod=login');
 }
+doAction('globals_3');
 ?>
