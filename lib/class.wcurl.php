@@ -54,12 +54,16 @@ class wcurl {
 
 	/**
 	 * POST 提交数据并获取返回获取的内容
-	 * @param $data array 提交的数据
+	 * @param $data array|string 提交的数据
 	 * @return 获取的内容
 	 */
-	public function post(array $data = array()) {
+	public function post($data) {
 		$this->set(CURLOPT_POST, 1);
-		$this->set(CURLOPT_POSTFIELDS, http_build_query($data));
+		if (is_array($data)) {
+			$this->set(CURLOPT_POSTFIELDS, http_build_query($data));
+		} else {
+			$this->set(CURLOPT_POSTFIELDS, $data);
+		}
 		return $this->exec();
 	}
 
