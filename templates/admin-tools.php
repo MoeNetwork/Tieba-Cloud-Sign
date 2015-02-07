@@ -7,7 +7,7 @@ if (isset($_GET['ok'])) {
 doAction('admin_tools_1');
 ?>
 <div id="comsys"></div>
-
+<!--Part 1 Primary-->
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=optim'" class="btn btn-primary" value="优化所有的数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;可清除所有数据表的多余数据
 
 <br/><br/><input type="button" data-toggle="modal" data-target="#RunSql" class="btn btn-primary" value="运行 SQL 语句" style="width:170px">
@@ -22,7 +22,10 @@ doAction('admin_tools_1');
 <!--
 <br/><br/><input type="button" onclick="if(confirm('将花费较长时间，请确认此操作')) location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=updatefid'" class="btn btn-primary" value="更新未记录的 FID" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;签到时会自动将没有被缓存的 FID 缓存下来，您也可以手动更新 FID 提高签到效率
 -->
+<?php doAction('admin_tools_3'); ?>
+
 <br/><br/>
+<!--Part 2 Warning-->
 <br/><br/><input type="button" data-toggle="modal" data-target="#TruncateTableLabel" class="btn btn-warning" value="清空指定数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;请慎用此功能，一般用于删除无用的分表
 
 <br/><br/><input type="button" data-toggle="modal" data-target="#RemoveTable" class="btn btn-warning" value="删除指定数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;请慎用此功能，一般用于删除无用的分表
