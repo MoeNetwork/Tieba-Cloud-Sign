@@ -159,7 +159,6 @@ elseif (SYSTEM_PAGE == 'login') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	//loadplugins();
 	template('login');
 	doAction('login_page_4');
 	die;
@@ -170,7 +169,6 @@ elseif (SYSTEM_PAGE == 'reg') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	//loadplugins();
 	template('reg');
 	doAction('reg_page_4');
 	die;
@@ -178,7 +176,6 @@ elseif (SYSTEM_PAGE == 'reg') {
 elseif (isset($_GET['pub_plugin'])) {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	//loadplugins();
 	$plug = strip_tags($_GET['pub_plugin']);
 	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php')) {
@@ -203,4 +200,3 @@ elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	$i['user']['role'] = 'visitor';
 	ReDirect('index.php?mod=login');
 }
-?>

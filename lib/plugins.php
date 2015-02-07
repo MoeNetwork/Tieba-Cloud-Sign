@@ -1,7 +1,6 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 global $i;
-//加载所有激活的插件
-loadplugins();
+
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
 	$plug=strip_tags($_GET['plugin']);
