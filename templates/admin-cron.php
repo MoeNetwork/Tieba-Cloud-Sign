@@ -91,7 +91,7 @@ if (isset($_GET['ok'])) {
 
 $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` ");
 ?>
-<div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">添加新计划任务</a> | <a href="do.php">运行全部计划任务</a></div>
+<div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:cron&add">添加新计划任务</a> | <a href="do.php?pw=<?php echo option::get('cron_pw') ?>">运行全部计划任务</a></div>
 <form action="setting.php?mod=admin:cron&xorder" method="post">
 <div class="table-responsive">
 <table class="table table-hover">
