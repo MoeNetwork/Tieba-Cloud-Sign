@@ -58,11 +58,10 @@ Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 Pull Request，提交Issue请到 Git@OSChina 代码库，在其他代码库提交可能不会被处理      
 如需加入开发组请联系 @无名智者
 
-#其他
+##其他
 StusGame GROUP:http://www.stus8.com   
-博客:http://zhizhe8.net   
 插件商城：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13   
 
-#邮箱联系方式
-无名智者：kenvix@vip.qq.com        
+##邮箱联系方式
+无名智者：kenvix@vip.qq.com  http://zhizhe8.net      
 mokeyjay：longting@longtings.com
