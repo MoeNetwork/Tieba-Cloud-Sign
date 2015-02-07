@@ -113,7 +113,7 @@ switch (SYSTEM_PAGE) {
 				echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
 			}
 		} else {
-			echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
+			echo '<div class="alert alert-info">未检测到新版的 '.SYSTEM_FN.' 信息，这可能是由于更新服务器被关闭，请前往<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign">OSCGit</a>自行更新</div>';
 		}
 		break;
 
