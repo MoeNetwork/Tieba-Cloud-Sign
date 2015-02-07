@@ -56,7 +56,7 @@ foreach($x as $key=>$val) {
 
 doAction('admin_plugins');
 ?>
-<div class="alert alert-info" id="tb_num">当前有 <?php echo sizeof(unserialize(option::get('actived_plugins'))); ?> 个已激活的插件，总共有 <?php echo $stat ?> 个插件
+<div class="alert alert-info" id="tb_num">当前有 <?php echo count($i['plugins']['all']); ?> 个已安装的插件，<?php echo count($i['plugins']['actived']) ?> 个已激活的插件，总共有 <?php echo $stat ?> 个插件
 <br/>插件手工安装方法：直接解包插件并上传到 /plugins/ 即可
 <?php if (option::get('isapp')) {
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';

@@ -11,7 +11,6 @@ class SMTP {
     public $host_name;
     public $log_file;
     public $part_boundary = '--PART-BOUNDARY-ID-WRG11-Y4RD1-5AS1D-RE4D1-AF1EG---';
-    public $spart_boundary = '--PART-BOUNDARY-ID-RE51F-EW1GF-ZXC12-QW1FG-TRH15---';
     public $relay_host;
     public $debug;
     public $auth;
