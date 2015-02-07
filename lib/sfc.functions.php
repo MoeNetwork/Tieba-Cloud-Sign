@@ -355,12 +355,52 @@ function dataBak($table) {
 	return $sql;
 }
 
+/**
+ * 执行一个网络请求而不等待返回结果
+ * @param string $url URL
+ * @param string $post post数据包，留空为get
+ * @param string $cookie cookies
+ * @return bool fsockopen是否成功
+ */
+function sendRequest($url , $post = '' , $cookie = '') {
+	if (function_exists('fsockopen')) {
+		$matches = parse_url($url);
+        $host = $matches['host'];
+        if (substr($url, 0, 8) == 'https://') {
+        	$host = 'ssl://' . $host;
+        }
+        $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
+        $port = !empty($matches['port']) ? $matches['port'] : 80;
+        if(!empty($post)) {
+                $out = "POST $path HTTP/1.1\r\n";
+                $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
+                $out .= "Host: $host\r\n";
+                $out .= "Connection: Close\r\n\r\n";
+                $out .= $post;
+        } else {
+                $out = "GET $path HTTP/1.1\r\n";
+                $out .= "Host: $host\r\n";
+                $out .= "Connection: Close\r\n\r\n";
+        }
+        $fp = fsockopen($host, $port);
+		if (!$fp) {
+			return false;
+		} else {
+			//stream_set_blocking($fp , 0);
+			stream_set_timeout($fp , 0);
+			fwrite($fp, $out);
+			fclose($fp);
+			return true;
+		}
+	}
+	die;
+}
 
 /**
  * fosckopen 改进版
- */
+ */ 
 
-function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = false) {
 	if (function_exists('fsockopen')) {
         $return = '';
         $matches = parse_url($url);
@@ -391,19 +431,19 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
                 $out .= "Connection: Close\r\n";
                 $out .= "Cookie: $cookie\r\n\r\n";
         }
-        $fp = @fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
+        $fp = fsockopen(($ip ? $ip : $host), $port, $errno, $errstr, $timeout);
         if(!$fp) {
-                return '';//note $errstr : $errno \r\n
+                return false;//note $errstr : $errno \r\n
         } else {
                 stream_set_blocking($fp, $block);
                 stream_set_timeout($fp, $timeout);
-                @fwrite($fp, $out);
+                fwrite($fp, $out);
                 while (!feof($fp)) {
                         $status = stream_get_meta_data($fp);
                         if(!empty($status['timed_out'])) {
-                                return '';
+                                return false;
                         }
-                        if(($header = @fgets($fp)) && ($header == "\r\n" ||  $header == "\n")) {
+                        if(($header = fgets($fp)) && ($header == "\r\n" ||  $header == "\n")) {
                                 break;
                         }
                 }
@@ -411,7 +451,7 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
                 while(!feof($fp) && !$stop) {
                         $status = stream_get_meta_data($fp);
                         if(!empty($status['timed_out'])) {
-                                return '';
+                                return false;
                         }
                         $data = fread($fp, ($limit == 0 || $limit > 8192 ? 8192 : $limit));
                         $return .= $data;
@@ -420,7 +460,7 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
                                 $stop = $limit <= 0;
                         }
                 }
-                @fclose($fp);
+                fclose($fp);
                 return $return;
         }
     }
@@ -637,17 +677,198 @@ function easy_match_all($exp, $str, $pat = 0, $flags = PREG_PATTERN_ORDER) {
 }
 
 /**
- * 已弃用，下列函数仅为了兼容旧插件
+ * 根据文件名称获取扩展名
+ * @param string $name 文件名
+ * @return string 扩展名（不带.）
  */
+function get_extname($name) {
+	return pathinfo($name, PATHINFO_EXTENSION);
+}
 
-function getCookie($pid) { misc::getCookie($pid); }
-
-function DoSign_Mobile($uid,$kw,$id,$pid,$fid) { misc::DoSign_Mobile($uid,$kw,$id,$pid,$fid); }
-
-function DoSign_Default($uid,$kw,$id,$pid,$fid) { misc::DoSign_Default($uid,$kw,$id,$pid,$fid); }
-
-function DoSign_Client($uid,$kw,$id,$pid,$fid){ misc::DoSign_Client($uid,$kw,$id,$pid,$fid); }
-
-function DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid) { misc::DoSign_All($uid,$kw,$id,$table,$sign_mode,$pid,$fid); }
-
-function DoSign($table,$sign_mode) { misc::DoSign($table,$sign_mode); }
+/**
+ * 根据扩展名获取文件的MIME
+ * @param string $ext 扩展名
+ * @return string MIME
+ */
+function get_mime($ext) {
+	static $mime_types = array(
+        'apk'     => 'application/vnd.android.package-archive',
+        '3gp'     => 'video/3gpp', 
+        'ai'      => 'application/postscript', 
+        'aif'     => 'audio/x-aiff', 
+        'aifc'    => 'audio/x-aiff', 
+        'aiff'    => 'audio/x-aiff', 
+        'asc'     => 'text/plain', 
+        'atom'    => 'application/atom+xml', 
+        'au'      => 'audio/basic', 
+        'avi'     => 'video/x-msvideo', 
+        'bcpio'   => 'application/x-bcpio', 
+        'bin'     => 'application/octet-stream', 
+        'bmp'     => 'image/bmp', 
+        'cdf'     => 'application/x-netcdf', 
+        'cgm'     => 'image/cgm', 
+        'class'   => 'application/octet-stream', 
+        'cpio'    => 'application/x-cpio', 
+        'cpt'     => 'application/mac-compactpro', 
+        'csh'     => 'application/x-csh', 
+        'css'     => 'text/css', 
+        'dcr'     => 'application/x-director', 
+        'dif'     => 'video/x-dv', 
+        'dir'     => 'application/x-director', 
+        'djv'     => 'image/vnd.djvu', 
+        'djvu'    => 'image/vnd.djvu', 
+        'dll'     => 'application/octet-stream', 
+        'dmg'     => 'application/octet-stream', 
+        'dms'     => 'application/octet-stream', 
+        'doc'     => 'application/msword', 
+        'dtd'     => 'application/xml-dtd', 
+        'dv'      => 'video/x-dv', 
+        'dvi'     => 'application/x-dvi', 
+        'dxr'     => 'application/x-director', 
+        'eps'     => 'application/postscript', 
+        'etx'     => 'text/x-setext', 
+        'exe'     => 'application/octet-stream', 
+        'ez'      => 'application/andrew-inset', 
+        'flv'     => 'video/x-flv', 
+        'gif'     => 'image/gif', 
+        'gram'    => 'application/srgs', 
+        'grxml'   => 'application/srgs+xml', 
+        'gtar'    => 'application/x-gtar', 
+        'gz'      => 'application/x-gzip', 
+        'hdf'     => 'application/x-hdf', 
+        'hqx'     => 'application/mac-binhex40', 
+        'htm'     => 'text/html', 
+        'html'    => 'text/html', 
+        'ice'     => 'x-conference/x-cooltalk', 
+        'ico'     => 'image/x-icon', 
+        'ics'     => 'text/calendar', 
+        'ief'     => 'image/ief', 
+        'ifb'     => 'text/calendar', 
+        'iges'    => 'model/iges', 
+        'igs'     => 'model/iges', 
+        'jnlp'    => 'application/x-java-jnlp-file', 
+        'jp2'     => 'image/jp2', 
+        'jpe'     => 'image/jpeg', 
+        'jpeg'    => 'image/jpeg', 
+        'jpg'     => 'image/jpeg', 
+        'js'      => 'application/x-javascript', 
+        'kar'     => 'audio/midi', 
+        'latex'   => 'application/x-latex', 
+        'lha'     => 'application/octet-stream', 
+        'lzh'     => 'application/octet-stream', 
+        'm3u'     => 'audio/x-mpegurl', 
+        'm4a'     => 'audio/mp4a-latm', 
+        'm4p'     => 'audio/mp4a-latm', 
+        'm4u'     => 'video/vnd.mpegurl', 
+        'm4v'     => 'video/x-m4v', 
+        'mac'     => 'image/x-macpaint', 
+        'man'     => 'application/x-troff-man', 
+        'mathml'  => 'application/mathml+xml', 
+        'me'      => 'application/x-troff-me', 
+        'mesh'    => 'model/mesh', 
+        'mid'     => 'audio/midi', 
+        'midi'    => 'audio/midi', 
+        'mif'     => 'application/vnd.mif', 
+        'mov'     => 'video/quicktime', 
+        'movie'   => 'video/x-sgi-movie', 
+        'mp2'     => 'audio/mpeg', 
+        'mp3'     => 'audio/mpeg', 
+        'mp4'     => 'video/mp4', 
+        'mpe'     => 'video/mpeg', 
+        'mpeg'    => 'video/mpeg', 
+        'mpg'     => 'video/mpeg', 
+        'mpga'    => 'audio/mpeg', 
+        'ms'      => 'application/x-troff-ms', 
+        'msh'     => 'model/mesh', 
+        'mxu'     => 'video/vnd.mpegurl', 
+        'nc'      => 'application/x-netcdf', 
+        'oda'     => 'application/oda', 
+        'ogg'     => 'application/ogg', 
+        'ogv'     => 'video/ogv', 
+        'pbm'     => 'image/x-portable-bitmap', 
+        'pct'     => 'image/pict', 
+        'pdb'     => 'chemical/x-pdb', 
+        'pdf'     => 'application/pdf', 
+        'pgm'     => 'image/x-portable-graymap', 
+        'pgn'     => 'application/x-chess-pgn', 
+        'pic'     => 'image/pict', 
+        'pict'    => 'image/pict', 
+        'png'     => 'image/png', 
+        'pnm'     => 'image/x-portable-anymap', 
+        'pnt'     => 'image/x-macpaint', 
+        'pntg'    => 'image/x-macpaint', 
+        'ppm'     => 'image/x-portable-pixmap', 
+        'ppt'     => 'application/vnd.ms-powerpoint', 
+        'ps'      => 'application/postscript', 
+        'qt'      => 'video/quicktime', 
+        'qti'     => 'image/x-quicktime', 
+        'qtif'    => 'image/x-quicktime', 
+        'ra'      => 'audio/x-pn-realaudio', 
+        'ram'     => 'audio/x-pn-realaudio', 
+        'ras'     => 'image/x-cmu-raster', 
+        'rdf'     => 'application/rdf+xml', 
+        'rgb'     => 'image/x-rgb', 
+        'rm'      => 'application/vnd.rn-realmedia', 
+        'roff'    => 'application/x-troff', 
+        'rtf'     => 'text/rtf', 
+        'rtx'     => 'text/richtext', 
+        'sgm'     => 'text/sgml', 
+        'sgml'    => 'text/sgml', 
+        'sh'      => 'application/x-sh', 
+        'shar'    => 'application/x-shar', 
+        'silo'    => 'model/mesh', 
+        'sit'     => 'application/x-stuffit', 
+        'skd'     => 'application/x-koan', 
+        'skm'     => 'application/x-koan', 
+        'skp'     => 'application/x-koan', 
+        'skt'     => 'application/x-koan', 
+        'smi'     => 'application/smil', 
+        'smil'    => 'application/smil', 
+        'snd'     => 'audio/basic', 
+        'so'      => 'application/octet-stream', 
+        'spl'     => 'application/x-futuresplash', 
+        'src'     => 'application/x-wais-source', 
+        'sv4cpio' => 'application/x-sv4cpio', 
+        'sv4crc'  => 'application/x-sv4crc', 
+        'svg'     => 'image/svg+xml', 
+        'swf'     => 'application/x-shockwave-flash', 
+        't'       => 'application/x-troff', 
+        'tar'     => 'application/x-tar', 
+        'tcl'     => 'application/x-tcl', 
+        'tex'     => 'application/x-tex', 
+        'texi'    => 'application/x-texinfo', 
+        'texinfo' => 'application/x-texinfo', 
+        'tif'     => 'image/tiff', 
+        'tiff'    => 'image/tiff', 
+        'tr'      => 'application/x-troff', 
+        'tsv'     => 'text/tab-separated-values', 
+        'txt'     => 'text/plain', 
+        'ustar'   => 'application/x-ustar', 
+        'vcd'     => 'application/x-cdlink', 
+        'vrml'    => 'model/vrml', 
+        'vxml'    => 'application/voicexml+xml', 
+        'wav'     => 'audio/x-wav', 
+        'wbmp'    => 'image/vnd.wap.wbmp', 
+        'wbxml'   => 'application/vnd.wap.wbxml', 
+        'webm'    => 'video/webm', 
+        'wml'     => 'text/vnd.wap.wml', 
+        'wmlc'    => 'application/vnd.wap.wmlc', 
+        'wmls'    => 'text/vnd.wap.wmlscript', 
+        'wmlsc'   => 'application/vnd.wap.wmlscriptc', 
+        'wmv'     => 'video/x-ms-wmv', 
+        'wrl'     => 'model/vrml', 
+        'xbm'     => 'image/x-xbitmap', 
+        'xht'     => 'application/xhtml+xml', 
+        'xhtml'   => 'application/xhtml+xml', 
+        'xls'     => 'application/vnd.ms-excel', 
+        'xml'     => 'application/xml', 
+        'xpm'     => 'image/x-xpixmap', 
+        'xsl'     => 'application/xml', 
+        'xslt'    => 'application/xslt+xml', 
+        'xul'     => 'application/vnd.mozilla.xul+xml', 
+        'xwd'     => 'image/x-xwindowdump', 
+        'xyz'     => 'chemical/x-xyz', 
+        'zip'     => 'application/zip' 
+    );
+    return isset($mime_types[$ext]) ? $mime_types[$ext] : 'application/octet-stream';
+}

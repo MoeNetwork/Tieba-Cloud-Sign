@@ -10,6 +10,8 @@ class SMTP {
     public $time_out;
     public $host_name;
     public $log_file;
+    public $part_boundary = '--PART-BOUNDARY-ID-WRG11-Y4RD1-5AS1D-RE4D1-AF1EG---';
+    public $spart_boundary = '--PART-BOUNDARY-ID-RE51F-EW1GF-ZXC12-QW1FG-TRH15---';
     public $relay_host;
     public $debug;
     public $auth;
@@ -18,6 +20,7 @@ class SMTP {
     public $sock;
     public $log;
     public $error;
+    public $att = array(); //附件内容
     public $ssl = false;
 
     public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass , $ssl = false) {
@@ -36,7 +39,16 @@ class SMTP {
         $this ->log_file = "";
     }
 
-    public function send($to, $from, $subject = "", $body = "", $reply = '', $mailtype = 'HTML', $cc = "", $bcc = "", $additional_headers = "") {
+    /**
+     * 添加一个附件
+     * @param string $name 文件名
+     * @param string $value 文件内容
+     */ 
+    public function addatt($name , $value = '') {
+        $this->att[$name] = $value;
+    }
+
+    public function send($to, $from, $subject = "", $body = "", $reply = '', $cc = "", $bcc = "", $additional_headers = "") {
         if (empty($reply)) {
             $reply = $from;
         }
@@ -44,7 +56,7 @@ class SMTP {
         $mail_from = $this ->get_address($this ->strip_comment($from));
         $body = mb_ereg_replace("(^|(\r\n))(\\.)", "\\1.\\3", $body);
         $header .= "MIME-Version:1.0\r\n";
-        if ($mailtype=="HTML") $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        $header .= 'Content-Type: multipart/mixed; boundary="'.$this->part_boundary.'"' . "\r\n";
         $header .= "To: " . $to . "\r\n";
         if ($cc!="") $header .= "Cc: " . $cc . "\r\n";
         $header .= "From: " . $from . "\r\n";
@@ -52,7 +64,7 @@ class SMTP {
         $header .= $additional_headers;
         $header .= "Date: " . date("r") . "\r\n";
         $header .= 'Reply-To: ' . $reply . "\r\n";
-        $header .= "X-Mailer:By (PHP/" . phpversion() . ")\r\n";
+        $header .= "Content-Transfer-Encoding: base64\r\n";
         list($msec, $sec) = explode(" ", microtime());
         $header .= "Message-ID: <" . date("YmdHis", $sec) . "." . ($msec*1000000) . "." . $mail_from . ">\r\n";
         $TO = explode(",", $this ->strip_comment($to));
@@ -77,7 +89,7 @@ class SMTP {
         return $sent;
     }
 
-    public function smtp_send($helo, $from, $to, $header, $body = "") {
+    private function smtp_send($helo, $from, $to, $header, $body = "") {
         if (!$this ->smtp_putcmd("HELO", $helo)) return $this ->smtp_error("sending HELO command");
         if ($this ->auth) {
             if (!$this ->smtp_putcmd("AUTH LOGIN", base64_encode($this ->user))) return $this ->smtp_error("sending HELO command");
@@ -86,17 +98,20 @@ class SMTP {
         if (!$this ->smtp_putcmd("MAIL", "FROM:<" . $from . ">")) return $this ->smtp_error("sending MAIL FROM command");
         if (!$this ->smtp_putcmd("RCPT", "TO:<" . $to . ">")) return $this ->smtp_error("sending RCPT TO command");
         if (!$this ->smtp_putcmd("DATA")) return $this ->smtp_error("sending DATA command");
-        if (!$this ->smtp_message($header, $body)) return $this ->smtp_error("sending message");
+        if (!$this ->smtp_message($header)) return $this ->smtp_error("sending head message");
+        if (!$this ->smtp_sendbody($body)) return $this ->smtp_error("sending body message");
+        if (!$this ->smtp_sendatt()) return $this ->smtp_error("sending attachments message");
+        if (!$this ->smtp_sendend()) return $this ->smtp_error("sending end message");
         if (!$this ->smtp_eom()) return $this ->smtp_error("sending <CR><LF>.<CR><LF> [EOM]");
         if (!$this ->smtp_putcmd("QUIT")) return $this ->smtp_error("sending QUIT command");
         return true;
     }
 
-    public function smtp_sockopen($address) {
+    private function smtp_sockopen($address) {
         if ($this ->relay_host=="") return $this ->smtp_sockopen_mx($address); else return $this ->smtp_sockopen_relay();
     }
 
-    public function smtp_sockopen_relay() {
+    private function smtp_sockopen_relay() {
         $this ->log_write("Trying to " . $this ->relay_host . ":" . $this ->smtp_port . "\n");
         $this ->sock = @fsockopen($this ->relay_host, $this ->smtp_port, $errno, $errstr, $this ->time_out);
         if (!($this ->sock && $this ->smtp_ok())) {
@@ -108,7 +123,7 @@ class SMTP {
         return true;;
     }
 
-    public function smtp_sockopen_mx($address) {
+    private function smtp_sockopen_mx($address) {
         $domain = ereg_replace("^.+@([^@]+)$", "\\1", $address);
         if (!@getmxrr($domain, $MXHOSTS)) {
             $this ->log_write("Error: Cannot resolve MX \"" . $domain . "\"\n");
@@ -129,19 +144,43 @@ class SMTP {
         return false;
     }
 
-    public function smtp_message($header, $body) {
-        fputs($this ->sock, $header . "\r\n" . $body);
-        $this ->smtp_debug("> " . str_replace("\r\n", "\n" . "> ", $header . "\n> " . $body . "\n> "));
+    private function smtp_message($header) {
+        fputs($this ->sock, $header . "\r\n");
+        $this ->smtp_debug("> " . str_replace("\r\n", "\n" . "> ", $header . "\n>"));
         return true;
     }
 
-    public function smtp_eom() {
+    private function smtp_sendbody($body) {
+        $head  = "\r\n\r\n" . '--' .  $this->part_boundary;
+        $head .= "\r\n" . 'Content-Type: text/html; charset="utf-8"';
+        $head .= "\r\n" . 'Content-Transfer-Encoding: base64';
+        $head .= "\r\n\r\n" . base64_encode($body);
+        return fputs($this ->sock, $head . "\r\n");
+    }
+
+    private function smtp_sendatt() {
+        $head = '';
+        foreach ($this->att as $n => $v) {
+            $head .= "\r\n\r\n" . '--' .  $this->part_boundary;
+            $head .= "\r\n" . 'Content-Type: ' . get_mime(get_extname($n)) . '; charset="utf-8"; name="'.$n.'"';
+            $head .= "\r\n" . 'Content-Disposition: attachment; filename="'.$n.'"';
+            $head .= "\r\n" . 'Content-Transfer-Encoding: base64';
+            $head .= "\r\n\r\n" . base64_encode($v);
+        }
+        return fputs($this ->sock, $head . "\r\n");
+    }
+
+    private function smtp_sendend() {
+        return fputs($this ->sock, "\r\n\r\n" . '--' . $this->part_boundary . '--');
+    }
+
+    private function smtp_eom() {
         fputs($this ->sock, "\r\n.\r\n");
         $this ->smtp_debug(". [EOM]\n");
         return $this ->smtp_ok();
     }
 
-    public function smtp_ok() {
+    private function smtp_ok() {
         $response = str_replace("\r\n", "", fgets($this ->sock, 512));
         $this ->smtp_debug($response . "\n");
         if (!mb_ereg("^[23]", $response)) {
@@ -153,7 +192,7 @@ class SMTP {
         return true;
     }
 
-    public function smtp_putcmd($cmd, $arg = "") {
+    private function smtp_putcmd($cmd, $arg = "") {
         if ($arg!="") {
             if ($cmd=="") $cmd = $arg; else
                 $cmd = $cmd . " " . $arg;
@@ -164,17 +203,17 @@ class SMTP {
         return $this ->smtp_ok();
     }
 
-    public function smtp_error($string) {
+    private function smtp_error($string) {
         $this ->error .= "<br/>Error: Error occurred while " . $string . ".<br/>";
         return false;
     }
 
-    public function log_write($message) {
+    private function log_write($message) {
         $this->log .= '<br/>'.$message.'<br/>';
         return true;
     }
 
-    public function strip_comment($address) {
+    private function strip_comment($address) {
         $comment = "\\([^()]*\\)";
         while (mb_ereg($comment, $address)) {
             $address = mb_ereg_replace($comment, "", $address);
@@ -182,7 +221,7 @@ class SMTP {
         return $address;
     }
 
-    public function get_address($address) {
+    private function get_address($address) {
         $address = mb_ereg_replace("([ \t\r\n])+", "", $address);
         $address = mb_ereg_replace("^.*<(.+)>.*$", "\\1", $address);
         return $address;
@@ -190,49 +229,8 @@ class SMTP {
 
     public function smtp_debug($message) {
         if ($this ->debug) {
-            echo $message . "<br>";
+            return $message . "<br>";
         }
-    }
-
-    public function get_attach_type($image_tag) {
-        $filedata = array();
-        $img_file_con = fopen($image_tag, "r");
-        unset($image_data);
-        while ($tem_buffer = AddSlashes(fread($img_file_con, filesize($image_tag)))) $image_data .= $tem_buffer;
-        fclose($img_file_con);
-        $filedata['context'] = $image_data;
-        $filedata['filename'] = basename($image_tag);
-        $extension = substr($image_tag, strrpos($image_tag, "."), strlen($image_tag)-strrpos($image_tag, "."));
-        switch ($extension) {
-            case ".gif":
-                $filedata['type'] = "image/gif";
-                break;
-            case ".gz":
-                $filedata['type'] = "application/x-gzip";
-                break;
-            case ".htm":
-                $filedata['type'] = "text/html";
-                break;
-            case ".html":
-                $filedata['type'] = "text/html";
-                break;
-            case ".jpg":
-                $filedata['type'] = "image/jpeg";
-                break;
-            case ".tar":
-                $filedata['type'] = "application/x-tar";
-                break;
-            case ".txt":
-                $filedata['type'] = "text/plain";
-                break;
-            case ".zip":
-                $filedata['type'] = "application/zip";
-                break;
-            default:
-                $filedata['type'] = "application/octet-stream";
-                break;
-        }
-        return $filedata;
     }
 }
 

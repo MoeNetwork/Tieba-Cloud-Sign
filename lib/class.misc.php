@@ -8,12 +8,13 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 class misc {
 	/**
 	 * 快捷发送一封邮件
-	 * @param $to 收件人
-	 * @param $sub 邮件主题
-	 * @param $msg 邮件内容
+	 * @param string $to 收件人
+	 * @param string $sub 邮件主题
+	 * @param string $msg 邮件内容(HTML)
+	 * @param array $att 附件，每个键为文件名称，值为附件内容（可以为二进制文件），例如array('a.txt' => 'abcd' , 'b.png' => file_get_contents('x.png'))
 	 * @return 成功:true 失败：错误消息
 	 */
-	public static function mail($to, $sub = '无主题', $msg = '无内容') {
+	public static function mail($to, $sub = '无主题', $msg = '无内容', $att = array()) {
         if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')){
             $mail = new SaeMail();
             $options = Array(
@@ -48,6 +49,7 @@ class misc {
 					$SSL = false;
 				}
 				$mail = new SMTP($Host , $Port , $SMTPAuth , $Username , $Password , $SSL);
+				$mail->att = $att;
 				if($mail->send($to , $From , $sub , $msg)) {
 					return true;
 				} else {

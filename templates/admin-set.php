@@ -117,7 +117,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<div class="input-group">
 			  <span class="input-group-addon">邮件发送模式</span>
 			  <select name="mail_mode" class="form-control"  onchange="if(this.value == 'SMTP') { $('#smtp_set').show(); } else { $('#smtp_set').hide(); }">
-			  	<option value="MAIL" <?php if(option::get('mail_mode') == 'MAIL') { echo 'selected'; } ?>>PHP Mail 函数</option>
+			  	<option value="MAIL" <?php if(option::get('mail_mode') == 'MAIL') { echo 'selected'; } ?>>PHP Mail 函数 [ 不支持附件 ]</option>
 			  	<option value="SMTP" <?php if(option::get('mail_mode') == 'SMTP') { echo 'selected'; } ?>>SMTP [ 支持验证 ]</option>
 			  </select>
 			</div><br/>

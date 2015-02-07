@@ -491,7 +491,7 @@ switch (SYSTEM_PAGE) {
 
 	case 'testmail':
 		global $i;
-		$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL);
+		$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL , array('测试附件.txt' => '这是一个测试附件'));
 		if($x === true) {
 			Redirect('index.php?mod=admin:set&mailtestok');
 		} else {
