@@ -2,8 +2,9 @@
 /**
  * 全局用户控制
  */
+loadplugins();
 if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
-	$name = isset($_COOKIE['wmzz_tc_user']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_user'])) : '';
+    $name = isset($_COOKIE['wmzz_tc_user']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_user'])) : '';
 	$pw = isset($_COOKIE['wmzz_tc_pw']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_pw'])) : '';
 	$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE name = '{$name}' LIMIT 1");
 	if($m->num_rows($osq) == 0) {
@@ -60,6 +61,7 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 	}
 	doAction('globals_2');
 }
+doAction('globals_3');
 if (SYSTEM_PAGE == 'admin:login') {
 	if (defined('ROLE')) {
 		ReDirect('index.php');
@@ -150,13 +152,14 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	doAction('admin_reg_3');
 	ReDirect('index.php');
 }
+
 elseif (SYSTEM_PAGE == 'login') { 
 	if (defined('ROLE')) {
 		ReDirect('index.php');
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
+	//loadplugins();
 	template('login');
 	doAction('login_page_4');
 	die;
@@ -167,7 +170,7 @@ elseif (SYSTEM_PAGE == 'reg') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
+	//loadplugins();
 	template('reg');
 	doAction('reg_page_4');
 	die;
@@ -175,7 +178,7 @@ elseif (SYSTEM_PAGE == 'reg') {
 elseif (isset($_GET['pub_plugin'])) {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
+	//loadplugins();
 	$plug = strip_tags($_GET['pub_plugin']);
 	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php')) {
@@ -188,6 +191,7 @@ elseif (isset($_GET['pub_plugin'])) {
 	}
 	die;
 }
+
 elseif (SYSTEM_PAGE == 'admin:logout') {
 	doAction('logout');
 	setcookie("wmzz_tc_user",'', time() - 3600);
@@ -199,5 +203,4 @@ elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	$i['user']['role'] = 'visitor';
 	ReDirect('index.php?mod=login');
 }
-doAction('globals_3');
 ?>
