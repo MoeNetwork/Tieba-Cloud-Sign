@@ -191,7 +191,11 @@ class cron {
 			include_once SYSTEM_ROOT.'/'.$file;
 			if (function_exists('cron_'.$name)) {
 				return call_user_func('cron_'.$name);
+			} else {
+				self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，处理此任务的函数不存在'));
 			}
+		}  else {
+			self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，任务文件不存在'));
 		}
 	}
 
@@ -200,12 +204,15 @@ class cron {
 	 * @param $name 计划任务名称
 	 */
 	public static function arun($name) {
-		$url = SYSTEM_URL . 'ajax.php?mod=runcron&cron=' . $name;
+		$url = SYSTEM_URL . 'do.php?mod=runcron&cron=' . $name;
 		$cpw = option::get('cron_pw');
 		if (!empty($cpw)) {
 			$url .= '&pw=' . md5($cpw);
 		}
-		XFSockOpen($url ,1,'','',false,'',0);
+
+		if(!sendRequest($url)) {
+			self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，在调用 fsockopen() 时失败，请检查主机是否支持此函数'));
+		}
 	}
 
 	/**

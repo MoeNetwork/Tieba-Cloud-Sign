@@ -386,14 +386,24 @@ function sendRequest($url , $post = '' , $cookie = '') {
 		if (!$fp) {
 			return false;
 		} else {
-			//stream_set_blocking($fp , 0);
+			stream_set_blocking($fp , 0);
 			stream_set_timeout($fp , 0);
 			fwrite($fp, $out);
 			fclose($fp);
 			return true;
 		}
+	} else {
+		$x = new wcurl($url);
+		$x->set(CURLOPT_CONNECTTIMEOUT , 1);
+		$x->set(CURLOPT_TIMEOUT , 1);
+		$x->addcookie($cookie);
+		if (empty($post)) {
+			$x->post($post);
+		} else {
+			$x->exec();
+		}
+		return true;
 	}
-	die;
 }
 
 /**

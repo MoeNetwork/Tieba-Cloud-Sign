@@ -132,7 +132,7 @@ INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('cktime', '999999');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('bduss_num', '0');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('sign_multith', '1');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('sign_asyn', '0');
-INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('cron_asyn', '0');
+INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('cron_asyn', '1');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('cron_sign_again', '');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('sign_hour', '0');
 INSERT INTO `{VAR-PREFIX}options` (`name`,`value`) VALUES ('mail_ssl', '0');
