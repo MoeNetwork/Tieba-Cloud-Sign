@@ -204,9 +204,9 @@ class option {
 	 * @param 插件标识符
 	 * @return string 设置值
 	*/
-	public static function xget($plug) {
+	public static function xget($plug , $name) {
 		global $i;
-		return $i['plugins']['info'][$plug]['options'][$plug];
+		return $i['plugins']['info'][$plug]['options'][$name];
 	}
 
 	/**
