@@ -377,6 +377,7 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'baiduid':
+    	doAction('baiduid_set_b');
 		if (isset($_GET['delete'])) {
 			CleanUser(UID);
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
