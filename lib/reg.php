@@ -44,7 +44,7 @@ if (!empty($_REQUEST['mod'])) {
 	$i['mode'][0] = 'default';
 }
 
-if(SYSTEM_VER != $i['opt']['core_version'] && !defined('SYSTEM_NO_CHECK_VER')) {
+if((empty($i['opt']['core_version']) || SYSTEM_VER != $i['opt']['core_version']) && !defined('SYSTEM_NO_CHECK_VER')) {
 	if (empty($i['opt']['core_version'])) {
 		$i['opt']['core_version'] = '3.45';
 	}
