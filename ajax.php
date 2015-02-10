@@ -104,7 +104,7 @@ ver='.SYSTEM_VER."\r\n".'
 time='.date('Y-m-d H:m:s') ."\r\n");
 
 		foreach ($_POST['file'] as $file) {
-			$c = new wcurl('http://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master'.$file);
+			$c = new wcurl('https://raw.githubusercontent.com/kenvix/Tieba-Cloud-Sign/master'.$file);
 			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $c->exec());
 			$c->close();
 			copy(SYSTEM_ROOT . $file , $backup . $file);
