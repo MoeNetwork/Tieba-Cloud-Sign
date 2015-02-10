@@ -207,7 +207,7 @@ class cron {
 		$url = SYSTEM_URL . 'do.php?mod=runcron&cron=' . $name;
 		$cpw = option::get('cron_pw');
 		if (!empty($cpw)) {
-			$url .= '&pw=' . md5($cpw);
+			$url .= '&pw=' . $cpw;
 		}
 
 		if(!sendRequest($url)) {
