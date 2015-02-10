@@ -13,7 +13,7 @@ if (ROLE == 'admin') {
 	}
 	option::add('core_version','3.8');
 	option::add('isapp','0');
-	option::add('cron_asyn','1');
+	option::add('cron_asyn','0');
 	option::add('mail_ssl','0');
 	option::add('baidu_name','1');
 	option::set('sign_sleep', option::get('sign_sleep') * 1000);

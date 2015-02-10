@@ -99,7 +99,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<?php
 		addset('最大允许用户绑定账号数<br/>0为无限，-1为禁止绑定，对管理员无效','number','bduss_num','min="-1" step="1" class="form-control"');
 		addset('计划任务线程数<br/>0单线程，此为模拟多线程','number','sign_multith','min="0" step="1" class="form-control"');
-		addset('计划任务同时运行<br/>主机需支持fsockopen','checkbox','cron_asyn','',' 当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率');
+		addset('计划任务同时运行<br/>主机需支持fsockopen','checkbox','cron_asyn','',' 当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速');
 		addset('计划任务密码<br/>留空为无密码，不能包含空格等特殊字符','text','cron_pw',' class="form-control"','启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可');
 		?>
 		<tr><td>注册杂项设置</td><td>
