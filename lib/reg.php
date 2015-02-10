@@ -50,10 +50,10 @@ if((empty($i['opt']['core_version']) || SYSTEM_VER != $i['opt']['core_version'])
 	}
 	if (file_exists(SYSTEM_ROOT . '/setup/update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php')) {
 		$updatefile = '<a href="setup/update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php">请点击运行: ' . 'update' . $i['opt']['core_version'] . 'to' . SYSTEM_VER . '.php</a>';
+		msg('严重错误：数据库中的云签到版本与文件版本不符，是否已运行升级脚本？<br/><br/>' . $updatefile);
 	} else {
-		$updatefile = '';
+		$m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('core_version','".SYSTEM_VER."') ON DUPLICATE KEY UPDATE `value` = '".SYSTEM_VER."';");
 	}
-	msg('严重错误：数据库中的云签到版本与文件版本不符，是否已运行升级脚本？<br/><br/>' . $updatefile);
 }
 
 if (!defined('SYSTEM_NO_PLUGIN')) {
