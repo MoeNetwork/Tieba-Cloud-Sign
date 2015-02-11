@@ -6,7 +6,7 @@
 require dirname(__FILE__).'/init.php';
 
 if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
-	msg('权限不足');
+    msg('权限不足');
 }
 
 if (ROLE != 'admin' && stristr(strip_tags($_GET['mod']), 'admin:')) {
@@ -377,8 +377,8 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'baiduid':
-    	doAction('baiduid_set_b');
 		if (isset($_GET['delete'])) {
+			doAction('baiduid_set_1');
 			CleanUser(UID);
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 		}
@@ -401,10 +401,12 @@ switch (SYSTEM_PAGE) {
 			} else {
 				$baidu_name = '';
 			}
+			doAction('baiduid_set_2');
 			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
 		}
 		elseif (isset($_GET['del'])) {
 			$del = (int) $_GET['del'];
+			doAction('baiduid_set_3');
 			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);	
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
