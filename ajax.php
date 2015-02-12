@@ -101,13 +101,15 @@ switch (SYSTEM_PAGE) {
 				break;
 
 			case '4':
-				$server = 'https://gitcafe.com/kenvix/Tieba-Cloud-Sign/raw/master';
+				$server = 'http://gitcafe.com/kenvix/Tieba-Cloud-Sign/raw/master';
 				break;
 			
 			default:
 				$server = 'https://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master';
 				break;
 		}
+
+		mkdir(SYSTEM_ROOT . '/update_cache',0777,true);
 
 		if(isset($_POST['dir'])){ //如果需要创建目录
 			foreach ($_POST['dir'] as $dir) {
@@ -125,12 +127,12 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 		foreach ($_POST['file'] as $file) {
 			$c     = new wcurl($server.$file);
 			$data  = $c->exec();
+			$c->close();
 			if (empty($data)) {
 				DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
-				msg('错误：更新失败：<br/><br/>与更新服务器的连接中断，操作已回滚');
+				msg('错误：更新失败：<br/><br/>与更新服务器的连接中断：无法下载数据' . $server.$file);
 			}
 			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $data);
-			$c->close();
 			copy(SYSTEM_ROOT . $file , $backup . $file);
 		}
 		ReDirect('ajax.php?mod=admin:update:install&updfile=' . $_POST['updatefile']);

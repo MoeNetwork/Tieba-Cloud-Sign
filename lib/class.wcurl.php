@@ -25,6 +25,7 @@ class wcurl {
 		$this->set(CURLOPT_URL, $file);
 		$this->set(CURLOPT_RETURNTRANSFER, 1); 
 		$this->set(CURLOPT_HTTPHEADER, $head);
+		$this->set(CURLOPT_SSL_VERIFYPEER, FALSE);
 	}
 
 	/**
