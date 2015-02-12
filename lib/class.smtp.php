@@ -47,12 +47,13 @@ class SMTP {
         $this->att[$name] = $value;
     }
 
-    public function send($to, $from, $subject = "", $body = "", $reply = '', $cc = "", $bcc = "", $additional_headers = "") {
+    public function send($to, $from, $subject = "", $body = "", $fromname = "贴吧云签到", $reply = '', $cc = "", $bcc = "", $additional_headers = "") {
         if (empty($reply)) {
             $reply = $from;
         }
         $header = "";
         $mail_from = $this ->get_address($this ->strip_comment($from));
+        $from = "=?UTF-8?B?".base64_encode($fromname)."?= " . "<$from>";
         $body = mb_ereg_replace("(^|(\r\n))(\\.)", "\\1.\\3", $body);
         $header .= "MIME-Version:1.0\r\n";
         $header .= 'Content-Type: multipart/mixed; boundary="'.$this->part_boundary.'"' . "\r\n";
@@ -232,4 +233,3 @@ class SMTP {
         }
     }
 }
-
