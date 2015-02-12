@@ -1,5 +1,6 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 global $i;
+
 switch ($i['mode'][0]) {
 	case 'baiduid':
 		template('baiduid');

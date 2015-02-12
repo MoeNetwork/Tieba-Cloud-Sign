@@ -77,6 +77,7 @@ switch (SYSTEM_PAGE) {
   <br/>文件将被临时下载到 /setup/update_cache 文件夹，更新前会自动备份文件以供回滚
 </div>';
 				echo '<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>以下文件可以更新</b>:<br/>';
+				echo '<input type="hidden" name="server" value="'.intval($_GET['server']).'">';
 				echo $d.$t;
 				echo '</div><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"><br/><br/></form>';
 			} else {
@@ -89,6 +90,24 @@ switch (SYSTEM_PAGE) {
 
 	case 'admin:update:updnow':
 		$backup = SYSTEM_ROOT.'/setup/update_backup/' . time() . '-' . getRandStr(7);
+
+		switch ($_POST['server']) {
+			case '2':
+				$server = 'https://raw.githubusercontent.com/kenvix/Tieba-Cloud-Sign/master';
+				break;
+
+			case '3':
+				$server = 'https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git/raw/master';
+				break;
+
+			case '4':
+				$server = 'https://gitcafe.com/kenvix/Tieba-Cloud-Sign/raw/master';
+				break;
+			
+			default:
+				$server = 'https://git.oschina.net/kenvix/Tieba-Cloud-Sign/raw/master';
+				break;
+		}
 
 		if(isset($_POST['dir'])){ //如果需要创建目录
 			foreach ($_POST['dir'] as $dir) {
@@ -104,8 +123,13 @@ ver='.SYSTEM_VER."\r\n".'
 time='.date('Y-m-d H:m:s') ."\r\n");
 
 		foreach ($_POST['file'] as $file) {
-			$c = new wcurl('https://raw.githubusercontent.com/kenvix/Tieba-Cloud-Sign/master'.$file);
-			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $c->exec());
+			$c     = new wcurl($server.$file);
+			$data  = $c->exec();
+			if (empty($data)) {
+				DeleteFile(SYSTEM_ROOT.'/setup/update_cache');
+				msg('错误：更新失败：<br/><br/>与更新服务器的连接中断，操作已回滚');
+			}
+			file_put_contents(SYSTEM_ROOT.'/setup/update_cache'.$file, $data);
 			$c->close();
 			copy(SYSTEM_ROOT . $file , $backup . $file);
 		}

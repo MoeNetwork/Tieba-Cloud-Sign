@@ -54,6 +54,32 @@ if($count <= 0) {
   <li><a href="index.php?mod=admin:update:back">更新回滚</a></li>
 </ul>
 <br/>
+<div class="input-group">
+	<span class="input-group-addon">更新服务器</span>
+	<select id="server" class="form-control">
+		<option value="1" id="server_1">Git@OSC [国内推荐]</option>
+		<option value="2" id="server_2">Github [国外推荐]</option>
+		<option value="3" id="server_3">Coding</option>
+		<option value="4" id="server_4">Gitcafe</option>
+	</select>
+	<span class="input-group-btn">
+		<input type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">
+	</span>
+</div>
+<script type="text/javascript">
+	server = localStorage.getItem("update_server");
+	if (server != null) { 
+		$('#server_' + server).attr('selected',true); 
+	} else {
+		server = '1';
+		localStorage.setItem("update_server", '1');
+	}
+	function save_server() {
+		localStorage.setItem("update_server", document.getElementById('server').value);
+		alert("保存更新服务器选项成功，刷新后即可应用<br/>如果刷新后仍未保存，表示你的浏览器过于落后，建议使用最新的Chrome浏览器");
+	}
+</script>
+<br/>
 <?php
 //检测服务器是否支持写入
 if(is_writable("setup")){
@@ -81,7 +107,7 @@ function update() {
 if(<?php echo $writable; ?>==1){
 	$.ajax({ 
 	  async:true, 
-	  url: 'ajax.php?mod=admin:update', 
+	  url: 'ajax.php?mod=admin:update&server=' + server, 
 	  type: "GET", 
 	  data : {},
 	  dataType: 'html', 
