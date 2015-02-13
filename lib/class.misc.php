@@ -152,7 +152,7 @@ class misc {
 			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 			$s  = $ch->exec();
 			preg_match('/\<input type=\"hidden\" name=\"fid\" value=\"(.*?)\"\/\>/', $s, $fid);
-			self::mSetFid($kw,$fid[1]);
+			//self::mSetFid($kw,$fid[1]);
 			return $fid[1];
 		//}
 	}
