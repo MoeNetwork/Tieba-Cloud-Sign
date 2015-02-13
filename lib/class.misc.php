@@ -43,6 +43,7 @@ class misc {
 				$SMTPAuth = (boolean) option::get('mail_auth');
 				$Username = option::get('mail_smtpname');
 				$Password = option::get('mail_smtppw');
+                $Nickname = option::get('mail_yourname');
 				if (option::get('mail_ssl') == '1') {
 					$SSL = true;
 				} else {
@@ -50,7 +51,7 @@ class misc {
 				}
 				$mail = new SMTP($Host , $Port , $SMTPAuth , $Username , $Password , $SSL);
 				$mail->att = $att;
-				if($mail->send($to , $From , $sub , $msg)) {
+				if($mail->send($to , $From , $sub , $msg, $Nickname)) {
 					return true;
 				} else {
 					return $mail->log;
