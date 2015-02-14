@@ -152,30 +152,15 @@ function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false) {
 	if (!empty($w)) {
 		$w = ' AND '.$w;
 	}
-	$sql = "SELECT * FROM `{$t}` AS r1 JOIN (SELECT (RAND() * (SELECT MAX(`{$c}`) FROM `{$t}`)) AS {$c}) AS r2 WHERE r1.{$c} >= r2.{$c} {$w} ORDER BY r1.{$c} ASC LIMIT 1;";
-	if ($n == '1') {
-		$r =  $m->once_fetch_array($sql);
-		if (!empty($r)) {
-			$r['id'] = intval($r['id']) + 1;
-			if ($f === false) {
-				return $r;
-			} else {
-				return array($r);
-			}
-		} else {
-			return array();
-		}
+	$sql = "SELECT * FROM `{$t}` WHERE {$c} >= (SELECT floor(RAND() * (SELECT MAX({$c}) FROM `{$t}`))) {$w} ORDER BY {$c} LIMIT {$n};";
+	$xq  = $m->query($sql);
+	$r   = array();
+	while ($x = $m->fetch_array($xq)) {
+		$r[] = $x;
+	}
+	if ($f == false && count($r) == 1) {
+		return $r[0];
 	} else {
-		$r = array();
-		for ($i=0; $i < $n; $i++) { 
-			$r1 = $m->once_fetch_array($sql);
-			if (!empty($r1)) {
-				$r1['id'] = intval($r1['id']) + 1;
-				$r[] = $r1;
-			} else {
-				break;
-			}
-		}
 		return $r;
 	}
 }
