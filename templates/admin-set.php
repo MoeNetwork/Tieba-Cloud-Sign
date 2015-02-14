@@ -52,7 +52,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	<tr><td>贴吧数据分表<br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所以请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">记录超过此行数时分表</span>
-			  <input type="number" min="2" step="1" class="form-control" name="fb" value="<?php echo option::get('fb') ?>">
+			  <input type="number" min="0" step="1" class="form-control" name="fb" value="<?php echo option::get('fb') ?>">
 		</div><br/>
 		<textarea class="form-control" style="height:150px" name="fb_tables"><?php
 		if (is_array(unserialize(option::get('fb_tables')))) {

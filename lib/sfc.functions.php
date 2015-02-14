@@ -196,7 +196,7 @@ function getfreetable() {
 	$fbs = option::get('fb_tables');
 	$fbset = option::get('fb');
 	$f = unserialize($fbs);
-	if ($x['fffff'] >= $fbset && !empty($f)) {
+	if (!empty($fbset) && $x['fffff'] >= $fbset && !empty($f)) {
 		$c = sizeof($f);
 		foreach ($f as $key => $value) {
 			$x = $m->once_fetch_array("SELECT COUNT(*) AS fffff FROM  `".DB_NAME."`.`".DB_PREFIX.$value."`");

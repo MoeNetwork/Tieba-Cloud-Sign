@@ -4,7 +4,7 @@
  * HELLO GAY!
  */
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','3.8');
+define('SYSTEM_VER','3.9');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 define('SUPPORT_URL', 'http://support.zhizhe8.net/tcs/');
