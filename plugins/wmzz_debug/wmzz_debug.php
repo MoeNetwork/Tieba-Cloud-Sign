@@ -18,14 +18,15 @@ function wmzz_debug_system1() {
 addAction('header','wmzz_debug_system1');
 
 function wmzz_debug_phpinfo() {
-	echo '<br/><a href="index.php?plugin=wmzz_debug" target="_blank">查看更多服务器信息 [ PHPInfo ]</a>';
+	if(ROLE == 'admin')
+		echo '<br/><a href="index.php?plugin=wmzz_debug" target="_blank">查看更多服务器信息 [ PHPInfo ]</a>';
 }
 
 addAction('index_3','wmzz_debug_phpinfo');
 
 function wmzz_debug_system2() {
 	global $m;
-	echo '<br/>调试信息：执行 MySQL 查询 '. $m->queryCount . ' 次，PHP 运行耗时 '. round(microtime() - $GLOBALS['wmzz_debug_time'],6) . ' 秒';
+	echo '<br/>调试信息：执行 MySQL 查询 '. $m->queryCount . ' 次，PHP 运行耗时 '. round(microtime() - $GLOBALS['wmzz_debug_time'],9) . ' 秒';
 }
 
 addAction('footer','wmzz_debug_system2');
