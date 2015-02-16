@@ -19,7 +19,7 @@ class wcurl {
 	 */
 	public function __construct($file, array $head = array('User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36')) {
 		if (!function_exists('curl_exec')) {
-			msg('服务器不支持cURL');
+			throw new Exception('服务器不支持cURL');
 		}
 		$this->conn = curl_init(); 
 		$this->set(CURLOPT_URL, $file);

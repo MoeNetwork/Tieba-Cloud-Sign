@@ -54,8 +54,7 @@ CREATE TABLE `{VAR-PREFIX}users` (
   `pw` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `role` enum('banned','vip','user','admin') NOT NULL DEFAULT 'user',
-  `t` varchar(20) NOT NULL DEFAULT 'tieba',
-  `options` text
+  `t` varchar(20) NOT NULL DEFAULT 'tieba'
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}users_options`;
