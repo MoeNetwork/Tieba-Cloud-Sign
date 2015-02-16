@@ -67,26 +67,25 @@ CREATE TABLE `{VAR-PREFIX}users_options` (
 
 
 ALTER TABLE `{VAR-PREFIX}baiduid`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), ADD INDEX `uid` (`uid`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}cron`
  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}options`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `id` (`id`), ADD UNIQUE KEY `name` (`name`), ADD FULLTEXT KEY `value` (`value`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}plugins`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}tieba`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), ADD INDEX `uid` (`uid`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}users`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`) USING BTREE, ADD UNIQUE KEY `id` (`id`) USING BTREE;
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}users_options`
- ADD PRIMARY KEY (`id`);
-
+ ADD PRIMARY KEY (`id`), ADD INDEX `uid` (`uid`) USING BTREE;
 
 ALTER TABLE `{VAR-PREFIX}baiduid`
 MODIFY `id` int(30) NOT NULL AUTO_INCREMENT;
