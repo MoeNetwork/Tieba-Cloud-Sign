@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-TABLE}` (
   `lastdo` varchar(200) DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `uid` (`uid`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
