@@ -2,7 +2,7 @@
 global $m,$i;
 
 if (isset($_GET['ok'])) {
-	echo '<div class="alert alert-success">设置保存成功</div>';
+    echo '<div class="alert alert-success">设置保存成功</div>';
 }
 
 if (!isset($i['mode'][2])) $i['mode'][2] = 'sign';
@@ -29,13 +29,21 @@ case 'sign' :
 	<tbody>
 		<?php 
 		$uxsv = $m->query("SELECT * FROM `".DB_PREFIX."users`");
+		$allu = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."users`");
+		$allc = 0;$allb = 0;$alln = 0;$allm = 0;
 		while ($uxs = $m->fetch_array($uxsv)) {
 			$uxsc = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid` WHERE `uid` = ".$uxs['id']);
+			$allc = $allc + $uxsc['c'];
 			$uxsb = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `no` != '0' AND `uid` = ".$uxs['id']);
+			$allb = $allb + $uxsb['c'];
 			$uxsn = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `status` != '0' AND `uid` = ".$uxs['id']);
+			$alln = $alln + $uxsn['c'];
 			$uxsm = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `uid` = ".$uxs['id']);
+			$allm = $allm + $uxsm['c'];
 			echo '<tr><td>'.$uxs['id'].'</td><td>'.$uxs['name'].'</td><td>'.$uxsc['c'].'</td><td>'.$uxsb['c'].'</td><td>'.$uxsn['c'].'</td><td>'.$uxsm['c'].'</td>';
 		}
+		echo '<tr><td><strong>总计</strong></td><td>'.$allu['c'].'</td><td>'.$allc.'</td><td>'.$allb.'</td><td>'.$alln.'</td><td>'.$allm.'</td>';
+
 		?>
 	</tbody>
 </table>
