@@ -14,7 +14,7 @@ if (option::get('core_version') < SYSTEM_VER) {
 	}
 	$sql .= "ALTER TABLE `".DB_PREFIX."baiduid` ADD INDEX `uid` (`uid`) USING BTREE ;";
 	$sql .= "ALTER TABLE `".DB_PREFIX."options` DROP INDEX `id`, DROP INDEX `value`;";
-	$sql .= "ALTER TABLE `".DB_PREFIX."users_options` ADD INDEX `uid` (`uid`) USING BTREE;"
+	$sql .= "ALTER TABLE `".DB_PREFIX."users_options` ADD INDEX `uid` (`uid`) USING BTREE;";
 	@$m->xquery($sql,true);
 	unlink(__FILE__);
 	msg('升级完成，请删除 /setup/update3.8to3.9.php',SYSTEM_URL);
