@@ -20,10 +20,10 @@ global $i;
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list-alt"></span> 功能菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
-          <li><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
-          <li><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
-          <li><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
+          <li class="<?php checkIfActive('default') ?>" ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+          <li class="<?php checkIfActive('set') ?>" ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
+          <li class="<?php checkIfActive('baiduid') ?>" ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
+          <li class="<?php checkIfActive('showtb') ?>" ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
           <?php doAction('navi_1'); ?>
         </ul>
       </li>
@@ -31,21 +31,21 @@ global $i;
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> 管理菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-          <li><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
-          <li><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
-          <li><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
-          <li><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
-          <li><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
-          <li><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+          <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+          <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+          <li class="<?php checkIfActive('admin:users') ?>" ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+          <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+          <li class="<?php checkIfActive('admin:stat') ?>" ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
+          <li class="<?php checkIfActive('admin:cron') ?>" ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+          <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
           <?php doAction('navi_2'); ?>
         </ul>
       </li>
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span> 插件菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-          <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
+          <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+          <li class="<?php checkIfActive('admin:tools') ?>" ><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
           <?php doAction('navi_3'); ?>
         </ul>
       </li>
@@ -57,8 +57,8 @@ global $i;
     </ul>
       <?php } else { ?>
     <ul class="nav navbar-nav">
-	  <li <?php if($i['mode'][0] == 'login' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
-	  <li <?php if($i['mode'][0] == 'reg' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+      <li class="<?php checkIfActive('login') ?>" ><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
+	  <li class="<?php checkIfActive('reg') ?>" ><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
 	  <?php doAction('navi_10'); ?>
 	</ul>
       <?php } ?>
@@ -83,27 +83,27 @@ global $i;
             <ul class="nav bs-sidenav">    
               <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>         
               <li>
-                <li <?php if($i['mode'][0] == 'default' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
-                <li <?php if($i['mode'][0] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
-                <li <?php if($i['mode'][0] == 'baiduid' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
-                <li <?php if($i['mode'][0] == 'showtb' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
+                <li class="<?php checkIfActive('default') ?>" ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+                <li class="<?php checkIfActive('set') ?>" ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
+                <li class="<?php checkIfActive('baiduid') ?>" ><a href="index.php?mod=baiduid"><span class="glyphicon glyphicon-link"></span> 百度账号管理</a></li>
+                <li class="<?php checkIfActive('showtb') ?>" ><a href="index.php?mod=showtb"><span class="glyphicon glyphicon-calendar"></span> 云签到设置和日志</a></li>
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'tools' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'set' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'users' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'update' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
-                <li <?php if(isset($i['mode'][1]) && $i['mode'][1] == 'stat' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'cron' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
-                <li <?php if($i['mode'][0] == 'admin'&& $i['mode'][1] == 'plugins' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?> ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+                <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
+                <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+                <li class="<?php checkIfActive('admin:users') ?>" ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+                <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                <li class="<?php checkIfActive('admin:stat') ?>" ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
+                <li class="<?php checkIfActive('admin:cron') ?>" ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
+                <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
                <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件商城</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
               <?php } else { ?>
-				<li <?php if($i['mode'][0] == 'login' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
-				<li <?php if($i['mode'][0] == 'reg' && !isset($_GET['plugin'])) { echo 'class="active"'; } ?>><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+				<li class="<?php checkIfActive('login') ?>" ><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
+				<li class="<?php checkIfActive('reg') ?>" ><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
 			    <?php doAction('navi_11'); ?>
               <?php } ?>
             </ul>
