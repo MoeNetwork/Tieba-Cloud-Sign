@@ -15,7 +15,7 @@ loadhead();
   <?php if (isset($_GET['error_msg'])): ?><div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   错误：<?php echo strip_tags($_GET['error_msg']); ?></div><?php endif;?>
-  <form name="f" method="post" action="<?php echo SYSTEM_URL ?>index.php?mod=admin:reg">
+  <form name="f" method="post" action="index.php?mod=admin:reg">
 	<div class="input-group">
   <span class="input-group-addon">账户</span>
   <input type="text" class="form-control" name="user" required>
