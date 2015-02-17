@@ -2,7 +2,7 @@
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 ob_start();
 function loadhead() {
-	doAction('top');
+    doAction('top');
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 	echo '<meta http-equiv="charset" content="utf-8">';
@@ -40,6 +40,22 @@ function loadfoot() {
 
 function template($file) {
 	include SYSTEM_ROOT.'/templates/'.$file.'.php';
+}
+
+/**
+ * 检查是否应该标记导航为active
+ * @param string $mod
+ */
+function checkIfActive($mod) {
+	global $i;
+	if ($mod == $i['mode'][0] && !isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin'])) {
+		echo 'active';
+	} elseif (strpos($mod, 'admin:') === 0) {
+		$a = explode(':', $mod);
+		if ($a[0] == $i['mode'][0] && $a[1] == $i['mode'][1] && !isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin'])) {
+			echo 'active';
+		}
+	}
 }
 
 /**
