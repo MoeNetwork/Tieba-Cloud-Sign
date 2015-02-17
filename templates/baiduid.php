@@ -221,7 +221,7 @@ global $m;
     <br/><br/>3.右键，点击 <b>查看网页信息</b>
 		<br/><br/>4.确保已经登录百度，然后点击 <b>显示 Cookie 和网站数据</b>
 		<br/><br/>5.如图，依次展开 <b>passport.baidu.com</b> -> <b>Cookie</b> -> <b>BDUSS</b>
-		<br/><br/><a href="<?php echo SYSTEM_URL ?>source/doc/baiduid.png" target="_blank"><img src="<?php echo SYSTEM_URL ?>source/doc/baiduid.png"></a>
+		<br/><br/><a href="source/doc/baiduid.png" target="_blank"><img src="source/doc/baiduid.png"></a>
 		<br/><br/>6.按下 Ctrl+A 全选，然后复制并输入到上面的表单即可
     <br/><br/>请注意，一旦退出登录，将导致 BDUSS 失效，因此建议在隐身模式下登录
 	</div>
