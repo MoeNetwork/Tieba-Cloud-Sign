@@ -1,7 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } if (ROLE != 'admin') { msg('权限不足！'); }
 global $i;
 if (isset($_GET['ok'])) {
-	echo '<div class="alert alert-success">插件操作成功</div>';
+    echo '<div class="alert alert-success">插件操作成功</div>';
 }
 
 $x=getPlugins();
@@ -34,7 +34,14 @@ foreach($x as $key=>$val) {
 	}
 
 	if (!empty($val['For'])) {
-		$fortc = '<br/>适用版本：'.$val['For'];
+		$val['For'] = str_ireplace(array('v',"\r",'+',' '),'',$val['For']);
+		if($val['For'] >= SYSTEM_VER){
+			$for = "&ver={$val['For']}";
+			$fortc = '<br/>适用版本：<font color="red">V'.$val['For'].'+</font>';
+		}
+		else{
+			$fortc = '<br/>适用版本：V'.$val['For'].'+';
+		}
 	} else {
 		$fortc = '<br/>适用版本：不限';
 	}
@@ -48,7 +55,7 @@ foreach($x as $key=>$val) {
 			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
 		}
 	} else {
-		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['Plugin'].'">安装插件</a><br/>';
+		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['Plugin'].$for.'">安装插件</a><br/>';
 	}
 
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="setting.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
