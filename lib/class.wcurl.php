@@ -29,6 +29,14 @@ class wcurl {
 	}
 
 	/**
+	 * 当wcurl类被当成字符串时的操作:执行curl并返回结果
+	 * @return string 返回值
+	 */
+	public function __tostring() {
+		return $this->exec();
+	}
+
+	/**
 	 * 设置一个cURL传输选项
 	 * @param $option 需要设置的选项
 	 * @param $value  将设置在option选项上的值
@@ -72,7 +80,7 @@ class wcurl {
 	 * 添加一些Cookies，在访问的时候会携带它们
 	 * @param $ck Cookies，数组或cookies字符串
 	 */
-	public function addcookie($ck) {
+	public function addCookie($ck) {
 		if (is_array($ck)) {
 			$r = '';
 			foreach ($ck as $key => $value) {
@@ -90,7 +98,7 @@ class wcurl {
  	 * @return array Cookies
  	 * ps: 搜索的网页需要打开CURLOPT_HTTPHEADER
 	 */
-	public static function readcookies($text) {
+	public static function readCookies($text) {
 		preg_match("/set\-cookie:([^\r\n]*)/i", $text, $m1);
 		preg_match_all("/(.*?)=(.*?);/", $m1[1], $m2, PREG_SET_ORDER);
 		$r = array();
@@ -107,7 +115,7 @@ class wcurl {
  	 * @return array Cookies
 	 * ps: 将会自动打开CURLOPT_HTTPHEADER
 	 */
-	public function getcookies($postdata = false) {
+	public function getCookies($postdata = false) {
 		$this->set(CURLOPT_HEADER,1);
 		if ($postdata != false) {
 			return self::readcookies($this->post($postdata));
@@ -121,7 +129,7 @@ class wcurl {
 	 * @param $opt 要获取的信息，参见 http://cn2.php.net/manual/zh/function.curl-getinfo.php
 	 * @return 信息
 	 */
-	public function getinfo($opt) {
+	public function getInfo($opt) {
 		return curl_getinfo($this->conn, $opt);
 	}
 
@@ -145,7 +153,7 @@ class wcurl {
 	 * 返回一个带错误代码的curl错误信息
 	 * @return 错误信息
 	 */
-	public function errmsg() {
+	public function errMsg() {
 		return '#' . $this->errno() . ' - ' . $this->error();
 	}
 
@@ -177,6 +185,14 @@ class wcurl {
 		$CN = __CLASS__;
 		$x  = new $CN($url);
 		return $x->exec();
+	}
+
+	/**
+	 * 设置超时时间 单位:毫秒
+	 * @param int $time 超时时间
+	 */
+	public function setTimeOut($time) {
+		$this->set(CURLOPT_CONNECTTIMEOUT_MS , $time);
 	}
 
 	/**

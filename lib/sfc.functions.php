@@ -34,7 +34,7 @@ function checkMail($email) {
 }
 
 /**
- * 生成一个随机的字符串
+ * (弃用)生成一个随机的字符串
  *
  * @param int $length
  * @param boolean $special_chars
@@ -489,6 +489,21 @@ function doAction($hook) {
 			$string = call_user_func_array($function, $args);
 		}
 	}
+}
+
+/**
+ * 打印可读的变量信息
+ * @param mixed $var
+ * @param bool $mode false = var_dump() | true = print_r()
+ */
+function dump($var , $mode = false) {
+	echo '<pre>';
+	if (!$mode) {
+		var_dump($var);
+	} else {
+		print_r($var);
+	}
+	echo '</pre>';
 }
 
 /**

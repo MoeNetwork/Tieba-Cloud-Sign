@@ -1,4 +1,10 @@
 <?php
+/**
+ * 显示错误消息
+ * @param string $msg 消息内容
+ * @param bool|string bool true=返回上一页|bool false=屏蔽返回链接|string=自定义返回地址
+ * @param bool $die 是否终止PHP
+ */
 function msg($msg = '未知的异常',$url = true,$die = true) {
     if (defined('SYSTEM_NAME')) {
         $sysname = SYSTEM_NAME;
