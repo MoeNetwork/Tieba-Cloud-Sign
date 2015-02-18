@@ -3,7 +3,7 @@ global $i;
 
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
-	$plug=strip_tags($_GET['plugin']);
+    $plug=strip_tags($_GET['plugin']);
 	if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php')) {
 			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php';
@@ -89,6 +89,9 @@ function inactivePlugin($plugin) {
 function installPlugin($plugin) {
 	global $m;
 	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
+		if(!empty($_REQUEST['ver'])){
+			msg ('该插件仅适用于 V'.$_REQUEST['ver'].' 及以上的版本，您的云签到版本低于插件所需最低版本，是否强制安装（强制安装可能造成云签到损坏）<br/><br/><a href="setting.php?mod=admin:plugins&install='.$plugin.'">强制安装</a>　　<a href="setting.php?mod=admin:plugins">取消安装</a><br/>',false,true);
+		}
 		$m->query("INSERT IGNORE INTO `" . DB_PREFIX . "plugins` (`name`,`status`,`options`) VALUES ('{$plugin}','0','');");
 		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
