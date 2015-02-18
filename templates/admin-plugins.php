@@ -8,7 +8,7 @@ $x=getPlugins();
 $plugins = '';
 $stat=0;
 foreach($x as $key=>$val) {
-	$stat++;
+    $stat++;
 	$pluginfo = '';
 	if (!empty($val['Url'])) {
 		$pluginfo .= '<b><a href="'.$val['Url'].'" target="_blank">'.$val['Name'].'</a></b>';
@@ -34,16 +34,17 @@ foreach($x as $key=>$val) {
 	}
 
 	if (!empty($val['For'])) {
-		$val['For'] = str_ireplace(array('v',"\r",'+',' '),'',$val['For']);
-		if($val['For'] >= SYSTEM_VER){
+		if($val['For'] == '不限') {
+			$for = '';
+			$fortc = '<br/>适用版本：不限';
+		}
+		elseif($val['For'] >= SYSTEM_VER) {
 			$for = "&ver={$val['For']}";
 			$fortc = '<br/>适用版本：<font color="red">V'.$val['For'].'+</font>';
-		}
-		else{
+		} else {
+			$for = '';
 			$fortc = '<br/>适用版本：V'.$val['For'].'+';
 		}
-	} else {
-		$fortc = '<br/>适用版本：不限';
 	}
 	if (in_array($val['Plugin'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['Plugin']]['status'] == '1') {
