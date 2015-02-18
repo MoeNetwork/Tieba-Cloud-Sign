@@ -4,7 +4,7 @@ global $i;
 //加载插件前台页面
 if (isset($_GET['plugin'])) {
     $plug=strip_tags($_GET['plugin']);
-	if (in_array($plug, $i['plugins']['actived'])) {
+    if (in_array($plug, $i['plugins']['actived'])) {
 		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php')) {
 			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_show.php';
 		} else {
@@ -218,6 +218,11 @@ function getPluginData($pluginFile) {
 	$author = isset($author_name[1]) ?strip_tags( trim($author_name[1])) : '';
 	$For = isset($For[1]) ? strip_tags(trim($For[1])) : '';
 	$author_url = isset($author_url[1]) ? strip_tags(trim($author_url[1])) : '';
+
+	$For = str_ireplace(array('v',"\r",'+',' '),'',$For);
+	if(!is_numeric($For)){
+		$For = '不限';
+	}
 
 	return array(
 		'Name' => $plugin_name,
