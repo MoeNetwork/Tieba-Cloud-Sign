@@ -5,7 +5,7 @@
 loadplugins();
 if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
     $name = isset($_COOKIE['wmzz_tc_user']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_user'])) : '';
-	$pw = isset($_COOKIE['wmzz_tc_pw']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_pw'])) : '';
+    $pw = isset($_COOKIE['wmzz_tc_pw']) ? addslashes(strip_tags($_COOKIE['wmzz_tc_pw'])) : '';
 	$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE name = '{$name}' LIMIT 1");
 	if($m->num_rows($osq) == 0) {
 		$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE email = '{$name}' LIMIT 1");
@@ -85,6 +85,7 @@ if (SYSTEM_PAGE == 'admin:login') {
 	if (EncodePwd($pw) != $p['pw']) {
 		ReDirect("index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
+		doAction('admin_login_3');
 		if (isset($_POST['ispersis']) && $_POST['ispersis'] == 1) {
 			$cktime = (int) option::get('cktime');
 			if (empty($cktime)) {
