@@ -11,7 +11,7 @@ define('SUPPORT_URL', 'http://support.zhizhe8.net/tcs/');
 header("content-type:text/html; charset=utf-8");
 date_default_timezone_set('Asia/Shanghai'); 
 require SYSTEM_ROOT.'/setup/msg.php';
-//require SYSTEM_ROOT.'/lib/class.E.php';
+require SYSTEM_ROOT.'/lib/class.E.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/lib/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/class.smtp.php';

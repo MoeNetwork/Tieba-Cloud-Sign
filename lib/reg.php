@@ -76,7 +76,7 @@ function class_autoload($c) {
 	if (file_exists(SYSTEM_ROOT . '/lib/class.' . $c . '.php')) {
 		include SYSTEM_ROOT . '/lib/class.' . $c . '.php';
 	} else {
-		msg("类 {$c} 加载失败");
+		msg("类 {$c} 加载失败，是否存在此类？");
 	}
 }
 spl_autoload_register('class_autoload');
@@ -87,25 +87,5 @@ if (option::get('dev') != 1 || defined('NO_ERROR')) {
 	define('SYSTEM_DEV', true);
 }
 
-function sfc_error($errno, $errstr, $errfile, $errline) {
-	switch ($errno) {
-		    case E_USER_ERROR:          $errnoo = 'User Error'; break;
-		    case E_USER_WARNING:        $errnoo = 'User Warning'; break;
-		    case E_ERROR:               $errnoo = 'Error'; break;
-	        case E_WARNING:             $errnoo = 'Warning'; break;
-	        case E_PARSE:               $errnoo = 'Parse Error'; break;
-			case E_USER_NOTICE:         $errnoo = 'User Notice';	    break;     
- 			case E_CORE_ERROR:          $errnoo = 'Core Error'; break;
-	        case E_CORE_WARNING:        $errnoo = 'Core Warning'; break;
-	        case E_COMPILE_ERROR:       $errnoo = 'Compile Error'; break;
-	        case E_COMPILE_WARNING:     $errnoo = 'Compile Warning'; break;
-	        case E_STRICT:              $errnoo = 'Strict Warning'; break;
-		    default:                    $errnoo = 'Unknown Error [ #'.$errno.' ]';  break;
-   	}
-	if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
-		echo '<div class="alert alert-danger alert-dismissable"><strong>[ StusGame Framework ] '.$errnoo.':</strong> [ Line: '.$errline.' ]<br/>'.$errstr.'<br/>File: '.$errfile.'</div>';
-	}
-	doAction('error', $errno, $errstr, $errfile, $errline, $errnoo);
-}
-
-set_error_handler('sfc_error');
+set_exception_handler(array('E','exception'));
+set_error_handler(array('E','error'));

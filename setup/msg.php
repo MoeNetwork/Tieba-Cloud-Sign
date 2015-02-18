@@ -69,7 +69,7 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 color: #555;
                 display: inline-block;
                 text-decoration: none;
-                font-size: 13px;
+                font-size: 9px;
                 line-height: 26px;
                 height: 28px;
                 margin: 0;
@@ -112,6 +112,25 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
                 color: #333;
                 -webkit-box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
                 box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
+            }
+            table {
+                table-layout:auto;
+                border:1px solid #333;
+                empty-cells:show;
+                border-collapse:collapse;
+            }
+            th {
+                padding:4px;
+                border:1px solid #333;
+                overflow:hidden;
+                color:#333;
+                background: #eee;
+            }
+            td {
+                padding:4px;
+                border:1px solid #333;
+                overflow:hidden;
+                color:#333;
             }
         </style>
     </head>
