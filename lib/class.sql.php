@@ -19,7 +19,7 @@ class sql extends wmysql {
 	 * @param string $column 列名
 	 * @param string $type 列类型，如varchar(10)
 	 * @param string $other 其他信息，如NOT NULL
-	 * @return mysql_result|bool 忽略返回false
+	 * @return bool 忽略返回false，其它返回true
 	 */
 	public function addColumn($table , $column , $type , $other = '') {
 		$table = self::_prefix($table);
