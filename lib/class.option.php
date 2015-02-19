@@ -201,7 +201,8 @@ class option {
 
 	/**
 	 * 获取插件的一条设置
-	 * @param 插件标识符
+     * @param $plug 插件标识符
+	 * @param $name 设置项名称
 	 * @return string 设置值
 	*/
 	public static function xget($plug , $name) {
