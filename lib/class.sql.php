@@ -103,9 +103,9 @@ class sql extends wmysql {
 	 * @return string
 	 */
 	public static function getIndexMethod($id) {
-		if ($type == 1) {
+		if ($id == 1) {
 			return 'USING BTREE';
-		} elseif ($type == 2) {
+		} elseif ($id == 2) {
 			return 'USING HASH';
 		} else {
 			return '';
