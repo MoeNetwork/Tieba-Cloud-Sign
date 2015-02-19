@@ -4,7 +4,7 @@
  * @copyright (c) 无名智者
  */
 
-class sql extends wmysql {
+class S extends wmysql {
 
 	/**
 	 * 构造函数
