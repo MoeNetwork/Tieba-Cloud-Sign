@@ -36,7 +36,7 @@ class sql extends wmysql {
 	 * 如果存在，则移除列
 	 * @param string $table  表名，不需要带前缀
 	 * @param string $column 列名
-	 * @return mysql_result|bool 忽略返回false
+	 * @return bool 忽略返回false，其它返回true
 	 */
 	public function delColumn($table , $column) {
 		$table = self::_prefix($table);
@@ -54,7 +54,7 @@ class sql extends wmysql {
 	 * @param string $column 列名
 	 * @param int $type 索引类型，0为普通索引，1为FULLTEXT，2为UNIQUE
 	 * @param int $method 索引方法，0为普通B-TREE，1为HASH
-	 * @return mysql_result|bool 忽略返回false
+	 * @return bool 忽略返回false，其它返回true
 	 */
 	public function addIndex($table , $index , $column , $type = 0 , $method = 0) {
 		$table   = self::_prefix($table);
@@ -71,7 +71,7 @@ class sql extends wmysql {
 	 * 删除索引，不存在则忽略
 	 * @param string $table  表名，不需要带前缀
 	 * @param string $index  索引名
-	 * @return mysql_result|bool 忽略返回false
+	 * @return bool 忽略返回false，其它返回true
 	 */
 	public function delIndex($table , $index) {
 		$table = self::_prefix($table);
@@ -85,7 +85,7 @@ class sql extends wmysql {
 	/**
 	 * 获取索引类型
 	 * @param int $type 索引类型ID
-	 * @return  string
+	 * @return string
 	 */
 	public static function getIndexType($type) {
 		if ($type == 1) {
@@ -100,7 +100,7 @@ class sql extends wmysql {
 	/**
 	 * 获取索引方法
 	 * @param int $id 索引方法ID
-	 * @return  string
+	 * @return string
 	 */
 	public static function getIndexMethod($id) {
 		if ($type == 1) {
