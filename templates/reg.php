@@ -5,7 +5,7 @@ if (option::get('enable_reg') != 1) {
 loadhead();
 
 ?>
-<div class="panel panel-success" style="margin:5% 15% 5% 15%;">
+<div class="panel panel-success" style="margin:1% 1% 1% 1%;">
 	<div class="panel-heading">
           <h3 class="panel-title">注册 <?php echo SYSTEM_NAME ?></h3>
     </div>

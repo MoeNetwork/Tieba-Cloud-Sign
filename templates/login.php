@@ -1,9 +1,9 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } loadhead(); ?>
-<div class="panel panel-primary" style="margin:5% 15% 5% 15%;">
+<div class="panel panel-primary" style="margin:1% 1% 1% 1%;">
 	<div class="panel-heading">
           <h3 class="panel-title">请输入您的账号信息</h3>
     </div>
-    <div style="margin:0% 5% 5% 5%;">
+  <div style="margin:0% 5% 5% 5%;">
 	<div class="login-top"></div><br/><?php doAction('login_page_1'); ?>
 	<b>您需要输入账户和密码才能继续使用 <?php echo SYSTEM_NAME ?>，请输入您的账号信息</b><br/><br/>
   <?php if (isset($_GET['error_msg'])): ?><div class="alert alert-danger alert-dismissable">
