@@ -53,10 +53,10 @@ class sql extends wmysql {
 	 * @param string $index  索引名
 	 * @param string $column 列名
 	 * @param int $type 索引类型，0为普通索引，1为FULLTEXT，2为UNIQUE
-	 * @param int $method 索引方法，0为普通B-TREE，1为HASH
+	 * @param int $method 索引方法，0为空，1为普通B-TREE，2为HASH
 	 * @return mysql_result|bool 忽略返回false
 	 */
-	public function addIndex($table , $index , $column , $type = 0 , $method = 0) {
+	public function addIndex($table , $index , $column , $type = 0 , $method = 1) {
 		$table   = self::_prefix($table);
 		$typee   = self::getIndexType($type);
 		$methodd = self::getIndexMethod($method);
@@ -104,9 +104,11 @@ class sql extends wmysql {
 	 */
 	public static function getIndexMethod($id) {
 		if ($type == 1) {
+			return 'BTREE';
+		} elseif ($type == 2) {
 			return 'HASH';
 		} else {
-			return 'BTREE';
+			return '';
 		}
 	}
 
