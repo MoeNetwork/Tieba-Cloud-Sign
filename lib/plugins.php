@@ -196,20 +196,20 @@ function getPlugins() {
  * 获取插件信息
  */
 function getPluginData($pluginFile) {
-        $pluginPath = SYSTEM_ROOT . '/plugins/';
-		$pluginData = implode('', file($pluginPath . $pluginFile));
-		preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
-		preg_match("/Version:(.*)/i", $pluginData, $version);
-		preg_match("/Plugin URL:(.*)/i", $pluginData, $plugin_url);
-		preg_match("/Description:(.*)/i", $pluginData, $description);
-		preg_match("/For:(.*)/i", $pluginData, $For);
-		preg_match("/Author:(.*)/i", $pluginData, $author_name);
-		preg_match("/Author URL:(.*)/i", $pluginData, $author_url);
+	global $i;
+    $pluginPath = SYSTEM_ROOT . '/plugins/';
+	$pluginData = implode('', file($pluginPath . $pluginFile));
+	preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
+	preg_match("/Version:(.*)/i", $pluginData, $version);
+	preg_match("/Plugin URL:(.*)/i", $pluginData, $plugin_url);
+	preg_match("/Description:(.*)/i", $pluginData, $description);
+	preg_match("/For:(.*)/i", $pluginData, $For);
+	preg_match("/Author:(.*)/i", $pluginData, $author_name);
+	preg_match("/Author URL:(.*)/i", $pluginData, $author_url);
 
-        $active_plugins = unserialize(option::get('actived_plugins'));
-        $ret = explode('/', $pluginFile);
-        $plugin = $ret[0];
-        @$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $active_plugins)) ? true : false;
+    $ret = explode('/', $pluginFile);
+    $plugin = $ret[0];
+    @$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $i['plugins']['actived'])) ? true : false;
 
     $plugin_name = isset($plugin_name[1]) ? strip_tags(trim($plugin_name[1])) : '';
 	$version = isset($version[1]) ? strip_tags(trim($version[1])) : '';
