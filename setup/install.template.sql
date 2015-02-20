@@ -120,8 +120,6 @@ CREATE TABLE `{VAR-PREFIX}users` (
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{VAR-PREFIX}users` VALUES ('1', 'admin', '66fa03f6ba652e2850d5e19d3a3fa9fc', 'kenvix@vip.qq.com', 'admin', 'tieba');
-
 DROP TABLE IF EXISTS `{VAR-PREFIX}users_options`;
 CREATE TABLE `{VAR-PREFIX}users_options` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
