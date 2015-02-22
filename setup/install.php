@@ -5,7 +5,7 @@ define('SYSTEM_ROOT2',dirname(__FILE__));
 define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 header("content-type:text/html; charset=utf-8");
-require SYSTEM_ROOT2.'/msg.php';
+require SYSTEM_ROOT2.'/../lib/msg.php';
 include SYSTEM_ROOT2.'/../lib/class.wcurl.php';
 
 if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
