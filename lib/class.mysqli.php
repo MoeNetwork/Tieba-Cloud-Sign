@@ -37,7 +37,7 @@ class wmysql {
 	 */
 	public function __construct($host , $user , $pw , $name) {
 		if (!class_exists('mysqli')) {
-			msg('服务器不支持MySqli类');
+			throw new Exception('服务器不支持MySqli类');
 		}
 		$coninfo = strpos($host, ':');
 		if ($coninfo === false) {
@@ -50,27 +50,27 @@ class wmysql {
 			switch ($this->conn->connect_errno) {
 				case 1044:
 				case 1045:
-					msg("连接数据库失败，数据库用户名或密码错误");
+					throw new Exception("连接数据库失败，数据库用户名或密码错误");
 					break;
 
                 case 1049:
-					msg("连接数据库失败，未找到您填写的数据库");
+					throw new Exception("连接数据库失败，未找到您填写的数据库");
 					break;
 
 				case 2003:
-					msg("连接数据库失败，数据库端口错误");
+					throw new Exception("连接数据库失败，数据库端口错误");
 					break;
 
 				case 2005:
-					msg("连接数据库失败，数据库地址错误或者数据库服务器不可用");
+					throw new Exception("连接数据库失败，数据库地址错误或者数据库服务器不可用");
 					break;
 
 				case 2006:
-					msg("连接数据库失败，数据库服务器不可用");
+					throw new Exception("连接数据库失败，数据库服务器不可用");
 					break;
 
 				default :
-					msg("连接数据库失败，请检查数据库信息。错误编号：" . $this->conn->connect_errno);
+					throw new Exception("连接数据库失败，请检查数据库信息。错误编号：" . $this->conn->connect_errno);
 					break;
 			}
 		}
@@ -105,7 +105,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+				throw new Exception("MySQL 语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror());
 			}	
 		} else {
 			return $this->result;
@@ -123,7 +123,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				msg("警告：MySQL 语句执行错误：<br/><br/>语句：$sql<br/><br/>错误：" . $this->geterror());
+				throw new Exception("MySQL 批量语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror());
 			}	
 		} else {
 			return $this->result;

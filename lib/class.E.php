@@ -26,8 +26,9 @@ class E extends Exception {
     }
 
     private static function display($code , $message , $file , $line , $trace) {
-        $msg = SYSTEM_FN . ' V' . SYSTEM_VER . ' 在工作时发生致命的异常 @ '.date('Y-m-d H:m:s').'<br/>消息：#' . $code . ' - ' . $message .'<br/>文件：' . $file . '<br/>错误所在行：' . $line . '<br/><br/>';
+        $msg = SYSTEM_FN . ' V' . SYSTEM_VER . ' 在工作时发生致命的异常 @ '.date('Y-m-d H:m:s').'<br/><b>消息：</b>#' . $code . ' - ' . $message .'<br/><br/>';
         $msg .= '<table style="width:100%"><thead><th>文件</th><th>行</th><th>代码</th></thead><tbody>';
+        $msg .= '<tr><td>' . $file . '</td><td>' . $line . '' . '</td><td>[抛出异常]</td></tr>';
         foreach ($trace as $v) {
             $msg .= '<tr><td>' . $v['file'] . '</td><td>' .  $v['line'] . '</td><td>' . $v['function'] . '</td></tr>';
         }
