@@ -138,31 +138,19 @@ function Clean() {
 }
 
 /**
- * MySQL 随机取记录
- * 
+ * [已搬走]MySQL 随机取记录
+ * 请查看S::rand()
  * @param $t 表
  * @param $c ID列，默认为id
  * @param $n 取多少个
  * @param $w 条件语句
  * @param $f bool 是否强制以多维数组形式返回，默认false
+ * @param $p string 随机数据前缀，如果产生冲突，请修改本项
  * @return array 取1个直接返回结果数组(除非$f为true)，取>1个返回多维数组，用foreach取出
  */
-function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false) {
+function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false , $p = 'tempval_') {
 	global $m;
-	if (!empty($w)) {
-		$w = ' AND '.$w;
-	}
-	$sql = "SELECT * FROM `{$t}` WHERE {$c} >= (SELECT floor(RAND() * (SELECT MAX({$c}) FROM `{$t}`))) {$w} ORDER BY {$c} LIMIT {$n};";
-	$xq  = $m->query($sql);
-	$r   = array();
-	while ($x = $m->fetch_array($xq)) {
-		$r[] = $x;
-	}
-	if ($f == false && count($r) == 1) {
-		return $r[0];
-	} else {
-		return $r;
-	}
+	return $m->rand($t , $c , $n, $w, $f, $p);
 }
 
 /**

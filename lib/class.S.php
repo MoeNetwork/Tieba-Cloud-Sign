@@ -14,6 +14,52 @@ class S extends wmysql {
 	}
 
 	/**
+	 * MySQL 随机取记录
+	 * 
+	 * @param $t 表
+	 * @param $c ID列，默认为id
+	 * @param $n 取多少个
+	 * @param $w 条件语句
+	 * @param $f bool 是否强制以多维数组形式返回，默认false
+	 * @param $p string 随机数据前缀，如果产生冲突，请修改本项
+	 * @return array 取1个直接返回结果数组(除非$f为true)，取>1个返回多维数组，用foreach取出
+	 */
+	public function rand($t , $c = 'id' , $n = '1', $w = '' , $f = false , $p = 'tempval_') {
+		if (!empty($w)) {
+			$w = ' AND '.$w;
+		}
+	/* //格式化的原句
+	SELECT * 
+	FROM
+		`{$t}` AS {$p}t1
+	JOIN (
+		SELECT
+			ROUND(
+				RAND() * (
+					(SELECT MAX({$c}) FROM `{$t}`) - (SELECT MIN({$c}) FROM `{$t}`)
+				)
+			) AS {$p}id
+	) AS {$p}t2
+	WHERE
+		{$p}t1.{$c} >= {$p}t2.{$p}id {$w}
+	ORDER BY
+		{$p}t1.{$c}
+	LIMIT {$n};
+	*/
+		$sql = "SELECT * FROM `{$t}` AS {$p}t1 JOIN ( SELECT ROUND( RAND() * ((SELECT MAX({$c}) FROM `{$t}`) - (SELECT MIN({$c}) FROM `{$t}`))) AS {$p}id ) AS {$p}t2 WHERE {$p}t1.{$c} >= {$p}t2.{$p}id {$w} ORDER BY {$p}t1.{$c} LIMIT {$n};";
+		$xq  = $this->query($sql);
+		$r   = array();
+		while ($x = $this->fetch_array($xq)) {
+			$r[] = $x;
+		}
+		if ($f == false && count($r) == 1) {
+			return $r[0];
+		} else {
+			return $r;
+		}
+	}
+
+	/**
 	 * 添加列，如果存在但列类型不一样则为更改列类型，如果存在且列类型一样则忽略
 	 * @param string $table  表名，不需要带前缀
 	 * @param string $column 列名
