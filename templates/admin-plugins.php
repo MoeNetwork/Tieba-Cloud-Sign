@@ -37,8 +37,7 @@ foreach($x as $key=>$val) {
 		if($val['For'] == '不限') {
 			$for = '';
 			$fortc = '<br/>适用版本：不限';
-		}
-		elseif($val['For'] >= SYSTEM_VER) {
+		} elseif($val['For'] > SYSTEM_VER) {
 			$for = "&ver={$val['For']}";
 			$fortc = '<br/>适用版本：<font color="red">V'.$val['For'].'+</font>';
 		} else {
