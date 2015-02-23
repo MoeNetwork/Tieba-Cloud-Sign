@@ -1,5 +1,5 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足！'); }
-global $m,$i;
+global $m,$i,$today;
 
 if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">设置保存成功</div>';
@@ -17,32 +17,47 @@ case 'sign' :
   <?php doAction('stat_navi'); ?>
 </ul>
 <h3>查看签到信息和用户信息</h3>
+<?php /* 数据缓存于 <?php echo date('Y-m-d H:m:s' , C::getTime('admin_stat')) ?>，点击刷新 */ ?>
 <table class="table table-striped">
 	<thead>
 		<th>UID</th>
 		<th>用户名</th>
 		<th>已绑定数</th>
-		<th>签到忽略数</th>
+		<th>等待签到数</th>
+		<th>签到成功数</th>
 		<th>签到出错数</th>
+		<th>签到忽略数</th>
 		<th>贴吧总数</th>
 	</thead>
 	<tbody>
 		<?php 
 		$uxsv = $m->query("SELECT * FROM `".DB_PREFIX."users`");
-		$allu = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."users`");
-		$allc = 0;$allb = 0;$alln = 0;$allm = 0;
+		$uxsg = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid`");
+		$alls = $alle = $alln = $allm = $allw = 0;
 		while ($uxs = $m->fetch_array($uxsv)) {
 			$uxsc = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid` WHERE `uid` = ".$uxs['id']);
-			$allc = $allc + $uxsc['c'];
-			$uxsb = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `no` != '0' AND `uid` = ".$uxs['id']);
-			$allb = $allb + $uxsb['c'];
-			$uxsn = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `status` != '0' AND `uid` = ".$uxs['id']);
-			$alln = $alln + $uxsn['c'];
-			$uxsm = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX.$uxs['t']."` WHERE `uid` = ".$uxs['id']);
-			$allm = $allm + $uxsm['c'];
-			echo '<tr><td>'.$uxs['id'].'</td><td>'.$uxs['name'].'</td><td>'.$uxsc['c'].'</td><td>'.$uxsb['c'].'</td><td>'.$uxsn['c'].'</td><td>'.$uxsm['c'].'</td>';
+			$list = $m->query("SELECT id,no,status,lastdo FROM `".DB_PREFIX.$uxs['t']."` WHERE `uid` = ".$uxs['id']);
+			$success = $error = $no = $all = $waiting = 0;
+			$num = $m->num_rows($list);
+			while ($x = $m->fetch_array($list)) {
+				if ($x['no'] == '1') {
+					$no++;
+				} elseif ($x['lastdo'] != $today) {
+					$waiting++;
+				} elseif ($x['status'] == '0') {
+					$success++;
+				} elseif ($x['status'] != '0') {
+					$error++;
+				}
+			}
+			$allw = $allw + $waiting;
+			$alls = $alls + $success;
+			$alln = $alln + $no;
+			$allm = $allm + $num;
+			$alle = $alle + $error;
+			echo '<tr><td>'.$uxs['id'].'</td><td>'.$uxs['name'].'</td><td>'.$uxsc['c'].'</td><td>'.$waiting.'</td><td>'.$success.'</td><td>'.$error.'</td><td>'.$no.'</td><td>'.$num.'</td>';
 		}
-		echo '<tr><td><strong>总计</strong></td><td>'.$allu['c'].'</td><td>'.$allc.'</td><td>'.$allb.'</td><td>'.$alln.'</td><td>'.$allm.'</td>';
+		echo '<tr><td colspan="2"><strong>总计数据</strong></td><td>'.$uxsg['c'].'</td><td>'.$allw.'</td><td>'.$alls.'</td><td>'.$alle.'</td><td>'.$alln.'</td><td>'.$allm.'</td>';
 
 		?>
 	</tbody>
