@@ -9,15 +9,20 @@ switch (SYSTEM_PAGE) {
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
 		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
 		echo "<b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
+		$c3 = $c4 = $c5 = $c6 = 0;
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
 				$count3 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `lastdo` = '".$today."' AND `no` != '1'"));
 				$count4 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `lastdo` != '".$today."' AND `no` != '1'"));
 				$count5 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `no` = '1' AND `status` = '0'"));
 				$count6 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `status` != '0' AND `no` != '1'"));
+				$c3 = $c3 + $count3[0];
+				$c4 = $c4 + $count4[0];
+				$c5 = $c5 + $count5[0];
+				$c6 = $c6 + $count6[0];
 			}	
-			echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$count3[0]} 个贴吧，还有 {$count4[0]} 个贴吧等待签到";
-			echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$count5[0]} 个贴吧签到出错，{$count6[0]} 个贴吧已被设定为忽略";
+			echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$c3} 个贴吧，还有 {$c4} 个贴吧等待签到";
+			echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$c5} 个贴吧签到出错，{$c6} 个贴吧已被设定为忽略";
 			echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
 		}
 		break;

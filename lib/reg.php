@@ -27,15 +27,10 @@ while ($rsr = $m->fetch_array($rs)) {
 	$key = $rsr['name'];
 	$i['cron'][$key] = $rsr;
 }
-//贴吧表列表
-$i['table'][] = 'tieba';
+
 //贴吧分表列表
-$i['tabpart'] = unserialize($i['opt']['fb_tables']);
-if (!empty($i['tabpart'])) {
-	foreach ($i['tabpart'] as $value) {
-		$i['table'][] = $value;
-	}
-}
+$i['tabpart'] = $i['table'] = unserialize($i['opt']['fb_tables']);
+$i['table'][] = 'tieba'; //贴吧表列表
 
 //当前页面/模式, $i['mode'][0] 一般表示页面
 if (!empty($_REQUEST['mod'])) {
