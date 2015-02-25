@@ -447,7 +447,7 @@ class misc {
 				if($osq['C'] == '0') {
 					$n++;
 					if (!empty($o) && $isvip == false && $n > $o) {
-						return '当前贴吧数量超出系统限定，无法将贴吧全部记录到数据库';
+						break;
 					}
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
 				}
