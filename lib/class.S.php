@@ -8,9 +8,14 @@ class S extends wmysql {
 
 	/**
 	 * 构造函数
+	 * @param string $host 数据库主机
+	 * @param string $user 用户名
+	 * @param string $pw 密码
+	 * @param string $name 数据库名
+	 * @param bool $long 是否开启长连接
 	 */
-	public function __construct($host , $user , $pw , $name) {
-		parent::__construct($host , $user , $pw , $name);
+	public function __construct($host , $user , $pw , $name , $long = false) {
+		parent::__construct($host , $user , $pw , $name , $long);
 	}
 
 	/**

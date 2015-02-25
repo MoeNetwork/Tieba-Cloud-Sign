@@ -34,12 +34,22 @@ class wmysql {
 
 	/**
 	 * 构造函数
+	 * @param string $host 数据库主机
+	 * @param string $user 用户名
+	 * @param string $pw 密码
+	 * @param string $name 数据库名
+	 * @param bool $long 是否开启长连接
 	 */
-	public function __construct($host , $user , $pw , $name) {
+	public function __construct($host , $user , $pw , $name , $long = false) {
 		if (!function_exists('mysql_connect')) {
 			throw new Exception('服务器PHP不支持MySql数据库');
 		}
-		if (!$this->conn = @mysql_connect($host , $user , $pw)) {
+		if ($long) {
+			$this->conn = @mysql_pconnect($host , $user , $pw);
+		} else {
+			$this->conn = @mysql_connect($host , $user , $pw);
+		}
+		if (!$this->conn) {
             switch ($this->geterrno()) {
                 case 2005:
                     throw new Exception("连接数据库失败，数据库地址错误或者数据库服务器不可用");
@@ -61,7 +71,9 @@ class wmysql {
 		if ($this->getMysqlVersion() > '4.1') {
 			mysql_query("SET NAMES 'utf8'");
 		}
-		@mysql_select_db($name, $this->conn) OR throw new Exception("连接数据库失败，未找到您填写的数据库");
+		if(!mysql_select_db($name, $this->conn)) {
+			throw new Exception("连接数据库失败，未找到您填写的数据库");
+		}
 		self::$instance = $this->conn;
 		return self::$instance;
 	}
