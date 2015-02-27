@@ -120,7 +120,15 @@ switch (SYSTEM_PAGE) {
         	msg('错误 - 更新失败：<br/><br/>无法更新文件');
         }
         DeleteFile(UPDATE_CACHE);
-        msg('站点升级完毕', SYSTEM_URL);
+        //获取最新的版本号
+        $c = new wcurl(SUPPORT_URL . 'callback.php');
+		$json = json_decode($c->exec(),true);
+		$c->close();
+		//修改版本号
+		option::set('core_version',$json['version']);
+		option::set('core_revision',$json['revision']);
+
+        msg('恭喜您！您已成功升级到 V'.$json['version'].$json['revision'].'<br/><br/>请按照版本号运行setup目录下的升级脚本', SYSTEM_URL);
 		break;
 
 	case 'admin:update:changeServer':
