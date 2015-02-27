@@ -59,7 +59,7 @@ switch (SYSTEM_PAGE) {
 
 	case 'admin:update:updnow':
 		mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
-		mkdir(SYSTEM_ROOT . '/setup/update_cache/', 0777, true);
+		mkdir(UPDATE_CACHE, 0777, true);
 
         //下载zip包
         switch (option::get('update_server')) {
@@ -82,10 +82,10 @@ switch (SYSTEM_PAGE) {
 		}
 		$file = $c->exec();
 		$c->close();
-		$zipPath = SYSTEM_ROOT.'/setup/update_cache/update.zip';
+		$zipPath = UPDATE_CACHE.'update.zip';
 		unlink($zipPath);
 		if(file_put_contents($zipPath, $file) === false){
-			DeleteFile(SYSTEM_ROOT . '/setup/update_cache/');
+			DeleteFile(UPDATE_CACHE);
 			msg('错误 - 更新失败：<br/><br/>无法从更新服务器下载更新包');
 		}
 
@@ -99,13 +99,13 @@ switch (SYSTEM_PAGE) {
         //解压缩
         $z = new zip();
         $z->open($zipPath);
-        $z->extract(SYSTEM_ROOT . '/setup/update_cache/');
+        $z->extract(UPDATE_CACHE);
         $z->close();
 
         //检查更新文件
-        $floderName = SYSTEM_ROOT . '/setup/update_cache/'.$floderName;
+        $floderName = UPDATE_CACHE.$floderName;
         if(!is_dir($floderName)){
-        	DeleteFile(SYSTEM_ROOT . '/setup/update_cache/');
+        	DeleteFile(UPDATE_CACHE);
         	msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
         }
 
@@ -116,10 +116,10 @@ switch (SYSTEM_PAGE) {
         
         //覆盖文件
         if(CopyAll($floderName,SYSTEM_ROOT) !== true){
-        	DeleteFile(SYSTEM_ROOT . '/setup/update_cache/');
+        	DeleteFile(UPDATE_CACHE);
         	msg('错误 - 更新失败：<br/><br/>无法更新文件');
         }
-        DeleteFile(SYSTEM_ROOT . '/setup/update_cache/');
+        DeleteFile(UPDATE_CACHE);
         msg('站点升级完毕', SYSTEM_URL);
 		break;
 
