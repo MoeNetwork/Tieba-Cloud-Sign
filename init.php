@@ -38,6 +38,6 @@ define('UPDATE_FNAME_GITHUB','Tieba-Cloud-Sign-master');
 define('UPDATE_FNAME_CODING','');
 define('UPDATE_FNAME_GITCAFE','Tieba-Cloud-Sign');
 //压缩包解压路径
-define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_backup/');
+define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_cache/');
 //加载压缩包操作类
 require SYSTEM_ROOT.'/lib/class.zip.php';
