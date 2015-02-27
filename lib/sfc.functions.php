@@ -276,28 +276,28 @@ function DeleteFile($file) {
  * @param $destination 目的目录名  
  * @return 成功返回TRUE，失败返回原因
  */
-function CopyAll($source,$destination){   
-    if(!is_dir($source)) {   
-        return "Error:the {$source} is not a direction!";   
-    }   
+function CopyAll($source,$destination){
+    if(!is_dir($source)) {
+        return '错误：'.$source.'并不是一个目录';
+    }
   
-    if(!is_dir($destination)) {   
-        mkdir($destination,0777);   
-    }  
+    if(!is_dir($destination)) {
+        mkdir($destination,0777,true);
+    }
 
-    $handle = dir($source);   
+    $handle = dir($source);
   
-    while($entry=$handle->read()) {   
-        if(($entry!==".")&&($entry!=="..")) {   
-            if(is_dir($source."/".$entry)) {   
-                CopyAll($source."/".$entry, $destination."/".$entry); 
+    while($entry=$handle->read()) {
+        if(($entry!=='.')&&($entry!=='..')) {
+            if(is_dir($source.'/'.$entry)) {
+                CopyAll($source.'/'.$entry, $destination.'/'.$entry);
             } else {
-            	copy($source."/".$entry, $destination."/".$entry);
+                copy($source.'/'.$entry, $destination.'/'.$entry);
             }
 		}
-    }   
-	return true;   
-}   
+    }
+	return true;
+}  
 
 /**
  * 备份指定表的数据结构和所有数据
