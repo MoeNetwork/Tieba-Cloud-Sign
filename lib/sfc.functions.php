@@ -292,12 +292,12 @@ function CopyAll($source,$destination){
             if(is_dir($source.'/'.$entry)) {
                 CopyAll($source.'/'.$entry, $destination.'/'.$entry);
             } else {
-                copy($source.'/'.$entry, $destination.'/'.$entry);
+            	copy($source.'/'.$entry, $destination.'/'.$entry);
             }
 		}
     }
 	return true;
-}  
+}
 
 /**
  * 备份指定表的数据结构和所有数据
