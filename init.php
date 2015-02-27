@@ -25,3 +25,19 @@ if (option::get('protector') == 1) {
 	require SYSTEM_ROOT.'/lib/protector.php';
 }
 require SYSTEM_ROOT.'/lib/plugins.php';
+//版本修订号
+define('SYSTEM_REV',option::get('core_revision'));
+//压缩包链接
+define('UPDATE_SERVER_OSCGIT','https://git.oschina.net/kenvix/Tieba-Cloud-Sign/repository/archive?ref=master');
+define('UPDATE_SERVER_GITHUB','https://github.com/kenvix/Tieba-Cloud-Sign/archive/master.zip');
+define('UPDATE_SERVER_CODING','https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git/archive/master');
+define('UPDATE_SERVER_GITCAFE','https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip');
+//压缩包内文件夹名
+define('UPDATE_FNAME_OSCGIT','Tieba-Cloud-Sign');
+define('UPDATE_FNAME_GITHUB','Tieba-Cloud-Sign-master');
+define('UPDATE_FNAME_CODING','');
+define('UPDATE_FNAME_GITCAFE','Tieba-Cloud-Sign');
+//压缩包解压路径
+define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_backup/');
+//加载压缩包操作类
+require SYSTEM_ROOT.'/lib/class.zip.php';
