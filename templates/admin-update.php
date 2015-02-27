@@ -57,26 +57,38 @@ if($count <= 0) {
 <div class="input-group">
 	<span class="input-group-addon">更新服务器</span>
 	<select id="server" class="form-control">
-		<option value="1" id="server_1">Git@OSC [国内推荐]</option>
-		<option value="2" id="server_2">Github [国外推荐]</option>
-		<option value="3" id="server_3">Coding</option>
-		<option value="4" id="server_4">Gitcafe</option>
+		<option value="0">Git@OSC [国内推荐]</option>
+		<option value="1">Github [国外推荐]</option>
+		<option value="2">Coding [国内]</option>
+		<option value="3">Gitcafe [国外]</option>
 	</select>
 	<span class="input-group-btn">
-		<input type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">
+		<input id="save_btn" type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">
 	</span>
 </div>
 <script type="text/javascript">
-	server = localStorage.getItem("update_server");
-	if (server != null) { 
-		$('#server_' + server).attr('selected',true); 
-	} else {
-		server = '1';
-		localStorage.setItem("update_server", '1');
-	}
+	<?php
+		$server = option::get('update_server') === null ? 0 : option::get('update_server');
+	?>
+	$('#server').val('<?php echo $server; ?>');
 	function save_server() {
-		localStorage.setItem("update_server", document.getElementById('server').value);
-		alert("保存更新服务器选项成功，刷新后即可应用<br/>如果刷新后仍未保存，表示你的浏览器过于落后，建议使用最新的Chrome浏览器");
+		$('#save_btn').val('正在保存').attr("disabled","disabled");
+		$.ajax({ 
+		  async:true, 
+		  url: 'ajax.php?mod=admin:update:changeServer&server=' + $('#server').val(), 
+		  type: "GET", 
+		  data : {},
+		  dataType: 'html', 
+		  timeout: 90000, 
+		  success: function(data){
+		    location.reload();
+		 },
+		  error: function(error){
+		  	console.log(error);
+		  	$('#save_btn').val('保存并应用').removeAttr("disabled");
+		  	alert('保存失败！错误信息已记录到控制台，按F12打开控制台查看详细信息');
+		  }
+		});
 	}
 </script>
 <br/>
@@ -121,9 +133,9 @@ if(<?php echo $writable; ?>==1){
 	 },
 	  error: function(error){
 	  	console.log(error);
-	  	 $("#upd_info").html('检查更新失败......');
+	  	 $("#upd_info").html('检查更新失败！');
 	     $("#upd_prog").css({'width':'0%'});
-	     $("#comsys").html('<div class="alert alert-danger">版本检查结果：检查更新失败：无法连接到更新服务器<br/>错误已经记录到控制台，打开控制台查看详细<br/>你还可以尝试 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">手动更新</a></div><br/>');
+	     $("#comsys").html('<div class="alert alert-danger">检查更新失败：无法连接到更新服务器<br/>错误已经记录到控制台，打开控制台查看详细<br/>你还可以尝试 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">手动更新</a></div><br/>');
 	  }
 	});
 }
