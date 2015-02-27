@@ -29,7 +29,7 @@ switch (SYSTEM_PAGE) {
 
 
 	case 'admin:update': 
-		$c = new wcurl(SUPPORT_URL . 'callback.php');//此处为测试url，需修改为官方url
+		$c = new wcurl(SUPPORT_URL . 'callback.php');
 		$json = json_decode($c->exec(),true);
 		$c->close();
 		if(count($json) != 0){
