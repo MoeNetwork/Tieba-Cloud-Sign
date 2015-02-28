@@ -58,8 +58,8 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:update:updnow':
-		mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
-		mkdir(UPDATE_CACHE, 0777, true);
+		@mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
+		@mkdir(UPDATE_CACHE, 0777, true);
 
         //下载zip包
         switch (option::get('update_server')) {
@@ -83,7 +83,7 @@ switch (SYSTEM_PAGE) {
 		$file = $c->exec();
 		$c->close();
 		$zipPath = UPDATE_CACHE.'update.zip';
-		unlink($zipPath);
+		@unlink($zipPath);
 		if(file_put_contents($zipPath, $file) === false){
 			DeleteFile(UPDATE_CACHE);
 			msg('错误 - 更新失败：<br/><br/>无法从更新服务器下载更新包');
@@ -110,9 +110,9 @@ switch (SYSTEM_PAGE) {
         }
 
         //删除配置文件
-        unlink($floderName.'/config.php');
-        unlink($floderName.'/config.yaml');
-        unlink($floderName.'/app.conf');
+        @unlink($floderName.'/config.php');
+        @unlink($floderName.'/config.yaml');
+        @unlink($floderName.'/app.conf');
         
         //覆盖文件
         if(CopyAll($floderName,SYSTEM_ROOT) !== true){
