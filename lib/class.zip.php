@@ -1,12 +1,10 @@
 <?php
-
 /**
  * 压缩包操作类
  * @copyright (c) mokeyjay
  */
 
-class zip
-{
+class zip {
     
     //内部zip类
     private $z;
