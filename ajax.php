@@ -58,8 +58,12 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:update:updnow':
-		@mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
-		@mkdir(UPDATE_CACHE, 0777, true);
+		if (!file_exists(SYSTEM_ROOT . '/setup/update_backup/')) {
+			mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
+		}
+		if (!file_exists(UPDATE_CACHE)) {
+			mkdir(UPDATE_CACHE, 0777, true);
+		}
 
         //下载zip包
         switch (option::get('update_server')) {
@@ -82,8 +86,7 @@ switch (SYSTEM_PAGE) {
 		}
 		$file = $c->exec();
 		$c->close();
-		$zipPath = UPDATE_CACHE.'update.zip';
-		@unlink($zipPath);
+		$zipPath = UPDATE_CACHE.'update_'.time().'.zip';
 		if(file_put_contents($zipPath, $file) === false){
 			DeleteFile(UPDATE_CACHE);
 			msg('错误 - 更新失败：<br/><br/>无法从更新服务器下载更新包');
@@ -110,9 +113,15 @@ switch (SYSTEM_PAGE) {
         }
 
         //删除配置文件
-        @unlink($floderName.'/config.php');
-        @unlink($floderName.'/config.yaml');
-        @unlink($floderName.'/app.conf');
+        if (file_exists($floderName.'/config.php')) {
+        	unlink($floderName.'/config.php');
+        }
+        if (file_exists($floderName.'/app.conf')) {
+        	unlink($floderName.'/app.conf');
+        }
+        if (file_exists($floderName.'/config.yaml')) {
+        	unlink($floderName.'/config.yaml');
+        }
         
         //覆盖文件
         if(CopyAll($floderName,SYSTEM_ROOT) !== true){
