@@ -137,7 +137,7 @@ switch (SYSTEM_PAGE) {
 		option::set('core_version',$json['version']);
 		option::set('core_revision',$json['revision']);
 
-        msg('恭喜您！您已成功升级到 V'.$json['version'].$json['revision'].'<br/><br/>请按照版本号运行setup目录下的升级脚本', SYSTEM_URL);
+        msg('恭喜您！您已成功升级到 V'.$json['version'].'.'.$json['revision'].'<br/><br/>请按照版本号运行setup目录下的升级脚本', SYSTEM_URL);
 		break;
 
 	case 'admin:update:changeServer':
