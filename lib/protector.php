@@ -210,7 +210,7 @@ function wmzz_prot_curl($url , $postdata = array()) {
   return array('httpcode'=>$httpcode,'response'=>$response);
 }
 
-if (option::get('protector') == 1 && ROLE != 'admin') {
+if (option::get('protector') == 1 && (!defined('ROLE') || ROLE != 'admin')) {
     foreach($_GET as $key=>$value) {
       wmzz_prot_StopAttack($key,$value,$getfilter,"GET");
     }

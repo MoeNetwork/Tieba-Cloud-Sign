@@ -17,7 +17,6 @@ function cron_system_sign_retry() {
 	}
 
 	foreach ($i['table'] as $value) {
-		$return = misc::DoSign_retry($value);
+		misc::DoSign_retry($value);
 	}
-	return $return;
 }
