@@ -60,7 +60,7 @@ class zip
                 }
             }
         }
-        closedir($path);
+        @closedir($handle);
     }
     
     //添加路径下所有文件（不包括子目录）到压缩包。$path=. 则表示当前目录
@@ -76,7 +76,7 @@ class zip
                 }
             }
         }
-        closedir($path);
+        @closedir($handle);
     }
     
     //云签专用备份函数
