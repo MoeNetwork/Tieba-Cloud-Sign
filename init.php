@@ -15,16 +15,10 @@ require SYSTEM_ROOT.'/lib/class.E.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/lib/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/class.smtp.php';
+require SYSTEM_ROOT.'/lib/class.zip.php';
 require SYSTEM_ROOT.'/lib/reg.php';
 define('SYSTEM_URL',option::get('system_url'));
 define('SYSTEM_NAME', option::get('system_name'));
-require SYSTEM_ROOT.'/lib/sfc.functions.php';
-require SYSTEM_ROOT.'/lib/ui.php';
-require SYSTEM_ROOT.'/lib/globals.php';
-if (option::get('protector') == 1) {
-	require SYSTEM_ROOT.'/lib/protector.php';
-}
-require SYSTEM_ROOT.'/lib/plugins.php';
 //版本修订号
 define('SYSTEM_REV',option::get('core_revision'));
 //压缩包链接
@@ -39,5 +33,10 @@ define('UPDATE_FNAME_CODING','');
 define('UPDATE_FNAME_GITCAFE','Tieba-Cloud-Sign');
 //压缩包解压路径
 define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_cache/');
-//加载压缩包操作类
-require SYSTEM_ROOT.'/lib/class.zip.php';
+require SYSTEM_ROOT.'/lib/sfc.functions.php';
+require SYSTEM_ROOT.'/lib/ui.php';
+require SYSTEM_ROOT.'/lib/globals.php';
+if (option::get('protector') == 1) {
+	require SYSTEM_ROOT.'/lib/protector.php';
+}
+require SYSTEM_ROOT.'/lib/plugins.php';
