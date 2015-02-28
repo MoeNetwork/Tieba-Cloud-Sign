@@ -93,11 +93,13 @@ switch (SYSTEM_PAGE) {
 		}
 
 		//备份
+		/*
         $file = SYSTEM_ROOT . '/setup/update_backup/'.date('Y-m-d H-i-s').'-'.getRandStr(7).'.zip';
         $z = new zip();
         $z->open($file,8);
         $z->backup();
         $z->close();
+        */
 
         //解压缩
         $z = new zip();
