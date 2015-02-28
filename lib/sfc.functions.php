@@ -248,6 +248,8 @@ function CreateZip($orig_fname, $content, $tempzip) {
  * 删除文件或目录
  */
 function DeleteFile($file) {
+	if (!file_exists($file)) 
+		return false;
 	if (empty($file))
 		return false;
 	if (@is_file($file))

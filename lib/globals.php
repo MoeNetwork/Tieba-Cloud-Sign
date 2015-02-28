@@ -176,20 +176,8 @@ elseif (SYSTEM_PAGE == 'reg') {
 }
 elseif (isset($_GET['pub_plugin'])) {
 	define('ROLE', 'visitor');
-	$i['user']['role'] = 'visitor';
-	$plug = strip_tags($_GET['pub_plugin']);
-	if (in_array($plug, $i['plugins']['actived'])) {
-		if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php')) {
-			require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_public.php';
-		} else {
-			msg('插件前台显示模块不存在或不正确');
-		}
-	} else {
-		ReDirect('index.php?mod=login');
-	}
-	die;
+	define('SYSTEM_READY_LOAD_PUBPLUGIN', true);
 }
-
 elseif (SYSTEM_PAGE == 'admin:logout') {
 	doAction('logout');
 	setcookie("wmzz_tc_user",'', time() - 3600);
