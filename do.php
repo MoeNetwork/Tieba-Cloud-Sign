@@ -2,6 +2,7 @@
 define('SYSTEM_DO_NOT_LOGIN', true);
 require dirname(__FILE__).'/init.php';
 global $m,$today,$i;
+ignore_user_abort(true);
 set_time_limit(0);
 $cron_pw = option::get('cron_pw');
 $cmd_pw = function_exists('getopt') ? getopt('',array('pw::')) : false;
@@ -12,7 +13,6 @@ if (!empty($cron_pw)) {
 }
 doAction('cron_1');
 if (SYSTEM_PAGE == 'runcron') {
-	set_time_limit(0);
 	$cron = isset($_GET['cron']) ? sqladds(strip_tags($_GET['cron'])) : msg('运行失败：计划任务未指定');
 	$cpw  = option::get('cron_pw');
 
