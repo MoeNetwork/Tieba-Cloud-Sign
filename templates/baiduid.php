@@ -196,17 +196,8 @@ global $m;
 </form>
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
 <div class="panel panel-default">
-  <div class="panel-heading" onclick="$('#baidumusic_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 推荐绑定方法</h3></div>
-  <div class="panel-body" id="baidumusic_bduss">
-      1.<a href="https://passport.baidu.com/v2/?login" target="_blank">登录需要绑定的百度账号</a>
-      <br/><br/>2.<a href="http://musicmini.baidu.com/app/passport/getBDUSS.php" target="_blank">点击此处</a>获取BDUSS
-      <br/><br/>3.复制你看到的那一大串英文和数字（不包括双引号"），粘贴到上方的输入框中
-  </div>
-</div>
-<br/>
-<div class="panel panel-default">
-	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Windows 系统下的绑定方法</h3></div>
-	<div class="panel-body" id="win_bduss" style="display:none">
+	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 在 Windows 系统下的绑定方法</h3></div>
+	<div class="panel-body" id="win_bduss">
 	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器</a>
 	    <br/><br/>2.请确保已安装了 <b>.Net Framework 3.0</b> [ 正版Win7已自带 ]
 	    <br/><br/>3.请运行此程序，按照要求输入账号信息，然后将获取到的 BDUSS 填入上面的表单即可
@@ -223,7 +214,7 @@ global $m;
 		<br/><br/>5.如图，依次展开 <b>passport.baidu.com</b> -> <b>Cookie</b> -> <b>BDUSS</b>
 		<br/><br/><a href="source/doc/baiduid.png" target="_blank"><img src="source/doc/baiduid.png"></a>
 		<br/><br/>6.按下 Ctrl+A 全选，然后复制并输入到上面的表单即可
-    <br/><br/>请注意，一旦退出登录，将导致 BDUSS 失效，因此建议在隐身模式下登录
+    <br/><br/>请注意，一旦退出登录，可能导致 BDUSS 失效，因此建议在隐身模式下登录
 	</div>
 </div>
 </div>
