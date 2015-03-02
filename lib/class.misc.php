@@ -215,6 +215,13 @@ class misc {
 			$ch->addcookie("BDUSS=".$ck);
 			$ch->exec();
 			$ch->close();
+			//临时判断解决方案
+			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+			$ch->addcookie("BDUSS=".$ck);
+			$s = $ch->exec();
+			$ch->close();
+			//如果找不到这段html则表示没有签到则stripos()返回false，同时is_bool()返回true，最终返回false
+			return !is_bool(stripos($s,'<td style="text-align:right;"><span >已签到</span></td>'));
 		} else {
 			return true;
 		}
@@ -265,22 +272,28 @@ class misc {
 		}
 
 		if(!empty($sign_mode) && in_array('1',$sign_mode) && $status_succ === false) {
-			$v = json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck),true);
-			if (empty($v['error_code']) || $v['error_code'] == $again_error_id) {
-				$status_succ = true;
-			} else {
-				$error_code = $v['error_code'];
-				$error_msg  = $v['error_msg'];
+			$r = self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck);
+			$v = json_decode($r,true);
+			if($v != $r && $v != NULL){//decode失败时会直接返回原文或NULL
+				if (empty($v['error_code']) || $v['error_code'] == $again_error_id) {
+					$status_succ = true;
+				} else {
+					$error_code = $v['error_code'];
+					$error_msg  = $v['error_msg'];
+				}
 			}
 		}
 
 		if(!empty($sign_mode) && in_array('3',$sign_mode) && $status_succ === false) {
-			$r = json_decode(self::DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck),true);
-			if (empty($r['no']) || $r['no'] == $again_error_id_2 || $r['no'] == $again_error_id_3) {
-				$status_succ = true;
-			} else {
-				$error_code  = $r['no'];
-				$error_msg   = $r['error'];
+			$r = self::DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck);
+			$v = json_decode($r,true);
+			if($v != $r && $v != NULL){//decode失败时会直接返回原文或NULL
+				if (empty($v['no']) || $v['no'] == $again_error_id_2 || $v['no'] == $again_error_id_3) {
+					$status_succ = true;
+				} else {
+					$error_code  = $v['no'];
+					$error_msg   = $v['error'];
+				}
 			}
 		}
 
