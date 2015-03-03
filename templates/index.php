@@ -14,6 +14,9 @@ doAction('index_3');
 	echo '<br/><br/><div id="stat" onclick="view_status(this);"><button type="button" class="btn btn-info">点击查看签到状态统计信息</button></div>';
 	echo '<br/><br/><b>权限：</b>'.getrole(ROLE);
 	if (ROLE == 'admin') {
+		if (!file_exists(SYSTEM_ROOT . '/setup/install.lock')) {
+			echo '<br/><br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font><a href="setting.php?mod=admin:create_lock">未找到 <b>/setup/install.lock</b> 文件，站点将有被恶意重装的风险，请务必建立一个空的 install.lock 文件，点此尝试建立</a>';
+		}
 		echo '<br/><br/><b>计划任务上次执行日期：</b>'.option::get('cron_last_do_time');
 		if (time() - strtotime(option::get('cron_last_do_time')) > 86400) {
 			echo '<br/><br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>警告：</b></font>计划任务今天尚未运行，是否已设置 <b>do.php</b> 到您的主机的计划任务？';

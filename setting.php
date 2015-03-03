@@ -379,6 +379,16 @@ switch (SYSTEM_PAGE) {
 		}
 		break;
 
+	case 'admin:create_lock':
+		if (!file_put_contents(SYSTEM_ROOT . '/setup/install.lock', '1')) {
+			$msg = '未能放置 install.lock，请手动完成。<br/><br/>';
+		} else {
+			$msg = '系统成功放置 install.lock，但是如果您的环境为引擎，您必须手工放置<br/><br/>';
+		}
+		$msg .= '若要手工放置，请在云签到的 setup 目录下建立一个 install.lock 文件';
+		msg($msg);
+		break;
+
 	case 'baiduid':
 		if (isset($_GET['delete'])) {
 			doAction('baiduid_set_1');
