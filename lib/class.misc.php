@@ -459,13 +459,13 @@ class misc {
 			$c->close();
 			preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
 			foreach ($list[3] as $v) {
+				$n++;
+				if (!empty($o) && $isvip == false && $n > $o) {
+					break;
+				}
 				$v = addslashes(htmlspecialchars(mb_convert_encoding($v, "UTF-8", "GBK")));
 				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `C` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
 				if($osq['C'] == '0') {
-					$n++;
-					if (!empty($o) && $isvip == false && $n > $o) {
-						break;
-					}
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
 				}
 				$addnum++;
