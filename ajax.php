@@ -171,7 +171,7 @@ switch (SYSTEM_PAGE) {
 
 	case 'baiduid:bdid':
 		//多次循环有助于解决验证码问题
-		for ($e = 0; $e < 2; $i++) {
+		for ($e = 0; $e < 2; $e++) {
 			$x = misc::loginBaidu( $_POST['bd_name'] , $_POST['bd_pw'] , $_POST['bd_v'] , $_POST['vcodestr'] );
 			if (stristr($x, '您输入的验证码有误') || stristr($x, urlencode('您输入的验证码有误'))) {
 				$error  = '您输入的验证码有误';

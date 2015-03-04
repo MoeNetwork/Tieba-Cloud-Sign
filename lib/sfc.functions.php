@@ -46,7 +46,7 @@ function getRandStr($length = 12, $special_chars = false) {
 		$chars .= '!@#$%^&*()';
 	}
 	$randStr = '';
-	for ($i = 0; $i < $length; $i++) {
+	for ($e = 0; $e < $length; $e++) {
 		$randStr .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 	}
 	return $randStr;
@@ -168,7 +168,7 @@ function rand_array($a) {
  */
 function rand_int($l) {
 	$int = null;
-	for ($i=0; $i < $l; $i++) { 
+	for ($e=0; $e < $l; $e++) { 
 		$int .= mt_rand(0,9);
 	}
 	return $int;
@@ -320,8 +320,8 @@ function dataBak($table) {
 	while ($row = $m->fetch_row($rows)) {
 		$comma = '';
 		$sql .= "INSERT INTO `$table` VALUES(";
-		for ($i = 0; $i < $numfields; $i++) {
-			$sql .= $comma."'" . $m->escape_string($row[$i]) . "'";
+		for ($e = 0; $e < $numfields; $e++) {
+			$sql .= $comma."'" . $m->escape_string($row[$e]) . "'";
 			$comma = ',';
 		}
 		$sql .= ");\n";
