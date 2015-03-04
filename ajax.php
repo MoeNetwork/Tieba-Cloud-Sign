@@ -3,8 +3,8 @@ require dirname(__FILE__).'/init.php';
 
 switch (SYSTEM_PAGE) {
 
-	case 'ajax:status':
-		global $today;
+    case 'ajax:status':
+    	global $today;
 		global $m,$i;
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
 		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
@@ -43,7 +43,7 @@ switch (SYSTEM_PAGE) {
   <br/>上次更新描述：'.$json['lastMessage'].'
   <br/>文件将被临时下载到 /setup/update_cache 文件夹，更新前会自动备份文件以供回滚
 </div>';
-				if($json['revision'] == '0'){
+				if($json['revision'] == '0' || $json['version'] > SYSTEM_VER){
 					echo '<input type="submit" class="btn btn-primary" value="更新到最新正式版"><br/><br/></form>';
 				} else {
 					echo '<div class="alert alert-danger" role="alert">开发版着重于尝鲜和更迭，但存在一定的不稳定性，更新请谨慎，后果自负哦。稳定版<a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">点此下载</a></div>';
@@ -65,8 +65,8 @@ switch (SYSTEM_PAGE) {
 			mkdir(UPDATE_CACHE, 0777, true);
 		}
 
-        //下载zip包
-        switch (option::get('update_server')) {
+		//下载zip包
+		switch (option::get('update_server')) {
 			case '1':
 				$c = new wcurl(UPDATE_SERVER_GITHUB);
 				$floderName = UPDATE_FNAME_GITHUB;
@@ -101,45 +101,48 @@ switch (SYSTEM_PAGE) {
         $z->close();
         */
 
-        //解压缩
-        $z = new zip();
-        $z->open($zipPath);
-        $z->extract(UPDATE_CACHE);
-        $z->close();
+		//解压缩
+		$z = new zip();
+		$z->open($zipPath);
+		$z->extract(UPDATE_CACHE);
+		$z->close();
 
-        //检查更新文件
-        $floderName = UPDATE_CACHE.$floderName;
-        if(!is_dir($floderName)){
-        	DeleteFile(UPDATE_CACHE);
-        	msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
-        }
+		//检查更新文件
+		$floderName = UPDATE_CACHE.$floderName;
+		if(!is_dir($floderName)){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
+		}
 
-        //删除配置文件
-        if (file_exists($floderName.'/config.php')) {
-        	unlink($floderName.'/config.php');
-        }
-        if (file_exists($floderName.'/app.conf')) {
-        	unlink($floderName.'/app.conf');
-        }
-        if (file_exists($floderName.'/config.yaml')) {
-        	unlink($floderName.'/config.yaml');
-        }
-        
-        //覆盖文件
-        if(CopyAll($floderName,SYSTEM_ROOT) !== true){
-        	DeleteFile(UPDATE_CACHE);
-        	msg('错误 - 更新失败：<br/><br/>无法更新文件');
-        }
-        DeleteFile(UPDATE_CACHE);
-        //获取最新的版本号
-        $c = new wcurl(SUPPORT_URL . 'callback.php');
+		//删除配置文件
+		if (file_exists($floderName.'/config.php')) {
+			unlink($floderName.'/config.php');
+		}
+		if (file_exists($floderName.'/app.conf')) {
+			unlink($floderName.'/app.conf');
+		}
+		if (file_exists($floderName.'/config.yaml')) {
+			unlink($floderName.'/config.yaml');
+		}
+		
+		//覆盖文件
+		if(CopyAll($floderName,SYSTEM_ROOT) !== true){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法更新文件');
+		}
+		DeleteFile(UPDATE_CACHE);
+		//获取最新的版本号
+		$c = new wcurl(SUPPORT_URL . 'callback.php');
 		$json = json_decode($c->exec(),true);
 		$c->close();
 		//修改版本号
-		option::set('core_version',$json['version']);
 		option::set('core_revision',$json['revision']);
-
-        msg('恭喜您！您已成功升级到 V'.$json['version'].'.'.$json['revision'].'<br/><br/>请按照版本号运行setup目录下的升级脚本', SYSTEM_URL);
+		if($json['version'] > SYSTEM_VER){
+			//每次主版本号变动必须有更新脚本，数据库中主版本号由更新脚本修改
+			$updatefile = '<br/><br/>本次升级需要运行升级脚本。请点击运行： <a href="setup/update'.SYSTEM_VER.'to'.$json['version'].'.php">update'.SYSTEM_VER.'to'.$json['version'].'.php</a><br/>如果升级脚本不存在，可能是由于您本次更新跨越了多个版本，您需要依次运行每一个脚本。<br/>';
+			msg('恭喜您！您已成功升级到 V'.$json['version'].'.'.$json['revision'].$updatefile,false);
+		}
+		msg('恭喜您！您已成功升级到 V'.$json['version'].'.'.$json['revision'], SYSTEM_URL);
 		break;
 
 	case 'admin:update:changeServer':
