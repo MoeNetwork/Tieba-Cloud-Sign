@@ -142,10 +142,6 @@ define(\'DB_PREFIX\',\'tc_\');
 					$isapp = '0';
 				}
 				preg_match("/^.*\//", $_SERVER['SCRIPT_NAME'], $sysurl);
-				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
-				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
-				$sql  = str_ireplace('{VAR-ISAPP}', $isapp, $sql);
-				$sql  = str_ireplace('{VAR-SYSTEM-URL}', $http . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				if($_POST['from_config'] == 1) {
 					require SYSTEM_ROOT2.'/../config.php';
 				} else {
@@ -155,7 +151,42 @@ define(\'DB_PREFIX\',\'tc_\');
 					define('DB_NAME',$_POST['dbname']);
 					define('DB_PREFIX',$_POST['dbprefix']);
 				}
+				$sql  = str_ireplace('{VAR-PREFIX}', $_POST['dbprefix'], file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
+				$sql  = str_ireplace('{VAR-DB}', $_POST['dbname'], $sql);
+				$sql  = str_ireplace('{VAR-ISAPP}', $isapp, $sql);
+				$sql  = str_ireplace('{VAR-SYSTEM-URL}', $http . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				$sql .= "\n"."INSERT INTO `".DB_NAME."`.`".DB_PREFIX."users` (`name`, `pw`, `email`, `role`) VALUES ('{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin');";
+				if (!isset($_POST['nosql'])) {
+					require SYSTEM_ROOT.'/lib/mysql_autoload.php';
+					global $m;
+					$testInstall = $m->fetch_row($m->query("SHOW TABLES LIKE '".DB_PREFIX."users'"));
+					if (!empty($testInstall[0])) {
+						if (!empty($_POST['force_user']) && !empty($_POST['force_pw'])) {
+							$force_user = !empty($_POST['force_user']) ? addslashes($_POST['force_user']) : msg('请输入原站点的管理员用户名');
+							$force_pw   = !empty($_POST['force_pw'])   ? addslashes($_POST['force_pw'])   : msg('请输入原站点的管理员密码');
+							$account    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users` WHERE `name` = '{$force_user}';");
+							if (empty($account['role'])) {
+								msg('原站点的管理员用户名错误，请返回重新输入');
+							} elseif ($account['pw'] != md5(md5(md5($force_pw)))) {
+								msg('原站点的管理员密码错误，请返回重新输入<br/><br/>注：暂时不支持自定义加密方式的用户重装站点');
+							} elseif ($account['role'] != 'admin') {
+								msg('权限不足');
+							}
+						} else {
+							echo '<h2>请输入原站点的管理员用户名和密码</h2><br/>';
+							echo '<div class="progress progress-striped"><div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 50%"><span class="sr-only">50%</span></div></div>';
+							echo '检测到站点已经安装过 '.SYSTEM_FN . ' 了，如果需要继续安装，请输入待覆盖站点管理员用户名和密码（不是刚才输入的创始人用户名和密码）<br/><br/>如果继续安装，您的站点的数据将会全部恢复到云签到初始状态<br/><br/>';
+							echo '<form action="install.php?step=4" method="post">';
+							echo '<div class="input-group"><span class="input-group-addon" id="basic-addon1">用户名</span><input type="text" class="form-control" name="force_user" required></div><br/>';
+							echo '<div class="input-group"><span class="input-group-addon" id="basic-addon1">密码</span><input type="password" class="form-control" name="force_pw" required></div><br/>';
+							foreach ($_POST as $key => $value) {
+								echo '<input type="hidden" name="'.$key.'" value="'.$value.'">';
+							}
+							echo '<br/><input type="submit" class="btn btn-success" value="下一步 >>"></form>';
+							die;
+						}
+					}
+				}
 				if (!isset($_POST['isbae'])) {
 					$write_data = '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
 //特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
@@ -178,8 +209,6 @@ define(\'DB_PREFIX\',\''.DB_PREFIX.'\');';
 					}
 				}
 				if (!isset($_POST['nosql'])) {
-					require SYSTEM_ROOT.'/lib/mysql_autoload.php';
-					global $m; 
 					$m->multi_query($sql);
 				} else {
 					$errorhappen .= '由于你选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
