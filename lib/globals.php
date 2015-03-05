@@ -34,6 +34,8 @@ if (isset($_COOKIE['wmzz_tc_user']) && isset($_COOKIE['wmzz_tc_pw'])) {
 			$i['user']['pw'] = $p['pw'];
 			$i['user']['bduss'] = array();
 			$i['user']['table'] = $p['t'];
+			$i['user']['tbnum'] = $m->fetch_row($m->query('SELECT COUNT(*) FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `uid` = '.UID));
+			$i['user']['tbnum'] = $i['user']['tbnum'][0];
 			$bds = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE uid = ".UID);
 			while ($bd = $m->fetch_array($bds)) {
 				$bdspid = $bd['id'];
