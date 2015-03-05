@@ -18,7 +18,9 @@ doAction('admin_tools_1');
 
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=cron_sign_again'" class="btn btn-primary" value="清空签到重试次数统计" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;[ 当前重试次数：<?php $sign_again = unserialize(option::get('cron_sign_again')); echo  $sign_again_num = empty($sign_again['num']) ? 0 : $sign_again['num'] ?> ] 本操作将清除目前的签到重试次数统计
 
+<!--
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=cleanz'" class="btn btn-primary" value="清除设置中的转义符" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;清除options和plugins表中所有的转义符
+-->
 
 <br/><br/><input type="button" data-toggle="modal" data-target="#BackupTable" class="btn btn-primary" value="导出数据库" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;导出数据库备份
 <!--

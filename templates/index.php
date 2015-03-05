@@ -13,7 +13,7 @@ doAction('index_1');
 		点击上方导航栏的 功能菜单 可以列出所有功能
 		<br/><br/>
 		此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> (@ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a>)
-		<br/><br/>本站 [ <?php echo SYSTEM_URL ?> ] 保留所有权利
+		<br/><br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
 	<?php doAction('index_p_1'); ?>
 	</div>
 </div>
@@ -39,8 +39,8 @@ doAction('index_1');
 		</li>
 		<li class="list-group-item">
 		<?php if(empty($i['user']['bduss'])){ ?>
-			<font color="red"><span class="glyphicon glyphicon-warning-sign"></span></font>
-			 您还没有绑定百度账号，无法自动签到，<a href="index.php?mod=baiduid">前往绑定</a>
+			<span class="glyphicon glyphicon-info-sign"></span>
+			 您还没有绑定任何百度账号，无法使用云签到功能，<a href="index.php?mod=baiduid">前往绑定</a>
 		<?php } else { ?>
 			<span class="glyphicon glyphicon-link"></span> <b>百度账号数：</b>
 		<?php
@@ -53,7 +53,7 @@ doAction('index_1');
 		<li class="list-group-item">
 		<?php
 			if(empty($i['user']['tbnum'])){ ?>
-				<font color="red"><span class="glyphicon glyphicon-warning-sign"></span></font>
+				<span class="glyphicon glyphicon-info-sign"></span>
 				 您还没有绑定刷新贴吧列表，无法自动签到，<a href="index.php?mod=showtb">前往刷新</a>
 			<?php } else { ?>
 				<span class="glyphicon glyphicon-check"></span> <b>贴吧个数：</b>
@@ -88,7 +88,7 @@ if (ROLE == 'admin') {
 			}
 			echo '</li>';
 			if (!file_exists(SYSTEM_ROOT . '/setup/install.lock')) {
-				echo '<li class="list-group-item"><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>未找到 <b>/setup/install.lock</b> 文件，站点将有被恶意重装的风险，请务必建立一个空的 install.lock 文件，<a href="setting.php?mod=admin:create_lock">点此尝试建立</a>';
+				echo '<li class="list-group-item"><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>未找到 <b>/setup/install.lock</b> 文件，站点将有被恶意重装的风险，请务必建立一个空的 install.lock 文件，<a href="setting.php?mod=admin:create_lock">点此建立</a>';
 			}
 			doAction('index_p_3');
 			echo '<li class="list-group-item"><p class="info">请填写您的邮件地址，订阅 StusGame 云签到官方订阅，以便于及时接收关于云签到程序的更新与重要通知：</p><div class="mailInput"><form action="https://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post"><input type="hidden" name="t" value="qf_booked_feedback"><input type="hidden" name="id" value="f752182ed774de32ef9ee39fbb5e44e38261368b16e7ea44"><div class="input-group">
