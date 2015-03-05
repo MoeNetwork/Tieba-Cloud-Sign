@@ -104,6 +104,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('system_url',$sou['system_url']);
 			@option::set('system_name',$sou['system_name']);
 			@option::set('footer',$sou['footer']);
+			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);
 			@option::set('protect_reg',$sou['protect_reg']);
 			@option::set('yr_reg',$sou['yr_reg']);

@@ -19,10 +19,10 @@ addAction('header','wmzz_debug_system1');
 
 function wmzz_debug_phpinfo() {
 	if(ROLE == 'admin')
-		echo '<br/><a href="index.php?plugin=wmzz_debug" target="_blank">查看更多服务器信息 [ PHPInfo ]</a>';
+		echo '<li class="list-group-item"><a href="index.php?plugin=wmzz_debug" target="_blank">查看更多服务器信息 [ PHPInfo ]</a></li>';
 }
 
-addAction('index_3','wmzz_debug_phpinfo');
+addAction('index_p_3','wmzz_debug_phpinfo');
 
 function wmzz_debug_system2() {
 	global $m;
