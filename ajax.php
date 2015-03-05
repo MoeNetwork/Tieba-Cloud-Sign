@@ -3,12 +3,12 @@ require dirname(__FILE__).'/init.php';
 
 switch (SYSTEM_PAGE) {
 
-    case 'ajax:status':
-    	global $today;
-		global $m,$i;
+	case 'ajax:status':
+		global $today,$m,$i;
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
 		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
-		echo "<b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
+		echo "<br/><b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
+		echo '<br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
 		$c3 = $c4 = $c5 = $c6 = 0;
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
@@ -21,9 +21,9 @@ switch (SYSTEM_PAGE) {
 				$c5 = $c5 + $count5[0];
 				$c6 = $c6 + $count6[0];
 			}	
-			echo "<br/><br/><b>签到状态[总体]：</b>已签到 {$c3} 个贴吧，还有 {$c4} 个贴吧等待签到";
-			echo "<br/><br/><b>贴吧状态[总体]：</b>有 {$c5} 个贴吧签到出错，{$c6} 个贴吧已被设定为忽略";
-			echo '<br/><br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
+			echo "<br/><b>签到状态[总体]：</b>已签到 {$c3} 个贴吧，还有 {$c4} 个贴吧等待签到";
+			echo "<br/><b>贴吧状态[总体]：</b>有 {$c5} 个贴吧签到出错，{$c6} 个贴吧已被设定为忽略";
+			echo '<br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
 		}
 		break;
 
