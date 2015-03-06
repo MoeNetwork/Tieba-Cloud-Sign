@@ -71,3 +71,13 @@ StusGame GROUP：http://www.stus8.com
 ##联系方式
 无名智者：kenvix@vip.qq.com　　http://zhizhe8.net      
 mokeyjay：longting@longtings.com　　http://www.longtings.com
+
+##云签到主要开发者列表
+无名智者[kenvix@vip.qq.com]      
+mokeyjay[longting@longtings.com]      
+FYY[793171926@qq.com]       
+
+##感谢
+VFleaKing[liuhaotian0520@163.com]      
+liwanglin12[i@lwl12.com]      
+角落里有蛇[395183830@qq.com]      
