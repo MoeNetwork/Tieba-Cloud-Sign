@@ -155,20 +155,6 @@ switch (SYSTEM_PAGE) {
 			option::set('cron_sign_again','');
 			break;
 
-		case 'cleanz':
-			global $m;
-			$f = $m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.'plugins` WHERE `options` RLIKE ".[\\\\]."');
-			while($ff = $m->fetch_array($f)) {
-				$ff['options'] = str_replace('\\','',$ff['options']);
-				$m->query('UPDATE  `'.DB_NAME.'`.`'.DB_PREFIX.'plugins` SET `options` = "'.$ff['options'].'" WHERE `id` = '.$ff['id']);
-			}
-			$f = $m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.'options` WHERE `value` RLIKE ".[\\\\]."');
-			while($ff = $m->fetch_array($f)) {
-				$ff['value'] = str_replace('\\','',$ff['value']);
-				$m->query('UPDATE  `'.DB_NAME.'`.`'.DB_PREFIX.'options` SET `value` = "'.$ff['value'].'" WHERE `id` = '.$ff['id']);
-			}
-			break;
-
 		case 'runsql':
 			global $m;
 			if (!empty($_POST['sql'])) {
