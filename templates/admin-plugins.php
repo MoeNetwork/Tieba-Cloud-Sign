@@ -80,7 +80,7 @@ doAction('admin_plugins');
 			<th style="width:30%">状态/操作</th>
 		</tr>
 	</thead>
-	<tobdy>
+	<tbody>
 		<?php echo $plugins; ?>
 	</tbody>
 </table>
