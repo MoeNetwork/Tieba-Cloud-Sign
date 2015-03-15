@@ -5,7 +5,8 @@
 ## 云签到教程
 所有教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163      
 在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204      
-"往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了"  ————插件开发者 DL
+“往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”  ————插件开发者 D丶L
+
 ## 代码库列表
 云签到在多个代码库均有副本，当某个代码库不可用时，您可以尝试通过其他代码库下载云签到
 #### 代码库地址
@@ -43,6 +44,11 @@ Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 找到   define('LONGSQL', false);      
 替换为 define('LONGSQL', true);      
 
+##许可协议
+请访问该地址阅读许可协议：http://tc.oschina.mopaas.com/license.html
+#####不要尝试去违反协议或用于盈利
+#####或者可以前往该地址购买商业授权：http://item.taobao.com/item.htm?id=43814067894
+
 ##禁止利用该软件来盈利
 #####1.不得要求用户付费
 例：你提出用户要付费才能使用
@@ -52,18 +58,6 @@ Gitcafe : https://gitcafe.com/kenvix/Tieba-Cloud-Sign/archiveball/master/zip
 总之：禁止贩售程序，禁止去版权，禁止要求用户付费      
 可以：摆放一个捐赠链接（必须是用户自愿，不得强制要求捐赠），挂广告
 
-##许可协议
-请访问该地址阅读：http://tc.oschina.mopaas.com/license.html
-#####不要尝试去违反协议或用于盈利
-
-##商业授权
-您可以前往该地址购买商业授权：http://item.taobao.com/item.htm?id=43814067894
-
-##参与开发
-贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码      
-Pull Request，提交Issue请到 Git@OSChina 代码库，在其他代码库提交可能不会被处理      
-如需加入开发组请联系 @无名智者
-
 ##其他
 StusGame GROUP：http://www.stus8.com      
 插件商城：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13
@@ -72,12 +66,15 @@ StusGame GROUP：http://www.stus8.com
 无名智者：kenvix@vip.qq.com　　http://zhizhe8.net      
 mokeyjay：longting@longtings.com　　http://www.longtings.com
 
-##云签到主要开发者列表
+##参与开发
+贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码      
+Pull Request，提交Issue请到 Git@OSChina 代码库，在其他代码库提交可能不会被处理      
+如需加入开发组请联系 @无名智者
+###主要开发者列表
 无名智者[kenvix@vip.qq.com]      
 mokeyjay[longting@longtings.com]      
-FYY[793171926@qq.com]       
-
-##感谢
+FYY[fyod@vip.qq.com]       
+###感谢
 VFleaKing[liuhaotian0520@163.com]      
 liwanglin12[i@lwl12.com]      
 角落里有蛇[395183830@qq.com]      
