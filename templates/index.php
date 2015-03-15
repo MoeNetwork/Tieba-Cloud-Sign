@@ -44,9 +44,18 @@ doAction('index_1');
 		<?php } else { ?>
 			<span class="glyphicon glyphicon-link"></span> <b>百度账号数：</b>
 		<?php
-			echo count($i['user']['bduss']).'条 / ';
-			if ($i['opt']['bduss_num'] != '0' && ISVIP == false) { echo $i['opt']['bduss_num'].' 条'; }
-			else { echo '无限'; } // ('.getrole(ROLE).')
+			echo '<span id="baiduid_used">' . count($i['user']['bduss']).'</span> 个 / ';
+			if ($i['opt']['bduss_num'] != '0' && $i['opt']['bduss_num'] != '-1' && ISVIP == false) { 
+				echo '<span id="baiduid_limit">'.$i['opt']['bduss_num'].'</span> 个'; 
+			} elseif ($i['opt']['bduss_num'] == '-1') {
+				echo '<span id="baiduid_limit">禁止绑定</span>'; 
+			} else { 
+				echo '<span id="baiduid_limit">无限</span>'; 
+			} // ('.getrole(ROLE).')
+			echo '<div class="progress hidden-xs" style="float:right;width:45%">
+  <div class="progress-bar" role="progressbar" aria-valuenow="0" id="baiduid_prog" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+  </div>
+</div>';
 		}
 		?>
 		</li>
@@ -58,9 +67,18 @@ doAction('index_1');
 			<?php } else { ?>
 				<span class="glyphicon glyphicon-check"></span> <b>贴吧个数：</b>
 			<?php
-				echo $i['user']['tbnum'].'个 / ';
-				if ($i['opt']['tb_max'] != '0' && ISVIP == false) { echo $i['opt']['tb_max'].' 个'; }
-				else { echo '无限'; } 
+				echo '<span id="tb_used">' . $i['user']['tbnum'].'</span> 个 / ';
+				if ($i['opt']['tb_max'] != '0' && $i['opt']['tb_max'] != '-1' && ISVIP == false) { 
+					echo '<span id="tb_limit">' . $i['opt']['tb_max'] . '</span> 个'; 
+				} elseif ($i['opt']['tb_max'] == '-1') {
+					echo '<span id="tb_limit">禁止刷新</span>'; 
+				} else { 
+					echo '<span id="tb_limit">无限</span>'; 
+				} 
+				echo '<div class="progress hidden-xs" style="float:right;width:45%">
+  <div class="progress-bar" role="progressbar" aria-valuenow="0" id="tb_prog" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+  </div>
+</div>';
 			}
 		?>
 		</li>
@@ -107,3 +125,18 @@ if (ROLE == 'admin') {
 doAction('index_3');
 doAction('index_2');
 echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
+
+<script type="text/javascript">
+	<?php if ($i['opt']['bduss_num'] != '0' && $i['opt']['bduss_num'] != '-1' && ISVIP == false) { ?>
+	var baiduid = Math.round($("#baiduid_used").html() / $("#baiduid_limit").html() * 100);
+	$("#baiduid_prog").html(baiduid + '%');
+	$("#baiduid_prog").css("width",baiduid + '%');
+	$("#baiduid_prog").attr("aria-valuenow",baiduid);
+	<?php } ?>
+	<?php if ($i['opt']['tb_max'] != '0' && $i['opt']['tb_max'] != '-1' && ISVIP == false) { ?>
+	var tb = Math.round($("#tb_used").html() / $("#tb_limit").html() * 100);
+	$("#tb_prog").html(tb + '%');
+	$("#tb_prog").css("width",tb + '%');
+	$("#tb_prog").attr("aria-valuenow",tb);
+	<?php } ?>
+</script>
