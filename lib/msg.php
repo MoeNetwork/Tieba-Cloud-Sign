@@ -11,7 +11,6 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
     } else {
         $sysname = SYSTEM_FN;
     }
-    ob_clean();
     ?>  
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
