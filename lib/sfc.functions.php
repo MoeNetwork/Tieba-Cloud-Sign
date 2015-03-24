@@ -594,6 +594,27 @@ function sqladds($s) {
 	}
 }
 
+/**
+ * 去除英文字母、数字、下划线以外所有字符
+ * @param $s 需要处理的
+ * @return 处理结果
+ */
+function onlyalnum($s) {
+    if (is_array($s)) {
+		$r = array();
+		foreach ($s as $key => $value) {
+			$k = preg_replace('/[^a-zA-Z0-9._]*/','',$key);
+			if (!is_array($value)) {
+				$r[$k] = preg_replace('/[^a-zA-Z0-9._]*/','',$value);
+			} else {
+				$r[$k] = onlyalnum($value);
+			}
+		}
+		return $r;
+	} else {
+		return preg_replace('/[^a-zA-Z0-9._]*/','',$s);
+	}
+}
 
 /**
  * 转为正数或者0
