@@ -462,20 +462,20 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
  */
 function addAction($hook, $actionFunc) {
 	global $i;
-	$i['PluginHooks'][$hook][] = $actionFunc;
+	$i['plugins']['hook'][$hook][] = $actionFunc;
 	return true;
 }
 
 /**
  * 执行挂在钩子上的函数,支持多参数 eg:doAction('post_comment', $author, $email, $url, $comment);
- *
  * @param string $hook
+ * @param mixed ... 更多参数
  */
 function doAction($hook) {
 	global $i;
 	$args = array_slice(func_get_args(), 1);
-	if (isset($i['PluginHooks'][$hook])) {
-		foreach ($i['PluginHooks'][$hook] as $function) {
+	if (isset($i['plugins']['hook'][$hook])) {
+		foreach ($i['plugins']['hook'][$hook] as $function) {
 			$string = call_user_func_array($function, $args);
 		}
 	}
@@ -542,7 +542,6 @@ function Redirect($url) {
  * @param 计划任务名称
  * @return 执行成功true，否则false
  */
-
 function RunCron($file,$name) {
 	return cron::run($file,$name);
 }
@@ -552,19 +551,9 @@ function RunCron($file,$name) {
  * @param $s 需要转义的
  * @return 转义结果
  */
-
 function adds($s) {
 	if (is_array($s)) {
-		$r = array();
-		foreach ($s as $key => $value) {
-			$k = addslashes($key);
-			if (!is_array($value)) {
-				$r[$k] = addslashes($value);
-			} else {
-				$r[$k] = adds($value);
-			}
-		}
-		return $r;
+		return array_map('addslashes', $s);
 	} else {
 		return addslashes($s);
 	}
@@ -578,22 +567,22 @@ function adds($s) {
  */
 function sqladds($s) {
 	if (is_array($s)) {
-		$r = array();
-		foreach ($s as $key => $value) {
-			$k = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
-
-			if (!is_array($value)) {
-				$r[$k] = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
-			} else {
-				$r[$k] = sqladds($value);
-			}
+		if (version_compare(phpversion(), '5.3') == -1) {
+			return array_map(create_function('$a', 
+<<< 'FUCKOLDPHP'
+return str_replace('\'','\\\'', str_replace('\\','\\\\',$a));
+FUCKOLDPHP
+), $s);
+		} else {
+			return array_map(function($a) {
+					return str_replace('\'','\\\'', str_replace('\\','\\\\',$a));
+			}, $s);
 		}
 		return $r;
 	} else {
 		return str_replace('\'','\\\'', str_replace('\\','\\\\',$s));
 	}
 }
-
 
 /**
  * 转为正数或者0

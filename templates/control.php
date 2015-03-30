@@ -39,7 +39,7 @@ switch ($i['mode'][0]) {
 				break;
 			case 'setplug':
 				$plug = strip_tags($_GET['plug']);
-				$pluginfo = getPluginData($plug.'/'.$plug.'.php');
+				$pluginfo = getPluginInfo($plug);
 				
 				if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], $i['plugins']['actived'])) {
 					require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php';

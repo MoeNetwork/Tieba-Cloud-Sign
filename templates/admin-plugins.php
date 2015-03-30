@@ -4,66 +4,71 @@ if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">插件操作成功</div>';
 }
 
-$x=getPlugins();
+$x       = getPlugins();
 $plugins = '';
-$stat=0;
-foreach($x as $key=>$val) {
-    $stat++;
+foreach($x as $key => $val) {
 	$pluginfo = '';
-	if (!empty($val['Url'])) {
-		$pluginfo .= '<b><a href="'.$val['Url'].'" target="_blank">'.$val['Name'].'</a></b>';
+	$action   = '';
+	if (!empty($val['plugin']['url'])) {
+		$pluginfo .= '<b><a href="'.$val['plugin']['url'].'" target="_blank">'.$val['plugin']['name'].'</a></b>';
 	} else {
-		$pluginfo .= '<b>'.$val['Name'].'</b>';
+		$pluginfo .= '<b>'.$val['plugin']['name'].'</b>';
 	}
-	if (!empty($val['Description'])) {
-		$pluginfo .= '<br/>'.$val['Description'];
+	if (!empty($val['plugin']['description'])) {
+		$pluginfo .= '<br/>'.$val['plugin']['description'];
 	} else {
 		$pluginfo .= '<br/>';
 	}
 
-	if (!empty($val['Version'])) {
-		$pluginfo .= '<br/>版本：'.$val['Version'];
+	if (!empty($val['plugin']['version'])) {
+		$pluginfo .= '<br/>版本：'.$val['plugin']['version'];
 	} else {
 		$pluginfo .= '<br/>版本：1.0';
 	}
 
-	if (!empty($val['AuthorUrl'])) {
-		$authinfo = '<a href="'.$val['AuthorUrl'].'" target="_blank">'.$val['Author'].'</a>';
+	if (!empty($val['author']['url'])) {
+		$authinfo = '<a href="'.$val['author']['url'].'" target="_blank">'.$val['author']['author'].'</a>';
 	} else {
-		$authinfo = $val['Author'];
+		$authinfo = $val['author']['author'];
 	}
 
-	if (!empty($val['For'])) {
-		if($val['For'] == '不限') {
+	if (!empty($val['plugin']['for'])) {
+		if($val['plugin']['for'] == '不限' || $val['plugin']['for'] == 'all') {
 			$for = '';
 			$fortc = '<br/>适用版本：不限';
-		} elseif($val['For'] > SYSTEM_VER) {
+		} elseif($val['plugin']['for'] > SYSTEM_VER) {
 			$for = "&ver={$val['For']}";
-			$fortc = '<br/>适用版本：<font color="red">V'.$val['For'].'+</font>';
+			$fortc = '<br/>适用版本：<font color="red">V'.$val['plugin']['for'].'+</font>';
 		} else {
 			$for = '';
-			$fortc = '<br/>适用版本：V'.$val['For'].'+';
+			$fortc = '<br/>适用版本：V'.$val['plugin']['for'].'+';
 		}
-	}
-	if (in_array($val['Plugin'], $i['plugins']['all'])) {
-		if ($i['plugins']['info'][$val['Plugin']]['status'] == '1') {
-			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['Plugin'].'">禁用插件</a><br/>';
-			if (file_exists(SYSTEM_ROOT.'/plugins/'.$val['Plugin'].'/'.$val['Plugin'].'_setting.php')) {
-				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['Plugin'].'">打开插件设置</a>';
-			}
-		} else {
-			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['Plugin'].'">激活插件</a><br/>';
-		}
-	} else {
-		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['Plugin'].$for.'">安装插件</a><br/>';
 	}
 
-	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['Plugin'].$fortc.'<td>'.$status.'<br/><a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="setting.php?mod=admin:plugins&uninst='.$val['Plugin'].'" style="color:red;">卸载插件</a></td></tr>'; 
+	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
+		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
+			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
+			if ($val['core']['setting'] && $val['view']['setting']) {
+				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'">打开插件设置</a>';
+				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span></a> ';
+			}
+			if ($val['core']['show'] && $val['view']['show']) {
+				$action .= '<a href="index.php?plugin='.$val['plugin']['id'].'" title="查看页面"><span class="glyphicon glyphicon-eye-open"></span></a> ';
+			}
+		} else {
+			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['plugin']['id'].'">激活插件</a><br/>';
+		}
+	} else {
+		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['plugin']['id'].$for.'">安装插件</a><br/>';
+	}
+
+	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['plugin']['id'].$fortc.'<td>'.$status.'<br/>';
+	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'; 
 }
 
 doAction('admin_plugins');
 ?>
-<div class="alert alert-info" id="tb_num">当前有 <?php echo count($i['plugins']['all']); ?> 个已安装的插件，<?php echo count($i['plugins']['actived']) ?> 个已激活的插件，总共有 <?php echo $stat ?> 个插件
+<div class="alert alert-info" id="tb_num">当前有 <?php echo count($i['plugins']['all']); ?> 个已安装的插件，<?php echo count($i['plugins']['actived']) ?> 个已激活的插件，总共有 <?php echo count($x) ?> 个插件
 <br/>插件手工安装方法：直接解包插件并上传到 /plugins/ 即可
 <?php if (option::get('isapp')) {
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';

@@ -180,7 +180,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<?php
 		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
 		addset('依靠访客触发任务','checkbox','trigger',null,' 建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效');
-		addset('启用安全保护模块','checkbox','protector',null,' 建议开启');
 		addset('记住密码有效期<br/>单位为秒，过大会导致浏览器无法记录','number','cktime',' class="form-control" step="1" min="1"');
 		doAction('admin_set');
 		addset('环境为引擎','checkbox','isapp',null,' 如果您的主机不支持写入或者为应用引擎，请选择此项');

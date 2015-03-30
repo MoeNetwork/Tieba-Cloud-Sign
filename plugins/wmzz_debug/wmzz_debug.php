@@ -30,4 +30,3 @@ function wmzz_debug_system2() {
 }
 
 addAction('footer','wmzz_debug_system2');
-?>

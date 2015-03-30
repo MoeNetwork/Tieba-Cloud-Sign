@@ -9,11 +9,13 @@ doAction('index_1');
 		<h3 class="panel-title">程序信息</h3>
 	</div>
 	<div class="panel-body">
-		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='100px' weight='100px' onerror="$('#avatar').html('无法加载头像');"></span>
+		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='80px' weight='80px' onerror="$('#avatar').html('无法加载头像');"></span>
+		<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?>.<?php echo SYSTEM_REV ?> <?php echo SYSTEM_VER_NOTE ?>
+		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能
-		<br/><br/>
+		<br/>
 		此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
-		<br/><br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
+		<br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
 	<?php doAction('index_p_1'); ?>
 	</div>
 </div>
@@ -137,7 +139,9 @@ if (ROLE == 'admin') {
 		<li class="list-group-item">
 			<b>服务器软件：</b><?php echo $_SERVER['SERVER_SOFTWARE'] ?>
 		</li>
-		
+		<li class="list-group-item">
+			<b>服务器系统：</b><?php echo php_uname('a') ?>
+		</li>
 		<li class="list-group-item">
 			<b>程序最大运行时间：</b><?php echo ini_get('max_execution_time') ?>s
 		</li>

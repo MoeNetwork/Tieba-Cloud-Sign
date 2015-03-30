@@ -1,10 +1,21 @@
 <?php
 require dirname(__FILE__).'/init.php';
 
-if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin'])) {
+if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin']) && $i['mode'][0] != 'page') {
 	loadhead();
 	template('control');
 	loadfoot();
+} elseif ($i['mode'][0] == 'page') {
+	if (in_array($i['mode'][1], $i['plugins']['actived']) && file_exists(SYSTEM_ROOT . '/plugins/' . $i['mode'][1] . '/' . 'view_' . $i['mode'][2] . '.php')) {
+		$plug = getPluginInfo($i['mode'][1]);
+		if (in_array($i['mode'][2], $plug['page'])) {
+			include SYSTEM_ROOT . '/plugins/' . $i['mode'][1] . '/' . 'view_' . $i['mode'][2] . '.php';
+		} else {
+			msg('无效的插件自定义页面，请在 插件名_desc.php 中的page键添加此页面');
+		}
+	} else {
+		ReDirect('index.php');
+	}
 } elseif (isset($_GET['plugin'])) {
     $plug=strip_tags($_GET['plugin']);
     if (in_array($plug, $i['plugins']['actived'])) {

@@ -109,7 +109,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('protect_reg',$sou['protect_reg']);
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('icp',$sou['icp']);
-			@option::set('protector',$sou['protector']);
 			@option::set('trigger',$sou['trigger']);
 			@option::set('mail_mode',$sou['mail_mode']);
 			@option::set('mail_name',$sou['mail_name']);

@@ -6,7 +6,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 $today       = date("Y-m-d");
 $i           = array();
 
-$i['PluginHooks'] = array(); //挂载列表
+$i['plugins']['hook'] = array(); //挂载列表
 //注册全局信息变量 $i
 $i['db']['host'] = DB_HOST;
 $i['db']['user'] = DB_USER;
@@ -77,6 +77,7 @@ if (!defined('SYSTEM_NO_PLUGIN')) {
 		$i['plugins']['actived'][] = $plugin_active_var['name'];
 	}
 }
+
 //autoload
 function class_autoload($c) {
 	$c = strtolower($c);

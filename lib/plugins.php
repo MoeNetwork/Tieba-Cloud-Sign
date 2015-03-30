@@ -2,6 +2,22 @@
 global $i;
 
 /**
+ * 加载所有激活的插件
+ */
+function loadplugins() {
+	global $i;
+	if (defined('SYSTEM_PLUGINS_LOADED')) {
+		return;
+	}
+	foreach ($i['plugins']['actived'] as $value) {
+		if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
+			include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
+		}
+	}
+	define('SYSTEM_PLUGINS_LOADED', true);
+}
+
+/**
  * 激活插件
  * @return bool
  */
@@ -105,58 +121,81 @@ function settingPlugin($plugin) {
 * 获取所有插件列表，未定义插件名称的插件将不予获取
 * 插件目录：/plugins
 * 仅识别 插件目录/插件/插件.php 目录结构的插件
-* @return array
+* @param bool true为获取完整信息，false为获取标识符列表
+* @return array 插件信息
 */
-function getPlugins() {
-	global $PluginsList;
-	if (isset($PluginsList)) {
-		return $PluginsList;
-	}
-	$PluginsList = array();
-	$pluginFiles = array();
-	$pluginPath = SYSTEM_ROOT . '/plugins';
-	$pluginDir = @ dir($pluginPath);
-	if ($pluginDir) {
-		while(($file = $pluginDir->read()) !== false) {
-			if (preg_match('|^\.+$|', $file)) {
-				continue;
-			}
-			if (is_dir($pluginPath . '/' . $file)) {
-				$pluginsSubDir = @ dir($pluginPath . '/' . $file);
-				if ($pluginsSubDir) {
-					while(($subFile = $pluginsSubDir->read()) !== false) {
-						if (preg_match('|^\.+$|', $subFile)) {
-							continue;
-						}
-						if ($subFile == $file.'.php') {
-							$pluginFiles[] = "$file/$subFile";
-						}
-					}
-				}
+function getPlugins($full = true) {
+	$path = SYSTEM_ROOT . '/plugins/';
+	$res  = scandir($path);
+	$r    = array();
+	foreach ($res as $x) {
+		if (is_dir($path . $x) && file_exists($path . $x . '/' . $x . '.php')) {
+			if ($full) {
+				$r[] = getPluginInfo($x);
+			} else {
+				$r[] = $x;
 			}
 		}
 	}
-	if (!$pluginDir || !$pluginFiles) {
-		return $PluginsList;
-	}
-	sort($pluginFiles);
-	foreach ($pluginFiles as $pluginFile) {
-		$pluginData = getPluginData($pluginFile);
-		if (empty($pluginData['Name'])) {
-			continue;
-		}
-		$PluginsList[$pluginFile] = $pluginData;
-	}
-	return $PluginsList;
+	return $r;
 }
 
 /**
  * 获取插件信息
+ * @param string $plugin 插件标识符
+ * @return bool|array 无效插件返回false，成功返回 插件名_desc.php 中的信息
  */
-function getPluginData($pluginFile) {
+function getPluginInfo($plugin) {
+	$path = SYSTEM_ROOT . '/plugins/' . $plugin . '/';
+	if (!file_exists($path . $plugin . '.php')) {
+		return false;
+	}
+	if (file_exists($path . $plugin . '_desc.php')) {
+		$r = include $path . $plugin . '_desc.php';
+	} else {
+		$d = getOldPluginData($plugin . '/' . $plugin . '.php');
+		$r = array(
+			'plugin' => array(
+				'name'        => $d['Name'],
+				'version'     => $d['Version'],
+				'description' => $d['Description'],
+				'url'         => $d['Url'],
+				'for'         => $d['For']
+			),
+			'view'   => array(
+				'setting'     => true,
+				'show'        => true,
+				'vip'         => true,
+				'private'     => true,
+				'public'      => true
+			),
+			'author' => array(
+				'author'      => $d['Author'],
+				'url'         => $d['AuthorUrl']
+			)
+		);
+	}
+	$r['plugin']['id'] = $plugin;
+	if (file_exists($path . $plugin . '_setting.php'))
+		$r['core']['setting'] = true;
+	if (file_exists($path . $plugin . '_show.php'))
+		$r['core']['show'] = true;
+	if (file_exists($path . $plugin . '_vip.php'))
+		$r['core']['vip'] = true;
+	if (file_exists($path . $plugin . '_private.php'))
+		$r['core']['private'] = true;
+	if (file_exists($path . $plugin . '_public.php'))
+		$r['core']['public'] = true;
+	return $r;
+}
+
+/**
+ * 获取旧式插件信息
+ */
+function getOldPluginData($pluginFile) {
 	global $i;
     $pluginPath = SYSTEM_ROOT . '/plugins/';
-	$pluginData = implode('', file($pluginPath . $pluginFile));
+	$pluginData = file_get_contents($pluginPath . $pluginFile);
 	preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
 	preg_match("/Version:(.*)/i", $pluginData, $version);
 	preg_match("/Plugin URL:(.*)/i", $pluginData, $plugin_url);
@@ -194,4 +233,7 @@ function getPluginData($pluginFile) {
         'Plugin' => $plugin,
 	);
 }
-?>
+
+foreach ($i['plugins']['actived'] as $pluginInfo) {
+	$i['plugins']['desc'][$pluginInfo] = getPluginInfo($pluginInfo);
+}

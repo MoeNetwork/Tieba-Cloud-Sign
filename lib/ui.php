@@ -1,13 +1,14 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 ob_start();
-function loadhead() {
+function loadhead($title = '') {
+	$title = empty($title) ? strip_tags(SYSTEM_NAME) : $title . ' - ' . strip_tags(SYSTEM_NAME);
     doAction('top');
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 	echo '<meta http-equiv="charset" content="utf-8">';
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-	echo '<title>'.strip_tags(SYSTEM_NAME).'</title>';
+	echo '<title>'.$title.'</title>';
 	echo '<meta name="generator" content="Tieba-Cloud-Sign Ver.'.SYSTEM_VER.'" />';
 	echo '<link href="favicon.ico" rel="shortcut icon"/>';
 	echo '<meta name="author" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" />';
@@ -56,20 +57,4 @@ function checkIfActive($mod) {
 			echo 'active';
 		}
 	}
-}
-
-/**
- * 加载所有激活的插件
- */
-function loadplugins() {
-	global $i;
-	if (defined('SYSTEM_PLUGINS_LOADED')) {
-		return;
-	}
-	foreach ($i['plugins']['actived'] as $value) {
-		if (file_exists(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php') && !is_dir(SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php')) {
-			include SYSTEM_ROOT.'/plugins/'.$value.'/'.$value.'.php';
-		}
-	}
-	define('SYSTEM_PLUGINS_LOADED', true);
 }
