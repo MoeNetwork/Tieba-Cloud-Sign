@@ -49,7 +49,7 @@ global $i;
           <?php doAction('navi_3'); ?>
         </ul>
       </li>
-      <?php } doAction('navi_4'); ?>
+      <?php doAction('navi_4'); } ?>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href="index.php?mod=admin:logout"><span class="glyphicon glyphicon-off"></span> 退出登录</a></li>

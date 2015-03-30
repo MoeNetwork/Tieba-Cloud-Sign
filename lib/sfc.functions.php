@@ -468,6 +468,7 @@ function addAction($hook, $actionFunc) {
 
 /**
  * 执行挂在钩子上的函数,支持多参数 eg:doAction('post_comment', $author, $email, $url, $comment);
+ *
  * @param string $hook
  * @param mixed ... 更多参数
  */
@@ -542,6 +543,7 @@ function Redirect($url) {
  * @param 计划任务名称
  * @return 执行成功true，否则false
  */
+
 function RunCron($file,$name) {
 	return cron::run($file,$name);
 }
@@ -551,6 +553,7 @@ function RunCron($file,$name) {
  * @param $s 需要转义的
  * @return 转义结果
  */
+
 function adds($s) {
 	if (is_array($s)) {
 		return array_map('addslashes', $s);
@@ -581,6 +584,28 @@ FUCKOLDPHP
 		return $r;
 	} else {
 		return str_replace('\'','\\\'', str_replace('\\','\\\\',$s));
+	}
+}
+
+/**
+ * 去除英文字母、数字、下划线以外所有字符
+ * @param $s 需要处理的
+ * @return 处理结果
+ */
+function onlyalnum($s) {
+    if (is_array($s)) {
+		$r = array();
+		foreach ($s as $key => $value) {
+			$k = preg_replace('/[^a-zA-Z0-9._]*/','',$key);
+			if (!is_array($value)) {
+				$r[$k] = preg_replace('/[^a-zA-Z0-9._]*/','',$value);
+			} else {
+				$r[$k] = onlyalnum($value);
+			}
+		}
+		return $r;
+	} else {
+		return preg_replace('/[^a-zA-Z0-9._]*/','',$s);
 	}
 }
 
