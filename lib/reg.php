@@ -87,7 +87,14 @@ function class_autoload($c) {
 		msg("类 {$c} 加载失败，是否存在此类？");
 	}
 }
-spl_autoload_register('class_autoload');
+
+if (function_exists('spl_autoload_register')) {
+	spl_autoload_register('class_autoload');
+} else {
+	function __autoload($c){
+		class_autoload($c);
+	}
+}
 
 if (option::get('dev') != 1 || defined('NO_ERROR')) {
 	define('SYSTEM_DEV', false);
