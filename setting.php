@@ -118,7 +118,9 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_auth',$sou['mail_auth']);
 			@option::set('mail_ssl',$sou['mail_ssl']);
 			@option::set('mail_smtpname',$sou['mail_smtpname']);
-			@option::set('mail_smtppw',$sou['mail_smtppw']);
+			if (isset($sou['mail_smtppw'])) {
+				@option::set('mail_smtppw',$sou['mail_smtppw']);
+			}
 			@option::set('dev',$sou['dev']);
 			@option::set('bduss_num',$sou['bduss_num']);
 			@option::set('dev',$sou['dev']);

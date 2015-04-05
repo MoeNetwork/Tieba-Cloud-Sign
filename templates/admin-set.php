@@ -169,7 +169,9 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 
 					<div class="input-group">
 					  <span class="input-group-addon">SMTP密码</span>
-					  <input type="password" name="mail_smtppw" class="form-control" value="<?php echo option::get('mail_smtppw') ?>">
+					  <div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'mail_smtppw\' id=\'smtp_pwd\' placeholder=\'输入新的SMTP密码，刷新可取消修改\'>');$(this).remove();">
+					 	 <input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
+					  </div>
 					</div><br/>
 				</div>
 			</div>
