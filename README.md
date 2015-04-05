@@ -75,6 +75,7 @@ Pull Request，提交Issue请到 Git@OSChina 代码库，在其他代码库提�
 mokeyjay[longting@longtings.com]      
 FYY[fyod@vip.qq.com]       
 ###感谢
+DL[]      
 VFleaKing[liuhaotian0520@163.com]      
 liwanglin12[i@lwl12.com]      
-角落里有蛇[395183830@qq.com]      
+角落里有蛇[395183830@qq.com]
