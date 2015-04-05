@@ -3,7 +3,7 @@
 return array(
 	'plugin' => array(
 		'name'        => '调试信息',            //插件名称，必填
-		'version'     => '1.1',                 //插件版本号
+		'version'     => '2.0',                 //插件版本号
 		'description' => '在底部显示调试信息',  //插件描述
 		'url'         => 'http://zhizhe8.net',  //插件地址，比如哪里可以下载到这个插件
 		'for'         => 'all'                  //适用的云签到版本，all为所有版本，版本后面跟+表示适用于该版本或更高版本，如V4.0+
@@ -19,7 +19,8 @@ return array(
 		'show'        => true,  //bool 插件是否有展示页面，必填
 		'vip'         => false, //bool 插件是否有只给VIP看的页面，必填
 		'private'     => false, //bool 插件是否有只给管理员看的页面，必填
-		'public'      => false  //bool 插件是否有给任何人（包括未登录的）看的页面，必填
+		'public'      => false, //bool 插件是否有给任何人（包括未登录的）看的页面，必填
+		'update'      => false, //bool 插件如果有新版本，是否在插件列表页面显示升级按钮
 	),
 	'page'   => array(
 		//规定插件有哪些自定义页面，不需要自定义页面可留空

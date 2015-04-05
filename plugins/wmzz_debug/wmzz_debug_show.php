@@ -1,4 +1,9 @@
 <?php
+/**
+ * 插件展示页面
+ * 访问 index.php?plugin=插件名
+ * 会自动加载此文件
+ */
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
 if (ROLE == 'admin') {
