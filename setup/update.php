@@ -38,7 +38,6 @@ foreach ($x as $value) {
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
-          <li><a href="http://zhizhe8.net" target="_blank">无名智者个人博客</a></li>
     </ul>
   </div><!-- /.navbar-collapse -->
 </div>

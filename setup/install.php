@@ -11,6 +11,10 @@ include SYSTEM_ROOT2.'/../lib/class.wcurl.php';
 if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 	msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock');
 }
+$csrf = !empty($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER']) : '';
+if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER['SERVER_NAME'] ) ) {
+	msg('安装程序检测到潜在的CSRF攻击，已被拦截，请点击返回重新操作','index.php');
+}
 
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">';
@@ -35,7 +39,6 @@ if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
-          <li><a href="http://zhizhe8.net" target="_blank">无名智者个人博客</a></li>
     </ul>
   </div><!-- /.navbar-collapse -->
 </div>
@@ -45,7 +48,7 @@ if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
 		echo '<h2>阅读许可协议</h2><br/>';
 		echo '<iframe src="../license.html" style="width:100%;height:450px"></iframe>';
 		echo '<br/><br/><input type="button" onclick="location = \'install.php?step=1\'" class="btn btn-default" value="我接受">&nbsp;&nbsp;&nbsp;';
-		echo '<input type="button" onclick=";alert(\'请关闭本窗口，并立即卸载本程序\');self.close();console.log(\'滚蛋吧你\');" class="btn btn-default" value="我拒绝">';
+		echo '<input type="button" onclick=";alert(\'请关闭本窗口，并立即卸载本程序\');self.close();location = \'index.html\';" class="btn btn-default" value="我拒绝">';
 	} else {
 		switch (strip_tags($_GET['step'])) {
 			case '100':
