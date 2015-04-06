@@ -1,7 +1,8 @@
 <?php
 require dirname(__FILE__).'/init.php';
+global $i;
 
-if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin']) && $i['mode'][0] != 'page') {
+if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin']) && $i['mode'][0] != 'view') {
 	loadhead();
 	template('control');
 	loadfoot();
