@@ -1,5 +1,5 @@
 <?php
-if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 
 /**
  * option 设置类
@@ -11,19 +11,15 @@ class option {
 	 * @return string
 	*/
 	public static function get($name) {
-		global $m;
-		global $i;
+		global $m,$i;
 		//用于兼容旧插件
 		if (stripos($name, 'plugin_') === 0) {
 			$plug = substr($name, '7');
-			$set = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."plugins` WHERE `name` = '{$plug}';");
+            if(isset($i['opt'][$plug])) return $i['opt'][$plug];
+			$set = $m->once_fetch_array("SELECT `options` FROM `".DB_PREFIX."plugins` WHERE `name` = '{$plug}' LIMIT 1;");
 			return $set['options'];
 		}
-		if (!isset($i['opt'][$name])) {
-			return;
-		} else {
-			return $i['opt'][$name];
-		}
+        return isset($i['opt'][$name]) ? $i['opt'][$name] : null;
 	}
 
 	/**
@@ -32,17 +28,20 @@ class option {
 	 * @param $value 值
 	*/
 	public static function set($name,$value) {
-		global $m;
+		global $m,$i;
 		//用于兼容旧插件
 		if (stripos($name, 'plugin_') === 0) {
 			$plug = substr($name, '7');
-			$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . $value . "' WHERE `name` = '{$plug}';");
-			return true;
+			if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . $value . "' WHERE `name` = '{$plug}';")){
+                $i['opt'][$plug] = $value;
+                return true;
+            } else {
+                return false;
+            }
 		}
-		$name = sqladds($name);
-		$value = sqladds($value);
+        $name = sqladds($name);
+        $value = sqladds($value);
 		if($m->query("INSERT INTO `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}','{$value}') ON DUPLICATE KEY UPDATE `value` = '{$value}';")){
-			global $i;
 			$i['opt'][$name] = $value;
 			return true;
 		} else {
@@ -56,10 +55,13 @@ class option {
 	 * @param $value 值
 	 */
 	public static function add($name,$value) {
-		global $m;
+		global $m,$i;
 		$name = sqladds($name);
 		$value = sqladds($value);
-		$m->query("INSERT IGNORE INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
+		if($m->query("INSERT IGNORE INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');")){
+            $i['opt'][$name] = $value;
+            return true;
+        } else {return false;}
 	}
 
 	/**
@@ -68,7 +70,7 @@ class option {
 	*/
 	public static function del($name) {
 		global $m;
-		$m->query("DELETE FROM `".DB_PREFIX."options` WHERE `name` = '{$name}'");
+		return $m->query("DELETE FROM `".DB_PREFIX."options` WHERE `name` = '{$name}'") ? true : false;
 	}
 
 	/**
@@ -78,22 +80,13 @@ class option {
 	 * @return string|bool 不存在时返回false
 	*/
 	public static function uget($name, $uid = '') {
-		global $m;
-		global $i;
+		global $m,$i;
 		if (empty($uid)) {
-			if (isset($i['user']['opt'][$name])) {
-				return $i['user']['opt'][$name];
-			} else {
-				return false;
-			}
+            return isset($i['user']['opt'][$name]) ? $i['user']['opt'][$name] : null;
 		} else {
 			$name = sqladds($name);
-			$x = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."users_options` WHERE `uid` = '{$uid}' AND `name` = '{$name}' LIMIT 1");
-			if (isset($x['value'])) {
-				return $x['value'];
-			} else {
-				return false;
-			}
+			$q = $m->once_fetch_array("SELECT `value` FROM `".DB_PREFIX."users_options` WHERE `uid` = '{$uid}' AND `name` = '{$name}' LIMIT 1");
+			return isset($q['value']) ? $q['value'] : null;
 		}
 	}
 
@@ -104,20 +97,24 @@ class option {
 	 * $uid 用户UID，默认当前用户的UID
 	*/
 	public static function uset($name , $value , $uid = '') {
-		global $m;
-		global $i;
+		global $m,$i;
 		if (empty($uid)) {
 			$uid = $i['user']['uid'];
 		}
 
 		$name = sqladds($name);
 		$value = sqladds($value);
-		$test = $m->once_fetch_array("SELECT COUNT(*) AS `x` FROM `".DB_PREFIX."users_options` WHERE `uid` = '{$uid}' AND `name` = '{$name}'");
-		if($test['x'] > 0) {
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users_options` SET `value` =  '{$value}' WHERE `name` = '{$name}' AND `uid` = ".$uid);
-		} else {
-			$m->query("INSERT INTO `".DB_PREFIX."users_options` (`uid`, `name`, `value`) VALUES ('{$uid}','{$name}','{$value}')");
-		}
+        if($m->once_fetch_array("SELECT uid FROM `".DB_PREFIX."users_options` WHERE `uid` = {$uid} AND `name` = '{$name}'")){
+            $q = $m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users_options` SET `value` =  '{$value}' WHERE `name` = '{$name}' AND `uid` = ".$uid);
+        } else {
+            $q = $m->query("INSERT INTO `".DB_PREFIX."users_options` (`uid`, `name`, `value`) VALUES ({$uid},'{$name}','{$value}')");
+        }
+        if($q){
+            if ($uid == $i['user']['uid']) $i['user']['opt'][$name] = $value;
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -125,12 +122,16 @@ class option {
 	 * $uid 用户UID，默认当前用户的UID
 	 */
 	public static function udel($uid = '') {
-		global $m;
-		global $i;
+		global $m,$i;
 		if (empty($uid)) {
 			$uid = $i['user']['uid'];
 		}
-		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE `uid` = ".$uid);
+		if($m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE `uid` = ".$uid)){
+            if ($uid == $i['user']['uid']) $i['user']['opt'] = null;
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -139,13 +140,17 @@ class option {
 	 * @param $uid 用户UID，默认当前用户的UID
 	 */
 	public static function udela($name , $uid = '') {
-		global $m;
-		global $i;
+		global $m,$i;
 		$name = sqladds($name);
 		if (empty($uid)) {
 			$uid = $i['user']['uid'];
 		}
-		$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE `name` = '{$name}' AND `uid` = ".$uid);
+		if($m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE `name` = '{$name}' AND `uid` = ".$uid)){
+            if ($uid == $i['user']['uid']) unset($i['user']['opt'][$name]);
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -156,17 +161,20 @@ class option {
 	 * @param $uid 用户UID，默认当前用户的UID
 	 */
 	public static function uadd($name , $value , $uid = '') {
-		global $m;
-		global $i;
+		global $m,$i;
 		if (empty($uid)) {
 			$uid = $i['user']['uid'];
 		}
 		$name = sqladds($name);
 		$value = sqladds($value);
-		$test = $m->once_fetch_array("SELECT COUNT(*) AS `x` FROM `".DB_PREFIX."users_options` WHERE `uid` = '{$uid}' AND `name` = '{$name}'");
-		if($test['x'] <= 0) {
-			$m->query("INSERT INTO  `".DB_PREFIX."users_options` (`uid`, `name`, `value`) VALUES ('{$uid}', '{$name}', '{$value}');");
-		}
+        if($m->once_fetch_array("SELECT uid `".DB_PREFIX."users_options` WHERE `uid` = '{$uid}' AND `name` = '{$name}'") === false){
+            if($m->query("INSERT INTO  `".DB_PREFIX."users_options` (`uid`, `name`, `value`) VALUES ({$uid}, '{$name}', '{$value}');")){
+                if ($uid == $i['user']['uid']) $i['user']['opt'][$name] = $value;
+                return true;
+            } else {
+                return false;
+            }
+        }
 	}
 
 	/**
@@ -186,8 +194,13 @@ class option {
 	 * @param $value array 设置数组
 	*/
 	public static function pset($plug , $value) {
-		global $m;
-		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($value) . "' WHERE `name` = '{$plug}';");
+		global $m,$i;
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($value) . "' WHERE `name` = '{$plug}';")){
+            $i['plugins']['info'][$plug]['options'] = $value;
+            return true;
+        } else{
+            return false;
+        }
 	}
 
 	/**
@@ -195,8 +208,13 @@ class option {
 	 * @param $plug 插件标识符
 	*/
 	public static function pdel($plug) {
-		global $m;
-		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '' WHERE `name` = '{$plug}';");
+		global $m,$i;
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '' WHERE `name` = '{$plug}';")){
+            $i['plugins']['info'][$plug]['options'] = null;
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -218,10 +236,15 @@ class option {
 	 * @param $value 值
 	 */
 	public static function xset($plug , $name , $value) {
-		global $m;
+		global $m,$i;
 		$a = self::pget($plug);
 		$a[$name] = $value;
-		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+            $i['plugins']['info'][$plug]['options'] = $a;
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -230,10 +253,15 @@ class option {
 	 * @param $name 设置项名称
 	 */
 	public static function xdel($plug , $name ) {
-		global $m;
+		global $m,$i;
 		$a = self::pget($plug);
 		unset($a[$name]);
-		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+            $i['plugins']['info'][$plug]['options'] = $a;
+            return true;
+        } else {
+            return false;
+        }
 	}
 
 	/**
@@ -244,13 +272,18 @@ class option {
 	 * @param $value 值
 	 */
 	public static function xadd($plug , $name , $value) {
-		global $m;
+		global $m,$i;
 		$a = self::pget($plug);
 		if (!isset($a[$name])) {
 			$a[$name] = $value;
 		} else {
 			return;
 		}
-		$m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';");
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+            $i['plugins']['info'][$plug]['options'] = $a;
+            return true;
+        } else {
+            return false;
+        }
 	}
 }
