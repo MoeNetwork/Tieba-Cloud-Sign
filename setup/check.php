@@ -1,8 +1,8 @@
 <?php
 if (!defined('DO_NOT_LOAD_UI')) {
-	define('SYSTEM_FN','百度贴吧云签到');
+    define('SYSTEM_FN','百度贴吧云签到');
 	define('SYSTEM_VER','1.0');
-	define('SYSTEM_ROOT',dirname(__FILE__));
+	define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 	define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 	header("content-type:text/html; charset=utf-8");
 	echo '<!DOCTYPE html><html><head>';
@@ -60,6 +60,7 @@ function checkclass($f,$m = false) {
 }
 
 ?>
+<h3>环境检查</h3>
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -143,17 +144,10 @@ function checkclass($f,$m = false) {
 			<td>各种字符串操作</td>
 		</tr>
 		<tr>
-			<td>PHP 5.3+</td>
-			<td>推荐</td>
-			<td>
-			<?php if (version_compare(phpversion(), '5.3') == -1) {
-				echo '<font color="red">';
-			} else {
-				echo '<font color="green">';
-			}
-			echo phpversion() . '</font>'; ?>
-			</td>
-			<td>云签到未来可能放弃对 PHP5.3 以下版本的支持</td>
+			<td>PHP 5+</td>
+			<td>必须</td>
+			<td><?php echo phpversion(); ?></td>
+			<td>核心，未来云签到可能不支持PHP 5.3以下版本</td>
 		</tr>
 		<tr>
 			<td>Zend Guard Loader</td>
@@ -163,5 +157,40 @@ function checkclass($f,$m = false) {
 		</tr>
 	</tbody>
 </table>
-<?php
-?>
+<h3>功能检查</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th style="width:20%">功能 / 举例</th>
+			<th style="width:15%">需求</th>
+			<th style="width:15%">当前</th>
+			<th style="width:50%">用途</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>连接百度服务器</td>
+			<td>必须</td>
+			<td>
+				<?php
+					if(function_exists('curl_exec')){
+						if(!defined('SYSTEM_ROOT2')){//检查是否在install.php
+							include SYSTEM_ROOT.'/lib/class.wcurl.php';
+						}
+						$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: Phone'.mt_rand()));
+						$result = $x->exec();
+						$result = strpos($result,'登录百度帐号');
+						if(!empty($result)){
+							echo '<font color="green">可用</font>';
+						} else {
+							echo '<font color="red">不支持</font>';
+						}
+					} else {
+						echo '<font color="red">不支持</font>';
+					}
+				?>
+			</td>
+			<td>执行签到等</td>
+		</tr>
+</tbody>
+</table>
