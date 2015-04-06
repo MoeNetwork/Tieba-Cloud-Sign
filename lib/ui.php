@@ -2,6 +2,8 @@
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 ob_start();
 function loadhead($title = '') {
+    if(defined('SYSTEM_NO_UI'))
+        return;
 	$title = empty($title) ? strip_tags(SYSTEM_NAME) : $title . ' - ' . strip_tags(SYSTEM_NAME);
     doAction('top');
 	echo '<!DOCTYPE html><html><head>';
@@ -30,6 +32,8 @@ function loadhead($title = '') {
 	doAction('body');
 }
 function loadfoot() {
+    if(defined('SYSTEM_NO_UI'))
+        return;
 	$icp=option::get('icp');
 	if (!empty($icp)) {
 		echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
