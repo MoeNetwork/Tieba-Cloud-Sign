@@ -186,6 +186,33 @@ class misc {
 	}
 
 	/**
+	 * 50贴吧客户端一键签到
+	 */
+	public static function DoSign_Onekey($uid,$kw,$id,$pid,$fid,$ck) {
+		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/msign', array(
+			'User-Agent: bdtb for Android 6.5.8'
+		));	
+		$ch->addcookie(array('BDUSS' => $ck));
+		$temp = array(
+			'BDUSS' => misc::getCookie($pid),
+			'_client_id' => '03-00-DA-59-05-00-72-96-06-00-01-00-04-00-4C-43-01-00-34-F4-02-00-BC-25-09-00-4E-36',
+			'_client_type' => '4',
+			'_client_version' => '1.2.1.17',
+			'_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
+			'fid' => $fid,
+			'kw' => $kw,
+			'net_type' => '3',
+			'tbs' => misc::getTbs($uid,$ck)
+		);
+		$x = '';
+		foreach($temp as $k=>$v) {
+			$x .= $k.'='.$v;
+		}
+		$temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+		return $ch->post($temp);
+	}
+
+	/**
 	 * 手机网页签到
 	 */
 	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
@@ -270,6 +297,8 @@ class misc {
 			$fid = misc::getFid($kw);
 			$m->query("UPDATE  `".DB_PREFIX.$table."` SET  `fid` =  '{$fid}' WHERE  `".DB_PREFIX.$table."`.`id` = '{$id}';",true);
 		}
+
+		dump(json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck),true),true);die;
 
 		if(!empty($sign_mode) && in_array('1',$sign_mode) && $status_succ === false) {
 			$r = self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck);

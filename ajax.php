@@ -29,31 +29,47 @@ switch (SYSTEM_PAGE) {
 
 
 	case 'admin:update': 
-		$c = new wcurl(SUPPORT_URL . 'callback.php');
-		$json = json_decode($c->exec(),true);
+		$c    = new wcurl(SUPPORT_URL . 'get.php?ver=' . SYSTEM_VER);
+		$data = json_decode($c->exec());
 		$c->close();
-		if(count($json) != 0){
-			if($json['version'] > SYSTEM_VER || $json['revision'] > SYSTEM_REV){
+		$d    = '';
+		if(!empty($data)){
+			$t = '';
+			//预先提供文件夹列表
+			foreach ($data->items->dir as $dir) {
+				$d .= '<input type="hidden" name="dir[]" value="'.$dir.'">';
+			}
+
+			//检测文件是否存在以及MD5是否相同
+			foreach ($data->items->file as $file) {
+				if(file_exists(SYSTEM_ROOT.'/'.$file->path)){
+					$md5 = md5_file(SYSTEM_ROOT.'/'.$file->path);
+					if($file->md5 != $md5){
+						$t.="<input type=\"checkbox\" name=\"file[]\" value=\"{$file->path}\" checked> <span class=\"glyphicon glyphicon-pencil\" title=\"修改\"></span>  {$file->path} <br/>";
+					}
+				} else {
+					$t.="<input type=\"checkbox\" name=\"file[]\" value=\"{$file->path}\" checked><span class=\"glyphicon glyphicon-plus\" title=\"新增\"></span> {$file->path} <br/>";
+				}
+			}
+			if (!empty($t)) {
 				echo '<form method="post" action="ajax.php?mod=admin:update:updnow">';
 				echo  '<div class="bs-callout bs-callout-danger">
   <h4>有更新可用</h4>
-  <br/>最新版本：V'.$json['version'].'.'.$json['revision'].'
-  <span style="float:right">提交时间：'.$json['time'].'</span>
-  <br/>更新描述：'.$json['message'].'
-  <br/>上次更新描述：'.$json['lastMessage'].'
+  <br/>最新版本：V'.$data->version.'
+  <span style="float:right">提交时间：'.$data->date.'</span>
+  <br/>更新描述：'.$data->msg.'
+  <br/>上次更新描述：'.$data->lastmsg.'
   <br/>文件将被临时下载到 /setup/update_cache 文件夹，更新前会自动备份文件以供回滚
 </div>';
-				if($json['revision'] == '0' || $json['version'] > SYSTEM_VER){
-					echo '<input type="submit" class="btn btn-primary" value="更新到最新正式版"><br/><br/></form>';
-				} else {
-					echo '<div class="alert alert-danger" role="alert">开发版着重于尝鲜和更迭，但存在一定的不稳定性，更新请谨慎，后果自负哦。稳定版<a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">点此下载</a></div>';
-					echo '<input type="submit" class="btn btn-primary" value="更新到最新开发版"><br/><br/></form>';
-				}
+				echo '<div class="alert alert-warning"><form action="ajax.php?mod=admin:update:updnow" method="post"><b>以下文件可以更新</b>: [ 不选表示不更新 ]<br/>';
+				echo '<input type="hidden" name="server" value="'.intval($_GET['server']).'">';
+				echo $d.$t;
+				echo '</div><input type="submit" class="btn btn-primary" value="更新上述文件到最新正式版本"><br/><br/></form>';
 			} else {
 				echo '<div class="alert alert-success">您当前正在使用最新版本的 '.SYSTEM_FN.'，无需更新</div>';
 			}
 		} else {
-			echo '<div class="alert alert-info">无法连接到更新服务器，请<a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141">手动更新</a></div>';
+			echo '<div class="alert alert-info">无法连接到更新服务器，请前往<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign">OSCGit</a>自行更新</div>';
 		}
 		break;
 
@@ -192,7 +208,7 @@ switch (SYSTEM_PAGE) {
 			} else {
 				preg_match('/Set-Cookie:(.*)BDUSS=(.*); expires=/', $x, $y);
 				if (empty($y[2])) {
-				    $error = '请检查用户名，密码，验证码是否正确';
+				    $error = '请检查用户名，密码，验证码是否正确<br/><br/>也有可能是百度强制开启了异地登陆保护导致的，请尝试手动绑定';
 				    break;
 				} else {
 					unset($error);

@@ -19,6 +19,7 @@ function loadplugins() {
 
 /**
  * 激活插件
+ * 如果存在，系统会调用 插件名_callback.php 的 callback_init()
  * @return bool
  */
 function activePlugin($plugin) {
@@ -40,6 +41,7 @@ function activePlugin($plugin) {
 
 /**
  * 禁用插件
+ * 如果存在，系统会调用 插件名_callback.php 的 callback_inactive()
  * @return bool
  */
 function inactivePlugin($plugin) {
@@ -61,12 +63,19 @@ function inactivePlugin($plugin) {
 
 /**
  * 安装插件
+ * 如果存在，系统会调用 插件名_callback.php 的 callback_install()
  * @return  bool	
  */
 function installPlugin($plugin) {
-	global $m;
+	global $m,$i;
 	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
-		$m->query("INSERT IGNORE INTO `" . DB_PREFIX . "plugins` (`name`,`status`,`options`) VALUES ('{$plugin}','0','');");
+		$info = getPluginInfo($plugin);
+		if (isset($info['plugin']['version'])) {
+			$ver = $info['plugin']['version'];
+		} else {
+			$ver = '';
+		}
+		$m->query("INSERT IGNORE INTO `" . DB_PREFIX . "plugins` (`name`,`status`,`ver`,`options`) VALUES ('{$plugin}','0','{$ver}','');");
 		$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
 		if (file_exists($callback_file)) {
 			require_once $callback_file;
@@ -82,7 +91,7 @@ function installPlugin($plugin) {
 
 /**
  * 卸载插件
- * @return bool 
+ * 如果存在，系统会调用 插件名_callback.php 的 callback_remove()
  */
 function uninstallPlugin($plugin) {
 	global $m;
@@ -114,6 +123,40 @@ function settingPlugin($plugin) {
 		if (function_exists('callback_setting')) {
 			callback_setting();
 		}
+	}
+}
+
+/**
+ * 升级插件
+ * 系统会调用 插件名_callback.php 的 callback_update(数据库中的版本号,插件文件中的版本号)，并传入当前数据库的版本号、当前插件文件中说明的版本号
+ * callback_update() 如果返回新的版本号，新版本号由系统记录到数据库；如果返回false，将终止操作且不记录到数据库
+ * @return bool
+ */
+function updatePlugin($plugin) {
+	global $m,$i;
+	if (isset($i['plugin']['desc'][$plugin])) {
+		if (version_compare($i['plugin']['info'][$plugin]['ver'], $i['plugin']['desc'][$plugin]['plugin']['version']) != -1) {
+			return false;
+		}
+	} else {
+		return false;
+	}
+	$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
+	if (file_exists($callback_file)) {
+		require_once $callback_file;
+		if (function_exists('callback_update')) {
+			$ver = callback_update($i['plugin']['info'][$plugin]['ver'] , $i['plugin']['desc'][$plugin]['plugin']['version']);
+			if (!$ver) {
+				return false;
+			} else {
+				$m->query("UPDATE `".DB_PREFIX."plugins` SET `ver` = '{$ver}' WHERE `name` = '{$plugin}'");
+				return true;
+			}
+		} else {
+			return false;
+		}
+	} else {
+		return false;
 	}
 }
 
@@ -163,11 +206,11 @@ function getPluginInfo($plugin) {
 				'for'         => $d['For']
 			),
 			'view'   => array(
-				'setting'     => true,
-				'show'        => true,
-				'vip'         => true,
-				'private'     => true,
-				'public'      => true
+				'setting'     => false,
+				'show'        => false,
+				'vip'         => false,
+				'private'     => false,
+				'public'      => false
 			),
 			'author' => array(
 				'author'      => $d['Author'],

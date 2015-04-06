@@ -66,15 +66,14 @@ if((empty($i['opt']['core_version']) || SYSTEM_VER != $i['opt']['core_version'])
 if (!defined('SYSTEM_NO_PLUGIN')) {
 	//所有插件列表
 	$i['plugins'] = array('all' => array() , 'actived' => array() , 'info' => array());
-	$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins`");
-	$plugin_active_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` WHERE `status` = '1'");
+	$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` ORDER BY `status` ASC");
 	while ($plugin_all_var = $m->fetch_array($plugin_all_query)) {
 		$i['plugins']['all'][] = $plugin_all_var['name']; 
 		$i['plugins']['info'][$plugin_all_var['name']] = $plugin_all_var; 
 		$i['plugins']['info'][$plugin_all_var['name']]['options'] = empty($plugin_all_var['options']) ? array() : unserialize($plugin_all_var['options']);
-	}
-	while ($plugin_active_var = $m->fetch_array($plugin_active_query)) {
-		$i['plugins']['actived'][] = $plugin_active_var['name'];
+		if ($plugin_all_var['status'] == '1') {
+			$i['plugins']['actived'][] = $plugin_all_var['name'];
+		}
 	}
 }
 

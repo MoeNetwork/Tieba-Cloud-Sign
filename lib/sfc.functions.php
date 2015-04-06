@@ -19,7 +19,8 @@ function getIp() {
  * 加密密码
  */
 function EncodePwd($pwd) {
-	return eval('return '.option::get('pwdmode').';');
+	$p = new P();
+	return $p->pwd($pwd);
 }
 
 /**

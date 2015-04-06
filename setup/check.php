@@ -143,10 +143,17 @@ function checkclass($f,$m = false) {
 			<td>各种字符串操作</td>
 		</tr>
 		<tr>
-			<td>PHP 5+</td>
-			<td>必须</td>
-			<td><?php echo phpversion(); ?></td>
-			<td>核心</td>
+			<td>PHP 5.3+</td>
+			<td>推荐</td>
+			<td>
+			<?php if (version_compare(phpversion(), '5.3') == -1) {
+				echo '<font color="red">';
+			} else {
+				echo '<font color="green">';
+			}
+			echo phpversion() . '</font>'; ?>
+			</td>
+			<td>云签到未来可能放弃对 PHP5.3 以下版本的支持</td>
 		</tr>
 		<tr>
 			<td>Zend Guard Loader</td>

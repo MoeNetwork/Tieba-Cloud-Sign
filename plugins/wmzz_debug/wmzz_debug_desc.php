@@ -20,7 +20,7 @@ return array(
 		'vip'         => false, //bool 插件是否有只给VIP看的页面，必填
 		'private'     => false, //bool 插件是否有只给管理员看的页面，必填
 		'public'      => false, //bool 插件是否有给任何人（包括未登录的）看的页面，必填
-		'update'      => false, //bool 插件如果有新版本，是否在插件列表页面显示升级按钮
+		'update'      => true, //bool 插件如果有新版本，是否在插件列表页面显示升级按钮
 	),
 	'page'   => array(
 		//规定插件有哪些自定义页面，不需要自定义页面可留空

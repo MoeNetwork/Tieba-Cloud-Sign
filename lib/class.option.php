@@ -59,7 +59,7 @@ class option {
 		global $m;
 		$name = sqladds($name);
 		$value = sqladds($value);
-		$m->query("INSERT IGNORE INTO  `".DB_PREFIX."options` (`id`, `name`, `value`) VALUES (NULL, '{$name}', '{$value}');");
+		$m->query("INSERT IGNORE INTO  `".DB_PREFIX."options` (`name`, `value`) VALUES ('{$name}', '{$value}');");
 	}
 
 	/**
