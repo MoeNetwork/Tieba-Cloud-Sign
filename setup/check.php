@@ -1,8 +1,9 @@
 <?php
 if (!defined('DO_NOT_LOAD_UI')) {
-	define('SYSTEM_FN','百度贴吧云签到');
+    define('SYSTEM_FN','百度贴吧云签到');
 	define('SYSTEM_VER','1.0');
-	define('SYSTEM_ROOT',dirname(__FILE__));
+	define('SYSTEM_ROOT2',dirname(__FILE__));
+	define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 	define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 	header("content-type:text/html; charset=utf-8");
 	echo '<!DOCTYPE html><html><head>';
@@ -60,6 +61,7 @@ function checkclass($f,$m = false) {
 }
 
 ?>
+<h3>环境检查</h3>
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -146,7 +148,7 @@ function checkclass($f,$m = false) {
 			<td>PHP 5+</td>
 			<td>必须</td>
 			<td><?php echo phpversion(); ?></td>
-			<td>核心</td>
+			<td>核心，未来云签到可能不支持PHP 5.3以下版本</td>
 		</tr>
 		<tr>
 			<td>Zend Guard Loader</td>
@@ -156,5 +158,38 @@ function checkclass($f,$m = false) {
 		</tr>
 	</tbody>
 </table>
-<?php
-?>
+<h3>功能检查</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th style="width:20%">功能 / 举例</th>
+			<th style="width:15%">需求</th>
+			<th style="width:15%">当前</th>
+			<th style="width:50%">用途</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>连接百度服务器</td>
+			<td>必须</td>
+			<td>
+				<?php
+					if(function_exists('curl_exec')){
+						require SYSTEM_ROOT.'/lib/class.wcurl.php';
+						$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: Phone'.mt_rand()));
+						$result = $x->exec();
+						$result = strpos($result,'登录百度帐号');
+						if(!empty($result)){
+							echo '<font color="green">可用</font>';
+						} else {
+							echo '<font color="red">不支持</font>';
+						}
+					} else {
+						echo '<font color="red">不支持</font>';
+					}
+				?>
+			</td>
+			<td>执行签到等</td>
+		</tr>
+</tbody>
+</table>
