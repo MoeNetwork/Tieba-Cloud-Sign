@@ -46,7 +46,7 @@ switch ($i['mode'][0]) {
 				} else {
 					echo '<b>插件设置页面不存在</b>';
 				}
-				echo '<br/><br/><br/><br/>'.$pluginfo['Name'].' V'.$pluginfo['Version'].' // 插件作者：<a href="'.$pluginfo['AuthorUrl'].'" target="_blank">'.$pluginfo['Author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>';
+				echo '<br/><br/><br/><br/>'.$pluginfo['Name'].' V'.$pluginfo['Version'].' // 插件作者：<a href="'.$pluginfo['AuthorUrl'].'" target="_blank">'.$pluginfo['Author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>';
 				break;
 			case 'stat':
 				template('admin-stat');
