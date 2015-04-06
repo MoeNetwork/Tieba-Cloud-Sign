@@ -2,7 +2,6 @@
 if (!defined('DO_NOT_LOAD_UI')) {
     define('SYSTEM_FN','百度贴吧云签到');
 	define('SYSTEM_VER','1.0');
-	define('SYSTEM_ROOT2',dirname(__FILE__));
 	define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 	define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 	header("content-type:text/html; charset=utf-8");
@@ -175,7 +174,9 @@ function checkclass($f,$m = false) {
 			<td>
 				<?php
 					if(function_exists('curl_exec')){
-						require SYSTEM_ROOT.'/lib/class.wcurl.php';
+						if(!defined('SYSTEM_ROOT2')){//检查是否在install.php
+							include SYSTEM_ROOT.'/lib/class.wcurl.php';
+						}
 						$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: Phone'.mt_rand()));
 						$result = $x->exec();
 						$result = strpos($result,'登录百度帐号');
