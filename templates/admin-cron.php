@@ -102,7 +102,7 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 			<th>状态/操作</th>
 		</tr>
 	</thead>
-	<tobdy>
+	<tbody>
 		<?php echo $cron ?>
 	</tbody>
 </table>
