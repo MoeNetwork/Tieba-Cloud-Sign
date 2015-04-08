@@ -238,6 +238,11 @@ function getPluginInfo($plugin) {
 		$r['core']['private'] = true;
 	if (file_exists($path . $plugin . '_public.php'))
 		$r['core']['public'] = true;
+    //取插件加载顺序
+    global $m;
+    $q = $m->once_fetch_array('Select `order` From `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Where `name`='{$plugin}' LIMIT 1");
+    $r['plugin']['order'] = empty($q['order']) ? 0 : intval($q['order']);//否则将会是00000001这样的数
+
 	return $r;
 }
 
