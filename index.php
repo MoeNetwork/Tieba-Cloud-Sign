@@ -1,11 +1,11 @@
 <?php
 require dirname(__FILE__).'/init.php';
+global $i;
 
-if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin']) && $i['mode'][0] != 'page') {
-	loadhead();
+if (!isset($_GET['plugin']) && !isset($_GET['pub_plugin']) && !isset($_GET['vip_plugin']) && !isset($_GET['pri_plugin']) && $i['mode'][0] != 'view') {
 	template('control');
 	loadfoot();
-} elseif ($i['mode'][0] == 'page') {
+} elseif ($i['mode'][0] == 'view') {
 	if (in_array($i['mode'][1], $i['plugins']['actived']) && file_exists(SYSTEM_ROOT . '/plugins/' . $i['mode'][1] . '/' . 'view_' . $i['mode'][2] . '.php')) {
 		$plug = getPluginInfo($i['mode'][1]);
 		if (in_array($i['mode'][2], $plug['page'])) {
