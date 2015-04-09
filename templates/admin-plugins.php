@@ -10,7 +10,7 @@ foreach($x as $key => $val) {
 	$pluginfo = '';
 	$action   = '';
 	if (!empty($val['plugin']['url'])) {
-		$pluginfo .= '<b><a href="'.$val['plugin']['url'].'" target="_blank">'.$val['plugin']['name'].'</a></b>';
+		$pluginfo .= '<b><a href="'.htmlspecialchars($val['plugin']['url']).'" target="_blank">'.$val['plugin']['name'].'</a></b>';
 	} else {
 		$pluginfo .= '<b>'.$val['plugin']['name'].'</b>';
 	}
@@ -25,7 +25,7 @@ foreach($x as $key => $val) {
 		if (!empty($i['plugins']['info'][$val['plugin']['id']]['ver'])) {
 			$pluginfo .= ' | 已安装版本：' . $i['plugins']['info'][$val['plugin']['id']]['ver'];
 		}
-		if (version_compare($i['plugins']['info'][$val['plugin']['id']]['ver'], $val['plugin']['version']) == -1 && $val['view']['update']) {
+		if (isset($i['plugins']['info'][$val['plugin']['id']]['ver']) && version_compare($i['plugins']['info'][$val['plugin']['id']]['ver'], $val['plugin']['version']) == -1 && $val['view']['update']) {
 			$pluginfo .= ' | <a href="setting.php?mod=admin:plugins&upd='.$val['plugin']['id'].'" onclick="return confirm(\'你确实要升级此插件吗？\\n'.$val['plugin']['name'].'\');">点击升级到最新版本</a>';
 		}
 	} else {
@@ -33,7 +33,7 @@ foreach($x as $key => $val) {
 	}
 
 	if (!empty($val['author']['url'])) {
-		$authinfo = '<a href="'.$val['author']['url'].'" target="_blank">'.$val['author']['author'].'</a>';
+		$authinfo = '<a href="'.htmlspecialchars($val['author']['url']).'" target="_blank">'.$val['author']['author'].'</a>';
 	} else {
 		$authinfo = $val['author']['author'];
 	}
@@ -43,7 +43,7 @@ foreach($x as $key => $val) {
 			$for = '';
 			$fortc = '<br/>适用版本：不限';
 		} elseif($val['plugin']['for'] > SYSTEM_VER) {
-			$for = "&ver={$val['For']}";
+			$for = "&ver={$val['plugin']['for']}";
 			$fortc = '<br/>适用版本：<font color="red">V'.$val['plugin']['for'].'+</font>';
 		} else {
 			$for = '';

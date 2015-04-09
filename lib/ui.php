@@ -1,6 +1,10 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 ob_start();
+/**
+ * 加载头部
+ * @param string $title 页面标题
+ */
 function loadhead($title = '') {
     if(defined('SYSTEM_NO_UI'))
         return;
@@ -31,7 +35,13 @@ function loadhead($title = '') {
 	template('navi');
 	doAction('body');
 }
-function loadfoot() {
+
+/**
+ * 加载底部
+ * @param bool|string $copy 如果为string，则必须输入插件标识符，并显示插件版权，bool(true)则显示云签到版权
+ */
+function loadfoot($copy = false) {
+    global $i;
     if(defined('SYSTEM_NO_UI'))
         return;
 	$icp=option::get('icp');
@@ -40,6 +50,33 @@ function loadfoot() {
 	}
 	echo '<br/>'.option::get('footer');
 	doAction('footer');
+    if(is_string(($copy))) {
+        if(isset($i['plugins']['desc'][$copy])) {
+            $plug = $i['plugins']['desc'][$copy];
+            echo '<br/><br/>';
+            if(!empty($plug['plugin']['url'])) {
+                echo '<a href="'.htmlspecialchars($plug['plugin']['url']).'" target="_blank">';
+            }
+            echo $plug[ 'plugin' ][ 'name' ];
+            if(!empty($plug['plugin']['url'])) {
+                echo '</a>';
+            }
+            if(!empty($plug['plugin'][ 'version' ])) {
+                echo ' V'.$plug['plugin'][ 'version' ];
+            }
+            echo ' // 作者：';
+            if(!empty($plug['author']['url'])) {
+                echo '<a href="'.htmlspecialchars($plug['author']['url']).'" target="_blank">';
+            }
+            echo $plug[ 'author' ][ 'author' ];
+            if(!empty($plug['author']['url'])) {
+                echo '</a>';
+            }
+        }
+    }
+    if($copy) {
+        echo '<br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>';
+    }
 	echo '</div></div></div></div></body></html>';
 }
 
