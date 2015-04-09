@@ -70,6 +70,15 @@ function installPlugin($plugin) {
 	global $m,$i;
 	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
 		$info = getPluginInfo($plugin);
+        //安装前判断版本
+        if(isset($info['plugin']['forphp']) && strtolower($info['plugin']['forphp'])!='all' && defined('PHP_VERSION')){
+            if(substr(PHP_VERSION, 0, 3) < $info['plugin']['forphp'])
+                msg('你的PHP版本过低('.substr(PHP_VERSION, 0, 3).')，无法安装该插件');
+        }
+        if(isset($info['plugin']['for']) && strtolower($info['plugin']['for'])!='all'){
+            if(SYSTEM_VER < $info['plugin']['for'])
+                msg('你的云签版本过低('.SYSTEM_VER.')，无法安装该插件');
+        }
 		if (isset($info['plugin']['version'])) {
 			$ver = $info['plugin']['version'];
 		} else {
@@ -229,6 +238,11 @@ function getPluginInfo($plugin) {
 		$r['core']['private'] = true;
 	if (file_exists($path . $plugin . '_public.php'))
 		$r['core']['public'] = true;
+    //取插件加载顺序
+    global $m;
+    $q = $m->once_fetch_array('Select `order` From `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Where `name`='{$plugin}' LIMIT 1");
+    $r['plugin']['order'] = empty($q['order']) ? 0 : intval($q['order']);//否则将会是00000001这样的数
+
 	return $r;
 }
 

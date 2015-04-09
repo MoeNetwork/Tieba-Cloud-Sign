@@ -68,6 +68,12 @@ switch (SYSTEM_PAGE) {
 			}
 			installPlugin($_GET['install']);
 		}
+        elseif (isset($_GET['xorder'])){
+            global $m;
+            foreach($_POST as $id=>$order){
+                $m->query('Update `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Set `order`={$order} Where `name`='{$id}'");
+            }
+        }
 		doAction('plugin_setting_2');
 		Redirect('index.php?mod=admin:plugins&ok');
 		break;

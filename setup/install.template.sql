@@ -90,6 +90,7 @@ CREATE TABLE `{VAR-PREFIX}plugins` (
   `name` varchar(100) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `options` text,
+  `order` int(10) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

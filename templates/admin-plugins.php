@@ -69,7 +69,13 @@ foreach($x as $key => $val) {
 	}
 
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['plugin']['id'].$fortc.'<td>'.$status.'<br/>';
-	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\\n'.$val['plugin']['name'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'; 
+	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\\n'.$val['plugin']['name'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td><td>';
+    if($i['plugins']['info'][$val['plugin']['id']]['status'] == '1'){
+        $plugins .= '<input required type="number" style="width: 70px;" name="'.$val['plugin']['id'].'" value="'.$val['plugin']['order'].'">';
+    } else {
+        $plugins .= '不可用';
+    }
+    $plugins .= '</td></tr>';
 }
 
 doAction('admin_plugins');
@@ -82,20 +88,23 @@ doAction('admin_plugins');
 ?>
 <br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">点击这里上传安装插件</a> | <a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank">插件商城</a>
 </div>
+<form action="setting.php?mod=admin:plugins&xorder" method="post">
 <div class="table-responsive">
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:50%">插件信息</th>
+			<th style="width:45%">插件信息</th>
 			<th style="width:30%">作者/标识符</th>
-			<th style="width:30%">状态/操作</th>
+			<th style="width:20%">状态/操作</th>
+			<th style="width:5%">加载顺序</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php echo $plugins; ?>
 	</tbody>
 </table>
-</div>
+</div><input type="submit" class="btn btn-primary" value="提交更改">
+</form>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
 
 <div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">
