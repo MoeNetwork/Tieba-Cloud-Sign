@@ -87,8 +87,9 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('baidu_name', '1');
 DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;
 CREATE TABLE `{VAR-PREFIX}plugins` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
+  `ver` varchar(15) NULL,
   `options` text,
   `order`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`),

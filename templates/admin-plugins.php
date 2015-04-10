@@ -50,7 +50,9 @@ foreach($x as $key => $val) {
 			$fortc = '<br/>适用版本：V'.$val['plugin']['for'].'+';
 		}
 	}
-
+    if(isset($i['plugins']['info'][$val['plugin']['id']]['status'])){
+        $fortc .= '<br/>加载顺序：<input required type="number" style="width: 50%;" name="'.$val['plugin']['id'].'" value="'.$val['plugin']['order'].'">';
+    }
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
 			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
@@ -69,13 +71,8 @@ foreach($x as $key => $val) {
 	}
 
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['plugin']['id'].$fortc.'<td>'.$status.'<br/>';
-	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\\n'.$val['plugin']['name'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td><td>';
-    if($i['plugins']['info'][$val['plugin']['id']]['status'] == '1'){
-        $plugins .= '<input required type="number" style="width: 70px;" name="'.$val['plugin']['id'].'" value="'.$val['plugin']['order'].'">';
-    } else {
-        $plugins .= '不可用';
-    }
-    $plugins .= '</td></tr>';
+	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\\n'.$val['plugin']['name'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td>';
+    $plugins .= '</tr>';
 }
 
 doAction('admin_plugins');
@@ -93,10 +90,9 @@ doAction('admin_plugins');
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th style="width:45%">插件信息</th>
-			<th style="width:30%">作者/标识符</th>
+			<th>插件信息</th>
+			<th>作者/标识符</th>
 			<th style="width:20%">状态/操作</th>
-			<th style="width:5%">加载顺序</th>
 		</tr>
 	</thead>
 	<tbody>
