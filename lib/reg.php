@@ -66,7 +66,7 @@ if((empty($i['opt']['core_version']) || SYSTEM_VER != $i['opt']['core_version'])
 if (!defined('SYSTEM_NO_PLUGIN')) {
 	//所有插件列表
 	$i['plugins'] = array('all' => array() , 'actived' => array() , 'info' => array());
-	$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` ORDER BY `status` ASC");
+	$plugin_all_query = $m->query("SELECT * FROM `".DB_PREFIX."plugins` ORDER BY `order` ASC");
 	while ($plugin_all_var = $m->fetch_array($plugin_all_query)) {
 		$i['plugins']['all'][] = $plugin_all_var['name']; 
 		$i['plugins']['info'][$plugin_all_var['name']] = $plugin_all_var; 
