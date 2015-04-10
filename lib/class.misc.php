@@ -499,6 +499,9 @@ class misc {
 				}
 				$addnum++;
 			}
+            if($n3 > 100){
+                break; //100页后重复
+            }
 			if (!isset($list[3][0])) {
 				break; //完成
 			} elseif($o != 0 && $n2 >= $o && $isvip == false) {
