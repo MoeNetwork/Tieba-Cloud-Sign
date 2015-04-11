@@ -14,21 +14,19 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
 CREATE TABLE `{VAR-PREFIX}cron` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(40) NOT NULL,
   `orde` int(10) NOT NULL DEFAULT '0',
-  `file` varchar(1000) DEFAULT NULL,
-  `no` int(10) NOT NULL DEFAULT '0',
+  `file` varchar(100) DEFAULT NULL,
+  `no` tinyint(1) NOT NULL DEFAULT '0',
   `desc` text,
   `freq` int(10) NOT NULL DEFAULT '0',
-  `lastdo` varchar(100) DEFAULT NULL,
+  `lastdo` varchar(30) DEFAULT NULL,
   `log` text,
-  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{VAR-PREFIX}cron` VALUES ('1', 'system_sign', '0', 'lib/cron_system_sign.php', '0', '每天对所有贴吧进行签到\r\n忽略或卸载此任务会导致停止签到', '0', '0', '');
-INSERT INTO `{VAR-PREFIX}cron` VALUES ('2', 'system_sign_retry', '1', 'lib/cron_system_sign_retry.php', '0', '对所有签到失败的贴吧进行复签\r\n忽略或卸载此任务会导致停止复签', '0', '0', '');
+INSERT INTO `{VAR-PREFIX}cron` VALUES ('system_sign', '0', 'lib/cron_system_sign.php', '0', '每天对所有贴吧进行签到\r\n忽略或卸载此任务会导致停止签到', '0', '0', '');
+INSERT INTO `{VAR-PREFIX}cron` VALUES ('system_sign_retry', '1', 'lib/cron_system_sign_retry.php', '0', '对所有签到失败的贴吧进行复签\r\n忽略或卸载此任务会导致停止复签', '0', '0', '');
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}options`;
 CREATE TABLE `{VAR-PREFIX}options` (
@@ -96,7 +94,7 @@ CREATE TABLE `{VAR-PREFIX}plugins` (
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{VAR-PREFIX}plugins` VALUES ('1', 'wmzz_debug', '1', '');
+INSERT INTO `{VAR-PREFIX}plugins` VALUES ('1', 'wmzz_debug', '1', '2.0');
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}tieba`;
 CREATE TABLE `{VAR-PREFIX}tieba` (
@@ -104,20 +102,22 @@ CREATE TABLE `{VAR-PREFIX}tieba` (
   `uid` int(30) NOT NULL,
   `pid` int(30) NOT NULL DEFAULT '0',
   `fid` int(30) NOT NULL DEFAULT '0',
-  `tieba` varchar(10000) DEFAULT NULL,
-  `no` int(10) NOT NULL DEFAULT '0',
+  `tieba` varchar(200) DEFAULT NULL,
+  `no` tinyint(1) NOT NULL DEFAULT '0',
   `status` int(10) NOT NULL DEFAULT '0',
-  `lastdo` varchar(200) DEFAULT '0',
+  `lastdo` varchar(30) DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
 CREATE TABLE `{VAR-PREFIX}users` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `pw` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `role` enum('banned','vip','user','admin') NOT NULL DEFAULT 'user',
+  `role` varchar(10) NOT NULL DEFAULT 'user',
   `t` varchar(20) NOT NULL DEFAULT 'tieba',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
