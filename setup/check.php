@@ -157,6 +157,7 @@ function checkclass($f,$m = false) {
 		</tr>
 	</tbody>
 </table>
+<?php /*
 <h3>功能检查</h3>
 <table class="table table-striped">
 	<thead>
@@ -194,3 +195,4 @@ function checkclass($f,$m = false) {
 		</tr>
 </tbody>
 </table>
+*/ ?>
