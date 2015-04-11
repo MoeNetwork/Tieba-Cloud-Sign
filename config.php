@@ -14,6 +14,8 @@ define('DB_PASSWD','000000');
 define('DB_NAME','tiebacloud');
 //MySQL 数据库前缀，建议保持默认
 define('DB_PREFIX','tc_');
+//加密用盐，请乱打，留空为不使用盐
+define('SYSTEM_SALT','');
 
 //请务必删掉下面这句，否则将每次转到安装页面
 if(!file_exists('./setup/install.lock') && !defined('SYSTEM_DO_NOT_REMIND_INSTALL')) header('Location: ./setup/install.php');
