@@ -12,20 +12,27 @@ loadhead();
     <div style="margin:0% 5% 5% 5%;">
 	<div class="login-top"></div><br/><?php doAction('reg_page_1'); ?>
 	<b>请输入您的账号信息以注册本站</b><br/><br/>
-  <?php if (isset($_GET['error_msg'])): ?><div class="alert alert-danger alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  错误：<?php echo strip_tags($_GET['error_msg']); ?></div><?php endif;?>
-  <form name="f" method="post" action="index.php?mod=admin:reg">
+        <?php if (isset($_GET['error_msg'])): ?><div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            错误：<?php echo strip_tags($_GET['error_msg']); ?></div><?php endif;?>
+        <?php if (isset($_GET['msg'])): ?><div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <?php echo strip_tags($_GET['msg']); ?></div><?php endif;?>
+  <form name="f" method="post" action="index.php?mod=admin:reg" onsubmit="if($('#rpw').val() != $('#pw').val()) {alert('注册失败：两次输入的密码不一致，请重新输入');return false;}">
 	<div class="input-group">
-  <span class="input-group-addon">账户</span>
+  <span class="input-group-addon">用户名</span>
   <input type="text" class="form-control" name="user" required>
 </div><br/>
+      <div class="input-group">
+          <span class="input-group-addon">密码</span>
+          <input type="password" class="form-control" name="pw" id="pw" required>
+      </div><br/>
+      <div class="input-group">
+          <span class="input-group-addon">再次输入密码</span>
+          <input type="password" class="form-control" name="rpw" id="rpw" required>
+      </div><br/>
 <div class="input-group">
-  <span class="input-group-addon">密码</span>
-  <input type="password" class="form-control" name="pw" id="pw" required>
-</div><br/>
-<div class="input-group">
-  <span class="input-group-addon">邮箱</span>
+  <span class="input-group-addon">邮箱地址</span>
   <input type="email" class="form-control" name="mail" id="mail" required>
 </div>
 <?php 

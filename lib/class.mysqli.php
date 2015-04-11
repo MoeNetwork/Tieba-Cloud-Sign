@@ -62,27 +62,27 @@ class wmysql {
 			switch ($this->conn->connect_errno) {
 				case 1044:
 				case 1045:
-					throw new Exception("连接数据库失败，数据库用户名或密码错误");
+					throw new Exception("连接数据库失败，数据库用户名或密码错误",10000);
 					break;
 
                 case 1049:
-					throw new Exception("连接数据库失败，未找到您填写的数据库");
+					throw new Exception("连接数据库失败，未找到您填写的数据库",10000);
 					break;
 
 				case 2003:
-					throw new Exception("连接数据库失败，数据库端口错误");
+					throw new Exception("连接数据库失败，数据库端口错误",10000);
 					break;
 
 				case 2005:
-					throw new Exception("连接数据库失败，数据库地址错误或者数据库服务器不可用");
+					throw new Exception("连接数据库失败，数据库地址错误或者数据库服务器不可用",10000);
 					break;
 
 				case 2006:
-					throw new Exception("连接数据库失败，数据库服务器不可用");
+					throw new Exception("连接数据库失败，数据库服务器不可用",10000);
 					break;
 
 				default :
-					throw new Exception("连接数据库失败，请检查数据库信息。错误编号：" . $this->conn->connect_errno);
+					throw new Exception("连接数据库失败，请检查数据库信息。错误编号：" . $this->conn->connect_errno,10000);
 					break;
 			}
 		}
@@ -117,7 +117,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				throw new Exception("MySQL 语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror());
+				throw new Exception("MySQL 语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror(),10000);
 			}	
 		} else {
 			return $this->result;
@@ -135,7 +135,7 @@ class wmysql {
 			if ($noerror == true) {
 				return false;
 			} else {
-				throw new Exception("MySQL 批量语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror());
+				throw new Exception("MySQL 批量语句执行错误：<br/><b>语句：</b>$sql<br/><b>错误：</b>" . $this->geterror(),10000);
 			}	
 		} else {
 			return $this->result;

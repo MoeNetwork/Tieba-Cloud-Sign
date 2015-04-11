@@ -30,7 +30,9 @@ class E extends Exception {
         $msg .= '<table style="width:100%"><thead><th>文件</th><th>行</th><th>代码</th></thead><tbody>';
         $msg .= '<tr><td>' . $file . '</td><td>' . $line . '' . '</td><td>[抛出异常]</td></tr>';
         foreach ($trace as $v) {
-            $msg .= '<tr><td>' . $v['file'] . '</td><td>' .  $v['line'] . '</td><td>' . $v['function'] . '</td></tr>';
+            $tracefile = isset($v['file']) ? $v['file'] : '';
+            $traceline = isset($v['line']) ? $v['line'] : '';
+            $msg .= '<tr><td>' . $tracefile . '</td><td>' .  $traceline . '</td><td>' . $v['function'] . '</td></tr>';
         }
         $msg .= '</tbody></table>';
         if (function_exists('doAction')) {

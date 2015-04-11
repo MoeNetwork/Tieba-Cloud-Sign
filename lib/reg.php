@@ -83,7 +83,7 @@ function class_autoload($c) {
 	if (file_exists(SYSTEM_ROOT . '/lib/class.' . $c . '.php')) {
 		include SYSTEM_ROOT . '/lib/class.' . $c . '.php';
 	} else {
-		msg("类 {$c} 加载失败，是否存在此类？");
+		throw new Exception('无法加载此类：' . $c , 10001);
 	}
 }
 
