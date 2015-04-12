@@ -46,6 +46,10 @@ switch ($i['mode'][0]) {
                 loadhead('检查更新');
 				template('admin-update');
 				break;
+			case 'cloud':
+                loadhead('产品中心');
+				template('admin-cloud');
+				break;
 			case 'setplug':
 				$plug = strip_tags($_GET['plug']);
 				$pluginfo = getPluginInfo($plug);

@@ -77,6 +77,19 @@ switch (SYSTEM_PAGE) {
 		doAction('plugin_setting_2');
 		Redirect('index.php?mod=admin:plugins&ok');
 		break;
+
+	case 'admin:cloud':
+		doAction('plugin_update_1');
+		$c = new wcurl(SUPPORT_URL.'getplug.php?m=up&pname='.$_GET['upd']);
+		$cloud = $c->exec();
+		$c->close();
+		if($cloud == 'WRONG'){
+			msg('更新失败');
+		}
+		//存储
+		doAction('plugin_update_2');
+		Redirect('index.php?mod=admin:cloud&ok');
+		break;
 	
 	case 'admin:set':
 		global $m;
