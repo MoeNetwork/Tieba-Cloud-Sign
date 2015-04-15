@@ -469,9 +469,11 @@ function addAction($hook, $actionFunc) {
 
 /**
  * 执行挂在钩子上的函数,支持多参数 eg:doAction('post_comment', $author, $email, $url, $comment);
+ * 执行成功返回函数返回的值，如该钩子下没有函数则返回false
  *
  * @param string $hook
  * @param mixed ... 更多参数
+ * @return string or bool
  */
 function doAction($hook) {
 	global $i;
@@ -480,7 +482,10 @@ function doAction($hook) {
 		foreach ($i['plugins']['hook'][$hook] as $function) {
 			$string = call_user_func_array($function, $args);
 		}
-	}
+        return $string;
+	} else {
+        return false;
+    }
 }
 
 /**
