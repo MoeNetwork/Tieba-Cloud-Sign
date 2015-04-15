@@ -489,6 +489,17 @@ function doAction($hook) {
 }
 
 /**
+ * 判断钩子上面是否挂有函数
+ *
+ * @param string $hook
+ * @return bool
+ */
+function hasAction($hook){
+    global $i;
+    return isset($i['plugins']['hook'][$hook]);
+}
+
+/**
  * 打印可读的变量信息
  * @param mixed $var
  * @param bool $mode false = var_dump() | true = print_r()
