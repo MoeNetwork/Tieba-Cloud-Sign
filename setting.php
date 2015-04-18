@@ -80,15 +80,51 @@ switch (SYSTEM_PAGE) {
 
 	case 'admin:cloud':
 		doAction('plugin_update_1');
-		$c = new wcurl(SUPPORT_URL.'getplug.php?m=up&pname='.$_GET['upd']);
-		$cloud = $c->exec();
+
+		if (!file_exists(SYSTEM_ROOT . '/setup/update_backup/')) {
+			mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
+		}
+		if (!file_exists(UPDATE_CACHE)) {
+			mkdir(UPDATE_CACHE, 0777, true);
+		}
+
+		$up_url = SUPPORT_URL.'getplug.php?m=up&pname='.$_GET['upd'].'&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
+		$c = new wcurl($up_url);
+		$file = $c->exec();
 		$c->close();
-		if($cloud == 'WRONG'){
+
+		if($file == 'WRONG'){
 			msg('更新失败');
 		}
-		//存储
+		
+		$zipPath = UPDATE_CACHE.'update_plug_'.time().'.zip';
+		if(file_put_contents($zipPath, $file) === false){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法下载更新包');
+		}
+
+		//解压缩
+		$z = new zip();
+		$z->open($zipPath);
+		$z->extract(UPDATE_CACHE);
+		$z->close();
+
+		//检查更新文件
+		$floderName = UPDATE_CACHE.$_GET['upd'];
+		if(!is_dir($floderName)){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
+		}
+		
+		//覆盖文件
+		if(CopyAll($floderName,SYSTEM_ROOT.'/plugins') !== true){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法更新文件');
+		}
+		DeleteFile(UPDATE_CACHE);
+
 		doAction('plugin_update_2');
-		Redirect('index.php?mod=admin:cloud&ok');
+		msg('恭喜您！您已成功将'.$_GET['upd'].'升级到最新版本', SYSTEM_URL);
 		break;
 	
 	case 'admin:set':
@@ -129,6 +165,8 @@ switch (SYSTEM_PAGE) {
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('icp',$sou['icp']);
 			@option::set('trigger',$sou['trigger']);
+			@option::set('bbs_us',$sou['bbs_us']);
+			@option::set('bbs_pw',$sou['bbs_pw']);
 			@option::set('mail_mode',$sou['mail_mode']);
 			@option::set('mail_name',$sou['mail_name']);
 			@option::set('mail_yourname',$sou['mail_yourname']);

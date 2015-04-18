@@ -111,6 +111,21 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<input type="checkbox" name="protect_reg" value="1" <?php if(option::get('protect_reg') == 1) { echo 'checked'; } ?>> 反恶意注册
 		</td>
 		</tr>
+		<tr><td>StusGame GROUP 账号设置
+		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testbbs'" value="测试登录">
+		<br/><br/>测试前请先保存设置
+		</td><td><br/>
+			<div class="input-group">
+			  <span class="input-group-addon">账号</span>
+			  <input type="text" name="bbs_us" class="form-control"  value="<?php echo option::get('bbs_us') ?>">
+			</div><br/>
+
+			<div class="input-group">
+				<span class="input-group-addon">密码</span>
+				<input type="text" name="bbs_pw" class="form-control" value="<?php echo option::get('bbs_pw') ?>" >
+			</div><br/>
+		</td>
+		</tr>
 		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
 		<tr><td>邮件综合设置
 		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testmail'" value="测试邮件发送">
