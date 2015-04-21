@@ -116,6 +116,9 @@ if (ROLE == 'admin') {
 				<span class="input-group-addon">输入邮箱地址</span>
 				<input type="text" class="form-control" name="to">
 				<span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击订阅"></span></div></form></div></li>';
+            if(defined('SYSTEM_KEY')) {
+                echo '<li class="list-group-item">商业授权密钥：' . SYSTEM_KEY . '</li>';
+            }
 		?>
 		</li>
 	</ul>
