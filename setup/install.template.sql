@@ -84,17 +84,15 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('baidu_name', '1');
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;
 CREATE TABLE `{VAR-PREFIX}plugins` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `ver` varchar(15) NULL,
   `options` text,
   `order`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
-  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{VAR-PREFIX}plugins` VALUES ('1', 'wmzz_debug', '1', '2.0');
+INSERT INTO `{VAR-PREFIX}plugins` VALUES ('wmzz_debug', '1', '2.0' , '' , 0);
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}tieba`;
 CREATE TABLE `{VAR-PREFIX}tieba` (
