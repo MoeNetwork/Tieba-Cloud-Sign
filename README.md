@@ -79,3 +79,6 @@ DL[]
 VFleaKing[liuhaotian0520@163.com]      
 liwanglin12[i@lwl12.com]      
 角落里有蛇[395183830@qq.com]
+#耻辱柱
+**有些不要脸的SB就是这样**
+1.巨型SB，去版权+辱骂作者，至今仍要强行装逼：http://ccgv.me/
