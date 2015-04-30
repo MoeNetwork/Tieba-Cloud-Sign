@@ -42,7 +42,7 @@ if (isset($_GET['add'])) {	?>
 <?php } else {
 $userc = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."users`"));
 $users = '';
-$s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users`');
+$s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users` ORDER BY `id`');
 
 while ($x = $m->fetch_array($s)) {
 	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';

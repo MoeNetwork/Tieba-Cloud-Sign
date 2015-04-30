@@ -61,7 +61,7 @@ if(!empty($wrongver)){
 	foreach ($wrongver as $wrongone) {
 		echo ''.$wrongone.' ';
 	}
-	echo '的数据库与文件版本不一致，此时升级存在风险。请先到插件管理</div>';
+	echo '的数据库与文件版本不一致，此时升级存在风险。请先到 <a href="index.php?mod=admin:cloud">插件管理</a> 更新此插件</div>';
 }
 ?>
 <div class="alert alert-info" id="tb_num">当前有 <?php echo count($i['plugins']['all']); ?> 个已安装的插件，<?php echo count($i['plugins']['actived']) ?> 个已激活的插件。其中已在 <a href="<?php echo $sp_url; ?>" target="_blank">产品中心</a> 上架的有 <?php echo $st ?> 个。</div>
