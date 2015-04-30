@@ -3,9 +3,10 @@ global $m,$i;
 
 if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">设置保存成功</div>';
-}
-elseif(isset($_GET['mailtestok'])) {
+} elseif(isset($_GET['mailtestok'])) {
 	echo '<div class="alert alert-success">一封邮件已经发送到您的邮箱 '.$i['user']['email'].'，请查收</div>';
+} elseif(isset($_GET['bbstestok'])) {
+	echo '<div class="alert alert-success">成功登陆到产品中心</div>';
 }
 function addset($name,$type,$x,$other = '',$text = '') {
 	if ($type == 'checkbox') {
@@ -111,8 +112,8 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<input type="checkbox" name="protect_reg" value="1" <?php if(option::get('protect_reg') == 1) { echo 'checked'; } ?>> 反恶意注册
 		</td>
 		</tr>
-		<tr><td>StusGame GROUP 账号设置
-		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testbbs'" value="测试登录">
+		<tr><td>StusGame 产品中心 账号设置
+		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testbbs'" value="测试登录">
 		<br/><br/>测试前请先保存设置
 		</td><td><br/>
 			<div class="input-group">
@@ -122,13 +123,15 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 
 			<div class="input-group">
 				<span class="input-group-addon">密码</span>
-				<input type="text" name="bbs_pw" class="form-control" value="<?php echo option::get('bbs_pw') ?>" >
+				<div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'bbs_pw\' id=\'bbs_pw\' placeholder=\'输入新的产品中心密码，刷新可取消修改\'>');$(this).remove();">
+					<input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
+				</div>
 			</div><br/>
 		</td>
 		</tr>
 		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
 		<tr><td>邮件综合设置
-		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=testmail'" value="测试邮件发送">
+		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testmail'" value="测试邮件发送">
 		<br/><br/>测试前请先保存设置
 		<br/><br/>无加密的SMTP服务器端口号通常为 25
 		<br/>SSL加密的SMTP服务器端口号通常为 465

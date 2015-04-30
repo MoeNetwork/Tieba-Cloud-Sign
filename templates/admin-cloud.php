@@ -10,6 +10,7 @@ if (isset($_GET['ok'])) {
 }
 $sp_url = dirname(SUPPORT_URL);
 $plugins = '';
+$wrongver = array();
 $st = 0;
 foreach($i['plugins']['desc'] as $key => $val) {
 	if($val['plugin']['onsale'] !== true){
@@ -32,11 +33,13 @@ foreach($i['plugins']['desc'] as $key => $val) {
 		$pluginfo .= '<br/>';
 	}
 	if (!empty($val['plugin']['version']) && !empty($i['plugins']['info'][$val['plugin']['id']]['ver'])) {
-		$pluginfo .= '<br/>本地版本：'.$val['plugin']['version'];
+		$pluginfo .= '<br/>本地程序版本：'.$val['plugin']['version'];
 		if ($i['plugins']['info'][$val['plugin']['id']]['ver'] != $val['plugin']['version']) {
-			msg('警告： '.$val['plugin']['name'].' 插件的数据库与文件版本不一致，此时升级存在风险');
+			$wrongver[] = $val['plugin']['name'];
+			$pluginfo .= ' | <font color="red">已安装版本：'.$val['plugin']['version'].'</font>';
+		} else {
+			$pluginfo .= ' | 最新版本：'.$cloud['version'];
 		}
-		$pluginfo .= ' | 最新版本：'.$cloud['version'];
 		if ($cloud['version'] > $val['plugin']['version']) {
 			$pluginfo .= ' | <a href="setting.php?mod=admin:cloud&upd='.$val['plugin']['id'].'" onclick="return confirm(\'你确实要升级此插件吗？\\n'.$val['plugin']['name'].'\');">点击升级到最新版本</a>';
 		}
@@ -53,6 +56,13 @@ foreach($i['plugins']['desc'] as $key => $val) {
     $plugins .= '</tr>';
 }
 
+if(!empty($wrongver)){ 
+	echo '<div class="alert alert-danger"><b>警告：</b>插件 ';
+	foreach ($wrongver as $wrongone) {
+		echo ''.$wrongone.' ';
+	}
+	echo '的数据库与文件版本不一致，此时升级存在风险。请先到插件管理</div>';
+}
 ?>
 <div class="alert alert-info" id="tb_num">当前有 <?php echo count($i['plugins']['all']); ?> 个已安装的插件，<?php echo count($i['plugins']['actived']) ?> 个已激活的插件。其中已在 <a href="<?php echo $sp_url; ?>" target="_blank">产品中心</a> 上架的有 <?php echo $st ?> 个。</div>
 <div class="table-responsive">

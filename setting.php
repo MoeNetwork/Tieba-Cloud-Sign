@@ -80,10 +80,9 @@ switch (SYSTEM_PAGE) {
 
 	case 'admin:cloud':
 		doAction('plugin_update_1');
+		global $i;
+		$plug = $i['plugins']['desc'][$_GET['upd']];
 
-		if (!file_exists(SYSTEM_ROOT . '/setup/update_backup/')) {
-			mkdir(SYSTEM_ROOT . '/setup/update_backup/', 0777, true);
-		}
 		if (!file_exists(UPDATE_CACHE)) {
 			mkdir(UPDATE_CACHE, 0777, true);
 		}
@@ -94,7 +93,7 @@ switch (SYSTEM_PAGE) {
 		$c->close();
 
 		if($file == 'WRONG'){
-			msg('更新失败');
+			msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
 		}
 		
 		$zipPath = UPDATE_CACHE.'update_plug_'.time().'.zip';
@@ -117,14 +116,14 @@ switch (SYSTEM_PAGE) {
 		}
 		
 		//覆盖文件
-		if(CopyAll($floderName,SYSTEM_ROOT.'/plugins') !== true){
+		if(CopyAll($floderName,SYSTEM_ROOT.'/plugins/'.$_GET['upd']) !== true){
 			DeleteFile(UPDATE_CACHE);
 			msg('错误 - 更新失败：<br/><br/>无法更新文件');
 		}
 		DeleteFile(UPDATE_CACHE);
 
 		doAction('plugin_update_2');
-		msg('恭喜您！您已成功将'.$_GET['upd'].'升级到最新版本', SYSTEM_URL);
+		msg('（1/2）已成功下载最新版本的 '.$plug['plugin']['name'].' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd='.$_GET['upd'].'">>> 下一步</a>',false);
 		break;
 	
 	case 'admin:set':
@@ -549,10 +548,6 @@ switch (SYSTEM_PAGE) {
 			$mail = !empty($_POST['mail']) ? $_POST['mail'] : msg('邮箱地址不能为空');
 			if (checkMail($mail)) {
 				$mail = sqladds($mail);
-                $z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
-				if ($z['total'] > 0) {
-                    msg('修改失败：邮箱已经存在');
-                }
 				$m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
 			} else {
 				msg('邮箱格式有误，请检查');
@@ -568,13 +563,29 @@ switch (SYSTEM_PAGE) {
 			Redirect('index.php?mod=set&ok');
 			break;
 
-	case 'testmail':
+	case 'admin:testmail':
 		global $i;
 		$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL , array('测试附件.txt' => '这是一个测试附件'));
 		if($x === true) {
 			Redirect('index.php?mod=admin:set&mailtestok');
 		} else {
 			msg('邮件发送失败，发件日志：<br/>'.$x);
+		}
+		break;
+
+	case 'admin:testbbs':
+		global $i;
+		$ch_url = SUPPORT_URL.'getplug.php?m=check&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
+		$c = new wcurl($ch_url);
+		$x = $c->exec();
+		$c->close();
+		if($x == 'RIGHT') {
+			Redirect('index.php?mod=admin:set&bbstestok');
+		} else {
+			if(empty($x)){
+				$x = '错误 - 与产品中心连接失败';
+			}
+			msg('错误 - '.$x);
 		}
 		break;
 }
