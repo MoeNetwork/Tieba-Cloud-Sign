@@ -31,7 +31,7 @@ case 'sign' :
 	</thead>
 	<tbody>
 		<?php 
-		$uxsv = $m->query("SELECT * FROM `".DB_PREFIX."users`");
+		$uxsv = $m->query("SELECT * FROM `".DB_PREFIX."users` ORDER BY `id`");
 		$uxsg = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid`");
 		$alls = $alle = $alln = $allm = $allw = 0;
 		while ($uxs = $m->fetch_array($uxsv)) {

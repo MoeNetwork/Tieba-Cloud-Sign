@@ -545,12 +545,17 @@ switch (SYSTEM_PAGE) {
 			);
 			doAction('set_save1');
 			//更改邮箱
-			$mail = !empty($_POST['mail']) ? $_POST['mail'] : msg('邮箱地址不能为空');
-			if (checkMail($mail)) {
-				$mail = sqladds($mail);
-				$m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
-			} else {
-				msg('邮箱格式有误，请检查');
+			if($_POST['mail'] != $i['user']['email'] && !empty($_POST['mail'])){
+				if (checkMail($_POST['mail'])) {
+					$mail = sqladds($_POST['mail']);
+            	    $z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
+					if ($z['total'] > 0) {
+            	        msg('修改失败：邮箱已经存在');
+            	    }
+            	    $m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
+				} else {
+					msg('邮箱格式有误，请检查');
+				}
 			}
 			$set = array();
 			foreach ($PostArray as $value) {
