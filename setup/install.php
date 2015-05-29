@@ -9,7 +9,7 @@ require SYSTEM_ROOT2.'/../lib/msg.php';
 include SYSTEM_ROOT2.'/../lib/class.wcurl.php';
 
 if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
-	msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock');
+	msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock<br/><br/>或者点击下面的按钮返回站点取消安装：', '../');
 }
 $csrf = !empty($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER']) : '';
 if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER['SERVER_NAME'] ) ) {

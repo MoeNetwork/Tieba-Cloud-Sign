@@ -10,6 +10,10 @@ define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 define('SUPPORT_URL', 'http://s.stus8.com/tcs/');
+if(!file_exists(SYSTEM_ROOT.'/config.php')) {
+	header('Location: ./setup/install.php');
+	die;	
+}
 header("content-type:text/html; charset=utf-8");
 date_default_timezone_set('Asia/Shanghai');
 if(file_exists(SYSTEM_ROOT . '/key.php')) {
