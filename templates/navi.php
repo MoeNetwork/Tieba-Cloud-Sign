@@ -45,7 +45,7 @@ global $i;
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span> 插件菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-          <li class="<?php checkIfActive('admin:cloud') ?>" ><a href="index.php?mod=admin:cloud"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
+          <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
           <?php doAction('navi_3'); ?>
         </ul>
       </li>
@@ -98,7 +98,7 @@ global $i;
                 <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
-               <li class="<?php checkIfActive('admin:cloud') ?>" ><a href="index.php?mod=admin:cloud"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
+               <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
               <?php } else { ?>

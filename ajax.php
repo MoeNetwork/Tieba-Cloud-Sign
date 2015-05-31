@@ -223,6 +223,20 @@ switch (SYSTEM_PAGE) {
 		}
 		break;
 
+	case 'admin:c_update:check':
+		global $i;
+		$c = new wcurl(SUPPORT_URL.'getplug.php?m=ver&pname='.$_GET['plug']);
+		$cloud = json_decode($c->exec(),true);
+		$c->close();
+		if(empty($cloud['version'])){
+			die('未找到该产品信息');
+		}
+		echo '最新版本：'.$cloud['version'];
+		if($cloud['version'] > $i['plugins']['desc'][$_GET['plug']]['plugin']['version']){
+			echo '//'.$i['plugins']['desc'][$_GET['plug']]['plugin']['name'].' - 发现新版本//最新版本：'.$cloud['version'].'<br/>版本描述：'.$cloud['whatsnew'].'<br/>'.'本次更新需要支付 '.$cloud['updateXB'].' XB。<a href="setting.php?mod=admin:cloud&upd='.$_GET['plug'].'">立即更新</a>';
+		}
+		break;
+
 	default:
 		msg('未定义操作');
 		break;

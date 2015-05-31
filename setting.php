@@ -6,7 +6,7 @@
 require dirname(__FILE__).'/init.php';
 
 if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
-    msg('权限不足');
+	msg('权限不足');
 }
 
 if (ROLE != 'admin' && stristr(strip_tags($_GET['mod']), 'admin:')) {
@@ -35,7 +35,7 @@ switch (SYSTEM_PAGE) {
 		if (empty($file['size'])) {
 			msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
 		}
-		$z    = new ZipArchive();
+		$z	= new ZipArchive();
 		if(!$z->open($file['tmp_name'])) {
 			msg('插件安装失败：无法打开压缩包');
 		}
@@ -59,6 +59,11 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['act'])) {
 			activePlugin($_GET['act']);
 		}
+		elseif (isset($_GET['upd'])) {
+			if(updatePlugin($_GET['upd']) == false){
+				Redirect('index.php?mod=admin:plugins&error_msg='.urlencode("插件更新失败"));
+			}
+		}
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
 		}
@@ -68,12 +73,12 @@ switch (SYSTEM_PAGE) {
 			}
 			installPlugin($_GET['install']);
 		}
-        elseif (isset($_GET['xorder'])){
-            global $m;
-            foreach($_POST as $id=>$order){
-                $m->query('Update `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Set `order`={$order} Where `name`='{$id}'");
-            }
-        }
+		elseif (isset($_GET['xorder'])){
+			global $m;
+			foreach($_POST as $id=>$order){
+				$m->query('Update `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Set `order`={$order} Where `name`='{$id}'");
+			}
+		}
 		doAction('plugin_setting_2');
 		Redirect('index.php?mod=admin:plugins&ok');
 		break;
@@ -197,7 +202,7 @@ switch (SYSTEM_PAGE) {
 			$rs=$m->query("SHOW TABLES FROM `".DB_NAME.'`');
 			while ($row = $m->fetch_row($rs)) {
 				$m->query('OPTIMIZE TABLE  `'.DB_NAME.'`.`'.$row[0].'`');
-		    }
+			}
 			break;
 		
 		case 'fixdoing':
@@ -548,11 +553,11 @@ switch (SYSTEM_PAGE) {
 			if($_POST['mail'] != $i['user']['email'] && !empty($_POST['mail'])){
 				if (checkMail($_POST['mail'])) {
 					$mail = sqladds($_POST['mail']);
-            	    $z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
+					$z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
 					if ($z['total'] > 0) {
-            	        msg('修改失败：邮箱已经存在');
-            	    }
-            	    $m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
+						msg('修改失败：邮箱已经存在');
+					}
+					$m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
 				} else {
 					msg('邮箱格式有误，请检查');
 				}

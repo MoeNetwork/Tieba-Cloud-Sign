@@ -3,6 +3,9 @@ global $i;
 if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">插件操作成功</div>';
 }
+if (isset($_GET['error_msg'])) {
+	echo '<div class="alert alert-danger">'.(empty($_GET['error_msg']) ? '未知的异常' : $_GET['error_msg']).'</div>';
+}
 
 $x       = getPlugins();
 $plugins = '';
@@ -27,6 +30,8 @@ foreach($x as $key => $val) {
 		}
 		if (isset($i['plugins']['info'][$val['plugin']['id']]['ver']) && version_compare($i['plugins']['info'][$val['plugin']['id']]['ver'], $val['plugin']['version']) == -1 && $val['view']['update']) {
 			$pluginfo .= ' | <a href="setting.php?mod=admin:plugins&upd='.$val['plugin']['id'].'" onclick="return confirm(\'你确实要升级此插件吗？\\n'.$val['plugin']['name'].'\');">点击升级到最新版本</a>';
+		} elseif ($val['plugin']['onsale'] == true) {
+			$pluginfo .= ' | <span id="c_upd" onclick="c_upd(this,\''.$val['plugin']['id'].'\')"><a href="javascript:void(0)">检查更新</a></span>';
 		}
 	} else {
 		$pluginfo .= '<br/>程序版本：1.0';
@@ -124,3 +129,30 @@ doAction('admin_plugins');
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script type="text/javascript">
+	function c_upd(e,plug) {
+		e.innerHTML = '检查更新中...';
+		$.ajax({ 
+			async:true, 
+			url: 'ajax.php?mod=admin:c_update:check&plug=' + plug, 
+			type: "GET", 
+			data : {},
+			dataType: 'HTML', 
+			timeout: 90000, 
+			success: function(data){
+				if(data.indexOf("发现新版本") != -1){
+					data = data.split('//'); 
+					e.innerHTML = data[0];
+					alert(data[2],data[1]);
+				} else {
+					e.innerHTML = data;
+				}
+			},
+			error: function(error){
+				e.innerHTML = '检查失败 [ 点击重试 ]';
+			}
+		});
+	}
+</script>
+
