@@ -4,6 +4,25 @@ global $m;
 if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">应用成功</div>';
 }
+$cookies = $_COOKIE['toolpw'];
+$toolpw = option::get('toolpw');
+if($cookies != $toolpw && !empty($toolpw)){
+?>
+<div class="alert alert-danger">
+    <h3>工具箱独立密码验证</h3><br/>
+    <form action="setting.php?mod=admin:tools&pw" method="post">
+        <div class="input-group">
+            <span class="input-group-addon">工具箱使用密码</span>
+            <input type="password" name="toolpw" class="form-control" />
+        </div><br/>
+        <button type="submit" class="btn btn-primary">提交更改</button>
+    </form>
+</div>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
+
+<?php
+die;
+}
 doAction('admin_tools_1');
 ?>
 <div id="comsys"></div>

@@ -129,12 +129,13 @@ define(\'DB_PREFIX\',\'tc_\');
 				echo '<div class="input-group"><span class="input-group-addon">创始人用户名</span><input type="text" required class="form-control" name="user" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人邮箱</span><input type="email" required class="form-control" name="mail" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人密码</span><input type="password" required class="form-control" name="pw" placeholder=""></div><br/>';
+				echo '<div class="input-group"><span class="input-group-addon">工具箱执行密码</span><input type="password" required class="form-control" name="toolpw" placeholder=""></div><br/>';
 				echo '<br/><br/><input type="submit" class="btn btn-success" value="下一步 >>"></form>';
 				break;
 
 			case '4':
 				$errorhappen = '';
-				if ($_SERVER['HTTPS'] == 'on') {
+				if (isset($_SERVER['HTTPS']) == 'on') {
 					$http = 'https://';
 				} else {
 					$http = 'http://';
@@ -157,6 +158,7 @@ define(\'DB_PREFIX\',\'tc_\');
 				$sql  = str_ireplace('{VAR-PREFIX}', DB_PREFIX, file_get_contents(SYSTEM_ROOT2.'/install.template.sql'));
 				$sql  = str_ireplace('{VAR-DB}', DB_NAME, $sql);
 				$sql  = str_ireplace('{VAR-ISAPP}', $isapp, $sql);
+				$sql  = str_ireplace('{VAR-TOOLPW}', md5(md5(md5($_POST['toolpw']))), $sql);
 				$sql  = str_ireplace('{VAR-SYSTEM-URL}', $http . $_SERVER['HTTP_HOST'] . str_ireplace('setup/', '', $sysurl[0]), $sql);
 				$sql .= "\n"."INSERT INTO `".DB_NAME."`.`".DB_PREFIX."users` (`name`, `pw`, `email`, `role`) VALUES ('{$_POST['user']}', '".md5(md5(md5($_POST['pw'])))."', '{$_POST['mail']}', 'admin');";
 				if (!isset($_POST['nosql'])) {
