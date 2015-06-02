@@ -211,7 +211,7 @@ switch (SYSTEM_PAGE) {
 					Redirect('index.php?mod=admin:tools');
 					}
 			}		
-		if($cookies != $toolpw || !empty($toolpw)){
+		if($cookies != $toolpw && !empty($toolpw)){
 			msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
 			}
 			
