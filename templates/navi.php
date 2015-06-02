@@ -68,6 +68,7 @@ global $i;
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
           <li><a href="http://zhizhe8.net" target="_blank">无名智者个人博客</a></li>
+          <li><a href="http://longtings.com" target="_blank">Mokeyjay</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
