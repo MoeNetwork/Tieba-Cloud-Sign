@@ -70,7 +70,7 @@ if (!empty($i['user']['bduss'])) {
 		else {
 			$f .= '</td><td><font color="green">正常</font>';
 		}
-		$f .= '</td><td>'.$lastdo.'</td><td>'.$no.'</td></tr>';
+		$f .= '</td><td>'.$lastdo.'</td><td>'.$no.'</td><td><a href="'.SYSTEM_URL.'setting.php?mod=showtb&del&id='.$x['id'].'">删除</a></td></tr>';
 	}
 	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧。已签到 '.$count1.' 个贴吧，还有 '.$count2.' 个贴吧等待签到<br/>PID 即为 账号ID';
 	if (!ISVIP) {
@@ -80,6 +80,7 @@ if (!empty($i['user']['bduss'])) {
 	if (option::get('enable_addtieba') == 1) {
 		echo ' | <a href="javascript:;" data-toggle="modal" data-target="#AddTieba">手动添加贴吧</a>';
 	}
+	echo ' | <a href="'.SYSTEM_URL.'setting.php?mod=showtb&reset'.'">重置签到失败贴吧</a>';
 	echo ' | <a href="javascript:;" onclick="go(\'submit_button\');">前往底部</a></div>';
 	echo '<form action="setting.php?mod=showtb&set" method="post">';
 	echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
@@ -88,7 +89,8 @@ if (!empty($i['user']['bduss'])) {
 	echo '<th>贴吧名称</th>';
 	echo '<th>状态</th>';
 	echo '<th>上次签到</th>';
-	echo '<th>忽略签到</th></thead><tbody>';
+	echo '<th>忽略签到</th>';
+	echo '<th>操作</th></thead><tbody>';
 	echo $f.'</tbody></table></div><input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
 } else {
 	echo '<div class="alert alert-danger">无法列出贴吧列表，因为当前没有绑定百度账号</div>';

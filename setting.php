@@ -535,6 +535,25 @@ switch (SYSTEM_PAGE) {
 			CleanUser(UID);
 			Redirect('index.php?mod=showtb');
 		}
+		elseif (isset($_GET['del'])) {
+			$id = (int) sqladds($_REQUEST['id']);
+			$m->query('DELETE FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$id);
+			Redirect('index.php?mod=showtb&ok');
+			}
+		elseif (isset($_GET['reset'])) {
+			$max = $m->fetch_array($m->query("select max(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
+			$min = $m->fetch_array($m->query("select min(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
+			$max = $max['id'];
+			$min = $min['id'];
+			while($min <= $max) {
+				$res = $m->fetch_array($m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$min.' Limit 1')); 
+				if($res['status'] != 0){
+					$m->query('UPDATE `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` SET `lastdo` = 0,`status` = 0,`last_error` = NULL WHERE `id` ='.$min);
+					}
+				$min = $min + 1;
+				}
+			Redirect('index.php?mod=showtb&ok');
+			}
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
 				$v = addslashes(htmlspecialchars($_POST['add']));
