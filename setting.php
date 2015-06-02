@@ -541,7 +541,17 @@ switch (SYSTEM_PAGE) {
 				$pid = (int) strip_tags($_POST['pid']);
 				$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 				if($m->num_rows($osq) == 0) {
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
+					$table = $m->fetch_array($m->query('select * from `'.DB_NAME.'`.`'.DB_PREFIX.'users` where `id` = '.UID));
+					$tb_max = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$table['t']."` where `uid` = ".UID));	
+					if(ROLE == 'admin' || ROLE == 'vip'){
+						$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
+					} else {
+						if($tb_max[0] < option::get('tb_max')){
+							$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
+						} else {
+							msg('Wrong：您的贴吧数量超过限制，无法刷新！');
+						}
+					}																				
 				}
 			}
 			Redirect('index.php?mod=showtb&ok');
