@@ -18,277 +18,277 @@ global $m;
 
 switch (SYSTEM_PAGE) {
 	case 'admin:plugins:install':
-	$cookies = $_COOKIE['toolpw'];
-	$toolpw = option::get('toolpw');
-	if($cookies != $toolpw && !empty($toolpw)){
-		msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
-	}
-	doAction('plugin_install_1');
-	if (!class_exists('ZipArchive')) {
-		msg('插件安装失败：你的主机不支持 ZipArchive 类，请返回');
-	}
-	if (!is_writable(SYSTEM_ROOT . '/plugins')) {
-		msg('插件安装失败：你的主机不支持文件写入，请手动安装插件');
-	}
-	if (!isset($_FILES['plugin'])) {
-		msg('若要安装插件，请上传插件包');
-	}
-	$file = $_FILES['plugin'];
-	if (!empty($file['error'])) {
-		msg('插件安装失败：在上传文件时发生错误：代码：' . $file['error']);
-	}
-	if (empty($file['size'])) {
-		msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
-	}
-	$z	= new ZipArchive();
-	if(!$z->open($file['tmp_name'])) {
-		msg('插件安装失败：无法打开压缩包');
-	}
-	$rdc = explode('/', $z->getNameIndex(0), 2);
-	$rd  = $rdc[0];
-	if($z->getFromName($rd . '/' . $rd . '.php') === false) {
-		msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
-	}
-	if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
-		msg('插件安装失败：解压缩失败');
-	}
-	doAction('plugin_install_2');
-	msg('插件安装成功');
-	break;
+		$cookies = $_COOKIE['toolpw'];
+		$toolpw = option::get('toolpw');
+		if($cookies != $toolpw && !empty($toolpw)){
+			msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
+			}
+		doAction('plugin_install_1');
+		if (!class_exists('ZipArchive')) {
+			msg('插件安装失败：你的主机不支持 ZipArchive 类，请返回');
+		}
+		if (!is_writable(SYSTEM_ROOT . '/plugins')) {
+			msg('插件安装失败：你的主机不支持文件写入，请手动安装插件');
+		}
+		if (!isset($_FILES['plugin'])) {
+			msg('若要安装插件，请上传插件包');
+		}
+		$file = $_FILES['plugin'];
+		if (!empty($file['error'])) {
+			msg('插件安装失败：在上传文件时发生错误：代码：' . $file['error']);
+		}
+		if (empty($file['size'])) {
+			msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
+		}
+		$z	= new ZipArchive();
+		if(!$z->open($file['tmp_name'])) {
+			msg('插件安装失败：无法打开压缩包');
+		}
+		$rdc = explode('/', $z->getNameIndex(0), 2);
+		$rd  = $rdc[0];
+		if($z->getFromName($rd . '/' . $rd . '.php') === false) {
+			msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
+		}
+		if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
+			msg('插件安装失败：解压缩失败');
+		}
+		doAction('plugin_install_2');
+		msg('插件安装成功');
+		break;
 
 	case 'admin:plugins':
-	doAction('plugin_setting_1');
-	if (isset($_GET['dis'])) {
-		inactivePlugin($_GET['dis']);
-	}
-	elseif (isset($_GET['act'])) {
-		activePlugin($_GET['act']);
-	}
-	elseif (isset($_GET['upd'])) {
-		if(updatePlugin($_GET['upd']) == false){
-			Redirect('index.php?mod=admin:plugins&error_msg='.urlencode("插件更新失败"));
+		doAction('plugin_setting_1');
+		if (isset($_GET['dis'])) {
+			inactivePlugin($_GET['dis']);
 		}
-	}
-	elseif (isset($_GET['uninst'])) {
-		uninstallPlugin($_GET['uninst']);
-	}
-	elseif (isset($_GET['install'])) {
-		if(!empty($_REQUEST['ver'])){
-			msg ('该插件仅适用于 V'.$_REQUEST['ver'].' 及以上的版本，您的云签到版本低于插件所需最低版本，是否强制安装（强制安装可能造成云签到损坏）<br/><br/><a href="setting.php?mod=admin:plugins&install='.$_GET['install'].'">强制安装</a>　　<a href="setting.php?mod=admin:plugins">取消安装</a><br/>',false,true);
+		elseif (isset($_GET['act'])) {
+			activePlugin($_GET['act']);
 		}
-		installPlugin($_GET['install']);
-	}
-	elseif (isset($_GET['xorder'])){
-		global $m;
-		foreach($_POST as $id=>$order){
-			$m->query('Update `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Set `order`={$order} Where `name`='{$id}'");
+		elseif (isset($_GET['upd'])) {
+			if(updatePlugin($_GET['upd']) == false){
+				Redirect('index.php?mod=admin:plugins&error_msg='.urlencode("插件更新失败"));
+			}
 		}
-	}
-	doAction('plugin_setting_2');
-	Redirect('index.php?mod=admin:plugins&ok');
-	break;
+		elseif (isset($_GET['uninst'])) {
+			uninstallPlugin($_GET['uninst']);
+		}
+		elseif (isset($_GET['install'])) {
+			if(!empty($_REQUEST['ver'])){
+				msg ('该插件仅适用于 V'.$_REQUEST['ver'].' 及以上的版本，您的云签到版本低于插件所需最低版本，是否强制安装（强制安装可能造成云签到损坏）<br/><br/><a href="setting.php?mod=admin:plugins&install='.$_GET['install'].'">强制安装</a>　　<a href="setting.php?mod=admin:plugins">取消安装</a><br/>',false,true);
+			}
+			installPlugin($_GET['install']);
+		}
+		elseif (isset($_GET['xorder'])){
+			global $m;
+			foreach($_POST as $id=>$order){
+				$m->query('Update `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Set `order`={$order} Where `name`='{$id}'");
+			}
+		}
+		doAction('plugin_setting_2');
+		Redirect('index.php?mod=admin:plugins&ok');
+		break;
 
 	case 'admin:cloud':
-	doAction('plugin_update_1');
-	global $i;
-	$plug = $i['plugins']['desc'][$_GET['upd']];
+		doAction('plugin_update_1');
+		global $i;
+		$plug = $i['plugins']['desc'][$_GET['upd']];
 
-	if (!file_exists(UPDATE_CACHE)) {
-		mkdir(UPDATE_CACHE, 0777, true);
-	}
+		if (!file_exists(UPDATE_CACHE)) {
+			mkdir(UPDATE_CACHE, 0777, true);
+		}
 
-	$up_url = SUPPORT_URL.'getplug.php?m=up&pname='.$_GET['upd'].'&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
-	$c = new wcurl($up_url);
-	$file = $c->exec();
-	$c->close();
+		$up_url = SUPPORT_URL.'getplug.php?m=up&pname='.$_GET['upd'].'&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
+		$c = new wcurl($up_url);
+		$file = $c->exec();
+		$c->close();
 
-	if($file == 'WRONG'){
-		msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
-	}
-	
-	$zipPath = UPDATE_CACHE.'update_plug_'.time().'.zip';
-	if(file_put_contents($zipPath, $file) === false){
-		DeleteFile(UPDATE_CACHE);
-		msg('错误 - 更新失败：<br/><br/>无法下载更新包');
-	}
+		if($file == 'WRONG'){
+			msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
+		}
+		
+		$zipPath = UPDATE_CACHE.'update_plug_'.time().'.zip';
+		if(file_put_contents($zipPath, $file) === false){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法下载更新包');
+		}
 
 		//解压缩
-	$z = new zip();
-	$z->open($zipPath);
-	$z->extract(UPDATE_CACHE);
-	$z->close();
+		$z = new zip();
+		$z->open($zipPath);
+		$z->extract(UPDATE_CACHE);
+		$z->close();
 
 		//检查更新文件
-	$floderName = UPDATE_CACHE.$_GET['upd'];
-	if(!is_dir($floderName)){
-		DeleteFile(UPDATE_CACHE);
-		msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
-	}
-	
+		$floderName = UPDATE_CACHE.$_GET['upd'];
+		if(!is_dir($floderName)){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
+		}
+		
 		//覆盖文件
-	if(CopyAll($floderName,SYSTEM_ROOT.'/plugins/'.$_GET['upd']) !== true){
+		if(CopyAll($floderName,SYSTEM_ROOT.'/plugins/'.$_GET['upd']) !== true){
+			DeleteFile(UPDATE_CACHE);
+			msg('错误 - 更新失败：<br/><br/>无法更新文件');
+		}
 		DeleteFile(UPDATE_CACHE);
-		msg('错误 - 更新失败：<br/><br/>无法更新文件');
-	}
-	DeleteFile(UPDATE_CACHE);
 
-	doAction('plugin_update_2');
-	msg('（1/2）已成功下载最新版本的 '.$plug['plugin']['name'].' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd='.$_GET['upd'].'">>> 下一步</a>',false);
-	break;
+		doAction('plugin_update_2');
+		msg('（1/2）已成功下载最新版本的 '.$plug['plugin']['name'].' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd='.$_GET['upd'].'">>> 下一步</a>',false);
+		break;
 	
 	case 'admin:set':
-	global $m;
-	$sou = $_POST;
-	if ($_GET['type'] == 'sign') {
-		@option::set('cron_limit',$sou['cron_limit']);
-		@option::set('tb_max',$sou['tb_max']);
-		@option::set('sign_mode', serialize($sou['sign_mode']));
-		@option::set('enable_addtieba',$sou['enable_addtieba']);
-		@option::set('retry_max',$sou['retry_max']);
-		@option::set('sign_hour',$sou['sign_hour']);
-		@option::set('baidu_name',$sou['baidu_name']);
-		@option::set('fb',$sou['fb']);
-		@option::set('sign_sleep',$sou['sign_sleep']);
-		if (empty($sou['fb_tables'])) {
-			@option::set('fb_tables',NULL);
-		} else {
-			$fb_tables = explode("\n",$sou['fb_tables']);
-			$fb_tab = array();
-			$n= 0;
-			foreach ($fb_tables as $value) {
-				$n++;
-				$value = strtolower($value);
-				$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
-				$m->query($sql);
-				$fb_tab[$n] .= trim($value);
+		global $m;
+		$sou = $_POST;
+		if ($_GET['type'] == 'sign') {
+			@option::set('cron_limit',$sou['cron_limit']);
+			@option::set('tb_max',$sou['tb_max']);
+			@option::set('sign_mode', serialize($sou['sign_mode']));
+			@option::set('enable_addtieba',$sou['enable_addtieba']);
+			@option::set('retry_max',$sou['retry_max']);
+			@option::set('sign_hour',$sou['sign_hour']);
+			@option::set('baidu_name',$sou['baidu_name']);
+			@option::set('fb',$sou['fb']);
+			@option::set('sign_sleep',$sou['sign_sleep']);
+			if (empty($sou['fb_tables'])) {
+				@option::set('fb_tables',NULL);
+			} else {
+				$fb_tables = explode("\n",$sou['fb_tables']);
+				$fb_tab = array();
+				$n= 0;
+				foreach ($fb_tables as $value) {
+					$n++;
+					$value = strtolower($value);
+					$sql = str_ireplace('{VAR-DB}', DB_NAME, str_ireplace('{VAR-TABLE}', trim(DB_PREFIX.$value), file_get_contents(SYSTEM_ROOT.'/setup/template.table.sql')));
+					$m->query($sql);
+					$fb_tab[$n] .= trim($value);
+				}
+				@option::set('fb_tables', serialize($fb_tab));
 			}
-			@option::set('fb_tables', serialize($fb_tab));
+		} else {
+			@option::set('system_url',$sou['system_url']);
+			@option::set('system_name',$sou['system_name']);
+			@option::set('footer',$sou['footer']);
+			@option::set('ann',$sou['ann']);
+			@option::set('enable_reg',$sou['enable_reg']);
+			@option::set('protect_reg',$sou['protect_reg']);
+			@option::set('yr_reg',$sou['yr_reg']);
+			@option::set('icp',$sou['icp']);
+			@option::set('trigger',$sou['trigger']);
+			@option::set('bbs_us',$sou['bbs_us']);
+			@option::set('bbs_pw',$sou['bbs_pw']);
+			@option::set('mail_mode',$sou['mail_mode']);
+			@option::set('mail_name',$sou['mail_name']);
+			@option::set('mail_yourname',$sou['mail_yourname']);
+			@option::set('mail_host',$sou['mail_host']);
+			@option::set('mail_port',$sou['mail_port']);
+			@option::set('mail_auth',$sou['mail_auth']);
+			@option::set('mail_ssl',$sou['mail_ssl']);
+			@option::set('mail_smtpname',$sou['mail_smtpname']);
+			if (isset($sou['mail_smtppw'])) {
+				@option::set('mail_smtppw',$sou['mail_smtppw']);
+			}
+			@option::set('dev',$sou['dev']);
+			@option::set('bduss_num',$sou['bduss_num']);
+			@option::set('dev',$sou['dev']);
+			@option::set('cron_pw',$sou['cron_pw']);
+			@option::set('cron_asyn',$sou['cron_asyn']);
+			@option::set('sign_multith',$sou['sign_multith']);
+			@option::set('cktime',$sou['cktime']);
+			@option::set('isapp',$sou['isapp']);
 		}
-	} else {
-		@option::set('system_url',$sou['system_url']);
-		@option::set('system_name',$sou['system_name']);
-		@option::set('footer',$sou['footer']);
-		@option::set('ann',$sou['ann']);
-		@option::set('enable_reg',$sou['enable_reg']);
-		@option::set('protect_reg',$sou['protect_reg']);
-		@option::set('yr_reg',$sou['yr_reg']);
-		@option::set('icp',$sou['icp']);
-		@option::set('trigger',$sou['trigger']);
-		@option::set('bbs_us',$sou['bbs_us']);
-		@option::set('bbs_pw',$sou['bbs_pw']);
-		@option::set('mail_mode',$sou['mail_mode']);
-		@option::set('mail_name',$sou['mail_name']);
-		@option::set('mail_yourname',$sou['mail_yourname']);
-		@option::set('mail_host',$sou['mail_host']);
-		@option::set('mail_port',$sou['mail_port']);
-		@option::set('mail_auth',$sou['mail_auth']);
-		@option::set('mail_ssl',$sou['mail_ssl']);
-		@option::set('mail_smtpname',$sou['mail_smtpname']);
-		if (isset($sou['mail_smtppw'])) {
-			@option::set('mail_smtppw',$sou['mail_smtppw']);
-		}
-		@option::set('dev',$sou['dev']);
-		@option::set('bduss_num',$sou['bduss_num']);
-		@option::set('dev',$sou['dev']);
-		@option::set('cron_pw',$sou['cron_pw']);
-		@option::set('cron_asyn',$sou['cron_asyn']);
-		@option::set('sign_multith',$sou['sign_multith']);
-		@option::set('cktime',$sou['cktime']);
-		@option::set('isapp',$sou['isapp']);
-	}
-	doAction('admin_set_save');
-	Redirect('index.php?mod=admin:set:'. $_GET['type'].'&ok');
-	break;
+		doAction('admin_set_save');
+		Redirect('index.php?mod=admin:set:'. $_GET['type'].'&ok');
+		break;
 
 	case 'admin:tools':
-	$cookies = $_COOKIE['toolpw'];
-	$toolpw = option::get('toolpw');
-	if(isset($_GET['pw'])){
-		if(md5(md5(md5($_POST['toolpw']))) != $toolpw){
-			msg('警告：密码错误，您无权使用工具箱等高级权限！');
-		} else {
-			setcookie('toolpw',$toolpw);
-			Redirect('index.php?mod=admin:tools');
-		}
-	}		
-	if($cookies != $toolpw && !empty($toolpw)){
-		msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
-	}
-	
-	
-	switch (strip_tags($_GET['setting'])) {
-		
+		$cookies = $_COOKIE['toolpw'];
+		$toolpw = option::get('toolpw');
+		if(isset($_GET['pw'])){
+			if(md5(md5(md5($_POST['toolpw']))) != $toolpw){
+				msg('警告：密码错误，您无权使用工具箱等高级权限！');
+				} else {
+					setcookie('toolpw',$toolpw);
+					Redirect('index.php?mod=admin:tools');
+					}
+			}		
+		if($cookies != $toolpw && !empty($toolpw)){
+			msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
+			}
+			
+			
+		switch (strip_tags($_GET['setting'])) {
+			
 		case 'optim':
-		global $m;
-		$rs=$m->query("SHOW TABLES FROM `".DB_NAME.'`');
-		while ($row = $m->fetch_row($rs)) {
-			$m->query('OPTIMIZE TABLE  `'.DB_NAME.'`.`'.$row[0].'`');
-		}
-		break;
+			global $m;
+			$rs=$m->query("SHOW TABLES FROM `".DB_NAME.'`');
+			while ($row = $m->fetch_row($rs)) {
+				$m->query('OPTIMIZE TABLE  `'.DB_NAME.'`.`'.$row[0].'`');
+			}
+			break;
 		
 		case 'fixdoing':
-		option::set('cron_isdoing',0);
-		break;
+			option::set('cron_isdoing',0);
+			break;
 
 		case 'reftable':
-		option::set('freetable',getfreetable());
-		break;
+			option::set('freetable',getfreetable());
+			break;
 
 		case 'cron_sign_again':
-		option::set('cron_sign_again','');
-		break;
+			option::set('cron_sign_again','');
+			break;
 
 		case 'runsql':
-		global $m;
-		if (!empty($_POST['sql'])) {
-			$sql = str_ireplace('{VAR-DBNAME}', DB_NAME, str_ireplace('{VAR-PREFIX}', DB_PREFIX, $_POST['sql']));
-			$m->xquery($sql);
-		}
-		break;
+			global $m;
+			if (!empty($_POST['sql'])) {
+				$sql = str_ireplace('{VAR-DBNAME}', DB_NAME, str_ireplace('{VAR-PREFIX}', DB_PREFIX, $_POST['sql']));
+				$m->xquery($sql);
+			}
+			break;
 
 		case 'backup':
-		global $m;
-		$list  = !empty($_POST['tab']) ? array_map('addslashes', $_POST['tab']) : msg('请至少选择一个需要导出的表');
-		$dump  = '#Warning: Do not change the comments!!!'  . "\n";
-		$dump .= '#Tieba-Cloud-Sign Database Backup' . "\n";
-		$dump .= '#Version:' . SYSTEM_VER . "\n";
-		$dump .= '#Date:' . date('Y-m-d H:m:s') . "\n";
-		$dump .= '############## Start ##############' . "\n";
-		foreach ($list as $table) {
-			$dump .= dataBak($table);
-		}
-		$dump .= "\n" . '############## End ##############';
-		$file  = 'cloud_sign_' . date('Y-m-d_H-m-s') . '.sql';
-		if (!empty($_POST['zip'])) {
-			if (!is_dir(SYSTEM_ROOT.'/source/cache')) {
-				mkdir(SYSTEM_ROOT.'/source/cache' , 0777 , true);
+			global $m;
+			$list  = !empty($_POST['tab']) ? array_map('addslashes', $_POST['tab']) : msg('请至少选择一个需要导出的表');
+			$dump  = '#Warning: Do not change the comments!!!'  . "\n";
+			$dump .= '#Tieba-Cloud-Sign Database Backup' . "\n";
+			$dump .= '#Version:' . SYSTEM_VER . "\n";
+			$dump .= '#Date:' . date('Y-m-d H:m:s') . "\n";
+			$dump .= '############## Start ##############' . "\n";
+			foreach ($list as $table) {
+				$dump .= dataBak($table);
 			}
-			if(CreateZip($file , $dump , SYSTEM_ROOT.'/source/cache/' . $file . '.zip') === true) {
-				header('Content-Type: application/zip');
-				header('Content-Disposition: attachment; filename=' . $file . '.zip');
-				echo file_get_contents(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
-				unlink(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
-				die;
+			$dump .= "\n" . '############## End ##############';
+			$file  = 'cloud_sign_' . date('Y-m-d_H-m-s') . '.sql';
+			if (!empty($_POST['zip'])) {
+				if (!is_dir(SYSTEM_ROOT.'/source/cache')) {
+					mkdir(SYSTEM_ROOT.'/source/cache' , 0777 , true);
+				}
+				if(CreateZip($file , $dump , SYSTEM_ROOT.'/source/cache/' . $file . '.zip') === true) {
+					header('Content-Type: application/zip');
+					header('Content-Disposition: attachment; filename=' . $file . '.zip');
+					echo file_get_contents(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
+					unlink(SYSTEM_ROOT.'/source/cache/' . $file . '.zip');
+					die;
+				}
 			}
-		}
-		header('Content-Type: text/x-sql');
-		header('Content-Disposition: attachment; filename=' . $file);
-		echo $dump;
-		die;
-		break;
+			header('Content-Type: text/x-sql');
+			header('Content-Disposition: attachment; filename=' . $file);
+			echo $dump;
+			die;
+			break;
 
 		case 'remtab':
-		global $m;
-		if (!empty($_POST['tab'])) {
-			$m->query('DROP TABLE IF EXISTS `'.$_POST['tab'].'`');
-		}
-		break;
+			global $m;
+			if (!empty($_POST['tab'])) {
+				$m->query('DROP TABLE IF EXISTS `'.$_POST['tab'].'`');
+			}
+			break;
 
 		case 'truntab':
-		if (!empty($_POST['tab'])) {
-			$m->query('TRUNCATE TABLE `'.$_POST['tab'].'`');
-		}
-		break;
+			if (!empty($_POST['tab'])) {
+				$m->query('TRUNCATE TABLE `'.$_POST['tab'].'`');
+			}
+			break;
 
 		/*
 		case 'updatefid':
@@ -330,7 +330,7 @@ switch (SYSTEM_PAGE) {
 			break;
 			*/
 
-			default:
+		default:
 			msg('未定义操作');
 			break;
 		}
@@ -338,84 +338,85 @@ switch (SYSTEM_PAGE) {
 		Redirect('index.php?mod=admin:tools&ok');
 		break;
 
-		case 'admin:users':
+	case 'admin:users':
 		switch (strip_tags($_POST['do'])) {
 			case 'cookie':
-			foreach ($_POST['user'] as $value) {
-				$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE  `".DB_PREFIX."baiduid`.`uid` = ".$value);
-			}
-			doAction('admin_users_cookie');
-			break;
+				foreach ($_POST['user'] as $value) {
+					$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE  `".DB_PREFIX."baiduid`.`uid` = ".$value);
+				}
+				doAction('admin_users_cookie');
+				break;
 			
 			case 'clean':
-			foreach ($_POST['user'] as $value) {
-				CleanUser($value);
-			}
-			doAction('admin_users_clean');
-			break;
+				foreach ($_POST['user'] as $value) {
+					CleanUser($value);
+				}
+				doAction('admin_users_clean');
+				break;
 
 			case 'delete':
-			foreach ($_POST['user'] as $value) {
-				DeleteUser($value);
-			}
-			doAction('admin_users_delete');
-			break;
+				foreach ($_POST['user'] as $value) {
+					DeleteUser($value);
+				}
+				doAction('admin_users_delete');
+				break;
 
 			case 'crole':
-			if($value=='1'){
+				if($value=='1'){
 				msg("操作失败：权限不足，您无权修改站点创始人的权限。");
-			}
-			else{
-				foreach ($_POST['user'] as $value) {
-					if ($_POST['crolev'] == 'user') {
-						$role = 'user';
-					} elseif ($_POST['crolev'] == 'admin') {
-						$role = 'admin';
-					} elseif ($_POST['crolev'] == 'vip') {
-						$role = 'vip';
-					} elseif ($_POST['crolev'] == 'banned') {
-						$role = 'banned';
-					} 
-
+				} else {
+					foreach ($_POST['user'] as $value) {
+						if ($_POST['crolev'] == 'user') {
+							$role = 'user';
+						} 
+						elseif ($_POST['crolev'] == 'admin') {
+							$role = 'admin';
+						} 
+						elseif ($_POST['crolev'] == 'vip') {
+							$role = 'vip';
+						} 
+						elseif ($_POST['crolev'] == 'banned') {
+							$role = 'banned';
+						}
 					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = '{$role}' WHERE `".DB_PREFIX."users`.`id` = {$value}");
+					}
 				}
-			}
-			doAction('admin_users_crole');
-			break;
+				doAction('admin_users_crole');
+				break;
 
 			case 'cset':
-			foreach ($_POST['user'] as $value) {
-				option::udel($value);
-			}
-			doAction('admin_users_cset');
-			break;
+				foreach ($_POST['user'] as $value) {
+					option::udel($value);
+				}
+				doAction('admin_users_cset');
+				break;
 
 			case 'add':
-			$name = isset($_POST['name']) ? strip_tags($_POST['name']) : '';
-			$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';
-			$pw   = isset($_POST['pwd']) ? strip_tags($_POST['pwd']) : '';
-			$role = isset($_POST['role']) ? strip_tags($_POST['role']) : 'user';
+				$name = isset($_POST['name']) ? strip_tags($_POST['name']) : '';
+				$mail = isset($_POST['mail']) ? strip_tags($_POST['mail']) : '';
+				$pw   = isset($_POST['pwd']) ? strip_tags($_POST['pwd']) : '';
+				$role = isset($_POST['role']) ? strip_tags($_POST['role']) : 'user';
 
-			if (empty($name) || empty($mail) || empty($pw)) {
-				msg('添加用户失败：请正确填写账户、密码或邮箱');
-			}
-			$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
-			if ($x['total'] > 0) {
-				msg('添加用户失败：用户名已经存在');
-			}
-			$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
-			doAction('admin_users_add');
-			Redirect('index.php?mod=admin:users&ok');
-			break;
+				if (empty($name) || empty($mail) || empty($pw)) {
+					msg('添加用户失败：请正确填写账户、密码或邮箱');
+				}
+				$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
+				if ($x['total'] > 0) {
+					msg('添加用户失败：用户名已经存在');
+				}
+				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
+				doAction('admin_users_add');
+				Redirect('index.php?mod=admin:users&ok');
+				break;
 
 			default:
-			msg('未定义操作');
-			break;
-		}
+				msg('未定义操作');
+				break;
+			}
 		Redirect('index.php?mod=admin:users&ok');
 		break;
 
-		case 'admin:cron':
+	case 'admin:cron':
 		doAction('cron_setting_1');
 		if (!empty($_GET['act'])) {
 			cron::aset($_GET['act'] , array('no' => 0));
@@ -447,7 +448,7 @@ switch (SYSTEM_PAGE) {
 		Redirect('index.php?mod=admin:cron&ok');
 		break;
 
-		case 'admin:update:back':
+	case 'admin:update:back':
 		if (isset($_GET['del'])) {
 			if (file_exists(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del'])) {
 				DeleteFile(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del']);
@@ -468,7 +469,7 @@ switch (SYSTEM_PAGE) {
 		}
 		break;
 
-		case 'admin:create_lock':
+	case 'admin:create_lock':
 		if (!file_put_contents(SYSTEM_ROOT . '/setup/install.lock', '1')) {
 			$msg = '未能放置 install.lock，请手动完成。<br/><br/>';
 		} else {
@@ -478,7 +479,7 @@ switch (SYSTEM_PAGE) {
 		msg($msg);
 		break;
 
-		case 'baiduid':
+	case 'baiduid':
 		if (isset($_GET['delete'])) {
 			doAction('baiduid_set_1');
 			CleanUser(UID);
@@ -517,7 +518,7 @@ switch (SYSTEM_PAGE) {
 		Redirect("index.php?mod=baiduid");
 		break;
 
-		case 'showtb':
+	case 'showtb':
 		if (isset($_GET['set'])) {
 			$x=$m->fetch_array($m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' LIMIT 1'));
 			$f=$x['tieba'];
@@ -544,7 +545,7 @@ switch (SYSTEM_PAGE) {
 			$id = (int) sqladds($_REQUEST['id']);
 			$m->query('DELETE FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$id);
 			Redirect('index.php?mod=showtb&ok');
-		}
+			}
 		elseif (isset($_GET['reset'])) {
 			$max = $m->fetch_array($m->query("select max(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
 			$min = $m->fetch_array($m->query("select min(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
@@ -554,11 +555,11 @@ switch (SYSTEM_PAGE) {
 				$res = $m->fetch_array($m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$min.' Limit 1')); 
 				if($res['status'] != 0){
 					$m->query('UPDATE `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` SET `lastdo` = 0,`status` = 0,`last_error` = NULL WHERE `id` ='.$min);
-				}
+					}
 				$min = $min + 1;
-			}
+				}
 			Redirect('index.php?mod=showtb&ok');
-		}
+			}
 		elseif (isset($_POST['add'])) {
 			if (option::get('enable_addtieba') == '1') {
 				$v = addslashes(htmlspecialchars($_POST['add']));
@@ -585,12 +586,12 @@ switch (SYSTEM_PAGE) {
 
 		case 'set':
 			// 获取头像的url
-		if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-			$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
-			$data = $c->get();
-			$c->close();
-			$i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
-		}
+			if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
+				$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+				$data = $c->get();
+				$c->close();
+				$i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+			}
 			/*
 			受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
 			具体挂载方法为：
@@ -602,7 +603,7 @@ switch (SYSTEM_PAGE) {
 				'face_img',
 				'face_baiduid',
 				'face_url'
-				);
+			);
 			doAction('set_save1');
 			//更改邮箱
 			if($_POST['mail'] != $i['user']['email'] && !empty($_POST['mail'])){
@@ -628,36 +629,36 @@ switch (SYSTEM_PAGE) {
 			Redirect('index.php?mod=set&ok');
 			break;
 
-			case 'admin:testmail':
-			global $i;
-			$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL , array('测试附件.txt' => '这是一个测试附件'));
-			if($x === true) {
-				Redirect('index.php?mod=admin:set&mailtestok');
-			} else {
-				msg('邮件发送失败，发件日志：<br/>'.$x);
-			}
-			break;
-
-			case 'admin:testbbs':
-			global $i;
-			$ch_url = SUPPORT_URL.'getplug.php?m=check&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
-			$c = new wcurl($ch_url);
-			$x = $c->exec();
-			$c->close();
-			if($x == 'RIGHT') {
-				Redirect('index.php?mod=admin:set&bbstestok');
-			} else {
-				if(empty($x)){
-					$x = '错误 - 与产品中心连接失败';
-				}
-				msg('错误 - '.$x);
-			}
-			break;
+	case 'admin:testmail':
+		global $i;
+		$x = misc::mail($i['user']['email'], SYSTEM_FN.' V'.SYSTEM_VER.' - 邮件发送测试','这是一封关于 ' . SYSTEM_FN . ' 的测试邮件，如果你收到了此邮件，表示邮件系统可以正常工作<br/><br/>站点地址：' . SYSTEM_URL , array('测试附件.txt' => '这是一个测试附件'));
+		if($x === true) {
+			Redirect('index.php?mod=admin:set&mailtestok');
+		} else {
+			msg('邮件发送失败，发件日志：<br/>'.$x);
 		}
+		break;
 
-		if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
-			option::pset($i['mode'][1] , $_POST);
-			Redirect("index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
-		} elseif (ROLE == 'admin' && $i['mode'][0] == 'setplugin') {
-			settingPlugin($i['mode'][1]);
+	case 'admin:testbbs':
+		global $i;
+		$ch_url = SUPPORT_URL.'getplug.php?m=check&user='.option::get('bbs_us').'&pw='.option::get('bbs_pw');
+		$c = new wcurl($ch_url);
+		$x = $c->exec();
+		$c->close();
+		if($x == 'RIGHT') {
+			Redirect('index.php?mod=admin:set&bbstestok');
+		} else {
+			if(empty($x)){
+				$x = '错误 - 与产品中心连接失败';
+			}
+			msg('错误 - '.$x);
 		}
+		break;
+}
+
+if (ROLE == 'admin' && $i['mode'][0] == 'plugin') {
+	option::pset($i['mode'][1] , $_POST);
+	Redirect("index.php?mod=admin:setplug&plug={$i['mode'][1]}&ok");
+} elseif (ROLE == 'admin' && $i['mode'][0] == 'setplugin') {
+	settingPlugin($i['mode'][1]);
+}
