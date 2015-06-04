@@ -46,3 +46,4 @@ define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_cache/');
 require SYSTEM_ROOT.'/lib/sfc.functions.php';
 require SYSTEM_ROOT.'/lib/ui.php';
 require SYSTEM_ROOT.'/lib/plugins.php';
+require SYSTEM_ROOT.'/lib/globals.php';
