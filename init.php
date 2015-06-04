@@ -21,6 +21,7 @@ if(file_exists(SYSTEM_ROOT . '/key.php')) {
 }
 require SYSTEM_ROOT.'/lib/msg.php';
 require SYSTEM_ROOT.'/lib/class.E.php';
+require SYSTEM_ROOT.'/lib/class.P.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/lib/mysql_autoload.php';
 require SYSTEM_ROOT.'/lib/class.smtp.php';
