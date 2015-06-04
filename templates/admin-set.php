@@ -42,7 +42,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		addset('签到开始时间<br/>24小时制。例如设为-1，则从0点开始签到','number','sign_hour','min="-1" step="1" max="24" class="form-control"');
 		addset('签到间隔时间<br/>单位为毫秒，0为不暂停','number','sign_sleep','min="0" step="1" class="form-control"','适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低');
 		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加贴吧，添加时必须≤最大关注贴吧数量');
-		addset('在绑定百度账号时记录用户名','checkbox','baidu_name',null,' 开启后用户绑定BDUSS将会被记录用户名');
+		//addset('在绑定百度账号时记录用户名','checkbox','baidu_name',null,' 开启后用户绑定BDUSS将会被记录用户名');
 	?>
 	<tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
 		<input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>

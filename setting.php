@@ -146,7 +146,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('enable_addtieba',$sou['enable_addtieba']);
 			@option::set('retry_max',$sou['retry_max']);
 			@option::set('sign_hour',$sou['sign_hour']);
-			@option::set('baidu_name',$sou['baidu_name']);
+			//@option::set('baidu_name',$sou['baidu_name']);
 			@option::set('fb',$sou['fb']);
 			@option::set('sign_sleep',$sou['sign_sleep']);
 			if (empty($sou['fb_tables'])) {
