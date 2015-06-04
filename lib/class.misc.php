@@ -298,7 +298,7 @@ class misc {
 			$m->query("UPDATE  `".DB_PREFIX.$table."` SET  `fid` =  '{$fid}' WHERE  `".DB_PREFIX.$table."`.`id` = '{$id}';",true);
 		}
 
-		dump(json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck),true),true);die;
+		//dump(json_decode(self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck),true),true);die;
 
 		if(!empty($sign_mode) && in_array('1',$sign_mode) && $status_succ === false) {
 			$r = self::DoSign_Client($uid,$kw,$id,$pid,$fid,$ck);
