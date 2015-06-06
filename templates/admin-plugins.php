@@ -44,10 +44,10 @@ foreach($x as $key => $val) {
 	}
 
 	if (!empty($val['plugin']['for'])) {
-		if($val['plugin']['for'] == '不限' || $val['plugin']['for'] == 'all') {
+		if(!is_numeric($val['plugin']['for'])) {
 			$for = '';
 			$fortc = '<br/>适用版本：不限';
-		} elseif($val['plugin']['for'] > SYSTEM_VER) {
+		} elseif ($val['plugin']['for'] > SYSTEM_VER) {
 			$for = "&ver={$val['plugin']['for']}";
 			$fortc = '<br/>适用版本：<font color="red">V'.$val['plugin']['for'].'+</font>';
 		} else {

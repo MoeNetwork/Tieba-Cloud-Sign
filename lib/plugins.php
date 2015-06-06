@@ -70,15 +70,11 @@ function installPlugin($plugin) {
 	global $m,$i;
 	if (file_exists(SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '.php')) {
 		$info = getPluginInfo($plugin);
-        //安装前判断版本
-        if(isset($info['plugin']['forphp']) && strtolower($info['plugin']['forphp'])!='all' && defined('PHP_VERSION')){
-            if(substr(PHP_VERSION, 0, 3) < $info['plugin']['forphp'])
-                msg('你的PHP版本过低('.substr(PHP_VERSION, 0, 3).')，无法安装该插件');
-        }
-        if(isset($info['plugin']['for']) && strtolower($info['plugin']['for'])!='all'){
-            if(SYSTEM_VER < $info['plugin']['for'])
-                msg('你的云签版本过低('.SYSTEM_VER.')，无法安装该插件');
-        }
+		//安装前判断版本
+		if(isset($info['plugin']['forphp']) && strtolower($info['plugin']['forphp'])!='all' && defined('PHP_VERSION')){
+			if(substr(PHP_VERSION, 0, 3) < $info['plugin']['forphp'])
+				msg('你的PHP版本过低('.substr(PHP_VERSION, 0, 3).')，无法安装该插件');
+		}
 		if (isset($info['plugin']['version'])) {
 			$ver = $info['plugin']['version'];
 		} else {
@@ -208,22 +204,22 @@ function getPluginInfo($plugin) {
 		$d = getOldPluginData($plugin . '/' . $plugin . '.php');
 		$r = array(
 			'plugin' => array(
-				'name'        => $d['Name'],
-				'version'     => $d['Version'],
+				'name'		=> $d['Name'],
+				'version'	 => $d['Version'],
 				'description' => $d['Description'],
-				'url'         => $d['Url'],
-				'for'         => $d['For']
+				'url'		 => $d['Url'],
+				'for'		 => $d['For']
 			),
 			'view'   => array(
-				'setting'     => false,
-				'show'        => false,
-				'vip'         => false,
-				'private'     => false,
-				'public'      => false
+				'setting'	 => false,
+				'show'		=> false,
+				'vip'		 => false,
+				'private'	 => false,
+				'public'	  => false
 			),
 			'author' => array(
-				'author'      => $d['Author'],
-				'url'         => $d['AuthorUrl']
+				'author'	  => $d['Author'],
+				'url'		 => $d['AuthorUrl']
 			)
 		);
 	}
@@ -238,10 +234,10 @@ function getPluginInfo($plugin) {
 		$r['core']['private'] = true;
 	if (file_exists($path . $plugin . '_public.php'))
 		$r['core']['public'] = true;
-    //取插件加载顺序
-    global $m;
-    $q = $m->once_fetch_array('Select `order` From `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Where `name`='{$plugin}' LIMIT 1");
-    $r['plugin']['order'] = empty($q['order']) ? 0 : intval($q['order']);//否则将会是00000001这样的数
+	//取插件加载顺序
+	global $m;
+	$q = $m->once_fetch_array('Select `order` From `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Where `name`='{$plugin}' LIMIT 1");
+	$r['plugin']['order'] = empty($q['order']) ? 0 : intval($q['order']);//否则将会是00000001这样的数
 
 	return $r;
 }
@@ -251,7 +247,7 @@ function getPluginInfo($plugin) {
  */
 function getOldPluginData($pluginFile) {
 	global $i;
-    $pluginPath = SYSTEM_ROOT . '/plugins/';
+	$pluginPath = SYSTEM_ROOT . '/plugins/';
 	$pluginData = file_get_contents($pluginPath . $pluginFile);
 	preg_match("/Plugin Name:(.*)/i", $pluginData, $plugin_name);
 	preg_match("/Version:(.*)/i", $pluginData, $version);
@@ -261,11 +257,11 @@ function getOldPluginData($pluginFile) {
 	preg_match("/Author:(.*)/i", $pluginData, $author_name);
 	preg_match("/Author URL:(.*)/i", $pluginData, $author_url);
 
-    $ret = explode('/', $pluginFile);
-    $plugin = $ret[0];
-    @$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $i['plugins']['actived'])) ? true : false;
+	$ret = explode('/', $pluginFile);
+	$plugin = $ret[0];
+	@$setting = (file_exists($pluginPath . $plugin . '/' . $plugin . '_setting.php') && in_array($pluginFile, $i['plugins']['actived'])) ? true : false;
 
-    $plugin_name = isset($plugin_name[1]) ? strip_tags(trim($plugin_name[1])) : '';
+	$plugin_name = isset($plugin_name[1]) ? strip_tags(trim($plugin_name[1])) : '';
 	$version = isset($version[1]) ? strip_tags(trim($version[1])) : '';
 	$description = isset($description[1]) ? strip_tags(trim($description[1])) : '';
 	$plugin_url = isset($plugin_url[1]) ? strip_tags(trim($plugin_url[1])) : '';
@@ -275,7 +271,7 @@ function getOldPluginData($pluginFile) {
 
 	$For = str_ireplace(array('v',"\r",'+',' '),'',$For);
 	if(!is_numeric($For)){
-		$For = '不限';
+		$For = 'all';
 	}
 
 	return array(
@@ -286,8 +282,8 @@ function getOldPluginData($pluginFile) {
 		'Author' => $author,
 		'For' => $For,
 		'AuthorUrl' => $author_url,
-        'Setting' => $setting,
-        'Plugin' => $plugin,
+		'Setting' => $setting,
+		'Plugin' => $plugin,
 	);
 }
 
