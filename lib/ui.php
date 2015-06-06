@@ -27,6 +27,8 @@ function loadhead($title = '') {
 	echo '<link rel="stylesheet" href="source/css/ui.css">';
 	echo '<link rel="stylesheet" href="source/css/my.css">';
 	echo '<script type="text/javascript" src="source/js/my.js"></script>';
+	echo '<meta name="keywords" content="'.option::get('system_keywords').'" />';
+	echo '<meta name="description" content="'.option::get('system_description').'" />';
 	doAction('header');
 	echo '</head><body>';
 	if (option::get('trigger') == 1) {

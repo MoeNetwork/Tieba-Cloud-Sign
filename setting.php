@@ -129,6 +129,8 @@ switch (SYSTEM_PAGE) {
 		} else {
 			@option::set('system_url',$sou['system_url']);
 			@option::set('system_name',$sou['system_name']);
+			@option::set('system_keywords',$sou['system_keywords']);
+			@option::set('system_description',$sou['system_description']);
 			@option::set('footer',$sou['footer']);
 			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);

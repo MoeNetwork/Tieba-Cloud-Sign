@@ -92,6 +92,8 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<?php
 		addset('站点地址<br/>后面必须带上 /','text','system_url',' class="form-control"');
 		addset('站点名称<br/>支持 HTML','text','system_name',' class="form-control"');
+		addset('关键字(SEO)<br/>Keywords(以半角逗号为分隔符)','text','system_keywords',' class="form-control"');
+		addset('描述(SEO)<br/>Description(以半角逗号为分隔符)','text','system_description',' class="form-control"');
 		?>
 		<tr><td>自定义底部信息<br/><br/>支持 HTML</td><td>
 		<textarea name="footer" class="form-control" style="height:200px"><?php echo htmlspecialchars(option::get('footer')) ?></textarea>
