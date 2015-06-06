@@ -165,7 +165,7 @@ global $m;
   </div>
 </div>
 <a name="#newid"></a>
-<div class="alert alert-warning" role="alert">由于百度强制开启了异地登陆验证，很可能导致自动绑定失败。如果你确定输入无误但却提示账号密码错误，请使用<a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');$('#PageTab li').removeClass('active').last().addClass('active');">手动绑定</a></div>
+<div class="alert alert-warning" role="alert">由于百度强制开启了异地登陆验证，很可能导致自动绑定失败。如果你确定输入无误但却提示账号密码错误，请尝试下面提供的方法，或使用<a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');$('#PageTab li').removeClass('active').last().addClass('active');">手动绑定</a></div>
 <form method="post" id="addbdid_form" onsubmit="addbdid_getcode();return false;">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>

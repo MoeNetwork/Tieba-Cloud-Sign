@@ -81,10 +81,11 @@ if (!empty($i['user']['bduss'])) {
       <div class="modal-body">
         <form action="setting.php?mod=showtb" method="post">
         	<div class="input-group">
-        		<span class="input-group-addon">请选择对应账号ID (PID)</span>
+        		<span class="input-group-addon">请选择对应账号</span>
 	        	<select name="pid" required class="form-control">
 					<?php foreach ($i['user']['bduss'] as $key => $value) {
-						echo '<option value="'.$key.'">'.$key.'</option>';
+						$name = empty($i['user']['baidu'][$key]) ? ' (未记录百度ID)' : (' ('.$i['user']['baidu'][$key].')');
+						echo '<option value="'.$key.'">'.$key.$name.'</option>';
 					}
 					?>
 				</select>
