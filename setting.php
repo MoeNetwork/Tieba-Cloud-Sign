@@ -17,44 +17,6 @@ global $i;
 global $m;
 
 switch (SYSTEM_PAGE) {
-	case 'admin:plugins:install':
-		$cookies = $_COOKIE['toolpw'];
-		$toolpw = option::get('toolpw');
-		if($cookies != $toolpw && !empty($toolpw)){
-			msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
-			}
-		doAction('plugin_install_1');
-		if (!class_exists('ZipArchive')) {
-			msg('插件安装失败：你的主机不支持 ZipArchive 类，请返回');
-		}
-		if (!is_writable(SYSTEM_ROOT . '/plugins')) {
-			msg('插件安装失败：你的主机不支持文件写入，请手动安装插件');
-		}
-		if (!isset($_FILES['plugin'])) {
-			msg('若要安装插件，请上传插件包');
-		}
-		$file = $_FILES['plugin'];
-		if (!empty($file['error'])) {
-			msg('插件安装失败：在上传文件时发生错误：代码：' . $file['error']);
-		}
-		if (empty($file['size'])) {
-			msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
-		}
-		$z	= new ZipArchive();
-		if(!$z->open($file['tmp_name'])) {
-			msg('插件安装失败：无法打开压缩包');
-		}
-		$rdc = explode('/', $z->getNameIndex(0), 2);
-		$rd  = $rdc[0];
-		if($z->getFromName($rd . '/' . $rd . '.php') === false) {
-			msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
-		}
-		if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
-			msg('插件安装失败：解压缩失败');
-		}
-		doAction('plugin_install_2');
-		msg('插件安装成功');
-		break;
 
 	case 'admin:plugins':
 		doAction('plugin_setting_1');
@@ -201,20 +163,21 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:tools':
-		$cookies = $_COOKIE['toolpw'];
 		$toolpw = option::get('toolpw');
-		if(isset($_GET['pw'])){
-			if(md5(md5(md5($_POST['toolpw']))) != $toolpw){
-				msg('警告：密码错误，您无权使用工具箱等高级权限！');
-				} else {
-					setcookie('toolpw',$toolpw);
-					Redirect('index.php?mod=admin:tools');
-					}
-			}		
-		if($cookies != $toolpw && !empty($toolpw)){
-			msg('警告：您无权使用此功能！请在工具箱中验证您的工具箱独立操作密码！');
+		if(!empty($_POST['toolpw'])){
+			$cookies = md5(md5(md5($_POST['toolpw'])));
+			if(empty($toolpw)){
+				option::add('toolpw',$cookies);
+				setcookie('toolpw',$cookies);
+				Redirect('index.php?mod=admin:tools&ok');
+			} else {
+				setcookie('toolpw',$cookies);
+				Redirect('index.php?mod=admin:tools');
 			}
-			
+		}	
+		if($_COOKIE['toolpw'] != $toolpw || empty($toolpw)){
+			Redirect('index.php?mod=admin:tools');
+		}
 			
 		switch (strip_tags($_GET['setting'])) {
 			
@@ -329,6 +292,40 @@ switch (SYSTEM_PAGE) {
 				}
 			break;
 			*/
+
+		case 'install_plugin':
+			doAction('plugin_install_1');
+			if (!class_exists('ZipArchive')) {
+				msg('插件安装失败：你的主机不支持 ZipArchive 类，请返回');
+			}
+			if (!is_writable(SYSTEM_ROOT . '/plugins')) {
+				msg('插件安装失败：你的主机不支持文件写入，请手动安装插件');
+			}
+			if (!isset($_FILES['plugin'])) {
+				msg('若要安装插件，请上传插件包');
+			}
+			$file = $_FILES['plugin'];
+			if (!empty($file['error'])) {
+				msg('插件安装失败：在上传文件时发生错误：代码：' . $file['error']);
+			}
+			if (empty($file['size'])) {
+				msg('插件安装失败：插件包大小无效 ( 0 Byte )，请确认压缩包是否已损坏');
+			}
+			$z	= new ZipArchive();
+			if(!$z->open($file['tmp_name'])) {
+				msg('插件安装失败：无法打开压缩包');
+			}
+			$rdc = explode('/', $z->getNameIndex(0), 2);
+			$rd  = $rdc[0];
+			if($z->getFromName($rd . '/' . $rd . '.php') === false) {
+				msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
+			}
+			if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
+				msg('插件安装失败：解压缩失败');
+			}
+			doAction('plugin_install_2');
+			msg('插件安装成功');
+			break;
 
 		default:
 			msg('未定义操作');

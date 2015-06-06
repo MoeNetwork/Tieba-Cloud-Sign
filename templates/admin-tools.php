@@ -1,21 +1,27 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足！'); }
+<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
+if (ROLE != 'admin') { msg('权限不足！'); }
 global $m;
 
-if (isset($_GET['ok'])) {
-	echo '<div class="alert alert-success">应用成功</div>';
-}
 $cookies = $_COOKIE['toolpw'];
 $toolpw = option::get('toolpw');
-if($cookies != $toolpw && !empty($toolpw)){
+if(empty($toolpw)){
+  $stat = '您尚未设置工具箱独立密码，为了您的站点安全，请先完成设置！<br/><i>（工具箱独立密码是4.0版本新增的一项保护站点安全的措施。未经设置，所有风险操作将被禁止。）</i>';
+} elseif(empty($cookies)) {
+  $stat = 'Cookies 未记录或已过期，请重新输入您设置的工具箱独立密码<br/>如果您忘记了该密码，请前往数据库删除options表中的toolpw一项，然后您可以来这里重设新密码';
+} elseif($cookies != $toolpw) {
+  setcookie("toolpw",'', time() - 3600);
+  $stat = 'Cookies 记录的密码错误<br/>如果您忘记了该密码，请前往数据库删除options表中的toolpw一项，然后您可以来这里重设新密码';
+}
+if(!empty($stat)){
 ?>
 <div class="alert alert-danger">
-    <h3>工具箱独立密码验证</h3><br/>
-    <form action="setting.php?mod=admin:tools&pw" method="post">
+    <h3>工具箱独立密码验证</h3><br/><?php echo $stat; ?><br/><br/>
+    <form action="setting.php?mod=admin:tools" method="post">
         <div class="input-group">
-            <span class="input-group-addon">工具箱使用密码</span>
-            <input type="password" name="toolpw" class="form-control" />
+            <span class="input-group-addon">工具箱独立密码</span>
+            <input type="password" name="toolpw" class="form-control"/>
         </div><br/>
-        <button type="submit" class="btn btn-primary">提交更改</button>
+        <button type="submit" class="btn btn-primary">提交</button>
     </form>
 </div>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
@@ -24,9 +30,14 @@ if($cookies != $toolpw && !empty($toolpw)){
 die;
 }
 doAction('admin_tools_1');
+if (isset($_GET['ok'])) {
+  echo '<div class="alert alert-success">应用成功</div>';
+}
 ?>
 <div id="comsys"></div>
 <!--Part 1 Primary-->
+<br/><br/><input type="button" data-toggle="modal" data-target="#InstallPlugin" class="btn btn-primary" value="上传安装插件" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;上传安装云签到插件，主机支持写入才可使用此功能
+
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=optim'" class="btn btn-primary" value="优化所有的数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;可清除所有数据表的多余数据
 
 <br/><br/><input type="button" data-toggle="modal" data-target="#RunSql" class="btn btn-primary" value="运行 SQL 语句" style="width:170px">
@@ -154,6 +165,28 @@ doAction('admin_tools_1');
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="submit" class="btn btn-danger" id="truntab_button">提交更改</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">安装插件包</h4>
+      </div>
+      <form action="<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=install_plugin" onsubmit="$('#installplugin_button').attr('disabled',true);" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        请浏览插件包：( ZIP格式 )
+        <br/><br/><input type="file" name="plugin" required accept="application/zip" style="width:100%">
+        <br/><br/>您的主机必须支持写入才能安装插件，若不支持，请手工安装
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="submit" class="btn btn-primary" id="installplugin_button">上传插件</button>
       </div>
       </form>
     </div><!-- /.modal-content -->
