@@ -31,17 +31,15 @@ global $m;
 <div class="alert alert-info">
   当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
   <?php if (option::get('bduss_num') != '0' && ISVIP != true) echo '，您最多能够绑定 '.option::get('bduss_num').' 个账号'; ?>
-</div>
+。点击百度名称可以重新获取百度用户名。</div>
 <?php } if(!empty($i['user']['bduss'])) { ?>
 
 <table class="table table-striped">
   <thead>
     <tr>
       <th>PID</th>
-      <?php if (option::get('baidu_name') == '1') {
-        echo '<th style="width:25%">百度名称</th>';
-      }
-      ?>
+      <?php //if (option::get('baidu_name') == '1') ?>
+      <th style="width:25%">百度名称</th>
       <th style="width:65%">BDUSS Cookie</th>
       <th>操作</th>
     </tr>
@@ -50,9 +48,10 @@ global $m;
    <?php
     foreach ($i['user']['bduss'] as $key => $value) {
       echo '<tr><td>'.$key.'</td>';
-      if (option::get('baidu_name') == '1') {
-          echo '<td>'.$i['user']['baidu'][$key].'</td>';
-      }
+      //if (option::get('baidu_name') == '1')
+      $name = empty($i['user']['baidu'][$key]) ? '未记录百度ID' : $i['user']['baidu'][$key];
+      if($name == '已失效'){ $name='<font color="red">已失效</font>';}
+      echo '<td><a href="setting.php?mod=baiduid&reget='.$key.'"">'.$name.'</a></td>';
       echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
     }
    ?>

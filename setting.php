@@ -482,7 +482,7 @@ switch (SYSTEM_PAGE) {
 			CleanUser(UID);
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 		}
-		elseif (isset($_GET['bduss'])) {
+		elseif (!empty($_GET['bduss'])) {
 			if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
 
 			if (option::get('bduss_num') != '0' && ISVIP == false) {
@@ -504,12 +504,23 @@ switch (SYSTEM_PAGE) {
 			doAction('baiduid_set_2');
 			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
 		}
-		elseif (isset($_GET['del'])) {
+		elseif (!empty($_GET['del'])) {
 			$del = (int) $_GET['del'];
 			doAction('baiduid_set_3');
 			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);	
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
+		}
+		elseif (!empty($_GET['reget'])){
+			$reget = (int) $_GET['reget'];
+			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `uid` = ".UID." AND `id` = ".$reget." LIMIT 1");
+			if(!empty($x)){
+				$baidu_name = sqladds(getBaiduId($x['bduss']));
+				if(empty($baidu_name)){
+					$baidu_name = '已失效';
+				}
+				$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."baiduid` SET `name` = '$baidu_name' WHERE `id` = '$reget'");
+			}
 		}
 		doAction('baiduid_set');
 		Redirect("index.php?mod=baiduid");
