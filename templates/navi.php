@@ -58,7 +58,7 @@ global $i;
       <?php } else { ?>
     <ul class="nav navbar-nav">
       <li class="<?php checkIfActive('login') ?>" ><a href="index.php?mod=login"><span class="glyphicon glyphicon-play"></span> 登录</a></li>
-	  <li class="<?php checkIfActive('reg') ?>" ><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+      <li class="<?php checkIfActive('reg') ?>" ><a href="index.php?mod=reg"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
 	  <?php doAction('navi_10'); ?>
 	</ul>
       <?php } ?>
@@ -68,7 +68,7 @@ global $i;
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
           <li><a href="http://zhizhe8.net" target="_blank">无名智者个人博客</a></li>
-          <li><a href="http://longtings.com" target="_blank">Mokeyjay</a></li>
+          <li><a href="http://longtings.com" target="_blank">龙霆工作室</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
