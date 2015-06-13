@@ -108,7 +108,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('enable_addtieba',$sou['enable_addtieba']);
 			@option::set('retry_max',$sou['retry_max']);
 			@option::set('sign_hour',$sou['sign_hour']);
-			//@option::set('baidu_name',$sou['baidu_name']);
 			@option::set('fb',$sou['fb']);
 			@option::set('sign_sleep',$sou['sign_sleep']);
 			if (empty($sou['fb_tables'])) {
@@ -495,13 +494,9 @@ switch (SYSTEM_PAGE) {
 			$bduss = str_replace('"', '', $_GET['bduss']);
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = sqladds($bduss);
-			if (option::get('baidu_name') == '1') {
-				$baidu_name = sqladds(getBaiduId($bduss));
-				if (empty($baidu_name)) {
-					msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
-				}
-			} else {
-				$baidu_name = '';
+			$baidu_name = sqladds(getBaiduId($bduss));
+			if (empty($baidu_name)) {
+				msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
 			}
 			doAction('baiduid_set_2');
 			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
