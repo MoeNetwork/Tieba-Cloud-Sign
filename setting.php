@@ -561,7 +561,7 @@ switch (SYSTEM_PAGE) {
 			$min = $m->fetch_array($m->query("select min(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
 			$max = $max['id'];
 			$min = $min['id'];
-			while($min <= $max) {
+			while($min < $max) {
 				$res = $m->fetch_array($m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$min.' Limit 1')); 
 				if($res['status'] != 0){
 					$m->query('UPDATE `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` SET `lastdo` = 0,`status` = 0,`last_error` = NULL WHERE `id` ='.$min);
