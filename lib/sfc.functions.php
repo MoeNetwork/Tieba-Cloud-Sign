@@ -589,7 +589,7 @@ function sqladds($s) {
 	if (is_array($s)) {
 		if (version_compare(phpversion(), '5.3') == -1) {
 			return array_map(create_function('$a', 
-<<< 'FUCKOLDPHP'
+<<<'FUCKOLDPHP'
 return str_replace('\'','\\\'', str_replace('\\','\\\\',$a));
 FUCKOLDPHP
 ), $s);
