@@ -231,7 +231,7 @@ class cron {
 						self::run($cs['file'],$cs['name']);
 						self::del($cs['name']);
 					}
-					elseif ( empty($cs['freq']) || empty($cs['lastdo']) || $cs['lastdo'] - $cs['freq'] >= $cs['freq'] ) {
+					elseif ( empty($cs['freq']) || empty($cs['lastdo']) || (time() - $cs['lastdo']) >= $cs['freq'] ) {
 						$return=self::run($cs['file'],$cs['name']);
 						cron::aset($cs['name'] , 
 							array(
