@@ -211,7 +211,7 @@ define(\'DB_NAME\',\''.DB_NAME.'\');
 define(\'DB_PREFIX\',\''.DB_PREFIX.'\');
 //加密用盐，请乱打，留空为不使用盐
 define(\'SYSTEM_SALT\',\'\');';
-					if($_POST['from_config'] != 1 && file_put_contents('../config.php', $write_data) <= 0) {
+					if(empty($_POST['from_config']) && !file_put_contents('../config.php', $write_data)) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
 				}
