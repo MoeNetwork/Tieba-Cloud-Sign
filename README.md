@@ -84,5 +84,9 @@ VFleaKing[liuhaotian0520@163.com]
 liwanglin12[i@lwl12.com]      
 角落里有蛇[395183830@qq.com]
 #耻辱柱
-**有些不要脸的SB就是这样**
-1.巨型SB，去版权+辱骂作者，至今仍要强行装逼：http://ccgv.me/
+**有些不要脸的SB就是这样** 
+1.多性欲      
+  罪行1：发布修改了版权的贴吧云签到，俨然成了他是作者 [查看罪证](http://www.asp300.com/SoftView/11/SoftView_57242.html)      
+  罪行2：云签到去版权屡教不改 [查看罪证](http://baidu.duoxingyu.pw/)      
+2.巨型SB，去版权+辱骂作者：http://ccgv.me/       
+3.楼上的小号，私用也不能去版权：http://ccgv.party/
