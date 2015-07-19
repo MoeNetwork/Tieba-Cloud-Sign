@@ -43,12 +43,22 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		addset('签到间隔时间<br/>单位为毫秒，0为不暂停','number','sign_sleep','min="0" step="1" class="form-control"','适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低');
 		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加贴吧，添加时必须≤最大关注贴吧数量');
 	?>
-	<tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
-		<input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>
-		<input type="checkbox" name="sign_mode[]" value="3" <?php if(!empty($sign_mode) && in_array('3',$sign_mode)) { echo 'checked'; } ?>> 手机网页签到<br/>
-		<input type="checkbox" name="sign_mode[]" value="2" <?php if(!empty($sign_mode) && in_array('2',$sign_mode)) { echo 'checked'; } ?>> 网页签到
-		</td>
-	</tr>
+    <tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
+            <input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>
+            <input type="checkbox" name="sign_mode[]" value="3" <?php if(!empty($sign_mode) && in_array('3',$sign_mode)) { echo 'checked'; } ?>> 手机网页签到<br/>
+            <input type="checkbox" name="sign_mode[]" value="2" <?php if(!empty($sign_mode) && in_array('2',$sign_mode)) { echo 'checked'; } ?>> 网页签到
+        </td>
+    </tr>
+    <tr><td>贴吧数据表搜寻方法<br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助"></td><td>
+            <select name="sign_scan" class="form-control">
+                <option value="0" <?php if(option::get('sign_scan') == '0') { echo 'selected'; } ?>>永不随机，按顺序抽取</option>
+                <option value="1" <?php if(option::get('sign_scan') == '1') { echo 'selected'; } ?>>随机，使用 JOIN</option>
+                <option value="2" <?php if(option::get('sign_scan') == '2') { echo 'selected'; } ?>>随机，使用 ORDER BY RAND()</option>
+                <option disabled>怎么这么麻烦，干脆不要签到了</option>
+            </select>
+            <br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签
+        </td>
+    </tr>
 	<tr><td>贴吧数据分表<br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所以请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">记录超过此行数时分表</span>
@@ -71,6 +81,16 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 </div>
 <input type="submit" class="btn btn-primary" value="提交更改">
 </form>
+    <script>
+        function viewSignScanModeHelp() {
+            str  = '该设置影响签到效率，不当的设置可能会导致效率降低并漏签<br/><br/>';
+            str += '<b>1.永不随机，按顺序抽取</b><br/>该模式是数据库性能最高的模式，不会有贴吧漏签，采取"先来后到"的签到原则。但是如果启用了多线程功能，这会导致一个贴吧被重复签到多次，导致整体签到效率降低<br/><br/>';
+            str += '<b>2.随机，使用 JOIN()</b><br/>该模式的数据库性能仅次于永不随机模式，随机抽取没有签到的贴吧并为其签到。多线程模式下可以较好地分配签到任务到每个线程，但是可能会有极少数贴吧漏签；此外，如果频繁清空和刷入新贴吧，也会增加漏签率<br/><br/>';
+            str += '<b>3.随机，使用 ORDER BY RAND()</b><br/>能够很好地分配签到任务到每个线程，随机抽取没有签到的贴吧并为其签到，不会有贴吧漏签。但是，一个表的贴吧数量越多，该模式的数据库性能就会越差，如果你能很好地使用分表功能，建议使用本选项';
+            str += '<br/><br/><b><font color="red">注意：</font></b>此处所指的 "漏签"，是指因为没有被扫描到而引发的未签到，而不是签到失败';
+            alert(str);
+        }
+    </script>
 <?php
 } else {
 ?>

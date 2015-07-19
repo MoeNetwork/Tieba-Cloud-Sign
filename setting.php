@@ -109,7 +109,8 @@ switch (SYSTEM_PAGE) {
 			@option::set('retry_max',$sou['retry_max']);
 			@option::set('sign_hour',$sou['sign_hour']);
 			@option::set('fb',$sou['fb']);
-			@option::set('sign_sleep',$sou['sign_sleep']);
+            @option::set('sign_sleep',$sou['sign_sleep']);
+            @option::set('sign_scan',$sou['sign_scan']);
 			if (empty($sou['fb_tables'])) {
 				@option::set('fb_tables',NULL);
 			} else {
