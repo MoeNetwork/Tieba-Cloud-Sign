@@ -44,9 +44,10 @@ global $i;
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span> 插件菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-          <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
-          <?php doAction('navi_3'); ?>
+            <?php doAction('navi_3'); ?>
+            <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
+            <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
+            <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
         </ul>
       </li>
       <?php doAction('navi_4'); } ?>
@@ -99,7 +100,8 @@ global $i;
                 <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
-               <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
+                  <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
+                  <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
               <?php } else { ?>
