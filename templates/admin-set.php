@@ -9,32 +9,12 @@ if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">成功登陆到产品中心</div>';
 }
 
-if(isset($i['mode'][2]) && $i['mode'][2] == 'plug') {
-	?>
-	<ul class="nav nav-tabs" role="tablist">
-	  <li><a href="index.php?mod=admin:set">全局设置</a></li>
-	  <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
-	  <li class="active"><a href="index.php?mod=admin:set:plug">插件设置</a></li>
-	</ul>
-	<?php
-	$content3 = array();
-	doAction('admin_set');
-	if(!empty($content3)){
-		$set3['title'] = '插件设置';
-		$set3['name'] = 'plugset';
-		$set3['url'] = 'setting.php?mod=admin:set&type=plug';
-		$set3['method'] = '1';
-		echo former::create($set1,$content1);
-	} else {
-		echo '<br/><div class="alert alert-warning">暂时没有插件把设置放在这里</div>';
-	}
-} elseif (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
+if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	/*准备*/
 	?>
 	<ul class="nav nav-tabs" role="tablist">
 	  <li><a href="index.php?mod=admin:set">全局设置</a></li>
 	  <li class="active"><a href="index.php?mod=admin:set:sign">签到设置</a></li>
-	  <li><a href="index.php?mod=admin:set:plug">插件设置</a></li>
 	</ul>
 	<script>
 		function viewSignScanModeHelp() {
@@ -99,7 +79,6 @@ if(isset($i['mode'][2]) && $i['mode'][2] == 'plug') {
 	<ul class="nav nav-tabs" role="tablist">
 	  <li class="active"><a href="index.php?mod=admin:set">全局设置</a></li>
 	  <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
-	  <li><a href="index.php?mod=admin:set:plug">插件设置</a></li>
 	</ul>
 	<?php
 	/*开始*/
