@@ -8,150 +8,148 @@ if (isset($_GET['ok'])) {
 } elseif(isset($_GET['bbstestok'])) {
 	echo '<div class="alert alert-success">成功登陆到产品中心</div>';
 }
-function addset($name,$type,$x,$other = '',$text = '') {
-	if ($type == 'checkbox') {
-		if (option::get($x) == 1) {
-			$other .= ' checked="checked"';
-		}
-		$value = '1';
-	} else {
-		$value = option::get($x);
-	}
-	echo '<tr><td>'.$name.'</td><td><input type="'.$type.'" name="'.$x.'" value="'.htmlspecialchars($value).'" '.$other.'>'.$text.'</td>';
-}
-if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
-?>
-<ul class="nav nav-tabs" role="tablist">
-  <li><a href="index.php?mod=admin:set">全局设置</a></li>
-  <li class="active"><a href="index.php?mod=admin:set:sign">签到设置</a></li>
-</ul>
-<form action="setting.php?mod=admin:set&type=sign" method="post">
-<div class="table-responsive">
-<table class="table table-hover">
-	<thead>
-		<tr>
-			<th style="width:40%">参数</th>
-			<th>值</th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php
-		addset('单表单次签到执行数量<br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','number','cron_limit','min="0" step="1" class="form-control"','注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数');
-		addset('最大关注贴吧数量<br/>0为不限,对管理员无效','number','tb_max','min="0" step="1" class="form-control"');
-		addset('签到失败重试次数<br/>0为无限，-1为不重试','number','retry_max','min="-1" step="1" class="form-control"');
-		addset('签到开始时间<br/>24小时制。例如设为-1，则从0点开始签到','number','sign_hour','min="-1" step="1" max="24" class="form-control"');
-		addset('签到间隔时间<br/>单位为毫秒，0为不暂停','number','sign_sleep','min="0" step="1" class="form-control"','适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低');
-		addset('允许手动添加贴吧','checkbox','enable_addtieba',null,' 开启后用户可以手动添加贴吧，添加时必须≤最大关注贴吧数量');
+
+if(isset($i['mode'][2]) && $i['mode'][2] == 'plug') {
 	?>
-    <tr><td>签到模式设置<br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td><?php $sign_mode = unserialize(option::get('sign_mode')) ?>
-            <input type="checkbox" name="sign_mode[]" value="1" <?php if(!empty($sign_mode) && in_array('1',$sign_mode)) { echo 'checked'; } ?>> 模拟手机客户端签到<br/>
-            <input type="checkbox" name="sign_mode[]" value="3" <?php if(!empty($sign_mode) && in_array('3',$sign_mode)) { echo 'checked'; } ?>> 手机网页签到<br/>
-            <input type="checkbox" name="sign_mode[]" value="2" <?php if(!empty($sign_mode) && in_array('2',$sign_mode)) { echo 'checked'; } ?>> 网页签到
-        </td>
-    </tr>
-    <tr><td>贴吧数据表搜寻方法<br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助"></td><td>
-            <select name="sign_scan" class="form-control">
-                <option value="0" <?php if(option::get('sign_scan') == '0') { echo 'selected'; } ?>>永不随机，按顺序抽取</option>
-                <option value="1" <?php if(option::get('sign_scan') == '1') { echo 'selected'; } ?>>随机，使用 JOIN</option>
-                <option value="2" <?php if(option::get('sign_scan') == '2') { echo 'selected'; } ?>>随机，使用 ORDER BY RAND()</option>
-                <option disabled>怎么这么麻烦，干脆不要签到了</option>
-            </select>
-            <br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签
-        </td>
-    </tr>
-	<tr><td>贴吧数据分表<br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所以请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
+	<ul class="nav nav-tabs" role="tablist">
+	  <li><a href="index.php?mod=admin:set">全局设置</a></li>
+	  <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
+	  <li class="active"><a href="index.php?mod=admin:set:plug">插件设置</a></li>
+	</ul>
+	<?php
+	$content3 = array();
+	doAction('admin_set');
+	if(!empty($content3)){
+		$set3['title'] = '插件设置';
+		$set3['name'] = 'plugset';
+		$set3['url'] = 'setting.php?mod=admin:set&type=plug';
+		$set3['method'] = '1';
+		echo former::create($set1,$content1);
+	} else {
+		echo '<br/><div class="alert alert-warning">暂时没有插件把设置放在这里</div>';
+	}
+} elseif (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
+	/*准备*/
+	?>
+	<ul class="nav nav-tabs" role="tablist">
+	  <li><a href="index.php?mod=admin:set">全局设置</a></li>
+	  <li class="active"><a href="index.php?mod=admin:set:sign">签到设置</a></li>
+	  <li><a href="index.php?mod=admin:set:plug">插件设置</a></li>
+	</ul>
+	<script>
+		function viewSignScanModeHelp() {
+			str  = '该设置影响签到效率，不当的设置可能会导致效率降低并漏签<br/><br/>';
+			str += '<b>1.永不随机，按顺序抽取</b><br/>该模式是数据库性能最高的模式，不会有贴吧漏签，采取"先来后到"的签到原则。但是如果启用了多线程功能，这会导致一个贴吧被重复签到多次，导致整体签到效率降低<br/><br/>';
+			str += '<b>2.随机，使用 JOIN()</b><br/>该模式的数据库性能仅次于永不随机模式，随机抽取没有签到的贴吧并为其签到。多线程模式下可以较好地分配签到任务到每个线程，但是可能会有极少数贴吧漏签；此外，如果频繁清空和刷入新贴吧，也会增加漏签率<br/><br/>';
+			str += '<b>3.随机，使用 ORDER BY RAND()</b><br/>能够很好地分配签到任务到每个线程，随机抽取没有签到的贴吧并为其签到，不会有贴吧漏签。但是，一个表的贴吧数量越多，该模式的数据库性能就会越差，如果你能很好地使用分表功能，建议使用本选项';
+			str += '<br/><br/><b><font color="red">注意：</font></b>此处所指的 "漏签"，是指因为没有被扫描到而引发的未签到，而不是签到失败';
+			alert(str);
+		}
+	</script>
+	<?php
+	/*开始*/
+	$set2['title'] = '签到设置';
+	$set2['name'] = 'signset';
+	$set2['url'] = 'setting.php?mod=admin:set&type=sign';
+	$set2['method'] = '1';
+	
+	$content2['cron_limit'] = array('td1'=>'<b>单表单次签到执行数量</b><br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','type'=>'number','text'=>'注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数','extra'=>'min="0" step="1"');
+	$content2['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
+	$content2['retry_max'] = array('td1'=>'<b>签到失败重试次数</b><br/>0为无限，-1为不重试','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
+	$content2['sign_hour'] = array('td1'=>'<b>签到开始时间</b><br/>24小时制。例如设为-1，则从0点开始签到','type'=>'number','text'=>'','extra'=>'min="-1" step="1" max="24"');
+	$content2['sign_sleep'] = array('td1'=>'<b>签到间隔时间</b><br/>单位为毫秒，0为不暂停','type'=>'number','text'=>'适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低','extra'=>'min="0" step="1"');
+	$content2['enable_addtieba'] = array('td1'=>'<b>允许手动添加贴吧</b>','type'=>'checkbox','text'=>'开启后用户可以手动添加贴吧，添加时必须≤最大关注贴吧数量','extra'=>'');
+	$sign_mode = unserialize(option::get('sign_mode'));
+	if(!empty($sign_mode)){
+		$sm1 = in_array('1',$sign_mode) ? ' checked' : '' ;
+		$sm2 = in_array('2',$sign_mode) ? ' checked' : '' ;
+		$sm3 = in_array('3',$sign_mode) ? ' checked' : '' ;
+	} else { $sm1=$sm2=$sm3=''; }
+	$smhtml = '<tr><td><b>签到模式设置</b><br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td>
+	            <input type="checkbox" name="sign_mode[]" value="1"'.$sm1.'> 模拟手机客户端签到<br/>
+	            <input type="checkbox" name="sign_mode[]" value="3"'.$sm3.'> 手机网页签到<br/>
+	            <input type="checkbox" name="sign_mode[]" value="2"'.$sm2.'> 网页签到
+	        </td>
+	    </tr>';
+	$content2['sign_mode'] = array('html'=>$smhtml,'type'=>'else');
+	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');     
+	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');   
+	$ft1 = option::get('fb');
+	if (is_array(unserialize(option::get('fb_tables')))) {
+		$temp = '';
+		foreach (unserialize(option::get('fb_tables')) as $value) {
+			$temp .= $value."\n";
+		}
+		$ft2 = trim($temp,"\n");
+		unset($value);
+	}
+	$fthtml = '<tr><td><b>贴吧数据分表</b><br/><br/>全部留空为不分表<br/>每行一个表名，无需填写表前缀<br/>错误的设置将导致签到程序不能正常工作<br/>当某一表存储的贴吧记录数目明显超过设定值时才能生效<br/>单个用户将终生使用某一表，所以请设置小点<br/>当所有的表的记录都超过设定值时，新的贴吧将往最后一个表写</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">记录超过此行数时分表</span>
-			  <input type="number" min="0" step="1" class="form-control" name="fb" value="<?php echo option::get('fb') ?>">
+			  <input type="number" min="0" step="1" class="form-control" name="fb" value="'.$ft1.'">
 		</div><br/>
-		<textarea class="form-control" style="height:150px" name="fb_tables"><?php
-		if (is_array(unserialize(option::get('fb_tables')))) {
-			$temp = '';
-			foreach (unserialize(option::get('fb_tables')) as $value) {
-				$temp .= $value."\n";
-			}
-			echo trim($temp,"\n");
-			unset($value);
-		}
-		?></textarea>
+		<textarea class="form-control" style="height:150px" name="fb_tables">'.$ft2.'</textarea>
 		</td>
-	</tr>
-	</tbody>
-</table>
-</div>
-<input type="submit" class="btn btn-primary" value="提交更改">
-</form>
-    <script>
-        function viewSignScanModeHelp() {
-            str  = '该设置影响签到效率，不当的设置可能会导致效率降低并漏签<br/><br/>';
-            str += '<b>1.永不随机，按顺序抽取</b><br/>该模式是数据库性能最高的模式，不会有贴吧漏签，采取"先来后到"的签到原则。但是如果启用了多线程功能，这会导致一个贴吧被重复签到多次，导致整体签到效率降低<br/><br/>';
-            str += '<b>2.随机，使用 JOIN()</b><br/>该模式的数据库性能仅次于永不随机模式，随机抽取没有签到的贴吧并为其签到。多线程模式下可以较好地分配签到任务到每个线程，但是可能会有极少数贴吧漏签；此外，如果频繁清空和刷入新贴吧，也会增加漏签率<br/><br/>';
-            str += '<b>3.随机，使用 ORDER BY RAND()</b><br/>能够很好地分配签到任务到每个线程，随机抽取没有签到的贴吧并为其签到，不会有贴吧漏签。但是，一个表的贴吧数量越多，该模式的数据库性能就会越差，如果你能很好地使用分表功能，建议使用本选项';
-            str += '<br/><br/><b><font color="red">注意：</font></b>此处所指的 "漏签"，是指因为没有被扫描到而引发的未签到，而不是签到失败';
-            alert(str);
-        }
-    </script>
-<?php
+	</tr>';
+	$content2['fb_tables'] = array('html'=>$fthtml,'type'=>'else');
+	echo former::create($set2,$content2);
 } else {
-?>
-<ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="index.php?mod=admin:set">全局设置</a></li>
-  <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
-</ul>
-<form action="setting.php?mod=admin:set&type=system" method="post">
-<div class="table-responsive">
-<table class="table table-hover">
-	<thead>
-		<tr>
-			<th style="width:40%">参数</th>
-			<th>值</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		addset('站点地址<br/>后面必须带上 /','text','system_url',' class="form-control"');
-		addset('站点名称<br/>支持 HTML','text','system_name',' class="form-control"');
-		addset('关键字(SEO)<br/>Keywords(以半角逗号为分隔符)','text','system_keywords',' class="form-control"');
-		addset('描述(SEO)<br/>Description(以半角逗号为分隔符)','text','system_description',' class="form-control"');
-		?>
-		<tr><td>自定义底部信息<br/><br/>支持 HTML</td><td>
-		<textarea name="footer" class="form-control" style="height:200px"><?php echo htmlspecialchars(option::get('footer')) ?></textarea>
-		</td>
-		</tr>
-		<tr><td>主页公告信息<br/>较长公告建议以&lt;br/&gt;开头<br/>支持 HTML</td><td>
-		<textarea name="ann" class="form-control" style="height:200px"><?php echo htmlspecialchars(option::get('ann')) ?></textarea>
-		</td>
-		</tr>
-		<?php
-		addset('最大允许用户绑定账号数<br/>0为无限，-1为禁止绑定，对管理员无效','number','bduss_num','min="-1" step="1" class="form-control"');
-		addset('计划任务线程数<br/>0单线程，此为模拟多线程','number','sign_multith','min="0" step="1" class="form-control"');
-		addset('计划任务同时运行<br/>主机需支持fsockopen','checkbox','cron_asyn','',' 当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速');
-		addset('计划任务密码<br/>留空为无密码，不能包含空格等特殊字符','text','cron_pw',' class="form-control"','启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可');
-		?>
-		<tr><td>注册杂项设置</td><td>
-		<input type="checkbox" name="enable_reg" value="1" <?php if(option::get('enable_reg') == 1) { echo 'checked'; } ?>> 允许用户注册<br/>
-		<input type="checkbox" name="protect_reg" value="1" <?php if(option::get('protect_reg') == 1) { echo 'checked'; } ?>> 反恶意注册
-		</td>
-		</tr>
-		<tr><td>StusGame 产品中心 账号设置
-		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testbbs'" value="测试登录">
-		<br/><br/>测试前请先保存设置
-		</td><td><br/>
-			<div class="input-group">
-			  <span class="input-group-addon">账号</span>
-			  <input type="text" name="bbs_us" class="form-control"  value="<?php echo option::get('bbs_us') ?>">
-			</div><br/>
+	/*准备*/
+	?>
+	<ul class="nav nav-tabs" role="tablist">
+	  <li class="active"><a href="index.php?mod=admin:set">全局设置</a></li>
+	  <li><a href="index.php?mod=admin:set:sign">签到设置</a></li>
+	  <li><a href="index.php?mod=admin:set:plug">插件设置</a></li>
+	</ul>
+	<?php
+	/*开始*/
+	$set1['title'] = '全局设置';
+	$set1['name'] = 'systemset';
+	$set1['url'] = 'setting.php?mod=admin:set&type=system';
+	$set1['method'] = '1';
 
-			<div class="input-group">
-				<span class="input-group-addon">密码</span>
-				<div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'bbs_pw\' id=\'bbs_pw\' placeholder=\'输入新的产品中心密码，刷新可取消修改\'>');$(this).remove();">
-					<input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
-				</div>
-			</div><br/>
-		</td>
-		</tr>
-		<?php addset('邀请码设置<br/>留空表示无需邀请码','text','yr_reg',' class="form-control"'); ?>
-		<tr><td>邮件综合设置
+	$content1['system_url'] = array('td1'=>'<b>站点地址</b><br/>后面必须带上 /','type'=>'text','text'=>'','extra'=>'');
+	$content1['system_name'] = array('td1'=>'<b>站点名称</b><br/>支持 HTML','type'=>'text','text'=>'','extra'=>'');
+	$content1['system_keywords'] = array('td1'=>'<b>关键字</b>(Keywords)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
+	$content1['system_description'] = array('td1'=>'<b>描述</b>(Description)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
+	$content1['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
+	$footer = htmlspecialchars(option::get('footer'));
+	$footerhtml = '<tr><td><b>自定义底部信息</b><br/><br/>支持 HTML</td><td>
+		<textarea name="footer" class="form-control" style="height:200px">'.$footer.'</textarea>
+		</td></tr>';
+	$content1['footer'] = array('html'=>$footerhtml,'type'=>'else');
+	$ann = htmlspecialchars(option::get('ann'));
+	$annhtml = '<tr><td><b>主页公告信息</b><br/><br/>较长公告建议以&lt;br/&gt;开头<br/>支持 HTML</td><td>
+		<textarea name="ann" class="form-control" style="height:200px">'.$ann.'</textarea>
+		</td></tr>';
+	$content1['ann'] = array('html'=>$annhtml,'type'=>'else');
+	$content1['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
+	$content1['sign_multith'] = array('td1'=>'<b>计划任务线程数</b><br/>0单线程，此为模拟多线程','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
+	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
+	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符','type'=>'text','text'=>'启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','extra'=>'');
+	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
+	$reg2 = option::get('protect_reg') == 1 ? ' checked' : '' ;
+	$reg3 = option::get('yr_reg');
+	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>输入框留空表示无需邀请码</td><td>
+		<div class="input-group">
+			&nbsp;&nbsp;<input type="checkbox" name="enable_reg" value="1"'.$reg1.'> 允许用户注册&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="checkbox" name="protect_reg" value="1"'.$reg2.'> 反恶意注册
+		</div><br/>
+		<div class="input-group">
+			<span class="input-group-addon">邀请码设置</span><input type="text" name="yr_reg" id="yr_reg" value="'.$reg3.'" class="form-control">
+		</div>
+		</td></tr>';
+	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
+	$content1['icp'] = array('td1'=>'<b>ICP 备案信息</b><br/>没有请留空','type'=>'text','text'=>'','extra'=>'');
+	$content1['trigger'] = array('td1'=>'<b>依靠访客触发任务</b>','type'=>'checkbox','text'=>'建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效','extra'=>'');
+	$content1['cktime'] = array('td1'=>'<b>Cookie有效期</b><br/>单位为秒，过大会导致浏览器无法记录','type'=>'number','text'=>'','extra'=>'step="1" min="1"');
+	$content1['isapp'] = array('td1'=>'<b>环境为引擎</b>','type'=>'checkbox','text'=>'如果您的主机不支持写入或者为应用引擎，请选择此项','extra'=>'');
+	$content1['dev'] = array('td1'=>'<b>开发者模式</b>','type'=>'checkbox','text'=>'生产环境下请勿开启','extra'=>'');
+		/*警告：超长内容*/
+	//内容较长时用缓冲区更方便
+	ob_start();
+	?>
+		<tr><td><b>邮件综合设置</b>
 		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testmail'" value="测试邮件发送">
 		<br/><br/>测试前请先保存设置
 		<br/><br/>无加密的SMTP服务器端口号通常为 25
@@ -164,7 +162,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 			  	<option value="SMTP" <?php if(option::get('mail_mode') == 'SMTP') { echo 'selected'; } ?>>SMTP [ 支持验证 ]</option>
 			  </select>
 			</div><br/>
-
 
 			<div class="input-group">
 			  <span class="input-group-addon">发件人邮箱</span>
@@ -214,22 +211,35 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 					</div><br/>
 				</div>
 			</div>
-
-		</td>
 		</td>
 		</tr>
-		<?php
-		addset('ICP 备案信息<br/>没有请留空','text','icp',' class="form-control"');
-		addset('依靠访客触发任务','checkbox','trigger',null,' 建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效');
-		addset('记住密码有效期<br/>单位为秒，过大会导致浏览器无法记录','number','cktime',' class="form-control" step="1" min="1"');
-		doAction('admin_set');
-		addset('环境为引擎','checkbox','isapp',null,' 如果您的主机不支持写入或者为应用引擎，请选择此项');
-		addset('开发者模式','checkbox','dev',null,' 生产环境建议关闭');
-		?>
-	</tbody>
-</table>
-</div>
-<input type="submit" class="btn btn-primary" value="提交更改">
-</form>
-<?php } ?>
+	<?php
+	$mailhtml = ob_get_clean();
+	$content1['mail'] = array('html'=>$mailhtml,'type'=>'else');
+	ob_start();
+	?>
+		<tr><td><b>StusGame 产品中心 账号设置</b>
+		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testbbs'" value="测试登录">
+		<br/><br/>测试前请先保存设置
+		</td><td><br/>
+			<div class="input-group">
+			  <span class="input-group-addon">账号</span>
+			  <input type="text" name="bbs_us" class="form-control"  value="<?php echo option::get('bbs_us') ?>">
+			</div><br/>
+
+			<div class="input-group">
+				<span class="input-group-addon">密码</span>
+				<div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'bbs_pw\' id=\'bbs_pw\' placeholder=\'输入新的产品中心密码，刷新可取消修改\'>');$(this).remove();">
+					<input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
+				</div>
+			</div><br/>
+		</td></tr>
+	<?php
+	$bbshtml = ob_get_clean();
+	$content1['bbs'] = array('html'=>$bbshtml,'type'=>'else');
+	/*end 超长内容*/
+	echo former::create($set1,$content1);
+}
+?>
+
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
