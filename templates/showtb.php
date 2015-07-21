@@ -84,7 +84,7 @@ if (!empty($i['user']['bduss'])) {
         		<span class="input-group-addon">请选择对应账号</span>
 	        	<select name="pid" required class="form-control">
 					<?php foreach ($i['user']['bduss'] as $key => $value) {
-						$name = empty($i['user']['baidu'][$key]) ? ' (未记录百度ID)' : (' ('.$i['user']['baidu'][$key].')');
+						$name = empty($i['user']['baidu'][$key]) ? ' [未知]' : (' ('.$i['user']['baidu'][$key].')');
 						echo '<option value="'.$key.'">'.$key.$name.'</option>';
 					}
 					?>
