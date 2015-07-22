@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-TABLE}` (
   `tieba` varchar(10000) DEFAULT NULL,
   `no` int(10) NOT NULL DEFAULT '0',
   `status` int(10) NOT NULL DEFAULT '0',
-  `lastdo` varchar(200) DEFAULT '0',
+  `latest` varchar(200) DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE
