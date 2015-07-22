@@ -8,13 +8,16 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
     $pw = isset($_COOKIE['pwd']) ? sqladds($_COOKIE['pwd']) : '';
 	$osq = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
     if($m->num_rows($osq) == 0) {
-        ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
+        setcookie("uid",'', time() - 3600);
+        setcookie("pwd",'', time() - 3600);
+        ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录(#1)')."");die;
     }
 	doAction('globals_1');
 	$p = $m->fetch_array($osq);
 	if ($pw != substr(sha1(EncodePwd(md5($p['pw']))) , 4 , 32)) {
-		setcookie("pwd",'', time() - 3600);
-		ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录')."");die;
+        setcookie("uid",'', time() - 3600);
+        setcookie("pwd",'', time() - 3600);
+		ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录(#2)')."");die;
 	} else {
 		define('LOGIN',true);
 		define('ROLE', $p['role']);
