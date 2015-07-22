@@ -1,11 +1,8 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-global $m,$i,$today;
+global $m,$i;
+$day = date('d');
 
-$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
-$count1 = $count1[0];
-$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
-$count2 = $count2[0];
-
+$count1 = $count2 = 0;
 if (!empty($i['user']['bduss'])) {
 	if (isset($_GET['ok'])) {
 		echo '<div class="alert alert-success">设置保存成功</div>';
@@ -14,11 +11,6 @@ if (!empty($i['user']['bduss'])) {
 	$ex = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' ORDER BY `id` ASC');
 	while($x=$m->fetch_array($ex)) {
 		$num++;
-		if ($x['lastdo'] == 0) {
-			$lastdo = '从未';
-		} else {
-			$lastdo = $x['lastdo'];
-		}
 		if ($x['no'] == '0') {
 			$no = '<input type="radio" name="no['.$x['id'].']" value="1"> 是 <input type="radio" name="no['.$x['id'].']" value="0" checked> 否';
 		} else {
@@ -33,16 +25,19 @@ if (!empty($i['user']['bduss'])) {
 		$f .= '<tr><td>'.$x['id'].'</td><td>'.$name.'</td><td>'.$x['fid'].'</td>';
 		$f .= '<td class="wrap"><a title="'.$x['tieba'].'" href="http://tieba.baidu.com/f?ie=utf-8&kw='.$x['tieba'].'" target="_blank">'. mb_substr($x['tieba'] , 0 , 30 , 'UTF-8') .'</a>';
 		if ($x['status'] != 0) {
+            $count2++;
 			$f .= '<br/><b>错误:</b>' . $x['last_error'] . '</td>';
 			$f .= '<td><font color="red">异常</font><br/>#' . $x['status'];
 		}
-		elseif ($x['lastdo'] != $today) {
+		elseif ($x['latest'] != $day) {
+            $count2++;
 			$f .= '</td><td><font color="black">待签</font>';
 		}
 		else {
+            $count1++;
 			$f .= '</td><td><font color="green">正常</font>';
 		}
-		$f .= '</td><td>'.$lastdo.'</td><td>'.$no.'</td><td><a href="'.SYSTEM_URL.'setting.php?mod=showtb&del&id='.$x['id'].'">删除</a></td></tr>';
+		$f .= '</td><td>'.$no.'</td><td><a href="'.SYSTEM_URL.'setting.php?mod=showtb&del&id='.$x['id'].'">删除</a></td></tr>';
 	}
 	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧。已签到 '.$count1.' 个贴吧，还有 '.$count2.' 个贴吧等待签到<br/>PID 即为 账号ID';
 	if (!ISVIP) {
@@ -61,7 +56,6 @@ if (!empty($i['user']['bduss'])) {
 	echo '<th>FID</th>';
 	echo '<th>贴吧名</th>';
 	echo '<th>状态</th>';
-	echo '<th>上次签到</th>';
 	echo '<th>忽略签到</th>';
 	echo '<th>操作</th></thead><tbody>';
 	echo $f.'</tbody></table></div><input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';

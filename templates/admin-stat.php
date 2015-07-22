@@ -1,5 +1,6 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足！'); }
-global $m,$i,$today;
+global $m,$i;
+$day = date('d');
 
 if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">设置保存成功</div>';
@@ -36,13 +37,13 @@ case 'sign' :
 		$alls = $alle = $alln = $allm = $allw = 0;
 		while ($uxs = $m->fetch_array($uxsv)) {
 			$uxsc = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid` WHERE `uid` = ".$uxs['id']);
-			$list = $m->query("SELECT id,no,status,lastdo FROM `".DB_PREFIX.$uxs['t']."` WHERE `uid` = ".$uxs['id']);
+			$list = $m->query("SELECT id,no,status,latest FROM `".DB_PREFIX.$uxs['t']."` WHERE `uid` = ".$uxs['id']);
 			$success = $error = $no = $all = $waiting = 0;
 			$num = $m->num_rows($list);
 			while ($x = $m->fetch_array($list)) {
 				if ($x['no'] == '1') {
 					$no++;
-				} elseif ($x['lastdo'] != $today) {
+				} elseif ($x['latest'] != $day) {
 					$waiting++;
 				} elseif ($x['status'] == '0') {
 					$success++;

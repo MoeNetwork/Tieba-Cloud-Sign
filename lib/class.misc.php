@@ -291,7 +291,7 @@ class misc {
 
 		$ck = misc::getCookie($pid);
 		$kw = addslashes($kw);
-		$today = date('Y-m-d');
+		$today = date('d');
 
 		if (empty($fid)) {
 			$fid = misc::getFid($kw);
@@ -333,9 +333,9 @@ class misc {
 		}
 
 		if ($status_succ === true) {
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
+			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `latest` =  '".$today."',`status` =  '0',`last_error` = NULL WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
 		} else {
-			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `lastdo` =  '".$today."',`status` =  '".$error_code."',`last_error` = '".$error_msg."' WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
+			$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX.$table."` SET  `latest` =  '".$today."',`status` =  '".$error_code."',`last_error` = '".$error_msg."' WHERE `".DB_PREFIX.$table."`.`id` = '{$id}'",true);
 		}
 
 		usleep(option::get('sign_sleep') * 1000);
@@ -346,9 +346,9 @@ class misc {
 	 * @param $table 表
 	 */
 	public static function DoSign($table) {
-		global $m,$i;
+		global $m;
 		$sign_mode = unserialize(option::get('sign_mode'));
-		$today = date('Y-m-d');
+		$today = date('d');
 
 		if (date('H') <= option::get('sign_hour')) {
 			return option::get('sign_hour').'点时忽略签到';	
@@ -359,7 +359,7 @@ class misc {
 		//处理所有未签到的贴吧
 		if ($limit == 0) {
 			$q  = array();
-			$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `lastdo` != '".$today."'");
+			$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `latest` != '".$today."'");
 			while ($qss = $m->fetch_array($qs)) {
 				$q[] = array(
 					'id'     => $qss['id'],
@@ -369,13 +369,13 @@ class misc {
 					'tieba'  => $qss['tieba'],
 					'no'     => $qss['no'],
 					'status' => $qss['status'],
-					'lastdo' => $qss['lastdo'],
+					'latest' => $qss['latest'],
 					'last_error'    => $qss['last_error']
 				);
 			}
 			shuffle($q);
 		} else {
-			$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `lastdo` != '{$today}'" , true );
+			$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `latest` != '{$today}'" , true );
 		}
 		
 		foreach ($q as $x) {
@@ -389,7 +389,7 @@ class misc {
 	 */
 	function DoSign_retry($table) {
 		global $m,$i;
-		$today = date('Y-m-d');
+		$today = date('d');
 		if (date('H') <= option::get('sign_hour')) {
 			return option::get('sign_hour').'点时忽略签到';	
 		}
@@ -401,7 +401,7 @@ class misc {
 		$x = array();
 		//重新尝试签到出错的贴吧
 		if ($limit == 0) {
-			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
 				$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
 				while ($qss = $m->fetch_array($qs)) {
 					$q[] = array(
@@ -412,15 +412,15 @@ class misc {
 						'tieba'  => $qss['tieba'],
 						'no'     => $qss['no'],
 						'status' => $qss['status'],
-						'lastdo' => $qss['lastdo'],
+						'latest' => $qss['latest'],
 						'last_error'    => $qss['last_error']
 					);
 				}
 				shuffle($q);
 			}
 		} else {
-			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `lastdo` = '{$today}'" , true );
+			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `latest` = '{$today}'" , true );
 			}
 		}
 
@@ -495,7 +495,7 @@ class misc {
 				$v = addslashes(htmlspecialchars(mb_convert_encoding($v, "UTF-8", "GBK")));
 				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `C` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
 				if($osq['C'] == '0') {
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `lastdo`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
 				}
 				$addnum++;
 			}
