@@ -5,15 +5,15 @@ switch (SYSTEM_PAGE) {
 
 	case 'ajax:status':
 		global $today,$m,$i;
-		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` = '".$today."' AND `uid` = ".UID));
-		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `lastdo` != '".$today."' AND `uid` = ".UID));
+		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` = '".$today."' AND `uid` = ".UID));
+		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` != '".$today."' AND `uid` = ".UID));
 		echo "<br/><b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
 		echo '<br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
 		$c3 = $c4 = $c5 = $c6 = 0;
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
-				$count3 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `lastdo` = '".$today."' AND `no` != '1'"));
-				$count4 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `lastdo` != '".$today."' AND `no` != '1'"));
+				$count3 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` = '".$today."' AND `no` != '1'"));
+				$count4 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` != '".$today."' AND `no` != '1'"));
 				$count5 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `no` = '1' AND `status` = '0'"));
 				$count6 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `status` != '0' AND `no` != '1'"));
 				$c3 = $c3 + $count3[0];
