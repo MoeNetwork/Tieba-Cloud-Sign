@@ -28,11 +28,10 @@ CREATE TABLE `{VAR-PREFIX}cron` (
   `no` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `desc` text,
   `freq` int(10) NOT NULL DEFAULT '0',
-  `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `lastdo`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
   `log` text,
   PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`) USING BTREE,
-  KEY `latest` (`latest`) USING BTREE
+  UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 

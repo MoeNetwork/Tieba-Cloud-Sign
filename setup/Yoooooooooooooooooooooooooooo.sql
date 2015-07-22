@@ -16,13 +16,6 @@ MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
 MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`;
 
 ALTER TABLE `tc_cron`
-DROP COLUMN `lastdo`,
-ADD COLUMN `latest`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `freq`;
-
-ALTER TABLE `tc_cron`
-ADD INDEX `latest` (`latest`) USING BTREE ;
-
-ALTER TABLE `tc_cron`
 ADD PRIMARY KEY (`name`);
 
 ALTER TABLE `tc_cron`
