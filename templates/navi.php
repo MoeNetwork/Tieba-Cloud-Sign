@@ -32,7 +32,7 @@ global $i;
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> 管理菜单 <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-          <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+          <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 设置中心</a></li>
           <li class="<?php checkIfActive('admin:users') ?>" ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
           <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
           <li class="<?php checkIfActive('admin:stat') ?>" ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
@@ -92,7 +92,7 @@ global $i;
                <?php doAction('navi_7'); if (ROLE == 'admin') { ?>
                <br/>
                 <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
-                <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 全局设置</a></li>
+                <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 设置中心</a></li>
                 <li class="<?php checkIfActive('admin:users') ?>" ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
                 <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
                 <li class="<?php checkIfActive('admin:stat') ?>" ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>

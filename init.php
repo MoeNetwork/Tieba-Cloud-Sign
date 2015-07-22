@@ -24,6 +24,7 @@ require SYSTEM_ROOT.'/lib/class.E.php';
 require SYSTEM_ROOT.'/lib/class.P.php';
 require SYSTEM_ROOT.'/config.php';
 require SYSTEM_ROOT.'/lib/mysql_autoload.php';
+require SYSTEM_ROOT.'/lib/class.former.php';
 require SYSTEM_ROOT.'/lib/class.smtp.php';
 require SYSTEM_ROOT.'/lib/class.zip.php';
 require SYSTEM_ROOT.'/lib/reg.php';
