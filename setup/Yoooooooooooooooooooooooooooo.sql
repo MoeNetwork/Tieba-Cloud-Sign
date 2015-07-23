@@ -23,3 +23,6 @@ MODIFY COLUMN `no`  tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
 
 ALTER TABLE `tc_users_options`
 ADD INDEX `name` (`name`) USING BTREE ;
+
+ALTER TABLE `tc_tieba`
+ADD INDEX `latest` (`latest`) USING BTREE ;

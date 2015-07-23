@@ -134,7 +134,8 @@ CREATE TABLE `{VAR-PREFIX}tieba` (
   `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),
-  KEY `uid` (`uid`) USING BTREE
+  INDEX `uid` (`uid`) USING BTREE ,
+  INDEX `latest` (`latest`) USING BTREE 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
