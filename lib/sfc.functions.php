@@ -588,10 +588,11 @@ function adds($s) {
 function sqladds($s) {
 	if (is_array($s)) {
 		if (version_compare(phpversion(), '5.3') == -1) {
-			return array_map(create_function('$a', 
-<<<'FUCKOLDPHP'
+			return array_map(create_function(<<<'FUCKOLDPHP'
 return str_replace('\'','\\\'', str_replace('\\','\\\\',$a));
 FUCKOLDPHP
+                ,
+                '$a'
 ), $s);
 		} else {
 			return array_map(function($a) {
