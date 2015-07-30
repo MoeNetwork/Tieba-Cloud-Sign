@@ -13,7 +13,7 @@ class former {
 	 * @param array $content 内容
 	 */
 
-	public function create(array $set,array $content){
+	public static function create(array $set,array $content){
 		//检查信息
 		if(empty($set['name']) || empty($set['url']) || empty($set['method']) || !is_array($content)){
 			throw new Exception('错误：在使用form::create时，表单必需内容不足<br/><b>提示：</b>$set和$content参数的说明和范例请访问<a href="http://git.oschina.net/fyy99/former/wikis/home#$set和$content参数说明" target="_blank">$set和$content参数说明</a>');
@@ -98,7 +98,7 @@ class former {
 	 * @param array $formname 表单名称，供识别
 	 */
 
-	public function fill($item,$formname){
+	public static function fill($item,$formname){
 		$filling = option::get($item);
 		return $filling;
 	}

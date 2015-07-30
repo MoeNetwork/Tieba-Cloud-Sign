@@ -2,11 +2,12 @@
 global $m,$i;
 $day = date('d');
 
-$count1 = $count2 = 0;
+if (isset($_GET['ok'])) {
+	echo '<div class="alert alert-success">设置保存成功</div>';
+}
 if (!empty($i['user']['bduss'])) {
-	if (isset($_GET['ok'])) {
-		echo '<div class="alert alert-success">设置保存成功</div>';
-	}
+	$num = 0;
+	$count1 = $count2 = 0;
 	$f = '';
 	$ex = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE  `uid` = '.UID.' ORDER BY `id` ASC');
 	while($x=$m->fetch_array($ex)) {

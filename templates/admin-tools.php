@@ -2,7 +2,7 @@
 if (ROLE != 'admin') { msg('权限不足！'); }
 global $m;
 
-$cookies = $_COOKIE['toolpw'];
+$cookies = isset($_COOKIE['toolpw']) ? sqladds($_COOKIE['toolpw']) : '';
 $toolpw = option::get('toolpw');
 if(empty($toolpw)){
   $stat = '您尚未设置工具箱独立密码，为了您的站点安全，请先完成设置！<br/><i>（工具箱独立密码是4.0版本新增的一项保护站点安全的措施。未经设置，所有风险操作将被禁止。）</i>';
