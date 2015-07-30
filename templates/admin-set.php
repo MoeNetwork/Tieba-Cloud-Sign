@@ -55,9 +55,9 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');     
 	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');   
 	$ft1 = option::get('fb');
-	if (is_array(unserialize(option::get('fb_tables')))) {
+	if (!empty($i['tabpart'])) {
 		$temp = '';
-		foreach (unserialize(option::get('fb_tables')) as $value) {
+		foreach ($i['tabpart'] as $value) {
 			$temp .= $value."\n";
 		}
 		$ft2 = trim($temp,"\n");
