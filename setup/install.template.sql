@@ -100,7 +100,12 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('core_revision', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('isapp', '{VAR-ISAPP}');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '{VAR-TOOLPW}');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_scan', '2');
-
+INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_scan', '2');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('system_keywords', '贴吧云签到');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '贴吧云签到');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_us', '');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_pw', '');
 
 
 
