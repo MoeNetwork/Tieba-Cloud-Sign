@@ -157,7 +157,6 @@ function checkclass($f,$m = false) {
 		</tr>
 	</tbody>
 </table>
-<?php /*
 <h3>功能检查</h3>
 <table class="table table-striped">
 	<thead>
@@ -175,19 +174,17 @@ function checkclass($f,$m = false) {
 			<td>
 				<?php
 					if(function_exists('curl_exec')){
-						if(!defined('SYSTEM_ROOT2')){//检查是否在install.php
-							include SYSTEM_ROOT.'/lib/class.wcurl.php';
-						}
+						require_once SYSTEM_ROOT.'/lib/class.wcurl.php';
 						$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: Phone'.mt_rand()));
 						$result = $x->exec();
 						$result = strpos($result,'登录百度帐号');
 						if(!empty($result)){
 							echo '<font color="green">可用</font>';
 						} else {
-							echo '<font color="red">不支持</font>';
+							echo '<font color="red">无法连接到百度服务器。请询问您的主机商。</font>';
 						}
 					} else {
-						echo '<font color="red">不支持</font>';
+						echo '<font color="red">请先联系您的主机商开启cURL功能。</font>';
 					}
 				?>
 			</td>
@@ -195,4 +192,3 @@ function checkclass($f,$m = false) {
 		</tr>
 </tbody>
 </table>
-*/ ?>

@@ -4,8 +4,9 @@
  * @param string $msg 消息内容
  * @param bool|string bool true=返回上一页|bool false=屏蔽返回链接|string=自定义返回地址
  * @param bool $die 是否终止PHP
+ * @param bool $title 是否显示标题
  */
-function msg($msg = '未知的异常',$url = true,$die = true) {
+function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
     if (defined('SYSTEM_NAME')) {
         $sysname = SYSTEM_NAME;
     } else {
@@ -135,8 +136,8 @@ function msg($msg = '未知的异常',$url = true,$die = true) {
         </style>
     </head>
     <body id="error-page">
-        <h3><?php echo $sysname ?> - 提示信息</h3>
-        <?php echo $msg ?>
+        <?php if($title) echo '<h3>'.$sysname.' - 提示信息</h3>';
+        echo $msg; ?>
         <?php if ($url !== false) {
             if ($url === true) {
                 echo '<br/><br/><a href="javascript:history.back(-1)"><< 返回上一页</a>';

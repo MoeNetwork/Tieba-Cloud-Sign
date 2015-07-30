@@ -27,6 +27,39 @@ switch (SYSTEM_PAGE) {
 		}
 		break;
 
+	case 'admin:server':
+		?>
+		<li class="list-group-item">
+			<b>PHP 版本：</b><?php echo phpversion() ?>
+			<?php if(ini_get('safe_mode')) { echo '线程安全'; } else { echo '非线程安全'; } ?>
+		</li>
+		<?php if(version_compare('5.3', phpversion()) === 1) { echo '<li class="list-group-item"><b>PHP 版本警告：</b><font color="red">PHP 版本太低</font>，未来云签到可能不再支持当前版本 <a href="http://php.net/manual/zh/appendices.php" target="_blank">查看如何升级</a></li>'; }?>
+		<?php if(get_magic_quotes_gpc()) { echo '<li class="list-group-item"><b>性能警告：</b><font color="red">魔术引号被激活</font>，云签到正以低效率模式运行 <a href="http://php.net/manual/zh/security.magicquotes.whynot.php" target="_blank">为什么不用魔术引号</a> <a href="http://php.net/manual/zh/security.magicquotes.disabling.php" target="
+		_blank">如何关闭魔术引号</a></li>'; }?>
+		<li class="list-group-item">
+			<b>MySQL 版本：</b><?php echo $m->getMysqlVersion() ?>
+		</li>
+		<li class="list-group-item">
+			<b>服务器地址：</b><?php echo $_SERVER['SERVER_ADDR'] ?>
+		</li>
+		<li class="list-group-item">
+			<b>服务器软件：</b><?php echo $_SERVER['SERVER_SOFTWARE'] ?>
+		</li>
+		<li class="list-group-item">
+			<b>服务器系统：</b><?php echo php_uname('a') ?>
+		</li>
+		<li class="list-group-item">
+			<b>程序最大运行时间：</b><?php echo ini_get('max_execution_time') ?>s
+		</li>
+		<li class="list-group-item">
+			<b>POST许可：</b><?php echo ini_get('post_max_size'); ?>
+		</li>
+		<li class="list-group-item">
+			<b>文件上传许可：</b><?php echo ini_get('upload_max_filesize'); ?>
+		</li>
+		<?php
+		break;
+
 	case 'admin:update':
 		$c=new wcurl(SUPPORT_URL . 'check.php?ver=' . SYSTEM_VER);
 		$data=json_decode($c->exec());

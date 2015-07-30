@@ -14,7 +14,7 @@ doAction('index_1');
 		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能
 		<br/>
-		此程序作者为  <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+		此程序作者为  <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
 		<br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
 	<?php doAction('index_p_1'); ?>
 	</div>
@@ -128,32 +128,8 @@ if (ROLE == 'admin') {
 	<div class="panel-heading">
 		<h3 class="panel-title">服务器信息</h3>
 	</div>
-	<ul class="list-group">
-		<li class="list-group-item">
-			<b>PHP 版本：</b><?php echo phpversion() ?>
-			<?php if(ini_get('safe_mode')) { echo '线程安全'; } else { echo '非线程安全'; } ?>
-		</li>
-		<?php if(version_compare('5.3', phpversion()) === 1) { echo '<li class="list-group-item"><b>PHP 版本警告：</b><font color="red">PHP 版本太低</font>，未来云签到可能不再支持当前版本 <a href="http://php.net/manual/zh/appendices.php" target="_blank">查看如何升级</a></li>'; }?>
-		<?php if(get_magic_quotes_gpc()) { echo '<li class="list-group-item"><b>性能警告：</b><font color="red">魔术引号被激活</font>，云签到正以低效率模式运行 <a href="http://php.net/manual/zh/security.magicquotes.whynot.php" target="_blank">为什么不用魔术引号</a> <a href="http://php.net/manual/zh/security.magicquotes.disabling.php" target="
-		_blank">如何关闭魔术引号</a></li>'; }?>
-		<li class="list-group-item">
-			<b>MySQL 版本：</b><?php echo $m->getMysqlVersion() ?>
-		</li>
-		<li class="list-group-item">
-			<b>服务器软件：</b><?php echo $_SERVER['SERVER_SOFTWARE'] ?>
-		</li>
-		<li class="list-group-item">
-			<b>服务器系统：</b><?php echo php_uname('a') ?>
-		</li>
-		<li class="list-group-item">
-			<b>程序最大运行时间：</b><?php echo ini_get('max_execution_time') ?>s
-		</li>
-		<li class="list-group-item">
-			<b>POST许可：</b><?php echo ini_get('post_max_size'); ?>
-		</li>
-		<li class="list-group-item">
-			<b>文件上传许可：</b><?php echo ini_get('upload_max_filesize'); ?>
-		</li>
+	<ul class="list-group" id="server">
+	读取中...
 	</ul>
 </div>
 <?php
@@ -162,9 +138,23 @@ if (ROLE == 'admin') {
 //由于历史原因，挂载点有2个
 doAction('index_3');
 doAction('index_2');
-echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
 
 <script type="text/javascript">
+	$.ajax({ 
+	  async:true, 
+	  url: 'ajax.php?mod=admin:server', 
+	  type: "GET", 
+	  data : {},
+	  dataType: 'HTML', 
+	  timeout: 90000, 
+	  success: function(data){
+	  	$("#server").html(data);
+	  },
+	  error: function(error){
+	  	$("#server").html("服务器信息读取失败。");
+	  }
+	});
 	<?php if ($i['opt']['bduss_num'] != '0' && $i['opt']['bduss_num'] != '-1' && ISVIP == false) { ?>
 	var baiduid = Math.round($("#baiduid_used").html() / $("#baiduid_limit").html() * 100);
 	$("#baiduid_prog").html(baiduid + '%');
