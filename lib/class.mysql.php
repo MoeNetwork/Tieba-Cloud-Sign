@@ -193,6 +193,14 @@ class wmysql {
 	}
 
 	/**
+	 * 释放所有与上次查询结果所关联的内存
+	 * @return bool
+	 */
+	public function free() {
+		return mysql_free_result($this->result);
+	}
+
+	/**
 	 * Get number of affected rows in previous MySQL operation
 	 */
 	public function affected_rows() {

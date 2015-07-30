@@ -143,7 +143,7 @@ class wmysql {
 	}
 	// 别名
 	public function multi_query($sql,$noerror = false) { 
-		return $this->xquery($sql,$noerror = false);
+		return $this->xquery($sql,$noerror);
 	}
 
 	/**
@@ -201,6 +201,14 @@ class wmysql {
 	 */
 	public function geterrno() {
 		return $this->conn->errno;
+	}
+
+	/**
+	 * 释放所有与上次查询结果所关联的内存
+	 * @return bool
+	 */
+	public function free() {
+		return $this->result->free();
 	}
 
 	/**
