@@ -165,6 +165,7 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:tools':
+		/*
 		$toolpw = option::get('toolpw');
 		if(!empty($_POST['toolpw'])){
 			$cookies = md5(md5(md5($_POST['toolpw'])));
@@ -180,7 +181,7 @@ switch (SYSTEM_PAGE) {
 		if($_COOKIE['toolpw'] != $toolpw || empty($toolpw)){
 			Redirect('index.php?mod=admin:tools');
 		}
-			
+		*/
 		switch (strip_tags($_GET['setting'])) {
 			
 		case 'optim':

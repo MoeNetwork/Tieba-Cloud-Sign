@@ -2,6 +2,7 @@
 if (ROLE != 'admin') { msg('权限不足！'); }
 global $m;
 
+/*
 $cookies = isset($_COOKIE['toolpw']) ? sqladds($_COOKIE['toolpw']) : '';
 $toolpw = option::get('toolpw');
 if(empty($toolpw)){
@@ -29,6 +30,7 @@ if(!empty($stat)){
 <?php
 die;
 }
+*/
 doAction('admin_tools_1');
 if (isset($_GET['ok'])) {
   echo '<div class="alert alert-success">应用成功</div>';
