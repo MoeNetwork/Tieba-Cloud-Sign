@@ -48,7 +48,7 @@ ALTER TABLE `'.DB_PREFIX.'tieba`
 ADD INDEX `latest` (`latest`) USING BTREE ;
 
 ALTER TABLE `'.DB_PREFIX.'plugins`
-ADD `order` int(10) unsigned NOT NULL DEFAULT \'0\';
+ADD `order` int(10) unsigned NOT NULL DEFAULT 0;
 ');
 
     //------------------------------------------------//
