@@ -18,34 +18,39 @@ error_reporting(0);
     option::add('system_description','贴吧云签到');
     option::add('bbs_us','');
     option::add('bbs_pw','');
-    $m->xquery('ALTER TABLE `tc_tieba`
+    $m->xquery('ALTER TABLE `'.DB_PREFIX.'tieba`
 MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
 MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`,
 MODIFY COLUMN `pid`  int(30) UNSIGNED NOT NULL DEFAULT 0 AFTER `uid`,
 MODIFY COLUMN `fid`  int(30) UNSIGNED NOT NULL DEFAULT 0 AFTER `pid`;
 
-ALTER TABLE `tc_tieba`
+ALTER TABLE `'.DB_PREFIX.'tieba`
 DROP COLUMN `lastdo`,
 ADD COLUMN `latest`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `status`;
 
-ALTER TABLE `tc_tieba`
+ALTER TABLE `'.DB_PREFIX.'tieba`
 MODIFY COLUMN `status`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `no`;
 
-ALTER TABLE `tc_baiduid`
+ALTER TABLE `'.DB_PREFIX.'baiduid`
 MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
 MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`;
 
-ALTER TABLE `tc_cron`
+ALTER TABLE `'.DB_PREFIX.'cron`
 ADD PRIMARY KEY (`name`);
 
-ALTER TABLE `tc_cron`
-MODIFY COLUMN `no`  tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
+ALTER TABLE `'.DB_PREFIX.'cron`
+MODIFY COLUMN `no` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
 
-ALTER TABLE `tc_users_options`
+ALTER TABLE `'.DB_PREFIX.'users_options`
 ADD INDEX `name` (`name`) USING BTREE ;
 
-ALTER TABLE `tc_tieba`
-ADD INDEX `latest` (`latest`) USING BTREE ;');
+ALTER TABLE `'.DB_PREFIX.'tieba`
+ADD INDEX `latest` (`latest`) USING BTREE ;
+
+ALTER TABLE `'.DB_PREFIX.'plugins`
+ADD `order` int(10) unsigned NOT NULL DEFAULT '0';
+');
+
     //------------------------------------------------//
     unlink(__FILE__);
     msg('您的云签到已成功升级到 V4.0 版本，请立即删除 /setup/update3.9to4.0.php，谢谢<br/><br/>若要获取 V4.0 版本新特性，请前往 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=6411">StusGame GROUP</a> ', SYSTEM_URL);
