@@ -1,4 +1,7 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } if (ROLE != 'admin') { msg('权限不足！'); }
+if (defined('SYSTEM_NO_PLUGIN') && SYSTEM_NO_PLUGIN){
+	die('<div class="alert alert-danger">您设置了"SYSTEM_NO_PLUGIN"，所以无法使用任何与插件相关的功能</div>');
+}
 global $i;
 if (isset($_GET['ok'])) {
     echo '<div class="alert alert-success">插件操作成功</div>';

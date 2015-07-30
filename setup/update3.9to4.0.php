@@ -1,12 +1,12 @@
 <?php
 define('SYSTEM_NO_ERROR', true);
 define('SYSTEM_NO_CHECK_VER', true);
-define('SYSTEM_ONLY_CHECK_LOGIN', true);
+define('SYSTEM_NO_CHECK_LOGIN', true);
 define('SYSTEM_NO_PLUGIN', true);
 require '../init.php';
 global $m;
 error_reporting(0);
-//if (ROLE == 'admin') {
+
     $cv = option::get('core_version');
     if (!empty($cv) && $cv >= '4.0') {
         msg('您的云签到已升级到 V4.0 版本，请勿重复更新<br/><br/>请立即删除 /setup/update3.9to4.0.php');
@@ -49,6 +49,3 @@ ADD INDEX `latest` (`latest`) USING BTREE ;');
     //------------------------------------------------//
     unlink(__FILE__);
     msg('您的云签到已成功升级到 V4.0 版本，请立即删除 /setup/update3.9to4.0.php，谢谢<br/><br/>若要获取 V4.0 版本新特性，请前往 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=6411">StusGame GROUP</a> ', SYSTEM_URL);
-/*} else {
-    msg('您需要先登录旧版本的云签到，才能继续升级');
-}*/

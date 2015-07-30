@@ -45,5 +45,5 @@ define('UPDATE_FNAME_GITCAFE','Tieba-Cloud-Sign');
 define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_cache/');
 require SYSTEM_ROOT.'/lib/sfc.functions.php';
 require SYSTEM_ROOT.'/lib/ui.php';
-require SYSTEM_ROOT.'/lib/plugins.php';
-require SYSTEM_ROOT.'/lib/globals.php';
+if (!defined('SYSTEM_NO_PLUGIN')) require SYSTEM_ROOT.'/lib/plugins.php';
+if (!defined('SYSTEM_NO_CHECK_LOGIN')) require SYSTEM_ROOT.'/lib/globals.php';
