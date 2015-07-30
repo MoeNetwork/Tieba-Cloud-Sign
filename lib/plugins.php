@@ -290,3 +290,5 @@ function getOldPluginData($pluginFile) {
 foreach ($i['plugins']['actived'] as $pluginInfo) {
 	$i['plugins']['desc'][$pluginInfo] = getPluginInfo($pluginInfo);
 }
+
+loadplugins();

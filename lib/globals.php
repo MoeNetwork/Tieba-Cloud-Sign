@@ -60,7 +60,6 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
 		if (ROLE == 'banned') {
 			msg('你已被禁止访问，请联系管理员解封');
 		}
-		loadplugins();
 	}
 	doAction('globals_2');
 }
@@ -71,7 +70,6 @@ if (SYSTEM_PAGE == 'admin:login') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
 	doAction('admin_login_1');
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
 	$pw = isset($_POST['pw']) ? sqladds($_POST['pw']) : '';
@@ -109,7 +107,6 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 		ReDirect('index.php');
 	}
 	define('ROLE', 'visitor');
-	loadplugins();
 	doAction('admin_reg_1');
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
@@ -159,7 +156,6 @@ elseif (SYSTEM_PAGE == 'login') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
 	template('login');
 	doAction('login_page_4');
 	die;
@@ -170,7 +166,6 @@ elseif (SYSTEM_PAGE == 'reg') {
 	}
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
 	template('reg');
 	doAction('reg_page_4');
 	die;
@@ -178,10 +173,8 @@ elseif (SYSTEM_PAGE == 'reg') {
 elseif (isset($_GET['pub_plugin'])) {
 	define('ROLE', 'visitor');
 	define('SYSTEM_READY_LOAD_PUBPLUGIN', true);
-	loadplugins();
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {
-	loadplugins();
 	doAction('logout');
 	setcookie("uid",'', time() - 3600);
 	setcookie("toolpw",'', time() - 3600);
@@ -191,6 +184,5 @@ elseif (SYSTEM_PAGE == 'admin:logout') {
 elseif (!defined('UID') && !defined('SYSTEM_DO_NOT_LOGIN')) {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
-	loadplugins();
 	ReDirect('index.php?mod=login');
 }
