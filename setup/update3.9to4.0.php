@@ -3,9 +3,8 @@ define('SYSTEM_NO_ERROR', true);
 define('SYSTEM_NO_CHECK_VER', true);
 define('SYSTEM_NO_CHECK_LOGIN', true);
 define('SYSTEM_NO_PLUGIN', true);
-require '../init.php';
+include '../init.php';
 global $m,$i;
-
     $cv = option::get('core_version');
     if (!empty($cv) && $cv >= '4.0') {
         msg('您的云签到已升级到 V4.0 版本，请勿重复更新<br/><br/>请立即删除 /setup/update3.9to4.0.php');
@@ -19,40 +18,42 @@ global $m,$i;
     option::add('bbs_pw','');
     $i['tabpart'][] = 'tieba';
     foreach ($i['tabpart'] as $value) {
-        $m->xquery('
-        ALTER TABLE `'.DB_PREFIX.$value.'`
+        $m->query('ALTER TABLE `'.DB_PREFIX.$value.'`
 MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
 MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`,
 MODIFY COLUMN `pid`  int(30) UNSIGNED NOT NULL DEFAULT 0 AFTER `uid`,
 MODIFY COLUMN `fid`  int(30) UNSIGNED NOT NULL DEFAULT 0 AFTER `pid`;
-
-ALTER TABLE `'.DB_PREFIX.$value.'`
+',true);
+        $m->query('ALTER TABLE `'.DB_PREFIX.$value.'`
 DROP COLUMN `lastdo`,
 ADD COLUMN `latest`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `status`;
-
-ALTER TABLE `'.DB_PREFIX.$value.'`
+',true);
+        $m->query('ALTER TABLE `'.DB_PREFIX.$value.'`
 MODIFY COLUMN `status`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `no`;
-
-ALTER TABLE `'.DB_PREFIX.$value.'`
-ADD INDEX `latest` (`latest`) USING BTREE ;');
+',true);
+        $m->query('ALTER TABLE `'.DB_PREFIX.$value.'`
+ADD INDEX `latest` (`latest`) USING BTREE ;',true);
     }
 
-    $m->xquery('
+    $m->query('
 ALTER TABLE `'.DB_PREFIX.'baiduid`
 MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
-MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`;
-
-ADD INDEX (`name`)
+MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`,
+ADD INDEX (`name`);
+',true);
+    $m->query('
 ALTER TABLE `'.DB_PREFIX.'cron`
 ADD INDEX `name` (`name`) USING BTREE;
-
-ALTER TABLE `'.DB_PREFIX.'cron`
+',true);
+    $m->query('ALTER TABLE `'.DB_PREFIX.'cron`
 MODIFY COLUMN `no` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
-
-ALTER TABLE `'.DB_PREFIX.'users_options`
+',true);
+    $m->query('ALTER TABLE `'.DB_PREFIX.'users_options`
 ADD INDEX `name` (`name`) USING BTREE ;
-
-');
+',true);
+    $m->query('ALTER TABLE `'.DB_PREFIX.'plugins`
+ADD `order` int(10) unsigned NOT NULL DEFAULT '0';
+',true);
 
     //------------------------------------------------//
     unlink(__FILE__);
