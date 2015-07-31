@@ -20,7 +20,7 @@ global $m,$i;
     $i['tabpart'][] = 'tieba';
     foreach ($i['tabpart'] as $value) {
         $m->xquery('
-        ALTER TABLE `'.DB_PREFIX.$value'`
+        ALTER TABLE `'.DB_PREFIX.$value.'`
 MODIFY COLUMN `id`  int(30) UNSIGNED NOT NULL AUTO_INCREMENT FIRST ,
 MODIFY COLUMN `uid`  int(30) UNSIGNED NOT NULL AFTER `id`,
 MODIFY COLUMN `pid`  int(30) UNSIGNED NOT NULL DEFAULT 0 AFTER `uid`,
