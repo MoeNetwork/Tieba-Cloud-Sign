@@ -34,7 +34,7 @@
      
 ##许可协议
 请访问程序根目录下的 /license.html 阅读许可协议     
-也可访问该地址阅读许可协议：http://tcsdemo.oschina.cnpaas.io/license.html
+也可访问该地址阅读许可协议：http://tcsdemo.oschina.mopaas.com/license.html
 #####不要尝试去违反协议，我们会把严重违反协议者挂在本页下方的耻辱柱上
 #####或者可以前往该地址购买商业授权：http://item.taobao.com/item.htm?id=43814067894
 
