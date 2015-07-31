@@ -52,6 +52,7 @@ MODIFY COLUMN `no` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
 ADD INDEX `name` (`name`) USING BTREE ;
 ',true);
     $m->query('ALTER TABLE `'.DB_PREFIX.'plugins`
+ADD `ver` varchar(15) DEFAULT NULL,
 ADD `order` int(10) unsigned NOT NULL DEFAULT '0';
 ',true);
 
