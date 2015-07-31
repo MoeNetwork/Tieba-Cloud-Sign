@@ -34,6 +34,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$set2['method'] = '1';
 	
 	$content2['cron_limit'] = array('td1'=>'<b>单表单次签到执行数量</b><br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','type'=>'number','text'=>'注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数','extra'=>'min="0" step="1"');
+	$content2['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$content2['retry_max'] = array('td1'=>'<b>签到失败重试次数</b><br/>0为无限，-1为不重试','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['sign_hour'] = array('td1'=>'<b>签到开始时间</b><br/>24小时制。例如设为-1，则从0点开始签到','type'=>'number','text'=>'','extra'=>'min="-1" step="1" max="24"');
@@ -93,7 +94,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content1['system_name'] = array('td1'=>'<b>站点名称</b><br/>支持 HTML','type'=>'text','text'=>'','extra'=>'');
 	$content1['system_keywords'] = array('td1'=>'<b>关键字</b>(Keywords)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
 	$content1['system_description'] = array('td1'=>'<b>描述</b>(Description)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
-	$content1['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$footer = htmlspecialchars(option::get('footer'));
 	$footerhtml = '<tr><td><b>自定义底部信息</b><br/><br/>支持 HTML</td><td>
 		<textarea name="footer" class="form-control" style="height:200px">'.$footer.'</textarea>
@@ -104,7 +104,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<textarea name="ann" class="form-control" style="height:200px">'.$ann.'</textarea>
 		</td></tr>';
 	$content1['ann'] = array('html'=>$annhtml,'type'=>'else');
-	$content1['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content1['sign_multith'] = array('td1'=>'<b>计划任务线程数</b><br/>0单线程，此为模拟多线程','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
 	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符','type'=>'text','text'=>'启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','extra'=>'');
