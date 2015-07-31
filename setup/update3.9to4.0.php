@@ -67,8 +67,6 @@ MODIFY COLUMN `no` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `file`;
 ALTER TABLE `'.DB_PREFIX.'users_options`
 ADD INDEX `name` (`name`) USING BTREE ;
 
-ALTER TABLE `'.DB_PREFIX.'plugins`
-ADD `order` int(10) unsigned NOT NULL DEFAULT 0;
 ');
 
     //------------------------------------------------//
