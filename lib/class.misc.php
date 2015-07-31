@@ -387,7 +387,7 @@ class misc {
 	 * 执行一个表的签到重試任务
 	 * @param $table 表
 	 */
-	function DoSign_retry($table) {
+	public static function DoSign_retry($table) {
 		global $m,$i;
 		$today = date('d');
 		if (date('H') <= option::get('sign_hour')) {
@@ -419,7 +419,7 @@ class misc {
 				shuffle($q);
 			}
 		} else {
-			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
 				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `latest` = '{$today}'" , true );
 			}
 		}
