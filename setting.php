@@ -104,6 +104,7 @@ switch (SYSTEM_PAGE) {
 		if ($_GET['type'] == 'sign') {
 			@option::set('cron_limit',$sou['cron_limit']);
 			@option::set('tb_max',$sou['tb_max']);
+			@option::set('bduss_num',$sou['bduss_num']);
 			@option::set('sign_mode', serialize($sou['sign_mode']));
 			@option::set('enable_addtieba',$sou['enable_addtieba']);
 			@option::set('retry_max',$sou['retry_max']);
@@ -152,7 +153,6 @@ switch (SYSTEM_PAGE) {
 				@option::set('mail_smtppw',$sou['mail_smtppw']);
 			}
 			@option::set('dev',$sou['dev']);
-			@option::set('bduss_num',$sou['bduss_num']);
 			@option::set('dev',$sou['dev']);
 			@option::set('cron_pw',$sou['cron_pw']);
 			@option::set('cron_asyn',$sou['cron_asyn']);
