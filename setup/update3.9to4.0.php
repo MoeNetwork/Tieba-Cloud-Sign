@@ -9,13 +9,13 @@ error_reporting(0);
 
     $cv = option::get('core_version');
     if (!empty($cv) && $cv >= '4.0') {
-        msg('ÄúµÄÔÆÇ©µ½ÒÑÉý¼¶µ½ V4.0 °æ±¾£¬ÇëÎðÖØ¸´¸üÐÂ<br/><br/>ÇëÁ¢¼´É¾³ý /setup/update3.9to4.0.php');
+        msg('æ‚¨çš„äº‘ç­¾åˆ°å·²å‡çº§åˆ° V4.0 ç‰ˆæœ¬ï¼Œè¯·å‹¿é‡å¤æ›´æ–°<br/><br/>è¯·ç«‹å³åˆ é™¤ /setup/update3.9to4.0.php');
     }
     //------------------------------------------------//
     option::add('toolpw','');
     option::add('sign_scan','1');
-    option::add('system_keywords','Ìù°ÉÔÆÇ©µ½');
-    option::add('system_description','Ìù°ÉÔÆÇ©µ½');
+    option::add('system_keywords','è´´å§äº‘ç­¾åˆ°');
+    option::add('system_description','è´´å§äº‘ç­¾åˆ°');
     option::add('bbs_us','');
     option::add('bbs_pw','');
     if(!empty($i['tabpart'])){
@@ -25,17 +25,14 @@ error_reporting(0);
             DROP COLUMN `lastdo`,
             ADD COLUMN `latest`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `status`;
             ',true);
-            $m->free();
             $m->query('
             ALTER TABLE `'.DB_PREFIX.$value.'`
             MODIFY COLUMN `status`  tinyint(2) UNSIGNED NOT NULL DEFAULT 0 AFTER `no`;
             ');
-            $m->free();
             $m->query('
             ALTER TABLE `'.DB_PREFIX.$value.'`
             ADD INDEX `latest` (`latest`) USING BTREE ;
             ');
-            $m->free();
         }
     }
     $m->xquery('ALTER TABLE `'.DB_PREFIX.'tieba`
@@ -73,4 +70,4 @@ ADD `order` int(10) unsigned NOT NULL DEFAULT 0;
 
     //------------------------------------------------//
     unlink(__FILE__);
-    msg('ÄúµÄÔÆÇ©µ½ÒÑ³É¹¦Éý¼¶µ½ V4.0 °æ±¾£¬ÇëÁ¢¼´É¾³ý /setup/update3.9to4.0.php£¬Ð»Ð»<br/><br/>ÈôÒª»ñÈ¡ V4.0 °æ±¾ÐÂÌØÐÔ£¬ÇëÇ°Íù <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=6411">StusGame GROUP</a> ', SYSTEM_URL);
+    msg('æ‚¨çš„äº‘ç­¾åˆ°å·²æˆåŠŸå‡çº§åˆ° V4.0 ç‰ˆæœ¬ï¼Œè¯·ç«‹å³åˆ é™¤ /setup/update3.9to4.0.phpï¼Œè°¢è°¢<br/><br/>è‹¥è¦èŽ·å– V4.0 ç‰ˆæœ¬æ–°ç‰¹æ€§ï¼Œè¯·å‰å¾€ <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=6411">StusGame GROUP</a> ', SYSTEM_URL);
