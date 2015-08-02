@@ -45,13 +45,13 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 ###主要开发者列表
 @Kenvix [kenvix@vip.qq.com]     
 @mokeyjay [longting@longtings.com]     
-@FYY [fyod@vip.qq.com]
+@fyy99 [fyod@vip.qq.com]
 ###感谢
 以下几位反馈/解决了程序的不足之处，特此感谢     
 @D丶L [i@v4.hk]     @吟梦 [i@inmeng.xyz]     
 @角落里有蛇 [395183830@qq.com]     @VFleaKing [liuhaotian0520@163.com]     
 @quericy [quericy@live.com]     @liwanglin12 [i@lwl12.com]     
-@superxzr [a457418121@gmail.com]
+@superxzr [a457418121@gmail.com]　　　@凹凸曼_m []
 
 ##耻辱柱
 这里列举了几个严重违反协议且经过提示还不知悔改的家伙     
