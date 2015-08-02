@@ -30,27 +30,28 @@
 （1）自动更新：前往 检查更新 更新程序即可     
 （2）手动更新：直接下载 Zip，删除压缩包内的 config.php ，然后上传到您的网站即可     
 另外，每一个大版本都会有一个升级脚本，别忘了运行它     
-文件名一般命名为 update旧版本to新版本.php ，例如 update1.0to2.0.php
-     
+（文件名一般为 update旧版本to新版本.php ，例如 update1.0to2.0.php）
+
 ##许可协议
-请访问程序根目录下的 /license.html 阅读许可协议     
+请访问程序根目录下的 license.html 阅读许可协议     
 也可访问该地址阅读许可协议：http://tcsdemo.oschina.mopaas.com/license.html
 #####不要尝试去违反协议，我们会把严重违反协议者挂在本页下方的耻辱柱上
 #####或者可以前往该地址购买商业授权：http://item.taobao.com/item.htm?id=43814067894
 
 ##参与开发
-贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码      
-Pull Request，提交Issue请到 Git@OSChina 代码库，在其他代码库提交可能不会被处理      
-如需加入开发组请联系 @无名智者
+贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
+Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可能不会被处理     
+如需加入开发组请联系 @Kenvix 
 ###主要开发者列表
-无名智者[kenvix@vip.qq.com]     
-mokeyjay[longting@longtings.com]     
-FYY[fyod@vip.qq.com]
+@Kenvix [kenvix@vip.qq.com]     
+@mokeyjay [longting@longtings.com]     
+@FYY [fyod@vip.qq.com]
 ###感谢
-DL[i@v4.hk]      
-VFleaKing[liuhaotian0520@163.com]     
-liwanglin12[i@lwl12.com]     
-角落里有蛇[395183830@qq.com]
+以下几位反馈/解决了程序的不足之处，特此感谢     
+@D丶L [i@v4.hk]     @吟梦 [i@inmeng.xyz]     
+@角落里有蛇 [395183830@qq.com]     @VFleaKing [liuhaotian0520@163.com]     
+@quericy [quericy@live.com]     @liwanglin12 [i@lwl12.com]     
+@superxzr [a457418121@gmail.com]
 
 ##耻辱柱
 这里列举了几个严重违反协议且经过提示还不知悔改的家伙     
@@ -58,6 +59,6 @@ liwanglin12[i@lwl12.com]
 1.多性欲     
   罪行1：发布修改了版权的贴吧云签到，俨然成了他是作者 [查看罪证](http://www.asp300.com/SoftView/11/SoftView_57242.html)     
   罪行2：云签到去版权屡教不改 [它的云签地址](http://baidu.duoxingyu.pw/)     
-2."CCGV"
+2."CCGV"     
   罪行1：去版权+辱骂作者：[它的云签地址](http://ccgv.me/)     
   罪行2：换个域名接着去版权：[它的云签地址](http://ccgv.party/)     

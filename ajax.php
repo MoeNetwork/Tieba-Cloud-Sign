@@ -4,7 +4,8 @@ require dirname(__FILE__).'/init.php';
 switch (SYSTEM_PAGE) {
 
 	case 'ajax:status':
-		global $today,$m,$i;
+		global $m,$i;
+		$today = date('d');
 		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` = '".$today."' AND `uid` = ".UID));
 		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` != '".$today."' AND `uid` = ".UID));
 		echo "<br/><b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
