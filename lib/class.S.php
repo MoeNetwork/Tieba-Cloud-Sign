@@ -15,7 +15,11 @@ class S extends wmysql {
 	 * @param bool $long 是否开启长连接
 	 */
 	public function __construct($host , $user , $pw , $name , $long = false) {
-		parent::__construct($host , $user , $pw , $name , $long);
+		try {
+			parent::__construct($host , $user , $pw , $name , $long);
+		} catch(Exception $ex) {
+			msg($ex->getMessage());
+		}
 	}
 
 	/**
