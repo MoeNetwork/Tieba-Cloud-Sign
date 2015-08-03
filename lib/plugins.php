@@ -208,7 +208,8 @@ function getPluginInfo($plugin) {
 				'version'	 => $d['Version'],
 				'description' => $d['Description'],
 				'url'		 => $d['Url'],
-				'for'		 => $d['For']
+				'for'		 => $d['For'],
+				'old'        => true
 			),
 			'view'   => array(
 				'setting'	 => false,

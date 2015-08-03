@@ -33,7 +33,7 @@ foreach($x as $key => $val) {
 		}
 		if (isset($i['plugins']['info'][$val['plugin']['id']]['ver']) && version_compare($i['plugins']['info'][$val['plugin']['id']]['ver'], $val['plugin']['version']) == -1 && $val['view']['update']) {
 			$pluginfo .= ' | <a href="setting.php?mod=admin:plugins&upd='.$val['plugin']['id'].'" onclick="return confirm(\'你确实要升级此插件吗？\\n'.$val['plugin']['name'].'\');">点击升级到最新版本</a>';
-		} elseif ($val['plugin']['onsale'] == true) {
+		} elseif (!empty($val['plugin']['onsale'])) {
 			$pluginfo .= ' | <span id="c_upd" onclick="c_upd(this,\''.$val['plugin']['id'].'\')"><a href="javascript:void(0)">检查更新</a></span>';
 		}
 	} else {
@@ -64,7 +64,7 @@ foreach($x as $key => $val) {
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
 			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
-			if ($val['core']['setting'] && $val['view']['setting']) {
+			if (($val['core']['setting'] && $val['view']['setting']) || (isset($val['plugin']['old']) && file_exists(SYSTEM_ROOT . '/plugins/' . $val['plugin']['id'] . '/' . $val['plugin']['id'] . '_setting.php'))) {
 				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'">打开插件设置</a>';
 				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span></a> ';
 			}
