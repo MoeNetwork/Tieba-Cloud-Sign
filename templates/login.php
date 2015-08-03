@@ -12,7 +12,7 @@
       <?php if (isset($_GET['msg'])): ?><div class="alert alert-info alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           <?php echo strip_tags($_GET['msg']); ?></div><?php endif;?>
-  <form name="f" method="post" action="index.php?mod=admin:login" onsubmit="$('#pw').val($.md5($('#pw').val()));">
+  <form name="f" method="post" action="index.php?mod=admin:login" onsubmit="//$('#pw').val($.md5($('#pw').val()));">
 	<div class="input-group">
   <span class="input-group-addon">账户</span>
   <input type="text" class="form-control" name="user" placeholder="账户可以为用户名或者邮箱地址" required>

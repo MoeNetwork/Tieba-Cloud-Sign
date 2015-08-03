@@ -14,7 +14,7 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
     }
 	doAction('globals_1');
 	$p = $m->fetch_array($osq);
-	if ($pw != substr(sha1(EncodePwd(md5($p['pw']))) , 4 , 32)) {
+	if ($pw != substr(sha1(EncodePwd($p['pw'])) , 4 , 32)) {
         setcookie("uid",'', time() - 3600);
         setcookie("pwd",'', time() - 3600);
 		ReDirect("index.php?mod=login&error_msg=".urlencode('Cookies 所记录的账号信息不正确，请重新登录(#2)')."");die;
@@ -72,7 +72,7 @@ if (SYSTEM_PAGE == 'admin:login') {
 	$i['user']['role'] = 'visitor';
 	doAction('admin_login_1');
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
-	$pw = isset($_POST['pw']) ? sqladds($_POST['pw']) : '';
+	$pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 	if (empty($name) || empty($pw)) {
 		ReDirect("index.php?mod=login&error_msg=".urlencode('请填写账户或密码'));die;
 	}
@@ -81,7 +81,7 @@ if (SYSTEM_PAGE == 'admin:login') {
         ReDirect("index.php?mod=login&error_msg=".urlencode('账户不存在 [ 提示：账户不是昵称，账户可为用户名或者邮箱地址 ]'));die;
     }
 	$p = $m->fetch_array($osq);
-	if (EncodePwd($pw) != md5($p['pw'])) {
+	if (EncodePwd($pw) != $p['pw']) {
 		ReDirect("index.php?mod=login&error_msg=".urlencode('密码错误'));die;
 	} else {
 		doAction('admin_login_3');
