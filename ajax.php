@@ -29,7 +29,7 @@ switch (SYSTEM_PAGE) {
 		}
 		echo "<br/><b>签到状态：</b>已签到 {$count['userSigned']} 个贴吧，{$count['userError']} 个出错， {$count['userWaiting']} 个贴吧等待签到";
 		echo '<br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
-		$c3 = $c4 = $c5 = $c6 = 0;
+
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
 				$signTab = $m->query("SELECT `latest`,`status`,`no` FROM `".DB_NAME."`.`".DB_PREFIX.$value."`");
