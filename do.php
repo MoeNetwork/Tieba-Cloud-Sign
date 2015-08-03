@@ -11,6 +11,9 @@ if (!empty($cron_pw)) {
 		msg('计划任务执行失败：密码错误<br/><br/>你需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务',false);
 	}
 }
+if(isset($_GET['in_thread'])) {
+	define('SYSTEM_CRON_THREAD',true);
+}
 doAction('cron_1');
 if (SYSTEM_PAGE == 'runcron') {
 	$cron = isset($_GET['cron']) ? sqladds(strip_tags($_GET['cron'])) : msg('运行失败：计划任务未指定');
@@ -37,7 +40,7 @@ if (SYSTEM_PAGE == 'runcron') {
 	$sign_multith = option::get('sign_multith');
 	if (!isset($_GET['donnot_sign_multith']) && !empty($sign_multith) && function_exists('fsockopen')) {
 		for ($ii=0; $ii < $sign_multith; $ii++) { 
-			sendRequest(SYSTEM_URL.'do.php?donnot_sign_multith&pw=' . $cron_pw);
+			sendRequest(SYSTEM_URL.'do.php?donnot_sign_multith&in_thread&pw=' . $cron_pw);
 		}
 	}
 		$return = '';
