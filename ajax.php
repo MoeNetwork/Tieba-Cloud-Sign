@@ -4,25 +4,51 @@ require dirname(__FILE__).'/init.php';
 switch (SYSTEM_PAGE) {
 
 	case 'ajax:status':
-		global $today,$m,$i;
-		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` = '".$today."' AND `uid` = ".UID));
-		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` != '".$today."' AND `uid` = ".UID));
-		echo "<br/><b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
+		global $m,$i;
+		$today = date('d');
+		$count = array(
+			'userSigned'  => 0,
+			'userWaiting' => 0,
+			'userError'   => 0,
+			'allSigned'   => 0,
+			'allWaiting'  => 0,
+			'allNo'       => 0,
+			'allError'    => 0
+		);
+		$signUser = $m->query("SELECT `latest`,`status` FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `no` = '0'");
+		while($countUser = $m->fetch_array($signUser)) {
+			if($countUser['latest'] == $today) {
+				if($countUser['status'] != '0') {
+					$count['userError']++;
+				} else {
+					$count['userSigned']++;
+				}
+			} else {
+				$count['userWaiting']++;
+			}
+		}
+		echo "<br/><b>签到状态：</b>已签到 {$count['userSigned']} 个贴吧，{$count['userError']} 个出错， {$count['userWaiting']} 个贴吧等待签到";
 		echo '<br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
 		$c3 = $c4 = $c5 = $c6 = 0;
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
-				$count3 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` = '".$today."' AND `no` != '1'"));
-				$count4 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` != '".$today."' AND `no` != '1'"));
-				$count5 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `no` = '1' AND `status` = '0'"));
-				$count6 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `status` != '0' AND `no` != '1'"));
-				$c3 = $c3 + $count3[0];
-				$c4 = $c4 + $count4[0];
-				$c5 = $c5 + $count5[0];
-				$c6 = $c6 + $count6[0];
+				$signTab = $m->query("SELECT `latest`,`status`,`no` FROM `".DB_NAME."`.`".DB_PREFIX.$value."`");
+				while($countTab = $m->fetch_array($signTab)) {
+					if($countTab['no'] != '0') {
+						$count['allNo']++;
+					} elseif($countTab['latest'] == $today) {
+						if($countTab['status'] != '0') {
+							$count['allError']++;
+						} else {
+							$count['allSigned']++;
+						}
+					} else {
+						$count['allWaiting']++;
+					}
+				}
 			}	
-			echo "<br/><b>签到状态[总体]：</b>已签到 {$c3} 个贴吧，还有 {$c4} 个贴吧等待签到";
-			echo "<br/><b>贴吧状态[总体]：</b>有 {$c5} 个贴吧签到出错，{$c6} 个贴吧已被设定为忽略";
+			echo "<br/><b>签到状态[总体]：</b>已签到 {$count['allSigned']} 个贴吧，还有 {$count['allWaiting']} 个贴吧等待签到";
+			echo "<br/><b>贴吧状态[总体]：</b>有 {$count['allError']} 个贴吧签到出错，{$count['allNo']} 个贴吧已被设定为忽略";
 			echo '<br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
 		}
 		break;
@@ -39,9 +65,11 @@ switch (SYSTEM_PAGE) {
 		<li class="list-group-item">
 			<b>MySQL 版本：</b><?php echo $m->getMysqlVersion() ?>
 		</li>
+		<?php if(!empty($_SERVER['SERVER_ADDR'])) { ?>
 		<li class="list-group-item">
 			<b>服务器地址：</b><?php echo $_SERVER['SERVER_ADDR'] ?>
 		</li>
+		<?php } ?>
 		<li class="list-group-item">
 			<b>服务器软件：</b><?php echo $_SERVER['SERVER_SOFTWARE'] ?>
 		</li>
