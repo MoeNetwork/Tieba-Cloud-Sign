@@ -30,8 +30,9 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
                 margin: 2em auto;
                 padding: 1em 2em;
                 max-width: 700px;
-                -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.13);
-                box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+                -webkit-box-shadow: 10px 10px 10px rgba(0,0,0,0.13);
+                box-shadow: 10px 10px 10px rgba(0,0,0,0.13);
+                opacity:0.8;
             }
             h1 {
                 border-bottom: 1px solid #dadada;
@@ -44,6 +45,7 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             }
             #error-page {
                 margin-top: 50px;
+                text-align:center;
             }
             #error-page p {
                 font-size: 9px;
@@ -60,6 +62,8 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             a {
                 color: #21759B;
                 text-decoration: none;
+                float:right;
+                margin-top:-10px;
             }
             a:hover {
                 color: #D54E21;
