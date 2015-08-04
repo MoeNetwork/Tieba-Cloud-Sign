@@ -45,6 +45,8 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             }
             #error-page {
                 margin-top: 50px;
+            }
+            h3 {
                 text-align:center;
             }
             #error-page p {
