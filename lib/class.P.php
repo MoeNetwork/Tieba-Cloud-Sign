@@ -21,11 +21,13 @@ class P {
 		if (function_exists('mcrypt_decrypt')) {
 			$this->mcrypt  = true;
 		}
+		/*
 		if (!empty($salt)) {
 			$this->salt    = $salt;
 		} else {
 			$this->salt    = SYSTEM_SALT;
 		}
+		*/
 	}
 
 	/**

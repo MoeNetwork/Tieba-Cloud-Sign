@@ -1,6 +1,11 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 if (option::get('enable_reg') != 1) {
-  msg('该站点已关闭注册');
+    $text = option::get('stop_reg');
+  if(!empty($text)){
+      msg($text);
+  } else {
+      msg('该站点已关闭注册');
+  }
 }
 loadhead();
 

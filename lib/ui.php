@@ -82,8 +82,18 @@ function loadfoot($copy = false) {
 	echo '</div></div></div></div></body></html>';
 }
 
+/**
+ * 加载系统或插件的模板（或文件）
+ * @param string $file 文件，如果表示为plugin:file，则加载plugin插件的file.php文件
+ * @return mixed
+ */
 function template($file) {
-	include SYSTEM_ROOT.'/templates/'.$file.'.php';
+	if(strstr($file , ':')) {
+		$parse = explode(':',$file);
+		return include SYSTEM_ROOT . '/plugins/' . $parse[0] .'/' . $parse[1] . '.php';
+	} else {
+		return include SYSTEM_ROOT . '/templates/' . $file . '.php';
+	}
 }
 
 /**

@@ -110,13 +110,17 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
 	$reg2 = option::get('protect_reg') == 1 ? ' checked' : '' ;
 	$reg3 = option::get('yr_reg');
-	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>输入框留空表示无需邀请码</td><td>
+	$reg4 = option::get('stop_reg');
+	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>邀请码框留空表示无需邀请码<br/><br/>停止注册提示框输入指定提示内容</td><td>
 		<div class="input-group">
 			&nbsp;&nbsp;<input type="checkbox" name="enable_reg" value="1"'.$reg1.'> 允许用户注册&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="checkbox" name="protect_reg" value="1"'.$reg2.'> 反恶意注册
 		</div><br/>
 		<div class="input-group">
 			<span class="input-group-addon">邀请码设置</span><input type="text" name="yr_reg" id="yr_reg" value="'.$reg3.'" class="form-control">
+		</div><br/>
+		<div class="input-group">
+			<span class="input-group-addon">停止注册提示</span><input type="text" name="stop_reg" id="stop_reg" value="'.$reg4.'" class="form-control">
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');

@@ -15,7 +15,11 @@ class S extends wmysql {
 	 * @param bool $long 是否开启长连接
 	 */
 	public function __construct($host , $user , $pw , $name , $long = false) {
-		parent::__construct($host , $user , $pw , $name , $long);
+		try {
+			parent::__construct($host , $user , $pw , $name , $long);
+		} catch(Exception $ex) {
+			msg($ex->getMessage());
+		}
 	}
 
 	/**
@@ -39,7 +43,7 @@ class S extends wmysql {
                 $sql .= " LIMIT {$n};";
                 break;
 
-            case '1':
+            case '2':
                 $sql  = "SELECT * FROM `{$t}` ";
                 if(!empty($w)) {
                     $sql .= " WHERE {$w} ";
@@ -47,7 +51,7 @@ class S extends wmysql {
                 $sql .= " ORDER BY RAND() LIMIT {$n};";
                 break;
 
-            case '2':
+            default:
                 if (!empty($w)) {
                     $w = ' AND '.$w;
                 }
