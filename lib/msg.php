@@ -64,7 +64,6 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             a {
                 color: #21759B;
                 text-decoration: none;
-                float:right;
                 margin-top:-10px;
             }
             a:hover {
