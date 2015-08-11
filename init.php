@@ -6,7 +6,7 @@
 
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','4.0');
-define('SYSTEM_VER_NOTE','RC 7');
+define('SYSTEM_VER_NOTE','RC 8');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
@@ -17,7 +17,7 @@ define('SYSTEM_STOP',false);
 if(SYSTEM_STOP == true){
     msg('站点已停止运行！请稍后再试，如有疑问请联系站长解决！');
 }
-if (!file_exists(SYSTEM_ROOT.'/setup/install.lock')) {
+if (!file_exists(SYSTEM_ROOT.'/setup/install.lock') && file_exists(SYSTEM_ROOT.'/setup/install.php')) {
 	msg('<h2>检测到无 install.lock 文件</h2><ul><li><font size="4">如果您尚未安装本程序，请<a href="./setup/install.php">前往安装</a></font></li><li><font size="4">如果您已经安装本程序，请手动放置一个空的 install.lock 文件到 /setup 文件夹下，<b>为了您站点安全，在您完成它之前我们不会工作。</b></font></li></ul><br/><h4>为什么必须建立 install.lock 文件？</h4>它是云签到的保护文件，如果云签到检测不到它，就会认为站点还没安装，此时任何人都可以安装/重装云签到。<br/><br/>',false,true,false);	
 }
 header("content-type:text/html; charset=utf-8");
