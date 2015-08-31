@@ -145,9 +145,9 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
         echo $msg; ?>
         <?php if ($url !== false) {
             if ($url === true) {
-                echo '<br/><br/><a href="javascript:history.back(-1)"><< 返回上一页</a>';
+                echo '<br/><br/><a style="float:right" href="javascript:history.back(-1)"><< 返回上一页</a>';
             } else {
-                echo '<br/><br/><a href="'.$url.'"><< 返回上一页</a>';
+                echo '<br/><br/><a style="float:right" href="'.$url.'"><< 返回上一页</a>';
             }
         } 
         ?>
