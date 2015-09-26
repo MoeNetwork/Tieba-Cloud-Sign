@@ -103,7 +103,7 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 		}
 	} else {
 		$hash = md5(EMAIL);
-		$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&d=$d&r=$g";
+		$avatar = "https://{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
 		return $avatar;
 	}
 }
