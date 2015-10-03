@@ -207,8 +207,8 @@ global $m;
 <div class="panel panel-default">
 	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 在 Windows 系统下的绑定方法</h3></div>
 	<div class="panel-body" id="win_bduss">
-	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器</a>
-	    <br/><br/>2.请确保已安装了 <b>.Net Framework 3.0</b> [ 正版Win7已自带 ]
+	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器 V3.0</a>
+	    <br/><br/>2.请确保已安装了 <a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=17718" target="_blank"><b>.Net Framework 4.0</b></a> [ 正版Win8已自带 ]
 	    <br/><br/>3.请运行此程序，按照要求输入账号信息，然后将获取到的 BDUSS 填入上面的表单即可
 	</div>
 </div>
