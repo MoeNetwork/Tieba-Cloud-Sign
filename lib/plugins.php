@@ -174,7 +174,7 @@ function updatePlugin($plugin) {
 */
 function getPlugins($full = true) {
 	$path = SYSTEM_ROOT . '/plugins/';
-	$res  = scandir($path);
+	$res  = listDir($path);
 	$r    = array();
 	foreach ($res as $x) {
 		if (is_dir($path . $x) && file_exists($path . $x . '/' . $x . '.php')) {

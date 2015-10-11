@@ -303,6 +303,43 @@ function CopyAll($source,$destination){
 }
 
 /**
+ * 列出目录里的文件和目录，不扫描子目录
+ * @param string $dir 文件夹路径
+ * @param int $order 排序，1=倒序
+ * @return array|bool 成功返回列表，失败返回false
+ */
+function listDir($dirpath , $order = 0) {
+	if(!file_exists($dirpath)) {
+		return false;
+	}
+	if(function_exists('scandir')) {
+		$dir = scandir($dirpath , $order);
+		if(!$dir) {
+			return false;
+		}
+		if($order == 0) {
+			array_shift($dir);
+			array_shift($dir);
+		} else {
+			array_pop($dir);
+			array_pop($dir);
+		}
+	} else {
+		$h = opendir($dirpath);
+		if(!$h) {
+			return false;
+		}
+		$dir = array();
+		while (($f = readdir($h)) !== false) {
+			if($f != '.' && $f != '..') {
+				$dir[] = $f;
+			}
+		}
+	}
+	return $dir;
+}
+
+/**
  * 备份指定表的数据结构和所有数据
  *
  * @param string $table 数据库表名
