@@ -32,7 +32,7 @@ CREATE TABLE `{VAR-PREFIX}cron` (
   `log` text,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 
@@ -115,7 +115,7 @@ CREATE TABLE `{VAR-PREFIX}plugins` (
   `options` text,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 
