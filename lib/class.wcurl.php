@@ -15,8 +15,8 @@ class wcurl {
 
 	/**
 	 * 构造函数，返回curl指针实例
-	 * @param $file 网络文件
-	 * @param $head array 可选，HTTP头
+	 * @param string $file 网络文件
+	 * @param array $head 可选，HTTP头
 	 * ps:如果未来要使用POST提交文件，在文件路径前面加上@
 	 */
 	public function __construct($file, array $head = array('User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36')) {
@@ -40,8 +40,8 @@ class wcurl {
 
 	/**
 	 * 设置一个cURL传输选项
-	 * @param $option 需要设置的选项
-	 * @param $value  将设置在option选项上的值
+	 * @param string $option 需要设置的选项
+	 * @param string $value  将设置在option选项上的值
 	 */
 	public function set($option, $value) {
 		curl_setopt($this->conn, $option, $value);
@@ -49,7 +49,7 @@ class wcurl {
 
 	/**
 	 * 执行curl并返回结果
-	 * @return 返回值
+	 * @return string 返回值
 	 */
 	public function exec() {
 		return curl_exec($this->conn);
@@ -57,7 +57,7 @@ class wcurl {
 
 	/**
 	 * 获取文件内容
-	 * @return 获取的内容
+	 * @return string 获取的内容
 	 */
 	public function get() {
 		return $this->exec();
@@ -66,7 +66,7 @@ class wcurl {
 	/**
 	 * POST 提交数据并获取返回获取的内容
 	 * @param $data array|string 提交的数据
-	 * @return 获取的内容
+	 * @return string 获取的内容
 	 */
 	public function post($data) {
 		$this->set(CURLOPT_POST, 1);
@@ -80,7 +80,7 @@ class wcurl {
 
 	/**
 	 * 添加一些Cookies，在访问的时候会携带它们
-	 * @param $ck Cookies，数组或cookies字符串
+	 * @param string|array $ck Cookies，数组或cookies字符串
 	 */
 	public function addCookie($ck) {
 		if (is_array($ck)) {
@@ -96,7 +96,7 @@ class wcurl {
 
 	/**
 	 * 静态，获取网页返回的所有Cookies [从已经获取到的网页搜索] [不写文件]
-	 * @param 网页内容
+	 * @param string $text 网页内容
  	 * @return array Cookies
  	 * ps: 搜索的网页需要打开CURLOPT_HTTPHEADER
 	 */
@@ -113,7 +113,7 @@ class wcurl {
 
 	/**
 	 * GET/POST获取网页返回的所有Cookies [自行抓取网页] [不写文件]
-	 * @param $postdata 是否POST提交数据，留空或false表示GET获取，若需要提交数据则传入数组
+	 * @param string $postdata 是否POST提交数据，留空或false表示GET获取，若需要提交数据则传入数组
  	 * @return array Cookies
 	 * ps: 将会自动打开CURLOPT_HTTPHEADER
 	 */
@@ -128,8 +128,8 @@ class wcurl {
 
 	/**
 	 * 获取一个cURL连接资源句柄的信息
-	 * @param $opt 要获取的信息，参见 http://cn2.php.net/manual/zh/function.curl-getinfo.php
-	 * @return 信息
+	 * @param string $opt 要获取的信息，参见 http://cn2.php.net/manual/zh/function.curl-getinfo.php
+	 * @return string 信息
 	 */
 	public function getInfo($opt) {
 		return curl_getinfo($this->conn, $opt);
@@ -137,7 +137,7 @@ class wcurl {
 
 	/**
 	 * 返回错误代码
-	 * @return 错误代码
+	 * @return string 错误代码
 	 */
 	public function errno() {
 		return curl_errno($this->conn);
@@ -145,7 +145,7 @@ class wcurl {
 
 	/**
 	 * 返回错误信息
-	 * @return 错误信息
+	 * @return string 错误信息
 	 */
 	public function error() {
 		return curl_error($this->conn);
@@ -153,7 +153,7 @@ class wcurl {
 
 	/**
 	 * 返回一个带错误代码的curl错误信息
-	 * @return 错误信息
+	 * @return string 错误信息
 	 */
 	public function errMsg() {
 		return '#' . $this->errno() . ' - ' . $this->error();
@@ -161,9 +161,9 @@ class wcurl {
 
 	/**
 	 * 运行一个curl函数
-	 * @param 函数名称，不需要带curl_
+	 * @param string $func 函数名称，不需要带curl_
 	 * @param ... 其他传给此函数的参数
-	 * @return 此函数的返回值
+	 * @return string 此函数的返回值
 	 */
 
 	public function run($func) {
@@ -180,8 +180,8 @@ class wcurl {
 
 	/**
 	 * 静态，HTTP CURL GET 快速用法
-	 * @param $url 要抓取的URL
-	 * @return 抓取结果
+	 * @param string $url 要抓取的URL
+	 * @return string 抓取结果
 	 */
 	public static function xget($url) {
 		$CN = __CLASS__;
