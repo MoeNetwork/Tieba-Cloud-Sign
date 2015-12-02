@@ -16,13 +16,13 @@ class wmysql {
 
 	/**
 	 * 内部数据连接对象
-	 * @var resourse
+	 * @var resource
 	 */
 	private $conn;
 
 	/**
 	 * 内部数据结果
-	 * @var resourse
+	 * @var resource
 	 */
 	private $result;
 

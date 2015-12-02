@@ -7,7 +7,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 class cron {
 	/**
 	 * 获取计划任务所有数据
-	 * $name 计划任务名称
+	 * @param string $name 计划任务名称
 	 * @return array
 	*/
 	public static function get($name) {
@@ -19,8 +19,8 @@ class cron {
 
 	/**
 	 * 获取计划任务指定数据
-	 * @param $name 计划任务名称
-	 * @param $set  设置项名
+	 * @param string $name 计划任务名称
+	 * @param string $set 设置项名
 	 */
 	public static function sget($name,$set) {
 		global $i;
@@ -128,8 +128,8 @@ class cron {
 
 	/**
 	 * 直接添加一个计划任务
-	 * @param $name 计划任务名
-	 * @param $set  任务设置
+	 * @param string $name 计划任务名
+	 * @param string $set  任务设置
 	 */
 	public static function add($name , $set) {
 		global $m;
@@ -180,9 +180,9 @@ class cron {
 	/**
 	 * 执行一个计划任务
 	 * 
-	 * @param 计划任务文件
-	 * @param 计划任务名称
-	 * @return 执行成功true，否则false
+	 * @param string $file 计划任务文件
+	 * @param string $name 计划任务名称
+	 * @return bool 执行成功true，否则false
 	 */
 
 	public static function run($file,$name) {
@@ -201,7 +201,7 @@ class cron {
 
 	/**
 	 * 异步执行计划任务（伪）
-	 * @param $name 计划任务名称
+	 * @param string  $name 计划任务名称
 	 */
 	public static function arun($name) {
 		$url = SYSTEM_URL . 'do.php?mod=runcron&cron=' . $name;

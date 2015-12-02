@@ -7,7 +7,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 class option {
 	/**
 	 * 获取设置
-	 * $name 设置项名称
+	 * @param string $name 设置项名称
 	 * @return string
 	*/
 	public static function get($name) {
@@ -24,8 +24,8 @@ class option {
 
 	/**
 	 * 改变或添加一个设置 (不存在时自动添加)
-	 * @param $name 设置项名称
-	 * @param $value 值
+	 * @param string $name 设置项名称
+	 * @param string $value 值
 	*/
 	public static function set($name,$value) {
 		global $m,$i;
@@ -51,8 +51,8 @@ class option {
 
 	/**
 	 * 直接添加一个设置
-	 * @param $name 设置项名称
-	 * @param $value 值
+	 * @param string $name 设置项名称
+	 * @param string $value 值
 	 */
 	public static function add($name,$value) {
 		global $m,$i;
@@ -66,7 +66,7 @@ class option {
 
 	/**
 	 * 删除一个设置
-	 * @param @name 设置名称
+	 * @param string $name 设置名称
 	*/
 	public static function del($name) {
 		global $m;
@@ -75,8 +75,8 @@ class option {
 
 	/**
 	 * 获取用户的设置
-	 * $name 设置项名称
-	 * $uid 用户UID，默认当前用户的UID
+	 * @param string $name 设置项名称
+	 * @param string $uid 用户UID，默认当前用户的UID
 	 * @return string|bool 不存在时返回false
 	*/
 	public static function uget($name, $uid = '') {
@@ -92,9 +92,9 @@ class option {
 
 	/**
 	 * 改变用户的设置
-	 * $name 设置名
-	 * $value 设置值
-	 * $uid 用户UID，默认当前用户的UID
+	 * @param string $name 设置名
+	 * @param string $value 设置值
+	 * @param string $uid 用户UID，默认当前用户的UID
 	*/
 	public static function uset($name , $value , $uid = '') {
 		global $m,$i;
@@ -119,7 +119,7 @@ class option {
 
 	/**
 	 * 清除用户的所有设置
-	 * $uid 用户UID，默认当前用户的UID
+	 * @param string $uid 用户UID，默认当前用户的UID
 	 */
 	public static function udel($uid = '') {
 		global $m,$i;
@@ -136,8 +136,8 @@ class option {
 
 	/**
 	 * 清除用户的指定设置
-	 * @param $name 设置项名称
-	 * @param $uid 用户UID，默认当前用户的UID
+	 * @param string $name 设置项名称
+	 * @param string $uid 用户UID，默认当前用户的UID
 	 */
 	public static function udela($name , $uid = '') {
 		global $m,$i;
@@ -156,9 +156,9 @@ class option {
 	/**
 	 * 添加一个用户的设置
 	 * 添加时会自动检查有关设置是否已存在
-	 * @param $name 设置项名称
-	 * @param $value 值
-	 * @param $uid 用户UID，默认当前用户的UID
+	 * @param string $name 设置项名称
+	 * @param string $value 值
+	 * @param string $uid 用户UID，默认当前用户的UID
 	 */
 	public static function uadd($name , $value , $uid = '') {
 		global $m,$i;
@@ -180,7 +180,7 @@ class option {
 	/**
 	 * 获取插件的所有设置
 	 * 其实我建议保存到options表
-	 * @param 插件标识符
+	 * @param string $plug 插件标识符
 	 * @return array 设置数组
 	*/
 	public static function pget($plug) {
@@ -190,8 +190,8 @@ class option {
 
 	/**
 	 * 保存插件的所有设置
-	 * @param $plug 插件标识符
-	 * @param $value array 设置数组
+	 * @param string $plug 插件标识符
+	 * @param string $value array 设置数组
 	*/
 	public static function pset($plug , $value) {
 		global $m,$i;
@@ -205,7 +205,7 @@ class option {
 
 	/**
 	 * 删除插件的所有设置
-	 * @param $plug 插件标识符
+	 * @param string $plug 插件标识符
 	*/
 	public static function pdel($plug) {
 		global $m,$i;
@@ -219,8 +219,8 @@ class option {
 
 	/**
 	 * 获取插件的一条设置
-     * @param $plug 插件标识符
-	 * @param $name 设置项名称
+     * @param string $plug 插件标识符
+	 * @param string $name 设置项名称
 	 * @return string 设置值
 	*/
 	public static function xget($plug , $name) {
@@ -231,9 +231,9 @@ class option {
 	/**
 	 * 保存插件的一条设置，不存在则添加之
 	 * 注意：需要大量修改的请直接将设置保存到options表
-	 * @param $plug 插件标识符
-	 * @param $name 设置项名称
-	 * @param $value 值
+	 * @param string $plug 插件标识符
+	 * @param string $name 设置项名称
+	 * @param string $value 值
 	 */
 	public static function xset($plug , $name , $value) {
 		global $m,$i;
@@ -249,8 +249,8 @@ class option {
 
 	/**
 	 * 删除插件的一条设置
-	 * @param $plug 插件标识符
-	 * @param $name 设置项名称
+	 * @param string $plug 插件标识符
+	 * @param string $name 设置项名称
 	 */
 	public static function xdel($plug , $name ) {
 		global $m,$i;
@@ -267,9 +267,9 @@ class option {
 	/**
 	 * 直接添加插件的一条设置，已存在则跳过
 	 * 注意：需要大量修改的请直接将设置保存到options表
-	 * @param $plug 插件标识符
-	 * @param $name 设置项名称
-	 * @param $value 值
+	 * @param string $plug 插件标识符
+	 * @param string $name 设置项名称
+	 * @param string $value 值
 	 */
 	public static function xadd($plug , $name , $value) {
 		global $m,$i;
