@@ -363,25 +363,22 @@ switch (SYSTEM_PAGE) {
 				break;
 
 			case 'crole':
-				if($value=='1'){
-				msg("操作失败：权限不足，您无权修改站点创始人的权限。");
-				} else {
-					foreach ($_POST['user'] as $value) {
-						if ($_POST['crolev'] == 'user') {
-							$role = 'user';
-						} 
-						elseif ($_POST['crolev'] == 'admin') {
-							$role = 'admin';
-						} 
-						elseif ($_POST['crolev'] == 'vip') {
-							$role = 'vip';
-						} 
-						elseif ($_POST['crolev'] == 'banned') {
-							$role = 'banned';
-						}
-					$m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = '{$role}' WHERE `".DB_PREFIX."users`.`id` = {$value}");
-					}
-				}
+                foreach ($_POST['user'] as $value) {
+                    if ($_POST['crolev'] == 'user') {
+                        $role = 'user';
+                    }
+                    elseif ($_POST['crolev'] == 'admin') {
+                        $role = 'admin';
+                    }
+                    elseif ($_POST['crolev'] == 'vip') {
+                        $role = 'vip';
+                    }
+                    elseif ($_POST['crolev'] == 'banned') {
+                        $role = 'banned';
+                    }
+                    doAction('admin_users_crole_process', $value, $_POST['crolev']);
+                    $m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = '{$role}' WHERE `".DB_PREFIX."users`.`id` = {$value}");
+                }
 				doAction('admin_users_crole');
 				break;
 

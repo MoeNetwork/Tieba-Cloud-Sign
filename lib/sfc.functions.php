@@ -17,6 +17,8 @@ function getIp() {
 
 /**
  * 加密密码
+ * @param string $pwd 密码
+ * @return string 加密的密码
  */
 function EncodePwd($pwd) {
 	$p = new P();
@@ -25,6 +27,8 @@ function EncodePwd($pwd) {
 
 /**
  * 验证email地址格式
+ * @param string @email EMAIL
+ * @return bool true表示有效
  */
 function checkMail($email) {
 	if (preg_match("/^[\w\.\-]+@\w+([\.\-]\w+)*\.\w+$/", $email) && strlen($email) <= 60) {
@@ -56,10 +60,10 @@ function getRandStr($length = 12, $special_chars = false) {
 /**
  * 获取两段文本之间的文本
  *
- * @param 完整的文本
- * @param 左边文本
- * @param 右边文本
- * 返回“左边文本”与“右边文本”之间的文本
+ * @param string $text 完整的文本
+ * @param string $left 左边文本
+ * @param string $right 右边文本
+ * @return string “左边文本”与“右边文本”之间的文本
  */
 function textMiddle($text, $left, $right) {
 	$loc1 = stripos($text, $left);
@@ -73,8 +77,8 @@ function textMiddle($text, $left, $right) {
 /**
  * 获取一个bduss对应的百度用户名
  *
- * @param bduss
- * 返回百度用户名，失败返回空
+ * @param string $bduss BDUSS
+ * @return string|bool 百度用户名，失败返回FALSE
  */
 function getBaiduId($bduss){
 	global $m;
@@ -89,10 +93,7 @@ function getBaiduId($bduss){
 /**
  * 获取Gravatar头像（或贴吧头像）
  * http://en.gravatar.com/site/implement/images/
- * @param $email
- * @param $s size
- * @param $d default avatar
- * @param $g
+ * @return bool|string
  */
 function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	if(option::uget('face_img') == 1) {
@@ -110,9 +111,8 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 
 /**
  * 解压zip
- * @param type $zipfile 要解压的文件
- * @param type $path 解压到该目录
- * @param type $type
+ * @param string $zipfile 要解压的文件
+ * @param string $path 解压到该目录
  * @return int
  */
 function UnZip($zipfile, $path) {
@@ -141,15 +141,15 @@ function Clean() {
 /**
  * [已搬走]MySQL 随机取记录
  * 请查看S::rand()
- * @param $t 表
- * @param $c ID列，默认为id
- * @param $n 取多少个
- * @param $w 条件语句
- * @param $f bool 是否强制以多维数组形式返回，默认false
- * @param $p string 随机数据前缀，如果产生冲突，请修改本项
+ * @param string $t 表
+ * @param string $c ID列，默认为id
+ * @param int $n 取多少个
+ * @param string $w 条件语句
+ * @param bool $f 是否强制以多维数组形式返回，默认false
+ * @param string $p 随机数据前缀，如果产生冲突，请修改本项
  * @return array 取1个直接返回结果数组(除非$f为true)，取>1个返回多维数组，用foreach取出
  */
-function rand_row($t , $c = 'id' , $n = '1', $w = '' , $f = false , $p = 'tempval_') {
+function rand_row($t , $c = 'id' , $n = 1, $w = '' , $f = false , $p = 'tempval_') {
 	global $m;
 	return $m->rand($t , $c , $n, $w, $f, $p);
 }
@@ -202,7 +202,7 @@ function getfreetable() {
 /**
  * 清除用户的所有贴吧
  *
- * @param 用户ID
+ * @param int $id 用户ID
  */
 function CleanUser($id) {
 	global $m;
@@ -225,9 +225,9 @@ function DeleteUser($id) {
 
 /**
  * zip压缩
- * @param $orig_fname 将在zip的文件路径
- * @param $content 文件内容
- * @param $tempzip zip存储路径
+ * @param string $orig_fname 将在zip的文件路径
+ * @param string $content 文件内容
+ * @param string $tempzip zip存储路径
  * @return bool
  */
 function CreateZip($orig_fname, $content, $tempzip) {
@@ -275,9 +275,9 @@ function DeleteFile($file) {
 
 /**
  * 批量复制
- * @param $source 源目录名  
- * @param $destination 目的目录名  
- * @return 成功返回TRUE，失败返回原因
+ * @param string $source 源目录名
+ * @param string $destination 目的目录名
+ * @return bool 成功返回TRUE，失败返回原因
  */
 function CopyAll($source,$destination){
     if(!is_dir($source)) {
@@ -496,7 +496,7 @@ function XFSockOpen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
  *
  * @param string $hook
  * @param string $actionFunc
- * @return boolearn
+ * @return bool
  */
 function addAction($hook, $actionFunc) {
 	global $i;
@@ -581,10 +581,10 @@ function getrole($role) {
 /**
  * 页面重定向
  *
- * @param $url 地址
+ * @param string $url 地址
  */
 
-function Redirect($url) {
+function redirect($url) {
 	Clean();
 	header("Location: ".$url);
 	msg('<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'" />请稍候......<br/><br/>如果您的浏览器没有自动跳转，请点击下面的链接',htmlspecialchars($url));
@@ -595,7 +595,7 @@ function Redirect($url) {
  * 
  * @param 计划任务文件
  * @param 计划任务名称
- * @return 执行成功true，否则false
+ * @return bool 执行成功true，否则false
  */
 
 function RunCron($file,$name) {
@@ -604,8 +604,8 @@ function RunCron($file,$name) {
 
 /**
  * 使用反斜线引用字符串或数组
- * @param $s 需要转义的
- * @return 转义结果
+ * @param string|array $s 需要转义的字符串或数组
+ * @return string|array 转义结果
  */
 
 function adds($s) {
@@ -619,8 +619,8 @@ function adds($s) {
 /**
  * 使用反斜线引用字符串或数组以便于SQL查询
  * 只引用'和\
- * @param $s 需要转义的
- * @return 转义结果
+ * @param string|array $s 需要转义的
+ * @return string|array 转义结果
  */
 function sqladds($s) {
 	if (is_array($s)) {
@@ -648,8 +648,8 @@ function sqladds($s) {
 
 /**
  * 去除英文字母、数字、下划线以外所有字符
- * @param $s 需要处理的
- * @return 处理结果
+ * @param string $s 需要处理的
+ * @return string 处理结果
  */
 function onlyalnum($s) {
     if (is_array($s)) {
@@ -669,9 +669,9 @@ function onlyalnum($s) {
 }
 
 /**
- * 转为正数或者0
- * @param $s 需要转换的
- * @return 转换结果
+ * 转换并得到绝对值
+ * @param int|string $s 需要转换的
+ * @return int 转换结果
  */
 
 function topos($s) {
