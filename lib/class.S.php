@@ -1,7 +1,7 @@
 <?php
 /**
  * 数据库类
- * @copyright (c) 无名智者
+ * @copyright (c) Kenvix
  */
 
 class S extends wmysql {

@@ -3,7 +3,7 @@
  * StusGame Framework MYSQL数据操作方法封装类
  * [MySQLi]
  * @note 已针对贴吧云签到优化并删除了对不支持MySqli的主机的兼容措施
- * @copyright (c) 无名智者
+ * @copyright (c) Kenvix
  */
 
 class wmysql {

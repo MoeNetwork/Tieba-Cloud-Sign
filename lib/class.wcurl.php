@@ -3,7 +3,7 @@
  * StusGame Framework cURL操作封装类
  * @version 3.0 @ 2015-04-03
  * @new 兼容在没curl的主机上使用
- * @copyright (c) 无名智者
+ * @copyright (c) Kenvix
  */
 
 class wcurl {

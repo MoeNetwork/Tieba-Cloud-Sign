@@ -1,7 +1,7 @@
 <?php
 /**
  * StusGame Framework 部分函数库
- * @author 无名智者
+ * @author Kenvix
  */
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 /**

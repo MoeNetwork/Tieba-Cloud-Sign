@@ -1,7 +1,7 @@
 <?php
 /**
  * MySQL 自动按需加载和配置
- * @author 无名智者
+ * @author Kenvix
  */
 
 /**

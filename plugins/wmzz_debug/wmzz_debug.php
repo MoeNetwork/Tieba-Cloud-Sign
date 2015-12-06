@@ -1,7 +1,7 @@
 <?php
 /**
  * 调试信息插件
- * @author 无名智者
+ * @author Kenvix
  * 一旦插件被激活，此文件将被include
  */
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 

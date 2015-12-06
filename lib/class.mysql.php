@@ -3,7 +3,7 @@
  * StusGame Framework MYSQL数据操作方法封装类
  * [MySQL]
  * @note 实际我是为了兼容不支持MySQLi的JB云的，一般不要使用此类
- * @copyright (c) 无名智者
+ * @copyright (c) Kenvix
  */
 
 class wmysql {

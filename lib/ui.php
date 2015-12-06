@@ -77,7 +77,7 @@ function loadfoot($copy = false) {
         }
     }
     if($copy) {
-        echo '<br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 作者: <a href="http://zhizhe8.net" target="_blank">无名智者</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>';
+        echo '<br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>';
     }
 	echo '</div></div></div></div></body></html>';
 }
