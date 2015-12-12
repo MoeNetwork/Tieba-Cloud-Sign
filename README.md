@@ -1,6 +1,6 @@
 #百度贴吧云签到
 在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。     配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
-详细了解本程序请前往：http://www.stus8.com/forum.php?mod=viewthread&tid=2141
+详细了解本程序请前往：http://www.stus8.com/topic/2/
 
 ##云签到相关
 产品中心：http://s.stus8.com/     
