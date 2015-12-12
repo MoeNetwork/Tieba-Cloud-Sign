@@ -4,9 +4,9 @@
 
 ##云签到相关
 产品中心：http://s.stus8.com/     
-插件商城：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13     
-全部教程：http://www.stus8.com/forum.php?mod=forumdisplay&fid=163     
-在各平台的部署教程：http://www.stus8.com/forum.php?mod=viewthread&tid=2204     
+插件商城：暂无     
+全部教程：http://www.stus8.com/category/3/
+在各平台的部署教程：暂无     
 “往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”  ————插件开发者 D丶L
 
 ##常见问题解决方案
