@@ -493,6 +493,7 @@ switch (SYSTEM_PAGE) {
 			// 去除双引号和bduss
 			$bduss = str_replace('"', '', $_GET['bduss']);
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
+			$bduss = str_replace(' ', '', $bduss);
 			$bduss = sqladds($bduss);
 			$baidu_name = sqladds(getBaiduId($bduss));
 			if (empty($baidu_name)) {
