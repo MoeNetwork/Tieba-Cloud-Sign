@@ -50,16 +50,20 @@ if (!empty($i['user']['bduss'])) {
 	}
 	echo ' | <a href="'.SYSTEM_URL.'setting.php?mod=showtb&reset'.'">重签失败贴吧</a>';
 	echo ' | <a href="javascript:;" onclick="go(\'submit_button\');">前往底部</a></div>';
-	echo '<form action="setting.php?mod=showtb&set" method="post">';
-	echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
-	echo '<th>ID</th>';
-	echo '<th>百度ID(PID)</th>';
-	echo '<th>FID</th>';
-	echo '<th>贴吧名</th>';
-	echo '<th>状态</th>';
-	echo '<th>忽略签到</th>';
-	echo '<th>操作</th></thead><tbody>';
-	echo $f.'</tbody></table></div><input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
+	if(!empty($f)) {
+		echo '<form action="setting.php?mod=showtb&set" method="post">';
+		echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
+		echo '<th>ID</th>';
+		echo '<th>百度ID(PID)</th>';
+		echo '<th>FID</th>';
+		echo '<th>贴吧名</th>';
+		echo '<th>状态</th>';
+		echo '<th>忽略签到</th>';
+		echo '<th>操作</th></thead><tbody>';
+		echo $f.'</tbody></table></div><input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
+	} else {
+		echo '<div class="alert alert-warning" role="alert">还没有添加任何贴吧，点击上方的按钮扫描贴吧。<br/>扫描不到贴吧？请检查百度账号BDUSS是否已经失效（尝试重新绑定）</div>';
+	}
 	echo '<br/><a href="javascript:scroll(0,0)">返回顶部</a>';
 } else {
 	echo '<div class="alert alert-danger">无法列出贴吧列表，因为当前没有绑定百度账号</div>';
