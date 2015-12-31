@@ -189,9 +189,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 
 					<div class="input-group">
 					  <span class="input-group-addon">SMTP密码</span>
-					  <div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'mail_smtppw\' id=\'smtp_pwd\' placeholder=\'输入新的SMTP密码，刷新可取消修改\'>');$(this).remove();">
-					 	 <input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
-					  </div>
+					 	 <input type="text" onclick="$(this).attr('value','').attr('type','password').attr('name','mail_smtppw').removeAttr('readonly');" class="form-control" readonly value="保持原密码 ( 点击可以修改 )">
 					</div><br/>
 				</div>
 			</div>
@@ -200,27 +198,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	<?php
 	$mailhtml = ob_get_clean();
 	$content1['mail'] = array('html'=>$mailhtml,'type'=>'else');
-	ob_start();
-	?>
-		<tr><td><b>StusGame 产品中心 账号设置</b>
-		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testbbs'" value="测试登录">
-		<br/><br/>测试前请先保存设置
-		</td><td><br/>
-			<div class="input-group">
-			  <span class="input-group-addon">账号</span>
-			  <input type="text" name="bbs_us" class="form-control"  value="<?php echo option::get('bbs_us') ?>">
-			</div><br/>
-
-			<div class="input-group">
-				<span class="input-group-addon">密码</span>
-				<div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'bbs_pw\' id=\'bbs_pw\' placeholder=\'输入新的产品中心密码，刷新可取消修改\'>');$(this).remove();">
-					<input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
-				</div>
-			</div><br/>
-		</td></tr>
-	<?php
-	$bbshtml = ob_get_clean();
-	$content1['bbs'] = array('html'=>$bbshtml,'type'=>'else');
 	/*end 超长内容*/
 	echo former::create($set1,$content1);
 }
