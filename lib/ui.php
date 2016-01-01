@@ -15,9 +15,10 @@ function loadhead($title = '') {
 	echo '<meta http-equiv="charset" content="utf-8">';
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	echo '<title>'.$title.'</title>';
-	echo '<meta name="generator" content="Tieba-Cloud-Sign Ver.'.SYSTEM_VER.'" />';
+	echo '<meta name="generator" content="Tieba Cloud Sign Ver.'.SYSTEM_VER.'" />';
 	echo '<link href="favicon.ico" rel="shortcut icon"/>';
-	echo '<meta name="author" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" />';
+	echo '<meta name="author" content="Kenvix (http://zhizhe8.net) at StusGame GROUP (http://www.stus8.com)" />';
+	echo '<link rel="canonical" href="http://www.stus8.com" />';
 	echo '<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />';
 	echo '<script src="source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="source/css/bootstrap.min.css">';
