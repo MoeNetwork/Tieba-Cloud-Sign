@@ -327,59 +327,31 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 		break;
 
 	case 'baiduid:getverify':
-		$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: fxxxx phone'));
-		$r = $x->post(array(
-			'login_username'  => $_POST['bd_name'],
-			'login_loginpass' => $_POST['bd_name']
-			));
-		preg_match('/\<img src=\"(.*)\" alt=\"wait...\" \/\>/',$r, $out);
-		if (empty($out[1])) {
-			echo '<b>无需验证码，请直接点击 [ 点击绑定 ] 继续</b>';
-		} else {
-			echo '<img onclick="addbdid_getcode();" src="'.$out[1].'"style="float:left;">&nbsp;&nbsp;&nbsp;请在下面输入左图中的字符<br>&nbsp;&nbsp;&nbsp;点击图片更换验证码';
+		global $m;
+		if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
+		if (option::get('bduss_num') != '0' && ISVIP == false) {
+			$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
+			if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
+		}
+        $name  = !empty($_POST['bd_name']) ? $_POST['bd_name'] : die();
+        $pw    = !empty($_POST['bd_pw'])   ? $_POST['bd_pw']   : die();
+        $vcode = !empty($_POST['vcode'])   ? $_POST['vcode']   : '';
+        $vcodestr = !empty($_POST['vcodestr']) ? $_POST['vcodestr'] : '';
+		$loginResult = misc::loginBaidu($name, $pw, $vcode, $vcodestr);
+		if ($loginResult[0] == -3) {
+            echo '{"error":"-3","msg":"请输入验证码","vcodestr":"'.$loginResult[1].'","img":"'.$loginResult[2].'"}';
+            /*
+			echo '<img onclick="addbdid_getcode();" src="'.$loginResult[2].'"style="float:left;">&nbsp;&nbsp;&nbsp;请在下面输入左图中的字符<br>&nbsp;&nbsp;&nbsp;点击图片更换验证码';
 			echo '<br/><br/><div class="input-group"><span class="input-group-addon">验证码</span>';
 			echo '<input type="text" class="form-control" id="bd_v" name="bd_v" placeholder="请输入上图的字符" required></div><br/>';
-		}
-		preg_match('/\<input type=\"hidden\" id=\"vcodeStr\" name=\"vcodestr\" value=\"(.*)\"\/\>/', $r, $outt);
-		echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$outt['1'].'"/>';
-		break;
-
-	case 'baiduid:bdid':
-		//多次循环有助于解决验证码问题
-		for ($e = 0; $e < 2; $e++) {
-			$x = misc::loginBaidu( $_POST['bd_name'] , $_POST['bd_pw'] , $_POST['bd_v'] , $_POST['vcodestr'] );
-			if (stristr($x, '您输入的验证码有误') || stristr($x, urlencode('您输入的验证码有误'))) {
-				$error  = '您输入的验证码有误';
-				if ($e < 2) {
-			 	break;
-				} else {
-					continue;
-				}
-			} elseif (stristr($x, '您输入的密码有误') || stristr($x, urlencode('您输入的密码有误'))) {
-				$error  = '您输入的密码或账号有误';
-				break;
-			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
-			    $error  = '您没有输入验证码或发生系统错误';
-			    break;
-			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
-				$error  = '请您输入密码';
-				break;
-			} else {
-				preg_match('/Set-Cookie:(.*)BDUSS=(.*); expires=/', $x, $y);
-				if (empty($y[2])) {
-				    $error = '请检查用户名，密码，验证码是否正确<br/><br/>也有可能是百度强制开启了异地登陆保护导致的，请尝试手动绑定';
-				    break;
-				} else {
-					unset($error);
-					break;
-				}
-			}
-		}
-		if (!empty($error)) {
-			echo '{"error":"1","msg":"'.$error.'"}';
+			echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$loginResult[1].'"/>';
+            */
+		} elseif($loginResult[0] == 0) {
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$loginResult[1]}', '{$loginResult[2]}')");
+            echo '{"error":"0","msg":"获取BDUSS成功","bduss":"'.$loginResult[1].'","name":"'.$loginResult[2].'"}';
 		} else {
-			echo '{"error":"0","bduss":"'.$y[2].'"}';
-		}
+            echo '{"error":"'.$loginResult[0].'","msg":"'.$loginResult[1].'"}';
+        }
 		break;
 
 	case 'admin:c_update:check':
