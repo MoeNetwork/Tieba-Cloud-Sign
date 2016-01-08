@@ -219,7 +219,12 @@ define(\'SYSTEM_SALT\',\'\');';
 					}
 				}
 				if (!isset($_POST['nosql'])) {
-					$m->multi_query($sql);
+					try {
+						$m->multi_query($sql);
+					} catch(Exception $ex) {
+						$errorhappen .= $ex->getMessage();
+						$errorhappen .= '<br/><br/>自动安装失败，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
+					}
 				} else {
 					$errorhappen .= '由于你选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
 				}
