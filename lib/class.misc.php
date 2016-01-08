@@ -452,29 +452,6 @@ class misc {
 	 * @return array [0成功|-1网络请求失败|-2json解析失败|-3表示需要验证码或验证码错误|2表示登陆失败|其他为百度提供的错误代码, 成功为BDUSS|需要验证码则返回vcodestr|其他错误返回百度提供的错误信息, 如果登陆成功，返回百度用户名|如果需要验证码，则此处返回验证图片地址 ]
 	 */
 	public static function loginBaidu( $bd_name , $bd_pw , $verifycode = '', $vcodestr = '') {
-		/* //弃用
-		$x = new wcurl('http://wappass.baidu.com/passport/?verifycode=' . $verifycode , array('User-Agent: Phone'.mt_rand()));
-		$x->set(CURLOPT_HEADER , true);
-		return $x->post(array(
-			'username'       => $bd_name ,
-			'password'       => $bd_pw ,
-			'verifycode'     => $verifycode , 
-			'login_save'     => '3' ,
-			'vcodestr'       => $vcodestr , 
-			'aaa'            => '%E7%99%BB%E5%BD%95' ,
-			'login'          => 'yes' ,
-			'can_input'      => '0' ,
-			'u'              => 'http%3A%2F%2Fm.baidu.com%2F%3Faction%3Dlogin' ,
-			'tn' ,
-			'tpl' ,
-			'ssid'           => '000000' ,
-			'form'           => '0' ,
-			'bd_page_type'   => '1' ,
-			'uid'            => 'wiaui_1316933575_9548' , 
-			'isPhone'        => 'isPhone' ,
-		));
-		*/
-		//v2(client)
 		$x = new wcurl('http://c.tieba.baidu.com/c/s/login');
 		$p = array(
                 'passwd'      => base64_encode($bd_pw),
