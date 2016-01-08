@@ -50,6 +50,11 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
 			}
 		}
 		//是否为VIP，管理员和VIP组的用户都为VIP
+		if (ROLE == 'admin') {
+			define('ISADMIN', true);
+		} else {
+			define('ISADMIN',false);
+		}
 		if (ROLE == 'admin' || ROLE == 'vip') {
 			$i['user']['isvip'] = true;
 			define('ISVIP', true);

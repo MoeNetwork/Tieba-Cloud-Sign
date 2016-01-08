@@ -1,8 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-
-
-
 DROP TABLE IF EXISTS `{VAR-PREFIX}baiduid`;
 CREATE TABLE `{VAR-PREFIX}baiduid` (
   `id` int(30) unsigned NOT NULL AUTO_INCREMENT,
@@ -12,12 +9,6 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-
-
-
-
 
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
@@ -104,7 +95,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('system_keywords', '贴吧云签到');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '贴吧云签到');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_us', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_pw', '');
-
+INSERT INTO `{VAR-PREFIX}options` VALUES ('same_pid', '0');
 
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;

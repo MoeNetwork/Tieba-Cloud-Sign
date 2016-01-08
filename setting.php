@@ -112,6 +112,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('fb',$sou['fb']);
             @option::set('sign_sleep',$sou['sign_sleep']);
             @option::set('sign_scan',$sou['sign_scan']);
+			@option::set('same_pid', $sou['same_pid']);
 			if (empty($sou['fb_tables'])) {
 				@option::set('fb_tables',NULL);
 			} else {

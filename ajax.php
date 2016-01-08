@@ -330,7 +330,7 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 		global $m;
 		if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
 		if (option::get('bduss_num') != '0' && ISVIP == false) {
-			$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
+			$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `uid` = ".UID);
 			if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
 		}
         $name  = !empty($_POST['bd_name']) ? $_POST['bd_name'] : die();
@@ -347,8 +347,19 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 			echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$loginResult[1].'"/>';
             */
 		} elseif($loginResult[0] == 0) {
+			if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
+				$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `name` = '{$loginResult[2]}'");
+				if(!empty($checkSame)) {
+					if(option::get('same_pid') == '2') {
+						echo '{"error":"-11","msg":"你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑"}';
+					} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
+						echo '{"error":"-10","msg":"你已经绑定了这个百度账号，若要重新绑定，请先解绑"}';
+					}
+					die;
+				}
+			}
 			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$loginResult[1]}', '{$loginResult[2]}')");
-            echo '{"error":"0","msg":"获取BDUSS成功","bduss":"'.$loginResult[1].'","name":"'.$loginResult[2].'"}';
+			echo '{"error":"0","msg":"获取BDUSS成功","bduss":"'.$loginResult[1].'","name":"'.$loginResult[2].'"}';
 		} else {
             echo '{"error":"'.$loginResult[0].'","msg":"'.$loginResult[1].'"}';
         }
