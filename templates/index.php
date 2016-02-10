@@ -14,7 +14,7 @@ doAction('index_1');
 		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能
 		<br/>
-		此程序作者为  <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
+		此程序作者为  <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>
 		<br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
 	<?php doAction('index_p_1'); ?>
 	</div>
