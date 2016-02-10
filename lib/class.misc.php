@@ -12,7 +12,7 @@ class misc {
 	 * @param string $sub 邮件主题
 	 * @param string $msg 邮件内容(HTML)
 	 * @param array $att 附件，每个键为文件名称，值为附件内容（可以为二进制文件），例如array('a.txt' => 'abcd' , 'b.png' => file_get_contents('x.png'))
-	 * @return 成功:true 失败：错误消息
+	 * @return bool 成功:true 失败：错误消息
 	 */
 	public static function mail($to, $sub = '无主题', $msg = '无内容', $att = array()) {
         if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')){
@@ -57,7 +57,7 @@ class misc {
 					return $mail->log;
 				}
 			} else {
-				$header .= "MIME-Version:1.0\r\n";
+				$header = "MIME-Version:1.0\r\n";
 		        $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 		        $header .= "To: " . $to . "\r\n";
 		        $header .= "From: " . $From . "\r\n";

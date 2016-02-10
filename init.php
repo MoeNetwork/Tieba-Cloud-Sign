@@ -6,7 +6,7 @@
 
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','4.2');
-define('SYSTEM_VER_NOTE','RC 0');
+define('SYSTEM_VER_NOTE','RC 1');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
