@@ -56,9 +56,12 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 ##耻辱柱
 这里列举了几个严重违反协议且经过提示还不知悔改的家伙     
 **有些不要脸的SB就是这样**     
-1.多性欲     
-  罪行1：发布修改了版权的贴吧云签到，俨然成了他是作者 [查看罪证](http://www.asp300.com/SoftView/11/SoftView_57242.html)     
-  罪行2：云签到去版权屡教不改 [它的云签地址](http://baidu.duoxingyu.pw/)     
+1.
+  罪行1：去版权+在Github上发布去版权的云签到+辱骂所有人
+  罪行2：https://github.com/shirakun/Tieba-Cloud-Sign
 2."CCGV"     
   罪行1：去版权+辱骂作者：[它的云签地址](http://ccgv.me/)     
   罪行2：换个域名接着去版权：[它的云签地址](http://ccgv.party/)     
+3.多性欲     
+  罪行1：发布修改了版权的贴吧云签到，俨然成了他是作者 [查看罪证](http://www.asp300.com/SoftView/11/SoftView_57242.html)     
+  罪行2：云签到去版权屡教不改 [它的云签地址](http://baidu.duoxingyu.pw/)   
