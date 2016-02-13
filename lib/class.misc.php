@@ -57,17 +57,18 @@ class misc {
 					return $mail->log;
 				}
 			} else {
-				$header = "MIME-Version:1.0\r\n";
+				$header  = "MIME-Version:1.0\r\n";
 		        $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 		        $header .= "To: " . $to . "\r\n";
 		        $header .= "From: " . $From . "\r\n";
 		        $header .= "Subject: " . $sub . "\r\n";
 		        $header .= 'Reply-To: ' . $From . "\r\n";
 		        $header .= "Date: " . date("r") . "\r\n";
+				$header .= "Content-Transfer-Encoding: base64\r\n";
 				return mail(
 					$to,
 					$sub,
-					$msg,
+					base64_encode($msg),
 					$header
 				);
 			}
