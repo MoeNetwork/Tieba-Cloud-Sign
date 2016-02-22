@@ -91,7 +91,7 @@ doAction('admin_plugins');
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';
 }
 ?>
-<br/><a href="index.php?mod=admin:tools">前往工具箱上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a>
+<br/><a href="index.php?mod=admin:tools">前往工具箱上传安装插件</a>
 </div>
 <form action="setting.php?mod=admin:plugins&xorder" method="post">
 <div class="table-responsive">
