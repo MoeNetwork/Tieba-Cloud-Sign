@@ -57,8 +57,8 @@ if (!empty($i['user']['bduss'])) {
 		echo '</ul>';
 		echo '<form action="setting.php?mod=showtb&set" method="post">';
 		foreach($i['user']['baidu'] as $pkey => $pval) {
+			echo '<div id="tbpidpanel_' . $pkey . '" class="tbpanel" style="display:none">';
 			if(isset($f[$pkey])) {
-				echo '<div id="tbpidpanel_' . $pkey . '" class="tbpanel" style="display:none">';
 				echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
 				echo '<th>ID</th>';
 				echo '<th>FID</th>';
@@ -66,10 +66,11 @@ if (!empty($i['user']['bduss'])) {
 				echo '<th>状态</th>';
 				echo '<th>忽略签到</th>';
 				echo '<th>操作</th></thead><tbody>';
-				echo $f[$pkey].'</tbody></table></div></div>';
+				echo $f[$pkey].'</tbody></table></div>';
 			} else {
 				echo '<br/><div class="alert alert-warning" role="alert">还没有添加任何贴吧，点击上方的按钮扫描贴吧。<br/>扫描不到贴吧？请检查百度账号BDUSS是否已经失效（尝试重新绑定）</div>';
 			}
+			echo '</div>';
 		}
 		echo '<input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
 	} else {
