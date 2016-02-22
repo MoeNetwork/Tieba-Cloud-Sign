@@ -1,4 +1,5 @@
 <?php
+<?php
 /**
  * 设置保存页面
  */
@@ -399,9 +400,9 @@ switch (SYSTEM_PAGE) {
 				if (empty($name) || empty($mail) || empty($pw)) {
 					msg('添加用户失败：请正确填写账户、密码或邮箱');
 				}
-				$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
+				$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}' OR `email` = '{$mail}'");
 				if ($x['total'] > 0) {
-					msg('添加用户失败：用户名已经存在');
+					msg('添加用户失败：用户名或邮箱已被使用！');
 				}
 				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 				doAction('admin_users_add');
