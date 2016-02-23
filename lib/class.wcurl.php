@@ -194,7 +194,7 @@ class wcurl {
 	 * @param int $time 超时时间
 	 */
 	public function setTimeOut($time) {
-		$this->set(CURLOPT_CONNECTTIMEOUT_MS , $time);
+		$this->set(CURLOPT_TIMEOUT_MS , $time);
 	}
 
 	/**
