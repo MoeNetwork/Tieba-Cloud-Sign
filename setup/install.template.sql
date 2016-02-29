@@ -86,7 +86,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_sign_again', 'a:2:{s:3:\"num\";i
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_hour', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('mail_ssl', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('freetable', 'tieba');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '4.0');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '4.2');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('core_revision', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('isapp', '{VAR-ISAPP}');
 #INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '{VAR-TOOLPW}');
