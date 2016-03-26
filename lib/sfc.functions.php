@@ -624,23 +624,16 @@ function adds($s) {
  */
 function sqladds($s) {
 	if (is_array($s)) {
-		if (version_compare(phpversion(), '5.3') == -1) {
-			$r = array();
-			foreach ($s as $key => $value) {
-				$k = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
-
-				if (!is_array($value)) {
-					$r[$k] = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
-				} else {
-					$r[$k] = sqladds($value);
-				}
+		$r = array();
+		foreach ($s as $key => $value) {
+			$k = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
+			if (!is_array($value)) {
+				$r[$k] = str_replace('\'','\\\'', str_replace('\\','\\\\',$value));
+			} else {
+				$r[$k] = sqladds($value);
 			}
-			return $r;
-		} else {
-			return array_map(function($a) {
-					return str_replace('\'','\\\'', str_replace('\\','\\\\',$a));
-			}, $s);
 		}
+		return $r;
 	} else {
 		return str_replace('\'','\\\'', str_replace('\\','\\\\',$s));
 	}
