@@ -38,7 +38,6 @@ if (isset($_GET['ok'])) {
 ?>
 <div id="comsys"></div>
 <!--Part 1 Primary-->
-<br/><br/><input type="button" data-toggle="modal" data-target="#InstallPlugin" class="btn btn-primary" value="上传安装插件" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;上传安装云签到插件，主机支持写入才可使用此功能
 
 <br/><br/><input type="button" onclick="location = '<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=optim'" class="btn btn-primary" value="优化所有的数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;可清除所有数据表的多余数据
 
@@ -167,28 +166,6 @@ if (isset($_GET['ok'])) {
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="submit" class="btn btn-danger" id="truntab_button">提交更改</button>
-      </div>
-      </form>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">安装插件包</h4>
-      </div>
-      <form action="<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=install_plugin" onsubmit="$('#installplugin_button').attr('disabled',true);" method="post" enctype="multipart/form-data">
-      <div class="modal-body">
-        请浏览插件包：( ZIP格式 )
-        <br/><br/><input type="file" name="plugin" required accept="application/zip" style="width:100%">
-        <br/><br/>您的主机必须支持写入才能安装插件，若不支持，请手工安装
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="submit" class="btn btn-primary" id="installplugin_button">上传插件</button>
       </div>
       </form>
     </div><!-- /.modal-content -->

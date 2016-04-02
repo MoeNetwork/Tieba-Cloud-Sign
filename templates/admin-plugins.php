@@ -91,7 +91,7 @@ doAction('admin_plugins');
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';
 }
 ?>
-<br/><a href="index.php?mod=admin:tools">前往工具箱上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a>
+<br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a> | <a href="javascript:;" onclick="alert('请确保插件目录名和插件入口文件的文件名一致(扩展名除外)<br/>例如，插件目录名是 <i>wmzz_debug</i>，则插件入口文件的文件名应该是 <i>wmzz_debug.php</i><br/><br/>如果您是从Git上下载的插件包，请注意去掉文件夹名称-master之类的字符');" target="_blank">找不到上传的插件？</a>
 </div>
 <form action="setting.php?mod=admin:plugins&xorder" method="post">
 <div class="table-responsive">
@@ -137,3 +137,24 @@ doAction('admin_plugins');
 	}
 </script>
 
+<div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">安装插件包</h4>
+      </div>
+      <form action="<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=install_plugin" onsubmit="$('#installplugin_button').attr('disabled',true);" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        请浏览插件包：( ZIP格式 )
+        <br/><br/><input type="file" name="plugin" required accept="application/zip" style="width:100%">
+        <br/><br/>您的主机必须支持写入才能安装插件，若不支持，请手工安装
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="submit" class="btn btn-primary" id="installplugin_button">上传插件</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
