@@ -1,33 +1,34 @@
 <?php
 /**
- * StusGame Framework cURL操作封装类
- * @version 3.0 @ 2015-04-03
- * @new 兼容在没curl的主机上使用
+ * Kenvix cURL类
+ * @version 3.1 @ 2016-04-17
  * @copyright (c) Kenvix
+ * @see http://zhizhe8.net
  */
 
 class wcurl {
+
 	/**
-	 * 内部curl指针
-	 * @var resourse
+	 * curl
+	 * @var resource
 	 */
-	private $conn;
+	public $conn;
 
 	/**
 	 * 构造函数，返回curl指针实例
-	 * @param string $file 网络文件
+	 * @param string $file 网络文件 如果要使用POST提交文件，在文件路径前面加上@
 	 * @param array $head 可选，HTTP头
-	 * ps:如果未来要使用POST提交文件，在文件路径前面加上@
 	 */
 	public function __construct($file, array $head = array('User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36')) {
 		if (!function_exists('curl_exec')) {
-			throw new Exception('服务器不支持cURL');
+			throw new Exception('服务器不支持cURL', -1);
 		}
 		$this->conn = curl_init(); 
-		$this->set(CURLOPT_URL, $file);
-		$this->set(CURLOPT_RETURNTRANSFER, 1); 
-		$this->set(CURLOPT_HTTPHEADER, $head);
-		$this->set(CURLOPT_SSL_VERIFYPEER, FALSE);
+		$this->setUrl($file)->setHeader($head)->setAll(array( //wcurl默认设定
+			CURLOPT_RETURNTRANSFER  => true, //将curl获取的信息以文件流的形式返回，而不是直接输出
+			CURLOPT_SSL_VERIFYPEER  => false, //cURL将终止从服务端进行验证
+		    CURLOPT_FOLLOWLOCATION  => true //跟随重定向 会将服务器服务器返回的"Location: "放在header中递归的返回给服务器
+		));
 	}
 
 	/**
@@ -45,6 +46,16 @@ class wcurl {
 	 */
 	public function set($option, $value) {
 		curl_setopt($this->conn, $option, $value);
+		return $this;
+	}
+
+	/**
+	 * 通过数组批量设置cURL传输选项
+	 * @param string $option 需要设置的选项
+	 */
+	public function setAll($option) {
+		curl_setopt_array($this->conn, $option);
+		return $this;
 	}
 
 	/**
@@ -92,6 +103,7 @@ class wcurl {
 			$r = $ck;
 		}
 		$this->set(CURLOPT_COOKIE, $r);
+		return $this;
 	}
 
 	/**
@@ -179,14 +191,13 @@ class wcurl {
 	}
 
 	/**
-	 * 静态，HTTP CURL GET 快速用法
+	 * 静态 HTTP CURL GET 快速用法
 	 * @param string $url 要抓取的URL
 	 * @return string 抓取结果
 	 */
 	public static function xget($url) {
-		$CN = __CLASS__;
-		$x  = new $CN($url);
-		return $x->exec();
+		$fuckoldphp = new self($url);
+		return $fuckoldphp->exec($url);
 	}
 
 	/**
@@ -195,6 +206,27 @@ class wcurl {
 	 */
 	public function setTimeOut($time) {
 		$this->set(CURLOPT_TIMEOUT_MS , $time);
+		return $this;
+	}
+
+	/**
+	 * 设置HTTP头
+	 * @param array $head HTTP头
+	 * @return $this
+	 */
+	public function setHeader(array $head) {
+		$this->set(CURLOPT_HTTPHEADER, $head);
+		return $this;
+	}
+
+	/**
+	 * 设置URL
+	 * @param string $url 网络文件 如果要使用POST提交文件，在文件路径前面加上@
+	 * @return $this
+	 */
+	public function setUrl($url) {
+		$this->set(CURLOPT_URL, $url);
+		return $this;
 	}
 
 	/**
@@ -206,4 +238,3 @@ class wcurl {
 	}
 	*/
 }
-?>
