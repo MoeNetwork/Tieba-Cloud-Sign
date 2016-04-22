@@ -225,7 +225,8 @@ class option {
 	*/
 	public static function xget($plug , $name) {
 		global $i;
-		return $i['plugins']['info'][$plug]['options'][$name];
+		if(isset($i['plugins']['info'][$plug]['options'][$name])) return $i['plugins']['info'][$plug]['options'][$name];
+		else return false;
 	}
 
 	/**
