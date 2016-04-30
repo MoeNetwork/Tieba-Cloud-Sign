@@ -81,7 +81,6 @@ class cron {
 		}
 
 		$sql .= $a . ' ) VALUES (' . $b . ') ON DUPLICATE KEY UPDATE '. $c . ';';
-		
 		$m->query($sql);
 
 	}
@@ -182,7 +181,7 @@ class cron {
 	 * 
 	 * @param string $file 计划任务文件
 	 * @param string $name 计划任务名称
-	 * @return bool 执行成功true，否则false
+	 * @return mixed 执行成功给出日志，否则false
 	 */
 
 	public static function run($file,$name) {
@@ -193,9 +192,11 @@ class cron {
 				return call_user_func('cron_'.$name);
 			} else {
 				self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，处理此任务的函数不存在'));
+				return false;
 			}
 		}  else {
 			self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，任务文件不存在'));
+			return false;
 		}
 	}
 

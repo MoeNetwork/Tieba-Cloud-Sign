@@ -34,6 +34,9 @@ switch (SYSTEM_PAGE) {
 		elseif (isset($_GET['uninst'])) {
 			uninstallPlugin($_GET['uninst']);
 		}
+		elseif (isset($_GET['clean'])) {
+			uninstallPlugin($_GET['clean'],false);
+		}
 		elseif (isset($_GET['install'])) {
 			if(!empty($_REQUEST['ver'])){
 				msg ('该插件仅适用于 V'.$_REQUEST['ver'].' 及以上的版本，您的云签到版本低于插件所需最低版本，是否强制安装（强制安装可能造成云签到损坏）<br/><br/><a href="setting.php?mod=admin:plugins&install='.$_GET['install'].'">强制安装</a>　　<a href="setting.php?mod=admin:plugins">取消安装</a><br/>',false,true);
@@ -430,7 +433,7 @@ switch (SYSTEM_PAGE) {
 			if(stripos($_POST['file'],'do.php') !== false){
 				msg('<h4>请不要将do.php加入到云签的计划任务中来</h4>若需签到，请用云监控监控<br/>'.SYSTEM_URL.'do.php<br/>即可实现计划任务(cron)的效果<br/><br/>推荐云监控:<a href="http://www.aliyun.com/product/jiankong/" target="_blank">阿里云监控</a> 或 <a href="http://jk.cloud.360.cn/" target="_blank">360网站服务监控</a> 或 <a href="http://ce.baidu.com/" target="_blank">百度云观测</a><br/>如果你的服务器在国外且国内访问较慢，则推荐使用:<a href="http://www.mywebcron.com/" target="_blank">Free Web Cron Service </a>',SYSTEM_URL.'index.php?mod=admin:cron');
 			} else {
-				cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['status'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
+				cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['desc'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
 			}
 			
 		}
