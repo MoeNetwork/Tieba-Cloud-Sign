@@ -98,7 +98,7 @@ function installPlugin($plugin) {
  * 卸载插件
  * 如果存在，系统会调用 插件名_callback.php 的 callback_remove()
  */
-function uninstallPlugin($plugin) {
+function uninstallPlugin($plugin , $delete = true) {
 	global $m;
 	inactivePlugin($plugin);
 	$callback_file =  SYSTEM_ROOT . '/plugins/' . $plugin . '/' . $plugin . '_callback.php';
@@ -110,7 +110,7 @@ function uninstallPlugin($plugin) {
 	}
 	$m->query("DELETE FROM `" . DB_PREFIX . "plugins` WHERE `name` = '{$plugin}';");
 	$isapp = option::get('isapp');
-	if (empty($isapp)) {
+	if (empty($isapp) && $delete) {
 		DeleteFile(SYSTEM_ROOT . '/plugins/' . $plugin);
 	}
 }

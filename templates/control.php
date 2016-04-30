@@ -39,8 +39,12 @@ switch ($i['mode'][0]) {
 				template('admin-plugins');
 				break;
 			case 'cron':
-                loadhead('计划任务');
+				loadhead('计划任务');
 				template('admin-cron');
+				break;
+			case 'editcron':
+				loadhead('编辑计划任务');
+				template('admin-editcron');
 				break;
 			case 'update':
                 loadhead('检查更新');
