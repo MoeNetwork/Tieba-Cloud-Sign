@@ -3,10 +3,7 @@
 详细了解本程序请前往：http://www.stus8.com/topic/2/
 
 ##云签到相关
-产品中心：http://s.stus8.com/     
-插件商城：暂无     
-全部教程：http://www.stus8.com/category/3/
-在各平台的部署教程：暂无     
+获取插件，教程，扩展，资料等请前往Wiki [Git@OSC](https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home) [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)              
 “往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”  ————插件开发者 D丶L
 
 ##常见问题解决方案
@@ -36,8 +33,10 @@
 请访问程序根目录下的 license.html 阅读许可协议     
 也可访问该地址阅读许可协议：http://tcsdemo.oschina.mopaas.com/license.html
 #####不要尝试去违反协议，我们会把严重违反协议者挂在本页下方的耻辱柱上
-#####或者可以前往该地址购买商业授权：http://item.taobao.com/item.htm?id=43814067894
-
+##商业版本
+若要购买商业版本，请发送邮件至：kenvix@qq.com [kenvix@qq.com]              
+购买商业版本后可以：修改版权，获取专属插件，后续更新，提供技术支持等         
+老商业用户请联系本人获取福利插件库地址
 ##参与开发
 贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
 Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可能不会被处理     
