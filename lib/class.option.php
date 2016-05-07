@@ -195,7 +195,7 @@ class option {
 	*/
 	public static function pset($plug , $value) {
 		global $m,$i;
-		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($value) . "' WHERE `name` = '{$plug}';")){
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . sqladds(serialize($value)) . "' WHERE `name` = '{$plug}';")){
             $i['plugins']['info'][$plug]['options'] = $value;
             return true;
         } else{
@@ -240,7 +240,7 @@ class option {
 		global $m,$i;
 		$a = self::pget($plug);
 		$a[$name] = $value;
-		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . sqladds(serialize($a)) . "' WHERE `name` = '{$plug}';")){
             $i['plugins']['info'][$plug]['options'] = $a;
             return true;
         } else {
@@ -257,7 +257,7 @@ class option {
 		global $m,$i;
 		$a = self::pget($plug);
 		unset($a[$name]);
-		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . sqladds(serialize($a)) . "' WHERE `name` = '{$plug}';")){
             $i['plugins']['info'][$plug]['options'] = $a;
             return true;
         } else {
@@ -280,7 +280,7 @@ class option {
 		} else {
 			return;
 		}
-		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . serialize($a) . "' WHERE `name` = '{$plug}';")){
+		if($m->query("UPDATE `".DB_PREFIX."plugins` SET `options` = '" . sqladds(serialize($a)) . "' WHERE `name` = '{$plug}';")){
             $i['plugins']['info'][$plug]['options'] = $a;
             return true;
         } else {
