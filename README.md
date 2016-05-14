@@ -1,12 +1,10 @@
 #百度贴吧云签到
-在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。     配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
-详细了解本程序请前往：http://www.stus8.com/topic/2/
-
-##云签到相关
+在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。     
+配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
 获取插件，教程，扩展，资料等请前往Wiki [Git@OSC](https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home) [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)              
-“往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”  ————插件开发者 D丶L
 
 ##常见问题解决方案
+“往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”
 #####1.如何安装程序
 上传此程序到您的网站，然后访问您的网站
 #####2.如何开启 MySQL 连接方式强制功能
@@ -29,38 +27,38 @@
 另外，每一个大版本都会有一个升级脚本，别忘了运行它     
 （文件名一般为 update旧版本to新版本.php ，例如 update1.0to2.0.php）
 
-##许可协议
-请访问程序根目录下的 license.html 阅读许可协议     
-也可访问该地址阅读许可协议：http://tcsdemo.oschina.mopaas.com/license.html
-#####不要尝试去违反协议，我们会把严重违反协议者挂在本页下方的耻辱柱上
-##商业版本
-若要购买商业版本，请发送邮件至：kenvix@qq.com [kenvix@qq.com]              
-购买商业版本后可以：修改版权，获取专属插件，后续更新，提供技术支持等         
-老商业用户请联系本人获取福利插件库地址
 ##参与开发
 贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
 Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可能不会被处理     
 如需加入开发组请联系 @Kenvix 
-###主要开发者列表
-@Kenvix [kenvix@vip.qq.com]     
+###开发者列表
+####主要
+@Kenvix [kenvix@qq.com]     
+####协助
 @mokeyjay [longting@longtings.com]     
 @fyy99 [fyod@vip.qq.com]
-###感谢
+####热心贡献者
 以下几位反馈/解决了程序的不足之处，特此感谢     
-@D丶L [i@v4.hk]     @吟梦 [i@inmeng.xyz]     
-@角落里有蛇 [395183830@qq.com]     @VFleaKing [liuhaotian0520@163.com]     
-@quericy [quericy@live.com]     @liwanglin12 [i@lwl12.com]     
-@superxzr [a457418121@gmail.com]　　　@凹凸曼_m []
+@96dl [i@v4.hk]     
+@kirainmoe [kotori@wo.cn]     
+@VFleaKing [liuhaotian0520@163.com]     
+@superxzr [a457418121@gmail.com]
 
-##耻辱柱
-这里列举了几个严重违反协议且经过提示还不知悔改的家伙     
-**有些不要脸的SB就是这样**     
-1.
-  罪行1：去版权+在Github上发布去版权的云签到+辱骂所有人
-  罪行2：https://github.com/shirakun/Tieba-Cloud-Sign
-2."CCGV"     
-  罪行1：去版权+辱骂作者：[它的云签地址](http://ccgv.me/)     
-  罪行2：换个域名接着去版权：[它的云签地址](http://ccgv.party/)     
-3.多性欲     
-  罪行1：发布修改了版权的贴吧云签到，俨然成了他是作者 [查看罪证](http://www.asp300.com/SoftView/11/SoftView_57242.html)     
-  罪行2：云签到去版权屡教不改 [它的云签地址](http://baidu.duoxingyu.pw/)   
+##许可协议与商业版本等
+###许可协议
+请访问程序根目录下的 license.html 阅读许可协议
+###商业版本
+若要购买商业版本，请发送邮件至：kenvix@qq.com     
+购买商业版本后可以：修改版权，获取专属插件，后续更新，提供技术支持等     
+老商业用户请联系@Kenvix [kenvix@qq.com]获取福利插件库地址
+###耻辱柱
+这里列出的是**一小部分**违反协议者的名单
+#####1.github:@shirakun -- 发布去版权版本
+[https://github.com/shirakun/Tieba-Cloud-Sign](https://github.com/shirakun/Tieba-Cloud-Sign)
+#####2."CCGV" -- 去版权、辱骂作者
+[http://ccgv.me/](http://ccgv.me/)  [http://ccgv.party/](http://ccgv.party/)
+#####3.多星宇 -- 发布修改版权的版本
+[http://www.asp300.com/SoftView/11/SoftView_57242.html](http://www.asp300.com/SoftView/11/SoftView_57242.html)
+###须知
+贴吧云签到V5.0可能成为最后的版本     
+商业版将继续支持，并提供漏洞修补程序以及接口更改
