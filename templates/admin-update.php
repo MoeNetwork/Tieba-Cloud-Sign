@@ -20,7 +20,7 @@ if (file_exists(SYSTEM_ROOT . '/setup/update_backup') && is_dir(SYSTEM_ROOT . '/
 	$count = 0;
 }
 if($count <= 0) {
-	echo '<div class="alert alert-danger" role="alert">现在无备份可供回滚，当您对云签到进行升级时，会自动生成备份以供回滚</div>';	
+	echo '<div class="alert alert-danger" role="alert">现在无备份可供回滚，当您对云签到进行升级时，会自动生成备份以供回滚</div>';
 } else {
 	echo '<div class="alert alert-info" role="alert">有 '.$count.' 个更新可供回滚，备份文件均位于 /setup/update_backup/实际名称 中</div>
 	<table class="table table-striped">
@@ -73,13 +73,13 @@ if($count <= 0) {
 	$('#server').val('<?php echo $server; ?>');
 	function save_server() {
 		$('#save_btn').val('正在保存').attr("disabled","disabled");
-		$.ajax({ 
-		  async:true, 
-		  url: 'ajax.php?mod=admin:update:changeServer&server=' + $('#server').val(), 
-		  type: "GET", 
+		$.ajax({
+		  async:true,
+		  url: 'ajax.php?mod=admin:update:changeServer&server=' + $('#server').val(),
+		  type: "GET",
 		  data : {},
-		  dataType: 'html', 
-		  timeout: 90000, 
+		  dataType: 'html',
+		  timeout: 90000,
 		  success: function(data){
 		    location.reload();
 		 },
@@ -117,13 +117,13 @@ function update() {
 	console.log(updata);
 }
 if(<?php echo $writable; ?>==1){
-	$.ajax({ 
-	  async:true, 
-	  url: 'ajax.php?mod=admin:update&server=' + server, 
-	  type: "GET", 
+	$.ajax({
+	  async:true,
+	  url: 'ajax.php?mod=admin:update&server=' + server,
+	  type: "GET",
 	  data : {},
-	  dataType: 'html', 
-	  timeout: 90000, 
+	  dataType: 'html',
+	  timeout: 90000,
 	  success: function(data){
 	    $("#upd_prog").css({'width':'70%'});
 		$("#comsys3").html(data);
@@ -141,4 +141,4 @@ if(<?php echo $writable; ?>==1){
 }
 </script>
 <?php } doAction('admin_update_2'); ?>
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="https://moesign.com/" target="_blank">MoeSign 官方签到中心</a>

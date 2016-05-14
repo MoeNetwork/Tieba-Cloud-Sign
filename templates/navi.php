@@ -1,4 +1,4 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 global $i;
 ?>
 <div class="navbar navbar-default" role="navigation">
@@ -69,7 +69,7 @@ global $i;
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
           <li><a href="http://zhizhe8.net" target="_blank">Kenvix's Blog</a></li>
-          <li><a href="http://longtings.com" target="_blank">龙霆工作室</a></li>
+          <li><a href="https://moesign.com/" target="_blank">MoeSign 官方签到中心</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
@@ -82,8 +82,8 @@ global $i;
       <div class="row">
         <div class="col-md-3">
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
-            <ul class="nav bs-sidenav">    
-              <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>         
+            <ul class="nav bs-sidenav">
+              <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>
               <li>
                 <li class="<?php checkIfActive('default') ?>" ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
                 <li class="<?php checkIfActive('set') ?>" ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
