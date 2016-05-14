@@ -26,4 +26,3 @@ function wmzz_debug_system2() {
 }
 
 addAction('footer','wmzz_debug_system2');
-addAction('index_2','wmzz_debug_phpinfo');

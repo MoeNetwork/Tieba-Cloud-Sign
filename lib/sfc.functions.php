@@ -91,11 +91,25 @@ function getBaiduId($bduss){
 }
 
 /**
- * 获取Gravatar头像（或贴吧头像）
+ * 获取指定邮箱的的Gravatar头像
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
+function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
+	$hash = md5($email);
+	if($site == 'moefont') {
+		return "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
+	} else {
+		return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
+	}
+}
+
+/**
+ * 获取当前用户的Gravatar头像或贴吧头像
+ * http://en.gravatar.com/site/implement/images/
+ * @return bool|string
+ */
+function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
 	if(option::uget('face_img') == 1) {
 		if(option::uget('face_url') != ''){
 			return option::uget('face_url');
@@ -103,9 +117,7 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 			return 'http://tb.himg.baidu.com/sys/portrait/item/';
 		}
 	} else {
-		$hash = md5(EMAIL);
-		$avatar = "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
-		return $avatar;
+		return gravatar(EMAIL, $s, $d, $g, $site);
 	}
 }
 
