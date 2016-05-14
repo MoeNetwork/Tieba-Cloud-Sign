@@ -3,6 +3,7 @@
  * 调试信息插件
  * @author Kenvix
  * 一旦插件被激活，此文件将被include
+ * 获取开发文档：https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/
  */
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
 
@@ -25,3 +26,4 @@ function wmzz_debug_system2() {
 }
 
 addAction('footer','wmzz_debug_system2');
+addAction('index_2','wmzz_debug_phpinfo');

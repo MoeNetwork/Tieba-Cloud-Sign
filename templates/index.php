@@ -102,7 +102,7 @@ if (ROLE == 'admin') {
 	</div>
 	<ul class="list-group">
 		<?php
-			echo '<li class="list-group-item"><b>计划任务上次执行日期：</b>'.$i['opt']['cron_last_do_time'];
+			echo '<li class="list-group-item"><b>计划任务上次执行日期：</b>'.(empty($i['opt']['cron_last_do_time']) ? '<font color="red">从未运行</font>' : $i['opt']['cron_last_do_time']);
 			if (time() - strtotime($i['opt']['cron_last_do_time']) > 86400) { //如果是'从未执行'，结果就为time()
 				echo '<br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>警告：</b></font>计划任务今天尚未运行，是否已设置 <b>do.php</b> 到您的主机的计划任务？';
 			}
