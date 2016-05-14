@@ -53,7 +53,7 @@ switch ($i['mode'][0]) {
 			case 'setplug':
 				$plug = strip_tags($_GET['plug']);
 				$pluginfo = getPluginInfo($plug);
-				
+
 				if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], $i['plugins']['actived'])) {
                     loadhead($pluginfo['plugin']['name'] . ' - 插件管理');
 					require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php';
@@ -63,7 +63,7 @@ switch ($i['mode'][0]) {
                     echo $pluginfo['plugin']['name'];
                     if(!empty($pluginfo['plugin']['url']))
                         echo '</a>';
-                    echo ' V'.$pluginfo['plugin']['version'].' // 插件作者：<a href="'.$pluginfo['author']['url'].'" target="_blank">'.$pluginfo['author']['author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>';
+                    echo ' V'.$pluginfo['plugin']['version'].' // 插件作者：<a href="'.$pluginfo['author']['url'].'" target="_blank">'.$pluginfo['author']['author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="https://moesign.com/" target="_blank">MoeSign 官方签到中心</a>';
 				} else {
 					echo '<b>插件设置页面不存在</b>';
 				}

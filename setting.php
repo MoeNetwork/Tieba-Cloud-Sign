@@ -70,7 +70,7 @@ switch (SYSTEM_PAGE) {
 		if($file == 'WRONG'){
 			msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
 		}
-		
+
 		$zipPath = UPDATE_CACHE.'update_plug_'.time().'.zip';
 		if(file_put_contents($zipPath, $file) === false){
 			DeleteFile(UPDATE_CACHE);
@@ -89,7 +89,7 @@ switch (SYSTEM_PAGE) {
 			DeleteFile(UPDATE_CACHE);
 			msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
 		}
-		
+
 		//覆盖文件
 		if(CopyAll($floderName,SYSTEM_ROOT.'/plugins/'.$_GET['upd']) !== true){
 			DeleteFile(UPDATE_CACHE);
@@ -100,7 +100,7 @@ switch (SYSTEM_PAGE) {
 		doAction('plugin_update_2');
 		msg('（1/2）已成功下载最新版本的 '.$plug['plugin']['name'].' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd='.$_GET['upd'].'">>> 下一步</a>',false);
 		break;
-	
+
 	case 'admin:set':
 		global $m;
 		$sou = $_POST;
@@ -182,13 +182,13 @@ switch (SYSTEM_PAGE) {
 				setcookie('toolpw',$cookies);
 				Redirect('index.php?mod=admin:tools');
 			}
-		}	
+		}
 		if($_COOKIE['toolpw'] != $toolpw || empty($toolpw)){
 			Redirect('index.php?mod=admin:tools');
 		}
 		*/
 		switch (strip_tags($_GET['setting'])) {
-			
+
 		case 'optim':
 			global $m;
 			$rs=$m->query("SHOW TABLES FROM `".DB_NAME.'`');
@@ -196,7 +196,7 @@ switch (SYSTEM_PAGE) {
 				$m->query('OPTIMIZE TABLE  `'.DB_NAME.'`.`'.$row[0].'`');
 			}
 			break;
-		
+
 		case 'fixdoing':
 			option::set('cron_isdoing',0);
 			break;
@@ -351,7 +351,7 @@ switch (SYSTEM_PAGE) {
 				}
 				doAction('admin_users_cookie');
 				break;
-			
+
 			case 'clean':
 				foreach ($_POST['user'] as $value) {
 					CleanUser($value);
@@ -435,7 +435,7 @@ switch (SYSTEM_PAGE) {
 			} else {
 				cron::set($_POST['name'], $_POST['file'], $_POST['no'], $_POST['desc'], $_POST['freq'] ,$_POST['lastdo'], $_POST['log']);
 			}
-			
+
 		}
 		elseif (isset($_GET['run'])) {
 			$return = cron::run($_GET['file'], $_GET['run']);
@@ -492,7 +492,7 @@ switch (SYSTEM_PAGE) {
 
 			if (option::get('bduss_num') != '0' && ISVIP == false) {
 				$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
-				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号'); 
+				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
 			}
 			// 去除双引号和bduss=
 			$bduss = str_replace('"', '', $_GET['bduss']);
@@ -510,7 +510,7 @@ switch (SYSTEM_PAGE) {
 			$del = (int) $_GET['del'];
 			doAction('baiduid_set_3');
 			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
-			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);	
+			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
 		}
 		/*
@@ -564,7 +564,7 @@ switch (SYSTEM_PAGE) {
 			$max = $max['id'];
 			$min = $min['id'];
 			while($min < $max) {
-				$res = $m->fetch_array($m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$min.' Limit 1')); 
+				$res = $m->fetch_array($m->query('SELECT * FROM `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$min.' Limit 1'));
 				if($res['status'] != 0){
 					$m->query('UPDATE `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` SET `latest` = 0,`status` = 0,`last_error` = NULL WHERE `id` ='.$min);
 					}
@@ -579,7 +579,7 @@ switch (SYSTEM_PAGE) {
 				$osq = $m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `tieba` = '{$v}';");
 				if($m->num_rows($osq) == 0) {
 					$table = $m->fetch_array($m->query('select * from `'.DB_NAME.'`.`'.DB_PREFIX.'users` where `id` = '.UID));
-					$tb_max = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$table['t']."` where `uid` = ".UID));	
+					$tb_max = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$table['t']."` where `uid` = ".UID));
 					if(ROLE == 'admin' || ROLE == 'vip'){
 						$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.TABLE."` (`id`, `pid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid} ,'".UID."', '{$v}', 0, 0);");
 					} else {
@@ -588,7 +588,7 @@ switch (SYSTEM_PAGE) {
 						} else {
 							msg('错误：您的贴吧数量超过限制，无法刷新！');
 						}
-					}																				
+					}
 				}
 			}
 			Redirect('index.php?mod=showtb&ok');

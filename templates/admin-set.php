@@ -32,7 +32,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$set2['name'] = 'signset';
 	$set2['url'] = 'setting.php?mod=admin:set&type=sign';
 	$set2['method'] = '1';
-	
+
 	$content2['cron_limit'] = array('td1'=>'<b>单表单次签到执行数量</b><br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','type'=>'number','text'=>'注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数','extra'=>'min="0" step="1"');
 	$content2['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
@@ -55,8 +55,8 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	        </td>
 	    </tr>';
 	$content2['sign_mode'] = array('html'=>$smhtml,'type'=>'else');
-	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');     
-	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');   
+	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');
+	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');
 	$ft1 = option::get('fb');
 	if (!empty($i['tabpart'])) {
 		$temp = '';
@@ -205,4 +205,4 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 }
 ?>
 
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="https://moesign.com/" target="_blank">MoeSign 官方签到中心</a>
