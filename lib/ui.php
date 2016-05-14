@@ -29,7 +29,7 @@ function loadhead($title = '') {
 	echo '<link rel="stylesheet" href="source/css/my.css">';
 	echo '<script type="text/javascript" src="source/js/my.js"></script>';
 	echo '<meta name="keywords" content="'.option::get('system_keywords').'" />';
-	echo '<meta name="description" content="'.option::get('system_description').'" />';
+	echo '<meta name="description" content="本网站使用StusGame贴吧云签到，请认准官方网址moesign.com以防被骗！" />';
 	doAction('header');
 	echo '</head><body>';
 	if (option::get('trigger') == 1) {
