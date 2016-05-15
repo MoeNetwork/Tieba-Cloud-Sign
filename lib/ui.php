@@ -6,8 +6,7 @@ ob_start();
  * @param string $title 页面标题
  */
 function loadhead($title = '') {
-    if(defined('SYSTEM_NO_UI'))
-        return;
+    if(defined('SYSTEM_NO_UI')) return;
 	$title = empty($title) ? strip_tags(SYSTEM_NAME) : $title . ' - ' . strip_tags(SYSTEM_NAME);
     doAction('top');
 	echo '<!DOCTYPE html><html><head>';
@@ -29,7 +28,7 @@ function loadhead($title = '') {
 	echo '<link rel="stylesheet" href="source/css/my.css">';
 	echo '<script type="text/javascript" src="source/js/my.js"></script>';
 	echo '<meta name="keywords" content="'.option::get('system_keywords').'" />';
-	echo '<meta name="description" content="本网站使用StusGame贴吧云签到，请认准官方网址moesign.com以防被骗！" />';
+	echo '<meta name="description" content="'.option::get('system_description').'" />';
 	doAction('header');
 	echo '</head><body>';
 	if (option::get('trigger') == 1) {
@@ -45,8 +44,7 @@ function loadhead($title = '') {
  */
 function loadfoot($copy = false) {
     global $i;
-    if(defined('SYSTEM_NO_UI'))
-        return;
+    if(defined('SYSTEM_NO_UI')) return;
 	$icp=option::get('icp');
 	if (!empty($icp)) {
 		echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
