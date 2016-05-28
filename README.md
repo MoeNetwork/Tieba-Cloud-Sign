@@ -43,12 +43,13 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 @kirainmoe [kotori@wo.cn]     
 @VFleaKing [liuhaotian0520@163.com]     
 @superxzr [a457418121@gmail.com]
-
+#官方自营签到平台
+[MoeSign](https://MoeSign.com)
 ##许可协议与商业版本等
 ###许可协议
 请访问程序根目录下的 license.html 阅读许可协议
 ###商业版本
-若要购买商业版本，请发送邮件至：kenvix@qq.com     
+若要购买商业版本（￥270），请发送邮件至：kenvix@qq.com     
 购买商业版本后可以：修改版权，获取专属插件，后续更新，提供技术支持等     
 老商业用户请联系@Kenvix [kenvix@qq.com]获取福利插件库地址
 ###耻辱柱
