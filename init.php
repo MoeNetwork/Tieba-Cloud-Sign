@@ -11,11 +11,21 @@
  */
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','4.4');
-define('SYSTEM_VER_NOTE','c');
+define('SYSTEM_VER_NOTE','d');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
+define('SYSTEM_ISCONSOLE' , (isset($argv) ? true : false));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 define('SUPPORT_URL', 'http://s.stus8.com/tcs/');
+if(SYSTEM_ISCONSOLE)  {
+    function console_htmltag_delete($v) {
+        $v = str_ireplace(array('</td>','</th>') , ' | ', $v);
+        $v = str_ireplace(array('<br/>','</p>','</tr>','</thead>','</tbody>') , PHP_EOL, $v);
+        $v = str_ireplace(array('&nbsp;') , ' ', $v);
+        return $v . SYSTEM_FN . ' Ver.' . SYSTEM_VER . ' - 控制台模式' . PHP_EOL . '==========================================================' . PHP_EOL . strip_tags($v);
+    }
+    ob_start('console_htmltag_delete');
+}
 require SYSTEM_ROOT.'/lib/msg.php';
 //如需停止站点运行，请解除注释，即删除开头的 //
 //msg('站点已关闭！请稍后再试，如有疑问请联系站长解决！');
