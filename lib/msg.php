@@ -7,7 +7,7 @@
  * @param bool $title 是否显示标题
  */
 function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
-    if(SYSTEM_ISCONSOLE) {
+    if(defined('SYSTEM_ISCONSOLE') && SYSTEM_ISCONSOLE) {
         echo $msg . PHP_EOL;
         die;
     }

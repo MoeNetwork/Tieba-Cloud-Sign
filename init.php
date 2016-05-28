@@ -22,7 +22,7 @@ if(SYSTEM_ISCONSOLE)  {
         $v = str_ireplace(array('</td>','</th>') , ' | ', $v);
         $v = str_ireplace(array('<br/>','</p>','</tr>','</thead>','</tbody>') , PHP_EOL, $v);
         $v = str_ireplace(array('&nbsp;') , ' ', $v);
-        return $v . SYSTEM_FN . ' Ver.' . SYSTEM_VER . ' - 控制台模式' . PHP_EOL . '==========================================================' . PHP_EOL . strip_tags($v);
+        return SYSTEM_FN . ' Ver.' . SYSTEM_VER . ' ' . SYSTEM_VER_NOTE . ' - 控制台模式' . PHP_EOL . '==========================================================' . PHP_EOL . strip_tags($v);
     }
     ob_start('console_htmltag_delete');
 }

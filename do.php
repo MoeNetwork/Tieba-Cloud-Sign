@@ -8,7 +8,7 @@ $cron_pw = option::get('cron_pw');
 $cmd_pw = function_exists('getopt') ? getopt('',array('pw::')) : false;
 if (!empty($cron_pw)) {
 	if ((empty($_REQUEST['pw']) || $_REQUEST['pw'] != $cron_pw) && (empty($cmd_pw) || $cmd_pw['pw'] != $cron_pw)) {
-		msg('计划任务执行失败：密码错误<br/><br/>你需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务',false);
+		msg('计划任务执行失败：密码错误<br/><br/>你需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务<br/>例如：'.SYSTEM_URL.'do.php?pw=yourpassword<br/><br/>若您要通过命令行执行计划任务，请加上参数 <b>--pw=密码</b><br/>例如：php do.php --pw=yourpassword<br/>命令行模式注意：你需要指明do.php的绝对路径，或者将do.php加入PATH',false);
 	}
 }
 if(isset($_GET['in_thread'])) {

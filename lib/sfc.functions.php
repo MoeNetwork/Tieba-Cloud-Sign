@@ -598,6 +598,9 @@ function getrole($role) {
 
 function redirect($url) {
 	Clean();
+	if(SYSTEM_ISCONSOLE) {
+		msg('控制台模式下，请手动打开此地址：' . PHP_EOL . $url);
+	}
 	header("Location: ".$url);
 	msg('<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'" />请稍候......<br/><br/>如果您的浏览器没有自动跳转，请点击下面的链接',htmlspecialchars($url));
 }

@@ -108,7 +108,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content1['ann'] = array('html'=>$annhtml,'type'=>'else');
 	$content1['sign_multith'] = array('td1'=>'<b>计划任务线程数</b><br/>0单线程，此为模拟多线程','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
-	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符','type'=>'text','text'=>'启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','extra'=>'');
+	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符<br/><a href="javascript:;" onclick="alert(\'你需要通过访问 <b>do.php?pw=密码</b> 执行计划任务<br/>例如：'.SYSTEM_URL.'do.php?pw=yourpassword<br/><br/>若您要通过命令行执行计划任务，请加上参数 <b>--pw=密码</b><br/>例如：php do.php --pw=yourpassword<br/>命令行模式注意：你需要指明do.php的绝对路径，或者将do.php加入PATH\')">帮助：启用密码功能后如何执行计划任务？</a>','type'=>'text','text'=>'','extra'=>'');
 	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
 	$reg2 = option::get('protect_reg') == 1 ? ' checked' : '' ;
 	$reg3 = option::get('yr_reg');
