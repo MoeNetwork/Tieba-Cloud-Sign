@@ -111,11 +111,7 @@ if (ROLE == 'admin') {
 				echo '<li class="list-group-item"><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>未找到 <b>/setup/install.lock</b> 文件，站点将有被恶意重装的风险，请务必建立一个空的 install.lock 文件，<a href="setting.php?mod=admin:create_lock">点此建立</a>';
 			}
 			doAction('index_p_3');
-			echo '<li class="list-group-item"><p class="info">请填写您的邮件地址，订阅 StusGame 云签到官方订阅，以便于及时接收关于云签到程序的更新与重要通知：</p><div class="mailInput"><form action="https://list.qq.com/cgi-bin/qf_compose_send" target="_blank" method="post"><input type="hidden" name="t" value="qf_booked_feedback"><input type="hidden" name="id" value="f752182ed774de32ef9ee39fbb5e44e38261368b16e7ea44"><div class="input-group">
-				<input type="hidden" name="mod" value="baiduid">
-				<span class="input-group-addon">输入邮箱地址</span>
-				<input type="text" class="form-control" name="to">
-				<span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击订阅"></span></div></form></div></li>';
+		
             if(defined('SYSTEM_KEY')) {
                 echo '<li class="list-group-item">商业授权密钥：' . SYSTEM_KEY . '</li>';
             }
