@@ -64,11 +64,11 @@ foreach($x as $key => $val) {
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
 			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
-			if (($val['core']['setting'] && $val['view']['setting']) || (isset($val['plugin']['old']) && file_exists(SYSTEM_ROOT . '/plugins/' . $val['plugin']['id'] . '/' . $val['plugin']['id'] . '_setting.php'))) {
+			if (isset($val['core']) && ($val['core']['setting'] && $val['view']['setting']) || (isset($val['plugin']['old']) && file_exists(SYSTEM_ROOT . '/plugins/' . $val['plugin']['id'] . '/' . $val['plugin']['id'] . '_setting.php'))) {
 				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'">打开插件设置</a>';
 				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span></a> ';
 			}
-			if ($val['core']['show'] && $val['view']['show']) {
+			if (isset($val['core']) && $val['core']['show'] && $val['view']['show']) {
 				$action .= '<a href="index.php?plugin='.$val['plugin']['id'].'" title="查看页面"><span class="glyphicon glyphicon-eye-open"></span></a> ';
 			}
 		} else {
