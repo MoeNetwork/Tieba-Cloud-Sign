@@ -516,6 +516,8 @@ function addAction($hook, $actionFunc) {
 	return true;
 }
 
+
+
 /**
  * 执行挂在钩子上的函数,支持多参数 eg:doAction('post_comment', $author, $email, $url, $comment);
  * 执行成功返回函数返回的值，如该钩子下没有函数则返回false
@@ -952,4 +954,19 @@ function get_mime($ext) {
         'zip'     => 'application/zip'
     );
     return isset($mime_types[$ext]) ? $mime_types[$ext] : 'application/octet-stream';
+}
+
+
+/**
+ * 防CSRF验证
+ * @param bool $strict 严格模式。拒绝空referer
+ */
+function csrf($strict = true) {
+	global $i;
+	if(empty($i['opt']['csrf'])) {
+		if(empty($_SERVER['HTTP_REFERER']) && $strict) redirect('index.php');
+		$p = parse_url($_SERVER['HTTP_REFERER']);
+		if(!$p || empty($p['host'])) msg('CSRF防御：无效请求');
+		if($p['host'] != $_SERVER['SERVER_NAME']) msg('CSRF防御：错误的请求来源');
+	}
 }

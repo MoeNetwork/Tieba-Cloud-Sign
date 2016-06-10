@@ -180,6 +180,7 @@ elseif (isset($_GET['pub_plugin'])) {
 	define('SYSTEM_READY_LOAD_PUBPLUGIN', true);
 }
 elseif (SYSTEM_PAGE == 'admin:logout') {
+	csrf();
 	doAction('logout');
 	setcookie("uid",'', time() - 3600);
 	setcookie("toolpw",'', time() - 3600);

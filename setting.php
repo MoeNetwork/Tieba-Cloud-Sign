@@ -4,7 +4,7 @@
  */
 
 require dirname(__FILE__).'/init.php';
-
+csrf();
 if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
     msg('权限不足');
 }
@@ -163,6 +163,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
+			@option::set('csrf',$sou['csrf']);
 			@option::set('isapp',$sou['isapp']);
 		}
 		doAction('admin_set_save');
