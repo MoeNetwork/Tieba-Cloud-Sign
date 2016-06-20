@@ -125,7 +125,7 @@ global $m;
   </div>
 </div>
 <a name="#newid"></a>
-<div class="alert alert-warning" role="alert" id="addbdid_msg">由于百度强制开启了异地登陆验证，很可能导致自动绑定失败。如果你确定输入无误但却提示账号密码错误，请尝试下面提供的方法，或使用<a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');$('#PageTab li').removeClass('active').last().addClass('active');">手动绑定</a></div>
+<div class="alert alert-warning" role="alert" id="addbdid_msg">如果您多次尝试绑定失败，可能是登录保护造成的原因，不妨试试 <a href="https://bduss.tbsign.cn" target="_blank">手动获取</a> 吧！</div>
 <form method="post" id="addbdid_form" onsubmit="return false;">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>
