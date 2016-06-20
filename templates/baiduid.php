@@ -125,7 +125,7 @@ global $m;
   </div>
 </div>
 <a name="#newid"></a>
-<div class="alert alert-warning" role="alert" id="addbdid_msg">如果您多次尝试绑定失败，可能是登录保护造成的原因，不妨试试 <a href="https://bduss.tbsign.cn" target="_blank">手动获取</a> 吧！</div>
+<div class="alert alert-warning" role="alert" id="addbdid_msg">如果您多次尝试绑定失败，可能是异地登录保护造成的原因，不妨试试 <a href="https://bduss.tbsign.cn" target="_blank">手动获取</a> 吧！</div>
 <form method="post" id="addbdid_form" onsubmit="return false;">
 <div class="input-group">
   <span class="input-group-addon">百度账号</span>
