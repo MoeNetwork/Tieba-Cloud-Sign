@@ -181,7 +181,7 @@ global $m;
 <div class="panel panel-default">
     <div class="panel-heading" onclick="$('#ver4_cloud').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span>通过云平台获取的方法</h3></div>
 	<div class="panel-body" id="ver4_cloud">
-	    1.<a href="https://bduss.tbsign.cn/">点击此处进入BDUSS获取平台</a>
+	    1.<a href="https://bduss.tbsign.cn/" target="_blank">点击此处进入BDUSS获取平台</a>
 	    <br><br>2.填写相应帐号信息进行获取BDUSS操作
 	    <br><br>3.将获取到的 BDUSS 填入上面的表单即可
 	</div>
