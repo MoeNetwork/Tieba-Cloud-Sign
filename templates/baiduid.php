@@ -179,6 +179,15 @@ global $m;
 </form>
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
 <div class="panel panel-default">
+    <div class="panel-heading" onclick="$('#ver4_cloud').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span>通过云平台获取的方法</h3></div>
+	<div class="panel-body" id="ver4_cloud">
+	    1.<a href="https://bduss.tbsign.cn/">点击此处进入BDUSS获取平台</a>
+	    <br><br>2.填写相应帐号信息进行获取BDUSS操作
+	    <br><br>3.将获取到的 BDUSS 填入上面的表单即可
+	</div>
+</div>
+<br/>
+<div class="panel panel-default">
 	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 在 Windows 系统下的绑定方法</h3></div>
 	<div class="panel-body" id="win_bduss">
 	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器 V3.0</a>
