@@ -179,24 +179,6 @@ global $m;
 </form>
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
 <div class="panel panel-default">
-    <div class="panel-heading" onclick="$('#ver4_cloud').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span>通过云平台获取的方法</h3></div>
-	<div class="panel-body" id="ver4_cloud">
-	    1.<a href="https://bduss.tbsign.cn/" target="_blank">点击此处进入BDUSS获取平台</a>
-	    <br><br>2.填写相应帐号信息进行获取BDUSS操作
-	    <br><br>3.将获取到的 BDUSS 填入上面的表单即可
-	</div>
-</div>
-<br/>
-<div class="panel panel-default">
-	<div class="panel-heading" onclick="$('#win_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 在 Windows 系统下的绑定方法</h3></div>
-	<div class="panel-body" id="win_bduss">
-	    1.<a href="source/doc/get_bduss.exe">点击此处下载 贴吧BDUSS获取器 V3.0</a>
-	    <br/><br/>2.请确保已安装了 <a href="http://www.microsoft.com/zh-cn/download/details.aspx?id=17718" target="_blank"><b>.Net Framework 4.0</b></a> [ 正版Win8已自带 ]
-	    <br/><br/>3.请运行此程序，按照要求输入账号信息，然后将获取到的 BDUSS 填入上面的表单即可
-	</div>
-</div>
-<br/>
-<div class="panel panel-default">
 	<div class="panel-heading" onclick="$('#chrome_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Chrome 浏览器下的绑定方法</h3></div>
 	<div class="panel-body" id="chrome_bduss" style="display:none">
 	    1.使用 Chrome 或 Chromium 内核的浏览器
@@ -212,4 +194,4 @@ global $m;
 </div>
 <!-- END PAGE3 -->
 
-<br/><br/><br/><br/><br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a> &amp; <a href="https://moesign.com/" target="_blank">MoeSign</a>
+<br/><br/><br/><br/><br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 
