@@ -2,6 +2,8 @@
 /**
  * 全局用户控制
  */
+ 
+doAction('globals');
 
 if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
     $uid = isset($_COOKIE['uid']) ? sqladds($_COOKIE['uid']) : '';
