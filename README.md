@@ -39,12 +39,12 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 @fyy99 [fyod@vip.qq.com]
 ####热心贡献者
 以下几位反馈/解决了程序的不足之处，特此感谢     
-@96dl [i@v4.hk]     
+@Ver4 [i@v4.hk]     
 @kirainmoe [kotori@wo.cn]     
 @VFleaKing [liuhaotian0520@163.com]     
 @superxzr [a457418121@gmail.com]
-#官方自营签到平台
-[MoeSign](https://MoeSign.com)
+#由StusGame官方人员运营的签到平台
+[MoeSign](https://MoeSign.com) [简云签到联盟](https://tbsign.cn)
 ##许可协议与商业版本等
 ###许可协议
 请访问程序根目录下的 license.html 阅读许可协议
