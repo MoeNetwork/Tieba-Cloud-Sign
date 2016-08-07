@@ -554,7 +554,6 @@ class misc {
 			if (empty($userid)) break;
 			$rc = self::getTieba($userid,$ubduss,$pn);
 			$rc = json_decode($rc,true);
-			if (count($rc['forum_list']['non-gconforum']) < 1) break;
 			foreach ($rc['forum_list']['non-gconforum'] as $v){
 				$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
 				if ($tb['c'] >= $o && !$isvip) break;
@@ -564,7 +563,6 @@ class misc {
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid}, {$uid}, '{$v}', 0, 0);");
 				}
 			}
-			if (count($rc['forum_list']['gconforum']) < 1) break;
 			foreach ($rc['forum_list']['gconforum'] as $v){
 				$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
 				if ($tb['c'] >= $o && !$isvip) break;
@@ -574,6 +572,7 @@ class misc {
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid}, {$uid}, '{$v}', 0, 0);");
 				}
 			}
+			if ((count($rc['forum_list']['non-gconforum']) < 1) && (count($rc['forum_list']['gconforum']) < 1)) break;
 			$pn ++;
 		}
 	}
