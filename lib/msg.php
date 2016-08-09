@@ -7,6 +7,10 @@
  * @param bool $title 是否显示标题
  */
 function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
+    if(defined('SYSTEM_ISCONSOLE') && SYSTEM_ISCONSOLE) {
+        echo $msg . PHP_EOL;
+        die;
+    }
     if (defined('SYSTEM_NAME')) {
         $sysname = SYSTEM_NAME;
     } else {
@@ -30,8 +34,9 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
                 margin: 2em auto;
                 padding: 1em 2em;
                 max-width: 700px;
-                -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.13);
-                box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+                -webkit-box-shadow: 10px 10px 10px rgba(0,0,0,0.13);
+                box-shadow: 10px 10px 10px rgba(0,0,0,0.13);
+                opacity:0.8;
             }
             h1 {
                 border-bottom: 1px solid #dadada;
@@ -44,6 +49,9 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             }
             #error-page {
                 margin-top: 50px;
+            }
+            h3 {
+                text-align:center;
             }
             #error-page p {
                 font-size: 9px;
@@ -60,6 +68,7 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
             a {
                 color: #21759B;
                 text-decoration: none;
+                margin-top:-10px;
             }
             a:hover {
                 color: #D54E21;
@@ -140,9 +149,9 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
         echo $msg; ?>
         <?php if ($url !== false) {
             if ($url === true) {
-                echo '<br/><br/><a href="javascript:history.back(-1)"><< 返回上一页</a>';
+                echo '<br/><br/><a style="float:right" href="javascript:history.back(-1)"><< 返回上一页</a>';
             } else {
-                echo '<br/><br/><a href="'.$url.'"><< 返回上一页</a>';
+                echo '<br/><br/><a style="float:right" href="'.$url.'"><< 返回上一页</a>';
             }
         } 
         ?>

@@ -14,6 +14,7 @@ $i['db']['prefix'] = DB_PREFIX;
 $i['db']['passwd'] = DB_PASSWD;
 $i['db']['name'] = DB_NAME;
 
+@ini_set('magic_quotes_runtime',0);
 if (get_magic_quotes_gpc()) {
     function fuck_magic_quotes($value) {
         $value = is_array($value) ? array_map('fuck_magic_quotes', $value) : stripslashes($value);

@@ -12,7 +12,7 @@ class misc {
 	 * @param string $sub 邮件主题
 	 * @param string $msg 邮件内容(HTML)
 	 * @param array $att 附件，每个键为文件名称，值为附件内容（可以为二进制文件），例如array('a.txt' => 'abcd' , 'b.png' => file_get_contents('x.png'))
-	 * @return 成功:true 失败：错误消息
+	 * @return bool 成功:true 失败：错误消息
 	 */
 	public static function mail($to, $sub = '无主题', $msg = '无内容', $att = array()) {
         if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')){
@@ -57,17 +57,18 @@ class misc {
 					return $mail->log;
 				}
 			} else {
-				$header .= "MIME-Version:1.0\r\n";
+				$header  = "MIME-Version:1.0\r\n";
 		        $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 		        $header .= "To: " . $to . "\r\n";
 		        $header .= "From: " . $From . "\r\n";
 		        $header .= "Subject: " . $sub . "\r\n";
 		        $header .= 'Reply-To: ' . $From . "\r\n";
 		        $header .= "Date: " . date("r") . "\r\n";
+				$header .= "Content-Transfer-Encoding: base64\r\n";
 				return mail(
 					$to,
 					$sub,
-					$msg,
+					base64_encode($msg),
 					$header
 				);
 			}
@@ -76,7 +77,7 @@ class misc {
 
 	/** 
 	 * 通过UID判断某个用户是不是VIP
-	 * @param $uid UID
+	 * @param string $uid UID
 	 * @return bool VIP=true
 	 */
 	public static function isvip($uid) {
@@ -91,7 +92,7 @@ class misc {
 
 	/** 
 	 * 通过UID获得指定用户的贴吧数据表
-	 * @param $uid UID
+	 * @param string $uid UID
 	 */
 	public static function getTable($uid) {
 		global $m;
@@ -101,7 +102,7 @@ class misc {
 
 	/**
 	 * 寻找已缓存的贴吧 FID
-	 * @param $kw 贴吧名
+	 * @param string $kw 贴吧名
 	 * @return string|boolean FID，如果没有缓存则返回false
 	 */
 	/*
@@ -121,8 +122,8 @@ class misc {
 
 	/**
 	 * 批量设置贴吧 FID
-	 * @param $kw 贴吧名
-	 * @param $fid FID
+	 * @param string $kw 贴吧名
+	 * @param string $fid FID
 	 */
 
 	public static function mSetFid($kw,$fid) {
@@ -137,7 +138,7 @@ class misc {
 
 	/**
 	 * 得到贴吧 FID
-	 * @param $kw 贴吧名
+	 * @param string $kw 贴吧名
 	 * @return string FID
 	 */
 
@@ -172,9 +173,27 @@ class misc {
 		return $x['tbs'];
 	}
 
+    /**
+     * 对输入的数组添加客户端验证代码（tiebaclient!!!）
+     * @param array $data 数组
+     */
+    public static function addTiebaSign(&$data) {
+        $data = array(
+            '_client_id' => '03-00-DA-59-05-00-72-96-06-00-01-00-04-00-4C-43-01-00-34-F4-02-00-BC-25-09-00-4E-36',
+            '_client_type' => '4',
+            '_client_version' => '6.0.1',
+            '_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
+        ) + $data;
+        $x = '';
+        foreach($data as $k=>$v) {
+            $x .= $k.'='.$v;
+        }
+        $data['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+    }
+
 	/**
 	 * 得到BDUSS 
-	 * @param $pid 用户PID
+	 * @param int|string $pid 用户PID
 	 */
 	public static function getCookie($pid) {
 		global $m;
@@ -204,11 +223,7 @@ class misc {
 			'net_type' => '3',
 			'tbs' => misc::getTbs($uid,$ck)
 		);
-		$x = '';
-		foreach($temp as $k=>$v) {
-			$x .= $k.'='.$v;
-		}
-		$temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+        self::addTiebaSign($temp);
 		return $ch->post($temp);
 	}
 
@@ -343,7 +358,7 @@ class misc {
 
 	/**
 	 * 执行一个表的签到任务
-	 * @param $table 表
+	 * @param string $table 表
 	 */
 	public static function DoSign($table) {
 		global $m;
@@ -385,9 +400,9 @@ class misc {
 
 	/**
 	 * 执行一个表的签到重試任务
-	 * @param $table 表
+	 * @param string $table 表
 	 */
-	function DoSign_retry($table) {
+	public static function DoSign_retry($table) {
 		global $m,$i;
 		$today = date('d');
 		if (date('H') <= option::get('sign_hour')) {
@@ -419,7 +434,7 @@ class misc {
 				shuffle($q);
 			}
 		} else {
-			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
 				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `latest` = '{$today}'" , true );
 			}
 		}
@@ -431,37 +446,51 @@ class misc {
 
 	/**
 	 * 登录百度
-	 * @param 百度用户名
-	 * @param 百度密码
-	 * @param 验证码
-	 * @param $vcodestr
-	 * @return 登录完成的页面
+	 * @param string $bd_name 百度用户名
+	 * @param string $bd_pw百度密码
+	 * @param string $verifycode 验证码
+	 * @param string $vcodestr 验证字符
+	 * @return array [0成功|-1网络请求失败|-2json解析失败|-3表示需要验证码或验证码错误|2表示登陆失败|其他为百度提供的错误代码, 成功为BDUSS|需要验证码则返回vcodestr|其他错误返回百度提供的错误信息, 如果登陆成功，返回百度用户名|如果需要验证码，则此处返回验证图片地址 ]
 	 */
-	public static function loginBaidu( $bd_name , $bd_pw , $verifycode , $vcodestr ) {
-		$x = new wcurl('http://wappass.baidu.com/passport/?verifycode=' . $verifycode , array('User-Agent: Phone'.mt_rand()));
-		$x->set(CURLOPT_HEADER , true);
-		return $x->post(array(
-			'username'       => $bd_name ,
-			'password'       => $bd_pw ,
-			'verifycode'     => $verifycode , 
-			'login_save'     => '3' ,
-			'vcodestr'       => $vcodestr , 
-			'aaa'            => '%E7%99%BB%E5%BD%95' ,
-			'login'          => 'yes' ,
-			'can_input'      => '0' ,
-			'u'              => 'http%3A%2F%2Fm.baidu.com%2F%3Faction%3Dlogin' ,
-			'tn' ,
-			'tpl' ,
-			'ssid'           => '000000' ,
-			'form'           => '0' ,
-			'bd_page_type'   => '1' ,
-			'uid'            => 'wiaui_1316933575_9548' , 
-			'isPhone'        => 'isPhone' ,
-		));
+	public static function loginBaidu( $bd_name , $bd_pw , $verifycode = '', $vcodestr = '') {
+		$x = new wcurl('http://c.tieba.baidu.com/c/s/login');
+		$p = array(
+                'passwd'      => base64_encode($bd_pw),
+                'timestamp'   => time() . '156',
+                'un'          => $bd_name,
+		);
+		if(!empty($verifycode) && !empty($vcodestr)) {
+			$p['vcode'] = $verifycode;
+			$p['vcode_md5'] = $vcodestr;
+		}
+        self::addTiebaSign($p);
+		//print_r($p);
+		if(!$data = $x->post($p)) return array(-1, '网络请求失败');
+		if(!$v = json_decode($data, true)) return array(-2, 'json解析失败');
+		$md5pos = strpos($v['user']['BDUSS'], '|');
+		if(!empty($md5pos)) {
+			$bduss = substr($v['user']['BDUSS'], 0 , $md5pos);
+		} else {
+			$bduss = $v['user']['BDUSS'];
+		}
+        if($v['error_code'] == '0') {
+            return array(0, $bduss, $v['user']['name']);
+        } else {
+            switch($v['error_code']) {
+                case '5': //需要验证码或验证码输入错误
+                case '6':
+                    return array(-3, $v['anti']['vcode_md5'], $v['anti']['vcode_pic_url']);
+                    break;
+
+                default: //其他错误
+                    return array((int)$v['error_code'], $v['error_msg']);
+                    break;
+            }
+        }
 	}
 	/**
 	 * 扫描指定PID的所有贴吧
-	 * @param $pid PID
+	 * @param string $pid PID
 	 */
 	public static function scanTiebaByPid($pid) {
 		global $i;

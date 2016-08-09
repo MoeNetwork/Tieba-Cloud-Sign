@@ -4,25 +4,51 @@ require dirname(__FILE__).'/init.php';
 switch (SYSTEM_PAGE) {
 
 	case 'ajax:status':
-		global $today,$m,$i;
-		$count1 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` = '".$today."' AND `uid` = ".UID));
-		$count2 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `latest` != '".$today."' AND `uid` = ".UID));
-		echo "<br/><b>签到状态：</b>已签到 {$count1[0]} 个贴吧，还有 {$count2[0]} 个贴吧等待签到";
+		global $m,$i;
+		$today = date('d');
+		$count = array(
+			'userSigned'  => 0,
+			'userWaiting' => 0,
+			'userError'   => 0,
+			'allSigned'   => 0,
+			'allWaiting'  => 0,
+			'allNo'       => 0,
+			'allError'    => 0
+		);
+		$signUser = $m->query("SELECT `latest`,`status` FROM `".DB_NAME."`.`".DB_PREFIX.TABLE."` WHERE `uid` = ".UID." AND `no` = '0'");
+		while($countUser = $m->fetch_array($signUser)) {
+			if($countUser['latest'] == $today) {
+				if($countUser['status'] != '0') {
+					$count['userError']++;
+				} else {
+					$count['userSigned']++;
+				}
+			} else {
+				$count['userWaiting']++;
+			}
+		}
+		echo "<br/><b>签到状态：</b>已签到 {$count['userSigned']} 个贴吧，{$count['userError']} 个出错， {$count['userWaiting']} 个贴吧等待签到";
 		echo '<br/><b>您的签到数据表：</b>'.DB_PREFIX.TABLE;
-		$c3 = $c4 = $c5 = $c6 = 0;
+
 		if (ROLE == 'admin') {
 			foreach ($i['table'] as $value) {
-				$count3 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` = '".$today."' AND `no` != '1'"));
-				$count4 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `latest` != '".$today."' AND `no` != '1'"));
-				$count5 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `no` = '1' AND `status` = '0'"));
-				$count6 = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX.$value."` WHERE `status` != '0' AND `no` != '1'"));
-				$c3 = $c3 + $count3[0];
-				$c4 = $c4 + $count4[0];
-				$c5 = $c5 + $count5[0];
-				$c6 = $c6 + $count6[0];
+				$signTab = $m->query("SELECT `latest`,`status`,`no` FROM `".DB_NAME."`.`".DB_PREFIX.$value."`");
+				while($countTab = $m->fetch_array($signTab)) {
+					if($countTab['no'] != '0') {
+						$count['allNo']++;
+					} elseif($countTab['latest'] == $today) {
+						if($countTab['status'] != '0') {
+							$count['allError']++;
+						} else {
+							$count['allSigned']++;
+						}
+					} else {
+						$count['allWaiting']++;
+					}
+				}
 			}	
-			echo "<br/><b>签到状态[总体]：</b>已签到 {$c3} 个贴吧，还有 {$c4} 个贴吧等待签到";
-			echo "<br/><b>贴吧状态[总体]：</b>有 {$c5} 个贴吧签到出错，{$c6} 个贴吧已被设定为忽略";
+			echo "<br/><b>签到状态[总体]：</b>已签到 {$count['allSigned']} 个贴吧，还有 {$count['allWaiting']} 个贴吧等待签到";
+			echo "<br/><b>贴吧状态[总体]：</b>有 {$count['allError']} 个贴吧签到出错，{$count['allNo']} 个贴吧已被设定为忽略";
 			echo '<br/><b>用户注册/添加用户首选表：</b>'.DB_PREFIX.option::get('freetable');
 		}
 		break;
@@ -39,9 +65,11 @@ switch (SYSTEM_PAGE) {
 		<li class="list-group-item">
 			<b>MySQL 版本：</b><?php echo $m->getMysqlVersion() ?>
 		</li>
+		<?php if(!empty($_SERVER['SERVER_ADDR'])) { ?>
 		<li class="list-group-item">
 			<b>服务器地址：</b><?php echo $_SERVER['SERVER_ADDR'] ?>
 		</li>
+		<?php } ?>
 		<li class="list-group-item">
 			<b>服务器软件：</b><?php echo $_SERVER['SERVER_SOFTWARE'] ?>
 		</li>
@@ -299,59 +327,42 @@ time='.date('Y-m-d H:m:s') ."\r\n");
 		break;
 
 	case 'baiduid:getverify':
-		$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: fxxxx phone'));
-		$r = $x->post(array(
-			'login_username'  => $_POST['bd_name'],
-			'login_loginpass' => $_POST['bd_name']
-			));
-		preg_match('/\<img src=\"(.*)\" alt=\"wait...\" \/\>/',$r, $out);
-		if (empty($out[1])) {
-			echo '<b>无需验证码，请直接点击 [ 点击绑定 ] 继续</b>';
-		} else {
-			echo '<img onclick="addbdid_getcode();" src="'.$out[1].'"style="float:left;">&nbsp;&nbsp;&nbsp;请在下面输入左图中的字符<br>&nbsp;&nbsp;&nbsp;点击图片更换验证码';
+		global $m;
+		if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
+		if (option::get('bduss_num') != '0' && ISVIP == false) {
+			$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `uid` = ".UID);
+			if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
+		}
+        $name  = !empty($_POST['bd_name']) ? $_POST['bd_name'] : die();
+        $pw    = !empty($_POST['bd_pw'])   ? $_POST['bd_pw']   : die();
+        $vcode = !empty($_POST['vcode'])   ? $_POST['vcode']   : '';
+        $vcodestr = !empty($_POST['vcodestr']) ? $_POST['vcodestr'] : '';
+		$loginResult = misc::loginBaidu($name, $pw, $vcode, $vcodestr);
+		if ($loginResult[0] == -3) {
+            echo '{"error":"-3","msg":"请输入验证码","vcodestr":"'.$loginResult[1].'","img":"'.$loginResult[2].'"}';
+            /*
+			echo '<img onclick="addbdid_getcode();" src="'.$loginResult[2].'"style="float:left;">&nbsp;&nbsp;&nbsp;请在下面输入左图中的字符<br>&nbsp;&nbsp;&nbsp;点击图片更换验证码';
 			echo '<br/><br/><div class="input-group"><span class="input-group-addon">验证码</span>';
 			echo '<input type="text" class="form-control" id="bd_v" name="bd_v" placeholder="请输入上图的字符" required></div><br/>';
-		}
-		preg_match('/\<input type=\"hidden\" id=\"vcodeStr\" name=\"vcodestr\" value=\"(.*)\"\/\>/', $r, $outt);
-		echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$outt['1'].'"/>';
-		break;
-
-	case 'baiduid:bdid':
-		//多次循环有助于解决验证码问题
-		for ($e = 0; $e < 2; $e++) {
-			$x = misc::loginBaidu( $_POST['bd_name'] , $_POST['bd_pw'] , $_POST['bd_v'] , $_POST['vcodestr'] );
-			if (stristr($x, '您输入的验证码有误') || stristr($x, urlencode('您输入的验证码有误'))) {
-				$error  = '您输入的验证码有误';
-				if ($e < 2) {
-			 	break;
-				} else {
-					continue;
-				}
-			} elseif (stristr($x, '您输入的密码有误') || stristr($x, urlencode('您输入的密码有误'))) {
-				$error  = '您输入的密码或账号有误';
-				break;
-			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
-			    $error  = '您没有输入验证码或发生系统错误';
-			    break;
-			} elseif (stristr($x, '请您输入验证码') || stristr($x, urlencode('请您输入验证码'))) {
-				$error  = '请您输入密码';
-				break;
-			} else {
-				preg_match('/Set-Cookie:(.*)BDUSS=(.*); expires=/', $x, $y);
-				if (empty($y[2])) {
-				    $error = '请检查用户名，密码，验证码是否正确<br/><br/>也有可能是百度强制开启了异地登陆保护导致的，请尝试手动绑定';
-				    break;
-				} else {
-					unset($error);
-					break;
+			echo '<input type="hidden" id="vcodeStr" name="vcodestr" value="'.$loginResult[1].'"/>';
+            */
+		} elseif($loginResult[0] == 0) {
+			if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
+				$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `name` = '{$loginResult[2]}'");
+				if(!empty($checkSame)) {
+					if(option::get('same_pid') == '2') {
+						echo '{"error":"-11","msg":"你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑"}';
+					} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
+						echo '{"error":"-10","msg":"你已经绑定了这个百度账号，若要重新绑定，请先解绑"}';
+					}
+					die;
 				}
 			}
-		}
-		if (!empty($error)) {
-			echo '{"error":"1","msg":"'.$error.'"}';
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$loginResult[1]}', '{$loginResult[2]}')");
+			echo '{"error":"0","msg":"获取BDUSS成功","bduss":"'.$loginResult[1].'","name":"'.$loginResult[2].'"}';
 		} else {
-			echo '{"error":"0","bduss":"'.$y[2].'"}';
-		}
+            echo '{"error":"'.$loginResult[0].'","msg":"'.$loginResult[1].'"}';
+        }
 		break;
 
 	case 'admin:c_update:check':

@@ -1,7 +1,7 @@
 <?php
 /**
  * 密码和加密类
- * @copyright (c) 无名智者
+ * @copyright (c) Kenvix
  */
 class P {
 	const PWDMODE  = true; //允许从数据库获得密码加密方式？
@@ -21,11 +21,13 @@ class P {
 		if (function_exists('mcrypt_decrypt')) {
 			$this->mcrypt  = true;
 		}
+		/*
 		if (!empty($salt)) {
 			$this->salt    = $salt;
 		} else {
 			$this->salt    = SYSTEM_SALT;
 		}
+		*/
 	}
 
 	/**

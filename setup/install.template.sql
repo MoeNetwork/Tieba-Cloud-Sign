@@ -1,8 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-
-
-
 DROP TABLE IF EXISTS `{VAR-PREFIX}baiduid`;
 CREATE TABLE `{VAR-PREFIX}baiduid` (
   `id` int(30) unsigned NOT NULL AUTO_INCREMENT,
@@ -12,12 +9,6 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-
-
-
-
 
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
@@ -32,7 +23,7 @@ CREATE TABLE `{VAR-PREFIX}cron` (
   `log` text,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 
@@ -88,6 +79,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_pw', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_sleep', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('cktime', '999999');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bduss_num', '0');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('csrf', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_multith', '1');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_asyn', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_asyn', '');
@@ -95,7 +87,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_sign_again', 'a:2:{s:3:\"num\";i
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_hour', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('mail_ssl', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('freetable', 'tieba');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '4.0');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '4.2');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('core_revision', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('isapp', '{VAR-ISAPP}');
 #INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '{VAR-TOOLPW}');
@@ -104,7 +96,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('system_keywords', '贴吧云签到');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '贴吧云签到');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_us', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_pw', '');
-
+INSERT INTO `{VAR-PREFIX}options` VALUES ('same_pid', '0');
 
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;
@@ -115,7 +107,7 @@ CREATE TABLE `{VAR-PREFIX}plugins` (
   `options` text,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 
@@ -133,7 +125,7 @@ CREATE TABLE `{VAR-PREFIX}tieba` (
   `fid` int(30) unsigned NOT NULL DEFAULT '0',
   `tieba` varchar(200) DEFAULT NULL,
   `no` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `status`  mediumint(8) UNSIGNED NOT NULL DEFAULT '0' ,
   `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),

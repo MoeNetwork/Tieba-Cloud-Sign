@@ -1,6 +1,11 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 if (option::get('enable_reg') != 1) {
-  msg('该站点已关闭注册');
+    $text = option::get('stop_reg');
+  if(!empty($text)){
+      msg($text);
+  } else {
+      msg('该站点已关闭注册');
+  }
 }
 loadhead();
 
@@ -35,7 +40,7 @@ loadhead();
   <span class="input-group-addon">邮箱地址</span>
   <input type="email" class="form-control" name="mail" id="mail" required>
 </div>
-<?php 
+<?php
 $yr_reg = option::get('yr_reg');
 if (!empty($yr_reg)) { ?>
 <br/>
@@ -49,7 +54,7 @@ if (!empty($yr_reg)) { ?>
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">继续注册</button>
   <?php doAction('reg_page_3'); ?>
 	</div><br/><br/><br/>
-	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 
 	<?php
 	$icp=option::get('icp');
     if (!empty($icp)) {

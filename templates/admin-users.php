@@ -65,9 +65,9 @@ while ($x = $m->fetch_array($s)) {
 	</tbody>
 </table>
 </div>
-选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp; 
-<input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp; 
-<input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp; 
+选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp;
+<input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp;
+<input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type="radio" name="do" value="cset"> 清除个人设置 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type="radio" name="do" value="crole">
 <select name="crolev" onchange="document.getElementsByName('do')[4].checked = true">
@@ -81,4 +81,4 @@ while ($x = $m->fetch_array($s)) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:users&add'">添加用户</button>
 </form><?php } ?>
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

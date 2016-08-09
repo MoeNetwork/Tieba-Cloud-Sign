@@ -33,7 +33,7 @@ foreach($x as $key => $val) {
 		}
 		if (isset($i['plugins']['info'][$val['plugin']['id']]['ver']) && version_compare($i['plugins']['info'][$val['plugin']['id']]['ver'], $val['plugin']['version']) == -1 && $val['view']['update']) {
 			$pluginfo .= ' | <a href="setting.php?mod=admin:plugins&upd='.$val['plugin']['id'].'" onclick="return confirm(\'你确实要升级此插件吗？\\n'.$val['plugin']['name'].'\');">点击升级到最新版本</a>';
-		} elseif ($val['plugin']['onsale'] == true) {
+		} elseif (!empty($val['plugin']['onsale'])) {
 			$pluginfo .= ' | <span id="c_upd" onclick="c_upd(this,\''.$val['plugin']['id'].'\')"><a href="javascript:void(0)">检查更新</a></span>';
 		}
 	} else {
@@ -64,22 +64,23 @@ foreach($x as $key => $val) {
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
 			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
-			if ($val['core']['setting'] && $val['view']['setting']) {
+			if (isset($val['core']) && ($val['core']['setting'] && $val['view']['setting']) || (isset($val['plugin']['old']) && file_exists(SYSTEM_ROOT . '/plugins/' . $val['plugin']['id'] . '/' . $val['plugin']['id'] . '_setting.php'))) {
 				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'">打开插件设置</a>';
 				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span></a> ';
 			}
-			if ($val['core']['show'] && $val['view']['show']) {
+			if (isset($val['core']) && $val['core']['show'] && $val['view']['show']) {
 				$action .= '<a href="index.php?plugin='.$val['plugin']['id'].'" title="查看页面"><span class="glyphicon glyphicon-eye-open"></span></a> ';
 			}
 		} else {
 			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['plugin']['id'].'">激活插件</a><br/>';
 		}
+		$action .= '<a onclick="return confirm(\'你想要清除此插件的数据吗？\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&clean='.$val['plugin']['id'].'" style="color:#FF6A00;" title="清除数据"><span class="glyphicon glyphicon-remove"></span></a> ';
 	} else {
 		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['plugin']['id'].$for.'">安装插件</a><br/>';
 	}
 
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['plugin']['id'].$fortc.'<td>'.$status.'<br/>';
-	$plugins .= $action.'<a onclick="return confirm(\'你确实要卸载此插件吗？\\n'.$val['plugin']['name'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td>';
+	$plugins .= $action.'<a onclick="return confirm(\'你想要要卸载此插件吗？\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td>';
     $plugins .= '</tr>';
 }
 
@@ -91,7 +92,7 @@ doAction('admin_plugins');
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';
 }
 ?>
-<br/><a href="index.php?mod=admin:tools">前往工具箱上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a>
+<br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a> | <a href="javascript:;" onclick="alert('请确保插件目录名和插件入口文件的文件名一致(扩展名除外)<br/>例如，插件目录名是 <i>wmzz_debug</i>，则插件入口文件的文件名应该是 <i>wmzz_debug.php</i><br/><br/>如果您是从Git上下载的插件包，请注意去掉文件夹名称-master之类的字符');" target="_blank">找不到上传的插件？</a>
 </div>
 <form action="setting.php?mod=admin:plugins&xorder" method="post">
 <div class="table-responsive">
@@ -109,21 +110,21 @@ doAction('admin_plugins');
 </table>
 </div><input type="submit" class="btn btn-primary" value="提交更改">
 </form>
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 
 
 <script type="text/javascript">
 	function c_upd(e,plug) {
 		e.innerHTML = '检查更新中...';
-		$.ajax({ 
-			async:true, 
-			url: 'ajax.php?mod=admin:c_update:check&plug=' + plug, 
-			type: "GET", 
+		$.ajax({
+			async:true,
+			url: 'ajax.php?mod=admin:c_update:check&plug=' + plug,
+			type: "GET",
 			data : {},
-			dataType: 'HTML', 
-			timeout: 90000, 
+			dataType: 'HTML',
+			timeout: 90000,
 			success: function(data){
 				if(data.indexOf("发现新版本") != -1){
-					data = data.split('//'); 
+					data = data.split('//');
 					e.innerHTML = data[0];
 					alert(data[2],data[1]);
 				} else {
@@ -137,3 +138,24 @@ doAction('admin_plugins');
 	}
 </script>
 
+<div class="modal fade" id="InstallPlugin" tabindex="-1" role="dialog" aria-labelledby="InstallPluginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">安装插件包</h4>
+      </div>
+      <form action="<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=install_plugin" onsubmit="$('#installplugin_button').attr('disabled',true);" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+        请浏览插件包：( ZIP格式 )
+        <br/><br/><input type="file" name="plugin" required accept="application/zip" style="width:100%">
+        <br/><br/>您的主机必须支持写入才能安装插件，若不支持，请手工安装
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="submit" class="btn btn-primary" id="installplugin_button">上传插件</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

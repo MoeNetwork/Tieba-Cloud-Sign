@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `{VAR-DB}`.`{VAR-TABLE}` (
   `fid` int(30) unsigned NOT NULL DEFAULT '0',
   `tieba` varchar(200) DEFAULT NULL,
   `no` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(2) unsigned NOT NULL DEFAULT '0',
+  `status`  mediumint(8) UNSIGNED NOT NULL DEFAULT '0' ,
   `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `last_error` text,
   PRIMARY KEY (`id`),

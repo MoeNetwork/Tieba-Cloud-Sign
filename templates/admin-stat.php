@@ -10,7 +10,7 @@ if (!isset($i['mode'][2])) $i['mode'][2] = 'sign';
 
 switch ($i['mode'][2]) {
 
-case 'sign' : 
+case 'sign' :
 ?>
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="index.php?mod=admin:stat:sign">签到</a></li>
@@ -31,7 +31,7 @@ case 'sign' :
 		<th>贴吧总数</th>
 	</thead>
 	<tbody>
-		<?php 
+		<?php
 		$uxsv = $m->query("SELECT * FROM `".DB_PREFIX."users` ORDER BY `id`");
 		$uxsg = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_PREFIX."baiduid`");
 		$alls = $alle = $alln = $allm = $allw = 0;
@@ -70,7 +70,7 @@ case 'sign' :
   <?php doAction('stat_navi'); ?>
 </ul>
 <h3>当前服务器软件环境</h3>
-<?php 
+<?php
 define('DO_NOT_LOAD_UI', true);
 require SYSTEM_ROOT.'/setup/check.php';
 ?>
@@ -83,4 +83,4 @@ require SYSTEM_ROOT.'/setup/check.php';
 <?php break;
 } ?>
 <br/><br/><br/><br/>
-<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

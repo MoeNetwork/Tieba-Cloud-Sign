@@ -39,8 +39,12 @@ switch ($i['mode'][0]) {
 				template('admin-plugins');
 				break;
 			case 'cron':
-                loadhead('计划任务');
+				loadhead('计划任务');
 				template('admin-cron');
+				break;
+			case 'editcron':
+				loadhead('编辑计划任务');
+				template('admin-editcron');
 				break;
 			case 'update':
                 loadhead('检查更新');
@@ -49,7 +53,7 @@ switch ($i['mode'][0]) {
 			case 'setplug':
 				$plug = strip_tags($_GET['plug']);
 				$pluginfo = getPluginInfo($plug);
-				
+
 				if (file_exists(SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php') && in_array($_GET['plug'], $i['plugins']['actived'])) {
                     loadhead($pluginfo['plugin']['name'] . ' - 插件管理');
 					require_once SYSTEM_ROOT.'/plugins/'.$plug.'/'.$plug.'_setting.php';
@@ -59,7 +63,7 @@ switch ($i['mode'][0]) {
                     echo $pluginfo['plugin']['name'];
                     if(!empty($pluginfo['plugin']['url']))
                         echo '</a>';
-                    echo ' V'.$pluginfo['plugin']['version'].' // 插件作者：<a href="'.$pluginfo['author']['url'].'" target="_blank">'.$pluginfo['author']['author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>';
+                    echo ' V'.$pluginfo['plugin']['version'].' // 插件作者：<a href="'.$pluginfo['author']['url'].'" target="_blank">'.$pluginfo['author']['author'].'</a><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 程序作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> ';
 				} else {
 					echo '<b>插件设置页面不存在</b>';
 				}

@@ -11,7 +11,14 @@ class E extends Exception {
     }
 
     public static function exception($e) {
-        self::display($e->code,$e->message,$e->file,$e->line,$e->getTrace());
+        $ex = new ReflectionClass($e);
+        self::display(
+            $ex->getMethod('getCode')->invoke($e),
+            $ex->getMethod('getMessage')->invoke($e),
+            $ex->getMethod('getFile')->invoke($e),
+            $ex->getMethod('getLine')->invoke($e),
+            $ex->getMethod('getTrace')->invoke($e)
+        );
     }
 
     public static function error($errno, $errstr, $errfile, $errline) {
@@ -25,7 +32,8 @@ class E extends Exception {
         }
     }
 
-    private static function display($code , $message , $file , $line , $trace) {
+    public static function display($code , $message , $file , $line , $trace) {
+        ob_clean();
         $msg = SYSTEM_FN . ' V' . SYSTEM_VER . ' 在工作时发生致命的异常 @ '.date('Y-m-d H:m:s').'<br/><b>消息：</b>#' . $code . ' - ' . $message .'<br/><br/>';
         $msg .= '<table style="width:100%"><thead><th>文件</th><th>行</th><th>代码</th></thead><tbody>';
         $msg .= '<tr><td>' . $file . '</td><td>' . $line . '' . '</td><td>[抛出异常]</td></tr>';

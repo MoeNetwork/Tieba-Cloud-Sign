@@ -1,4 +1,4 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 global $i;
 ?>
 <div class="navbar navbar-default" role="navigation">
@@ -46,7 +46,7 @@ global $i;
         <ul class="dropdown-menu">
             <?php doAction('navi_3'); ?>
             <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-            <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
+            <li><a href="https://github.com/MoeNetwork/tbsign_plugins/blob/master/README.md" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
             <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
         </ul>
       </li>
@@ -68,8 +68,8 @@ global $i;
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> 关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
-          <li><a href="http://zhizhe8.net" target="_blank">Kenvix个人博客</a></li>
-          <li><a href="http://longtings.com" target="_blank">龙霆工作室</a></li>
+          <li><a href="http://zhizhe8.net" target="_blank">Kenvix's Blog</a></li>
+          <li><a href="https://moesign.com/" target="_blank">MoeSign</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
@@ -82,8 +82,8 @@ global $i;
       <div class="row">
         <div class="col-md-3">
           <div class="bs-sidebar hidden-print visible-lg visible-md" role="complementary" >
-            <ul class="nav bs-sidenav">    
-              <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>         
+            <ul class="nav bs-sidenav">
+              <?php if (ROLE != 'visitor' && ROLE != 'banned') { ?>
               <li>
                 <li class="<?php checkIfActive('default') ?>" ><a href="index.php"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
                 <li class="<?php checkIfActive('set') ?>" ><a href="index.php?mod=set"><span class="glyphicon glyphicon-wrench"></span> 个人设置</a></li>
@@ -94,13 +94,12 @@ global $i;
                 <li class="<?php checkIfActive('admin:tools') ?>" ><a href="index.php?mod=admin:tools"><span class="glyphicon glyphicon-briefcase"></span> 工具箱</a></li>
                 <li class="<?php checkIfActive('admin:set') ?>" ><a href="index.php?mod=admin:set"><span class="glyphicon glyphicon-cog"></span> 设置中心</a></li>
                 <li class="<?php checkIfActive('admin:users') ?>" ><a href="index.php?mod=admin:users"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
-                <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
                 <li class="<?php checkIfActive('admin:stat') ?>" ><a href="index.php?mod=admin:stat"><span class="glyphicon glyphicon-stats"></span> 统计信息</a></li>
                 <li class="<?php checkIfActive('admin:cron') ?>" ><a href="index.php?mod=admin:cron"><span class="glyphicon glyphicon-time"></span> 计划任务</a></li>
                 <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
-                  <li><a href="http://www.stus8.com/forum.php?mod=forumdisplay&fid=163&filter=sortid&sortid=13" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
+                  <li><a href="https://github.com/MoeNetwork/tbsign_plugins/blob/master/README.md" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
                   <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
                <?php doAction('navi_9'); } ?>
               </li>

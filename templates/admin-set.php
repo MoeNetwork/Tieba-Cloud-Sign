@@ -32,28 +32,31 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$set2['name'] = 'signset';
 	$set2['url'] = 'setting.php?mod=admin:set&type=sign';
 	$set2['method'] = '1';
-	
+
 	$content2['cron_limit'] = array('td1'=>'<b>单表单次签到执行数量</b><br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','type'=>'number','text'=>'注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数','extra'=>'min="0" step="1"');
+	$content2['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
+	$bsphtml = '<tr><td><b>禁止重复添加同一百度账号</b><br/>禁止添加用户名一样的百度账号<br/>对管理员无效</td><td>
+	            <label><input type="radio" name="same_pid" value="0" '.(option::get('same_pid') == '0' ? 'checked' : '').'> 不禁止(可以重复添加)</label><br/>
+	            <label><input type="radio" name="same_pid" value="1" '.(option::get('same_pid') == '1' ? 'checked' : '').'> 仅禁止同一云签到账号重复添加</label><br/>
+	            <label><input type="radio" name="same_pid" value="2" '.(option::get('same_pid') == '2' ? 'checked' : '').'> 全局禁止(一旦有用户添加则其他用户不能添加)</label>
+	        </td>
+	    </tr>';
+	$content2['same_pid'] = array('html'=>$bsphtml,'type'=>'else');
 	$content2['retry_max'] = array('td1'=>'<b>签到失败重试次数</b><br/>0为无限，-1为不重试','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['sign_hour'] = array('td1'=>'<b>签到开始时间</b><br/>24小时制。例如设为-1，则从0点开始签到','type'=>'number','text'=>'','extra'=>'min="-1" step="1" max="24"');
 	$content2['sign_sleep'] = array('td1'=>'<b>签到间隔时间</b><br/>单位为毫秒，0为不暂停','type'=>'number','text'=>'适量的间隔时间可以防止签到过快而失败的问题，但会导致签到效率降低','extra'=>'min="0" step="1"');
 	$content2['enable_addtieba'] = array('td1'=>'<b>允许手动添加贴吧</b>','type'=>'checkbox','text'=>'开启后用户可以手动添加贴吧，添加时必须≤最大关注贴吧数量','extra'=>'');
 	$sign_mode = unserialize(option::get('sign_mode'));
-	if(!empty($sign_mode)){
-		$sm1 = in_array('1',$sign_mode) ? ' checked' : '' ;
-		$sm2 = in_array('2',$sign_mode) ? ' checked' : '' ;
-		$sm3 = in_array('3',$sign_mode) ? ' checked' : '' ;
-	} else { $sm1=$sm2=$sm3=''; }
 	$smhtml = '<tr><td><b>签到模式设置</b><br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td>
-	            <input type="checkbox" name="sign_mode[]" value="1"'.$sm1.'> 模拟手机客户端签到<br/>
-	            <input type="checkbox" name="sign_mode[]" value="3"'.$sm3.'> 手机网页签到<br/>
-	            <input type="checkbox" name="sign_mode[]" value="2"'.$sm2.'> 网页签到
+	            <label><input type="checkbox" name="sign_mode[]" value="1" '.(in_array('1',$sign_mode) ? 'checked' : '').'> 模拟手机客户端签到</label><br/>
+	            <label><input type="checkbox" name="sign_mode[]" value="3" '.(in_array('2',$sign_mode) ? 'checked' : '').'> 手机网页签到</label><br/>
+	            <label><input type="checkbox" name="sign_mode[]" value="2" '.(in_array('3',$sign_mode) ? 'checked' : '').'> 网页签到</label>
 	        </td>
 	    </tr>';
 	$content2['sign_mode'] = array('html'=>$smhtml,'type'=>'else');
-	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');     
-	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');   
+	$content2['sign_scan'] = array('td1'=>'<b>贴吧数据表搜寻方法</b><br/><br/><input type="button" class="btn btn-default" onclick="viewSignScanModeHelp();" value="查看帮助">','type'=>'select','text'=>'<br/>该设置影响签到效率，不当的设置可能会导致效率降低并漏签');
+	$content2['sign_scan']['select'] = array('0'=>'永不随机，按顺序抽取','1'=>'随机，使用 JOIN','2'=>'随机，使用 ORDER BY RAND()');
 	$ft1 = option::get('fb');
 	if (!empty($i['tabpart'])) {
 		$temp = '';
@@ -93,7 +96,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content1['system_name'] = array('td1'=>'<b>站点名称</b><br/>支持 HTML','type'=>'text','text'=>'','extra'=>'');
 	$content1['system_keywords'] = array('td1'=>'<b>关键字</b>(Keywords)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
 	$content1['system_description'] = array('td1'=>'<b>描述</b>(Description)<br/>SEO功能，以半角逗号(,)为分隔符','type'=>'text','text'=>'','extra'=>'');
-	$content1['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$footer = htmlspecialchars(option::get('footer'));
 	$footerhtml = '<tr><td><b>自定义底部信息</b><br/><br/>支持 HTML</td><td>
 		<textarea name="footer" class="form-control" style="height:200px">'.$footer.'</textarea>
@@ -104,26 +106,30 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<textarea name="ann" class="form-control" style="height:200px">'.$ann.'</textarea>
 		</td></tr>';
 	$content1['ann'] = array('html'=>$annhtml,'type'=>'else');
-	$content1['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content1['sign_multith'] = array('td1'=>'<b>计划任务线程数</b><br/>0单线程，此为模拟多线程','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
 	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
-	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符','type'=>'text','text'=>'启用后需要通过访问 <b>do.php?pw=密码</b> 才能执行计划任务，POST/GET 均可','extra'=>'');
+	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符<br/><a href="javascript:;" onclick="alert(\'你需要通过访问 <b>do.php?pw=密码</b> 执行计划任务<br/>例如：'.SYSTEM_URL.'do.php?pw=yourpassword<br/><br/>若您要通过命令行执行计划任务，请加上参数 <b>--pw=密码</b><br/>例如：php do.php --pw=yourpassword<br/>命令行模式注意：你需要指明do.php的绝对路径，或者将do.php加入PATH\')">帮助：启用密码功能后如何执行计划任务？</a>','type'=>'text','text'=>'','extra'=>'');
 	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
 	$reg2 = option::get('protect_reg') == 1 ? ' checked' : '' ;
 	$reg3 = option::get('yr_reg');
-	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>输入框留空表示无需邀请码</td><td>
+	$reg4 = option::get('stop_reg');
+	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>邀请码框留空表示无需邀请码<br/><br/>停止注册提示框输入指定提示内容</td><td>
 		<div class="input-group">
 			&nbsp;&nbsp;<input type="checkbox" name="enable_reg" value="1"'.$reg1.'> 允许用户注册&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="checkbox" name="protect_reg" value="1"'.$reg2.'> 反恶意注册
 		</div><br/>
 		<div class="input-group">
 			<span class="input-group-addon">邀请码设置</span><input type="text" name="yr_reg" id="yr_reg" value="'.$reg3.'" class="form-control">
+		</div><br/>
+		<div class="input-group">
+			<span class="input-group-addon">停止注册提示</span><input type="text" name="stop_reg" id="stop_reg" value="'.$reg4.'" class="form-control">
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
 	$content1['icp'] = array('td1'=>'<b>ICP 备案信息</b><br/>没有请留空','type'=>'text','text'=>'','extra'=>'');
 	$content1['trigger'] = array('td1'=>'<b>依靠访客触发任务</b>','type'=>'checkbox','text'=>'建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效','extra'=>'');
 	$content1['cktime'] = array('td1'=>'<b>Cookie有效期</b><br/>单位为秒，过大会导致浏览器无法记录','type'=>'number','text'=>'','extra'=>'step="1" min="1"');
+	$content1['csrf'] = array('td1'=>'<b>停用CSRF防御</b>','type'=>'checkbox','text'=>'贴吧云签到可以防御CSRF攻击，开启该选项会导致站点处于危险状态','extra'=>'');
 	$content1['isapp'] = array('td1'=>'<b>环境为引擎</b>','type'=>'checkbox','text'=>'如果您的主机不支持写入或者为应用引擎，请选择此项','extra'=>'');
 	$content1['dev'] = array('td1'=>'<b>开发者模式</b>','type'=>'checkbox','text'=>'生产环境下请勿开启','extra'=>'');
 		/*警告：超长内容*/
@@ -186,9 +192,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 
 					<div class="input-group">
 					  <span class="input-group-addon">SMTP密码</span>
-					  <div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'mail_smtppw\' id=\'smtp_pwd\' placeholder=\'输入新的SMTP密码，刷新可取消修改\'>');$(this).remove();">
-					 	 <input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
-					  </div>
+					 	 <input type="text" onclick="$(this).attr('value','').attr('type','password').attr('name','mail_smtppw').removeAttr('readonly');" class="form-control" readonly value="保持原密码 ( 点击可以修改 )">
 					</div><br/>
 				</div>
 			</div>
@@ -197,30 +201,9 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	<?php
 	$mailhtml = ob_get_clean();
 	$content1['mail'] = array('html'=>$mailhtml,'type'=>'else');
-	ob_start();
-	?>
-		<tr><td><b>StusGame 产品中心 账号设置</b>
-		<br/><br/><input type="button" class="btn btn-default" onclick="location = '<?php echo SYSTEM_URL; ?>setting.php?mod=admin:testbbs'" value="测试登录">
-		<br/><br/>测试前请先保存设置
-		</td><td><br/>
-			<div class="input-group">
-			  <span class="input-group-addon">账号</span>
-			  <input type="text" name="bbs_us" class="form-control"  value="<?php echo option::get('bbs_us') ?>">
-			</div><br/>
-
-			<div class="input-group">
-				<span class="input-group-addon">密码</span>
-				<div onclick="$(this.parentNode).append('<input type=\'password\' class=\'form-control\' name=\'bbs_pw\' id=\'bbs_pw\' placeholder=\'输入新的产品中心密码，刷新可取消修改\'>');$(this).remove();">
-					<input type="text" id="smtp_pwd" class="form-control" disabled value="保持原密码 ( 点击可以修改 )">
-				</div>
-			</div><br/>
-		</td></tr>
-	<?php
-	$bbshtml = ob_get_clean();
-	$content1['bbs'] = array('html'=>$bbshtml,'type'=>'else');
 	/*end 超长内容*/
 	echo former::create($set1,$content1);
 }
 ?>
 
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

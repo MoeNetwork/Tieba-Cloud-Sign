@@ -11,7 +11,7 @@ return array(
         'forphp'      => 'all'                  //适用的PHP版本，如果定义了，系统就在安装和激活时进行版本对比，如果版本低于forphp，自动禁止下一步操作，all为所有版本
 	),
 	'author' => array(
-		'author'      => '无名智者',            //作者名称
+		'author'      => 'Kenvix',            //作者名称
 		'email'       => 'kenvix@vip.qq.com',   //作者邮箱
 		'url'         => 'http://zhizhe8.net'   //作者的个人网站
 	),

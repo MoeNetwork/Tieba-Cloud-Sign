@@ -1,6 +1,6 @@
 <?php
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','1.0');
+define('SYSTEM_VER','4.0');
 define('SYSTEM_ROOT2',dirname(__FILE__));
 define('SYSTEM_ROOT',dirname(__FILE__).'/..');
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
@@ -11,10 +11,12 @@ include SYSTEM_ROOT2.'/../lib/class.wcurl.php';
 if (file_exists(SYSTEM_ROOT2.'/install.lock')) {
     msg('错误：安装锁定，请删除以下文件后再安装：<br/><br/>/setup/install.lock<br/><br/>或者点击下面的按钮返回站点取消安装：', '../');
 }
+/*
 $csrf = !empty($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER']) : '';
 if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER['SERVER_NAME'] ) ) {
 	msg('安装程序检测到来源异常，已被拦截，请按步骤进行安装！点击返回重新操作','index.php');
 }
+*/
 
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">';
@@ -217,11 +219,16 @@ define(\'SYSTEM_SALT\',\'\');';
 					}
 				}
 				if (!isset($_POST['nosql'])) {
-					$m->multi_query($sql);
+					try {
+						$m->multi_query($sql);
+					} catch(Exception $ex) {
+						$errorhappen .= $ex->getMessage();
+						$errorhappen .= '<br/><br/>自动安装失败，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
+					}
 				} else {
 					$errorhappen .= '由于你选择了手动安装，请手动复制下列语句到数据库管理软件(例如phpmyadmin)并运行：<br/>请无视其中的注释，直接导入即可<br/><div class="alert alert-success"><pre>'.$sql.'</pre><br/><br/>';
 				}
-
+				echo '<script src="stat.js?type=tcs&ver='.SYSTEM_VER.'"></script>';
 				if (!empty($errorhappen)) {
 					echo '<h2>请手动安装</h2><br/>';
 					echo '<div class="progress progress-striped">

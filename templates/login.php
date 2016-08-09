@@ -12,7 +12,7 @@
       <?php if (isset($_GET['msg'])): ?><div class="alert alert-info alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           <?php echo strip_tags($_GET['msg']); ?></div><?php endif;?>
-  <form name="f" method="post" action="index.php?mod=admin:login" onsubmit="$('#pw').val($.md5($('#pw').val()));">
+  <form name="f" method="post" action="index.php?mod=admin:login" onsubmit="//$('#pw').val($.md5($('#pw').val()));">
 	<div class="input-group">
   <span class="input-group-addon">账户</span>
   <input type="text" class="form-control" name="user" placeholder="账户可以为用户名或者邮箱地址" required>
@@ -27,8 +27,8 @@
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">登陆</button>
   <?php doAction('login_page_3'); ?>
 	</div><br/><br/><br/>
-	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
-	<?php 
+	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 
+	<?php
   $icp=option::get('icp');
     if (!empty($icp)) {
       echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
