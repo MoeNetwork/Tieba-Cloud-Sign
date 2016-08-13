@@ -83,7 +83,7 @@ function textMiddle($text, $left, $right) {
 function getBaiduId($bduss){
 	global $m;
 	$header[] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8';
-	$header[] = 'Cookie: BDUSS='.$bduss;
+	$header[] = 'Cookie: BDUSS='.$bduss.';BAIDUID='.strtoupper(md5(time()));
 	$c = new wcurl('http://wapp.baidu.com/',$header);
 	$data = $c->get();
 	$c->close();
