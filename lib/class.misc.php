@@ -150,7 +150,7 @@ class misc {
 			return $f; 
 		} else {
 		*/
-			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded','Cookie:BAIDUID='.strtoupper(md5(time()))));
 			$s  = $ch->exec();
 			//self::mSetFid($kw,$fid[1]);
 			$x  = easy_match('<input type="hidden" name="fid" value="*"/>',$s);
