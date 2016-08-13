@@ -46,8 +46,7 @@ global $i;
         <ul class="dropdown-menu">
             <?php doAction('navi_3'); ?>
             <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-            <li><a href="https://github.com/MoeNetwork/tbsign_plugins/blob/master/README.md" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
-            <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
+            <li><a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
         </ul>
       </li>
       <?php doAction('navi_4'); } ?>
@@ -69,7 +68,6 @@ global $i;
         <ul class="dropdown-menu">
           <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
           <li><a href="http://zhizhe8.net" target="_blank">Kenvix's Blog</a></li>
-          <li><a href="https://moesign.com/" target="_blank">MoeSign</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
@@ -99,8 +97,7 @@ global $i;
                 <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
-                  <li><a href="https://github.com/MoeNetwork/tbsign_plugins/blob/master/README.md" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件中心</a></li>
-                  <li><a href="http://s.stus8.com/index.php?mod=list" target="_blank"><span class="glyphicon glyphicon-cloud"></span> 产品中心</a></li>
+                  <li><a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
               <?php } else { ?>
