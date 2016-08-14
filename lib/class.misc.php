@@ -233,7 +233,7 @@ class misc {
 	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
 		//没问题了
 		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
-		$ch->addcookie("BDUSS=".$ck);
+		$ch->addcookie(array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time()))));
 		return $ch->exec();
 	}
 
@@ -242,8 +242,9 @@ class misc {
 	 */
 	public static function DoSign_Default($uid,$kw,$id,$pid,$fid,$ck) {
 		global $m,$today;
+        $cookie = array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time())));
 		$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
-		$ch->addcookie("BDUSS=".$ck);
+		$ch->addcookie($cookie);
 		$s  = $ch->exec();
 		$ch->close();
 		preg_match('/\<td style=\"text-align:right;\"\>\<a href=\"(.*)\"\>签到\<\/a\>\<\/td\>\<\/tr\>/', $s, $s);
@@ -254,12 +255,12 @@ class misc {
 					'Accept-Language: zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
 					'User-Agent: Fucking Phone'
 				));
-			$ch->addcookie("BDUSS=".$ck);
+			$ch->addcookie($cookie);
 			$ch->exec();
 			$ch->close();
 			//临时判断解决方案
 			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
-			$ch->addcookie("BDUSS=".$ck);
+			$ch->addcookie($cookie);
 			$s = $ch->exec();
 			$ch->close();
 			//如果找不到这段html则表示没有签到则stripos()返回false，同时is_bool()返回true，最终返回false
