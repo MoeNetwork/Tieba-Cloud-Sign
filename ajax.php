@@ -95,12 +95,14 @@ switch (SYSTEM_PAGE) {
 			die('<div class="alert alert-danger"><b>检查更新失败：无法获取最新版本信息。</b></div>');
 		} else {
 			global $i;
-			if($i['opt']['vid'] > $data['vid']){
-				die('<div class="alert alert-warning"><b>您可能正处于开发模式或在使用测试版本，因此不支持升级。</b></div>');
+			if(isset($_GET['ok'])){
+				$tip = '<b>更新成功，下面是当前版本信息。</b><hr/>';
+			} elseif($i['opt']['vid'] > $data['vid']){
+				die('<div class="alert alert-warning"><b>您可能正处于开发模式或在使用测试版本，因此不支持在线更新。</b></div>');
 		    } elseif($i['opt']['vid'] == $data['vid']) {
 				$tip = '<b>您当前正在使用最新版本的云签到程序，下面是有关信息。</b><hr/>';
 			} else {
-				$tip = '<b>检测到新版本云签到，建议您<a href="ajax.php?mod=admin:update:updnow">立即升级</a>，下面是有关信息。</b><hr/>';
+				$tip = '<b>检测到新版本云签到，建议您<a href="ajax.php?mod=admin:update:updnow" onclick="waitup();">立即更新</a>，下面是有关信息。</b><hr/>';
 			}
 			$tip .= $data['content'];
 			die('<div class="alert alert-success">'.$tip.'</div>');
@@ -170,7 +172,7 @@ switch (SYSTEM_PAGE) {
 		//修改版本号
 		option::set('vid',$data['vid']);
 		//暂不支持更新脚本
-		msg('恭喜您，更新成功！', SYSTEM_URL);
+		msg('恭喜您，更新成功！', SYSTEM_URL.'index.php?mod=admin:update&ok');
 		break;
 
 	case 'admin:update:changeServer':
@@ -216,20 +218,6 @@ switch (SYSTEM_PAGE) {
 		} else {
             echo '{"error":"'.$loginResult[0].'","msg":"'.$loginResult[1].'"}';
         }
-		break;
-
-	case 'admin:c_update:check':
-		global $i;
-		$c = new wcurl(SUPPORT_URL.'getplug.php?m=ver&pname='.$_GET['plug']);
-		$cloud = json_decode($c->exec(),true);
-		$c->close();
-		if(empty($cloud['version'])){
-			die('未找到该产品信息');
-		}
-		echo '最新版本：'.$cloud['version'];
-		if($cloud['version'] > $i['plugins']['desc'][$_GET['plug']]['plugin']['version']){
-			echo '//'.$i['plugins']['desc'][$_GET['plug']]['plugin']['name'].' - 发现新版本//最新版本：'.$cloud['version'].'<br/>版本描述：'.$cloud['whatsnew'].'<br/>'.'本次更新需要支付 '.$cloud['updateXB'].' XB。<a href="setting.php?mod=admin:cloud&upd='.$_GET['plug'].'">立即更新</a>';
-		}
 		break;
 
 	default:

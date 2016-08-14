@@ -158,7 +158,6 @@ switch (SYSTEM_PAGE) {
 				@option::set('mail_smtppw',$sou['mail_smtppw']);
 			}
 			@option::set('dev',$sou['dev']);
-			@option::set('dev',$sou['dev']);
 			@option::set('cron_pw',$sou['cron_pw']);
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
