@@ -11,10 +11,10 @@
  */
 define('SYSTEM_FN','百度贴吧云签到');
 define('SYSTEM_VER','4.7');
-define('SYSTEM_VER_NOTE','');
+define('SYSTEM_VER_NOTE','a');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
-define('SYSTEM_ISCONSOLE' , (isset($argv) ? true : false));
+define('SYSTEM_ISCONSOLE' , ((!empty($argc) && !empty($argv)) ? true : false));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 define('SUPPORT_URL', 'http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home');
 if(SYSTEM_ISCONSOLE)  {
