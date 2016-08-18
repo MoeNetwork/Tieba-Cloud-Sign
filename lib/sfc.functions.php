@@ -81,10 +81,8 @@ function textMiddle($text, $left, $right) {
  * @return string|bool 百度用户名，失败返回FALSE
  */
 function getBaiduId($bduss){
-	global $m;
-	$header[] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8';
-	$header[] = 'Cookie: BDUSS='.$bduss;
-	$c = new wcurl('http://wapp.baidu.com/',$header);
+	$c = new wcurl('http://wapp.baidu.com/');
+    $c->addCookie(array('BDUSS' => $bduss,'BAIDUID' => strtoupper(md5(time()))));
 	$data = $c->get();
 	$c->close();
 	return urldecode(textMiddle($data,'i?un=','">'));

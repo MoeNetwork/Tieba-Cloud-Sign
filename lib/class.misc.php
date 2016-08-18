@@ -150,7 +150,7 @@ class misc {
 			return $f; 
 		} else {
 		*/
-			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded','Cookie:BAIDUID='.strtoupper(md5(time()))));
 			$s  = $ch->exec();
 			//self::mSetFid($kw,$fid[1]);
 			$x  = easy_match('<input type="hidden" name="fid" value="*"/>',$s);
@@ -233,7 +233,7 @@ class misc {
 	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
 		//没问题了
 		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
-		$ch->addcookie("BDUSS=".$ck);
+		$ch->addcookie(array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time()))));
 		return $ch->exec();
 	}
 
@@ -242,8 +242,9 @@ class misc {
 	 */
 	public static function DoSign_Default($uid,$kw,$id,$pid,$fid,$ck) {
 		global $m,$today;
+        $cookie = array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time())));
 		$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
-		$ch->addcookie("BDUSS=".$ck);
+		$ch->addcookie($cookie);
 		$s  = $ch->exec();
 		$ch->close();
 		preg_match('/\<td style=\"text-align:right;\"\>\<a href=\"(.*)\"\>签到\<\/a\>\<\/td\>\<\/tr\>/', $s, $s);
@@ -254,12 +255,12 @@ class misc {
 					'Accept-Language: zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
 					'User-Agent: Fucking Phone'
 				));
-			$ch->addcookie("BDUSS=".$ck);
+			$ch->addcookie($cookie);
 			$ch->exec();
 			$ch->close();
 			//临时判断解决方案
 			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
-			$ch->addcookie("BDUSS=".$ck);
+			$ch->addcookie($cookie);
 			$s = $ch->exec();
 			$ch->close();
 			//如果找不到这段html则表示没有签到则stripos()返回false，同时is_bool()返回true，最终返回false
@@ -488,55 +489,92 @@ class misc {
             }
         }
 	}
+    
+	/*
+	 * 获取指定pid用户userid
+	 */
+	public static function getUserid($pid){
+		global $m;
+		$ub  = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
+		$user = new wcurl('http://tieba.baidu.com/i/sys/user_json');
+		$user->addCookie(array('BDUSS' => $ub['bduss']));
+		$re = iconv("GB2312","UTF-8//IGNORE",$user->get());
+		$ur = json_decode($re,true);
+		$userid = $ur['creator']['id'];
+		return $userid;
+	}
+
+	/*
+	 * 获取指定pid
+	 */
+	public static function getTieba($userid,$bduss,$pn){
+		$head = array();
+		$head[] = 'Content-Type: application/x-www-form-urlencoded';
+		$head[] = 'User-Agent: Mozilla/5.0 (SymbianOS/9.3; Series60/3.2 NokiaE72-1/021.021; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 BrowserNG/7.1.16352';
+		$tl = new wcurl('http://c.tieba.baidu.com/c/f/forum/like',$head);
+		$data = array(
+			'_client_id' => 'wappc_' . time() . '_' . '258',
+			'_client_type' => 2,
+			'_client_version' => '6.5.8',
+			'_phone_imei' => '357143042411618',
+			'from' => 'baidu_appstore',
+			'is_guest' => 1,
+			'model' => 'H60-L01',
+			'page_no' => $pn,
+			'page_size' => 200,
+			'timestamp' => time(). '903',
+			'uid' => $userid,
+		);
+		$sign_str = '';
+		foreach($data as $k=>$v) $sign_str .= $k.'='.$v;
+		$sign = strtoupper(md5($sign_str.'tiebaclient!!!'));
+		$data['sign'] = $sign;
+		$tl->addCookie(array('BDUSS' => $bduss));
+		$tl->set(CURLOPT_RETURNTRANSFER,true);
+		$rt = $tl->post($data);
+		return $rt;
+	}
+
 	/**
 	 * 扫描指定PID的所有贴吧
 	 * @param string $pid PID
 	 */
 	public static function scanTiebaByPid($pid) {
-		global $i;
+    	global $i;
 		global $m;
-		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");	
+		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
 		$uid    = $cma['uid'];
 		$ubduss = $cma['bduss'];
 		$isvip  = self::isvip($uid);
 		$pid    = $cma['id'];
+		$userid = self::getUserid($pid);
 		$table  = self::getTable($uid);
-		$n3     = 1;
-		$n      = 0;
-		$n2     = 0;
-		$addnum = 0; 
-		$list   = array();
 		$o      = option::get('tb_max');
-		while(true) {
-			$url = 'http://tieba.baidu.com/f/like/mylike?&pn='.$n3;
-			$n3++;
-			$addnum = 0;
-			$c      = new wcurl($url, array('User-Agent: Phone XXX')); 
-			$c->addcookie("BDUSS=".$ubduss);
-			$ch = $c->exec();
-			$c->close();
-			preg_match_all('/\<td\>(.*?)\<a href=\"\/f\?kw=(.*?)\" title=\"(.*?)\">(.*?)\<\/a\>\<\/td\>/', $ch, $list);
-			foreach ($list[3] as $v) {
-				$n++;
-				if (!empty($o) && $isvip == false && $n > $o) {
-					break 2;
+		$pn     = 1;
+		while (true){
+			if (empty($userid)) break;
+			$rc = self::getTieba($userid,$ubduss,$pn);
+			$rc = json_decode($rc,true);
+			foreach ($rc['forum_list']['non-gconforum'] as $v){
+    			$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
+				if ($tb['c'] >= $o && !$isvip) break;
+				$vn = addslashes(htmlspecialchars($v['name']));
+				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
+				if ($ist['c'] == 0){
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
 				}
-				$v = addslashes(htmlspecialchars(mb_convert_encoding($v, "UTF-8", "GBK")));
-				$osq = $m->once_fetch_array("SELECT COUNT(*) AS `C` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$v}';");
-				if($osq['C'] == '0') {
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid}, ".$uid.", '{$v}', 0, 0);");
+			}
+			foreach ($rc['forum_list']['gconforum'] as $v){
+				$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
+				if ($tb['c'] >= $o && !$isvip) break;
+				$vn = addslashes(htmlspecialchars($v['name']));
+				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
+				if ($ist['c'] == 0){
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
 				}
-				$addnum++;
 			}
-            if($n3 > 100){
-                break; //100页后重复
-            }
-			if (!isset($list[3][0])) {
-				break; //完成
-			} elseif($o != 0 && $n2 >= $o && $isvip == false) {
-				break; //超限
-			}
-			$n2 = $n2 + $addnum;
+			if ((count($rc['forum_list']['non-gconforum']) < 1) && (count($rc['forum_list']['gconforum']) < 1)) break;
+			$pn ++;
 		}
 	}
 

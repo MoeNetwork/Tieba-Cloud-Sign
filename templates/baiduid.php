@@ -173,10 +173,11 @@ global $m;
 <div class="input-group">
   <input type="hidden" name="mod" value="baiduid">
   <span class="input-group-addon">输入BDUSS</span>
-  <input type="text" class="form-control" name="bduss">
+  <input type="text" class="form-control" name="bduss" id="bduss_input">
   <span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击提交"></span>
 </div>
 </form>
+
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
 <div class="panel panel-default">
 	<div class="panel-heading" onclick="$('#chrome_bduss').fadeToggle();"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down"></span> 点击查看在 Chrome 浏览器下的绑定方法</h3></div>
@@ -193,5 +194,5 @@ global $m;
 </div>
 </div>
 <!-- END PAGE3 -->
-
+<?php doAction('baiduid'); ?>
 <br/><br/><br/><br/><br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

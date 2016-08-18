@@ -158,7 +158,6 @@ switch (SYSTEM_PAGE) {
 				@option::set('mail_smtppw',$sou['mail_smtppw']);
 			}
 			@option::set('dev',$sou['dev']);
-			@option::set('dev',$sou['dev']);
 			@option::set('cron_pw',$sou['cron_pw']);
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
@@ -449,27 +448,6 @@ switch (SYSTEM_PAGE) {
 		}
 		doAction('cron_setting_2');
 		Redirect('index.php?mod=admin:cron&ok');
-		break;
-
-	case 'admin:update:back':
-		if (isset($_GET['del'])) {
-			if (file_exists(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del'])) {
-				DeleteFile(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['del']);
-			}
-			Redirect('index.php?mod=admin:update:back&ok');
-		}
-
-		if (isset($_GET['dir'])) {
-			if (file_exists(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['dir'] . '/__backup.ini')) {
-				if(CopyAll(SYSTEM_ROOT . '/setup/update_backup/' . $_GET['dir'] , SYSTEM_ROOT) !== true) {
-					msg('版本回滚失败');
-				}
-				unlink(SYSTEM_ROOT . '/__backup.ini');
-				msg('版本回滚成功','index.php');
-			} else {
-				msg('版本回滚失败：该备份不存在或不正确');
-			}
-		}
 		break;
 
 	case 'admin:create_lock':

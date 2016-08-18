@@ -1,71 +1,18 @@
 <?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }  if (ROLE != 'admin') { msg('权限不足！'); }
 global $m,$i;
-
-if (isset($_GET['ok'])) {
-    echo '<div class="alert alert-success">应用成功</div>';
-}
 doAction('admin_update_1');
-if (isset($i['mode'][2])) {
-	?>
-<ul class="nav nav-tabs" role="tablist">
-  <li><a href="index.php?mod=admin:update">检查更新</a></li>
-  <li class="active"><a href="index.php?mod=admin:update:back">更新回滚</a></li>
-</ul>
-<br/>
-	<?php
-if (file_exists(SYSTEM_ROOT . '/setup/update_backup') && is_dir(SYSTEM_ROOT . '/setup/update_backup')) {
-	$xc = scandir(SYSTEM_ROOT . '/setup/update_backup',1);
-	$count = count($xc) - 2;
-} else {
-	$count = 0;
-}
-if($count <= 0) {
-	echo '<div class="alert alert-danger" role="alert">现在无备份可供回滚，当您对云签到进行升级时，会自动生成备份以供回滚</div>';
-} else {
-	echo '<div class="alert alert-info" role="alert">有 '.$count.' 个更新可供回滚，备份文件均位于 /setup/update_backup/实际名称 中</div>
-	<table class="table table-striped">
-	<thead>
-		<tr>
-			<th style="width:15%">实际名称</th>
-			<th style="width:10%">版本</th>
-			<th style="width:20%">备份时间</th>
-			<th style="width:25%">操作</th>
-		</tr>
-	</thead>
-	<tbody>';
-	foreach ($xc as $v) {
-		$ini = parse_ini_file(SYSTEM_ROOT . '/setup/update_backup/' . $v . '/__backup.ini');
-
-		if ($ini !== false) {
-			echo '<tr><td>'.$v.'</td>';
-			echo '<td>'.$ini['ver'].'</td>';
-			echo '<td>'.$ini['time'].'</td>';
-			echo '<td><button type="button" class="btn btn-primary" onclick="if(confirm(\'你确实要将云签到回滚到此版本吗\')) location = \'setting.php?mod=admin:update:back&dir='.$v.'\';">回滚</button> ';
-			echo '<button type="button" class="btn btn-default"  onclick="if(confirm(\'你确实要删除此备份吗\')) location = \'setting.php?mod=admin:update:back&del='.$v.'\';">删除</button></td>';
-			echo '</tr>';
-		}
-	}
-	echo '</tbody></table>';
-}
-} else {
 ?>
-<ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="index.php?mod=admin:update">检查更新</a></li>
-  <li><a href="index.php?mod=admin:update:back">更新回滚</a></li>
-</ul>
-<br/>
 <div class="input-group">
 	<span class="input-group-addon">更新服务器</span>
 	<select id="server" class="form-control">
-		<option value="0">Git@OSC [国内推荐]</option>
-		<option value="1">Github [国外推荐]</option>
-		<option value="2">Coding [国内]</option>
-		<option value="3">Gitcafe [国外]</option>
+		<option value="0">Github [默认,国外]</option>
+		<option value="5">Coding [国内]</option>
 	</select>
 	<span class="input-group-btn">
 		<input id="save_btn" type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">
 	</span>
 </div>
+<br/>
 <script type="text/javascript">
 	<?php
 		$server = option::get('update_server') === null ? 0 : option::get('update_server');
@@ -91,7 +38,7 @@ if($count <= 0) {
 		});
 	}
 </script>
-<br/>
+
 <?php
 //检测服务器是否支持写入
 if(is_writable("setup")){
@@ -107,19 +54,22 @@ if(is_writable("setup")){
 <div id="comsys3"></div>';
 	$writable="1";
 } else {
-	echo '<div class="alert alert-danger" role="alert">你的服务器不支持文件写入，请 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">手动更新</a></div>';
+	echo '<div class="alert alert-danger" role="alert">你的服务器不支持文件写入，请手动更新</div>';
 	$writable="0";
 }
 ?>
 
 <script type="text/javascript">
+function waitup() {
+	$("#comsys").html('<div class="alert alert-warning">开始更新，请不要离开此页面...</div>');
+}
 function update() {
 	console.log(updata);
 }
 if(<?php echo $writable; ?>==1){
 	$.ajax({
 	  async:true,
-	  url: 'ajax.php?mod=admin:update&server=' + server,
+	  url: 'ajax.php?mod=admin:update<?php if(isset($_GET['ok'])) echo '&ok' ?>',
 	  type: "GET",
 	  data : {},
 	  dataType: 'html',
@@ -135,10 +85,10 @@ if(<?php echo $writable; ?>==1){
 	  	console.log(error);
 	  	 $("#upd_info").html('检查更新失败！');
 	     $("#upd_prog").css({'width':'0%'});
-	     $("#comsys").html('<div class="alert alert-danger">检查更新失败：无法连接到更新服务器<br/>错误已经记录到控制台，打开控制台查看详细<br/>你还可以尝试 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=2141" target="_blank">手动更新</a></div><br/>');
+	     $("#comsys").html('<div class="alert alert-danger">检查更新失败：无法连接到更新服务器<br/>错误已经记录到控制台，打开控制台查看详细<br/>你可以尝试手动更新</div><br/>');
 	  }
 	});
 }
 </script>
-<?php } doAction('admin_update_2'); ?>
+<?php doAction('admin_update_2'); ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

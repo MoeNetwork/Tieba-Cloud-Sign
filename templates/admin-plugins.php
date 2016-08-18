@@ -92,7 +92,7 @@ doAction('admin_plugins');
 	echo ' | 您已在全局设置中指定环境为引擎，卸载插件将不会删除插件文件';
 }
 ?>
-<br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">上传安装插件</a> | <a href="http://s.stus8.com/index.php?mod=list" target="_blank">产品中心</a> | <a href="javascript:;" onclick="alert('请确保插件目录名和插件入口文件的文件名一致(扩展名除外)<br/>例如，插件目录名是 <i>wmzz_debug</i>，则插件入口文件的文件名应该是 <i>wmzz_debug.php</i><br/><br/>如果您是从Git上下载的插件包，请注意去掉文件夹名称-master之类的字符');" target="_blank">找不到上传的插件？</a>
+<br/><a href="javascript:;" data-toggle="modal" data-target="#InstallPlugin">上传安装插件</a> | <a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank">插件库</a> | <a href="javascript:;" onclick="alert('请确保插件目录名和插件入口文件的文件名一致(扩展名除外)<br/>例如，插件目录名是 <i>wmzz_debug</i>，则插件入口文件的文件名应该是 <i>wmzz_debug.php</i><br/><br/>如果您是从Git上下载的插件包，请注意去掉文件夹名称-master之类的字符');" target="_blank">找不到上传的插件？</a>
 </div>
 <form action="setting.php?mod=admin:plugins&xorder" method="post">
 <div class="table-responsive">
