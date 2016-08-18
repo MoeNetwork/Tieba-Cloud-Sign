@@ -400,48 +400,50 @@ class misc {
 	}
 
 	/**
-	 * 执行一个表的签到重試任务
+     * 执行一个表的签到重試任务
 	 * @param string $table 表
 	 */
 	public static function DoSign_retry($table) {
-		global $m,$i;
+		global $m;
 		$today = date('d');
-		if (date('H') <= option::get('sign_hour')) {
-			return option::get('sign_hour').'点时忽略签到';	
-		}
-		$limit = option::get('cron_limit');
-		$sign_mode = unserialize(option::get('sign_mode'));
-		$sign_again = unserialize(option::get('cron_sign_again'));
-		$retry_max  = option::get('retry_max');
-		$q = array();
-		$x = array();
-		//重新尝试签到出错的贴吧
-		if ($limit == 0) {
-			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
-				while ($qss = $m->fetch_array($qs)) {
-					$q[] = array(
-						'id'     => $qss['id'],
-						'uid'    => $qss['uid'],
-						'pid'    => $qss['pid'],
-						'fid'    => $qss['fid'],
-						'tieba'  => $qss['tieba'],
-						'no'     => $qss['no'],
-						'status' => $qss['status'],
-						'latest' => $qss['latest'],
-						'last_error'    => $qss['last_error']
-					);
-				}
-				shuffle($q);
-			}
-		} else {
-			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `latest` = '{$today}'" , true );
-			}
-		}
+		if (date('H') <= option::get('sign_hour')) return option::get('sign_hour').'点时忽略签到';
 
-		foreach ($q as $x) {
-			self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+		$x = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `latest` != {$today} "));
+		if ($x['c'] == 0){
+			$limit = option::get('cron_limit');
+			$sign_mode = unserialize(option::get('sign_mode'));
+			$sign_again = unserialize(option::get('cron_sign_again'));
+			$retry_max  = option::get('retry_max');
+			$q = array();
+			$x = array();
+			//重新尝试签到出错的贴吧
+			if ($limit == 0) {
+				if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+					$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` IN (340011,2280007,110001,1989004,255)");
+					while ($qss = $m->fetch_array($qs)) {
+						$q[] = array(
+							'id'     => $qss['id'],
+							'uid'    => $qss['uid'],
+							'pid'    => $qss['pid'],
+							'fid'    => $qss['fid'],
+							'tieba'  => $qss['tieba'],
+							'no'     => $qss['no'],
+							'status' => $qss['status'],
+							'latest' => $qss['latest'],
+							'last_error'    => $qss['last_error']
+						);
+					}
+					shuffle($q);
+				}
+			} else {
+				if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+					$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` IN (340011,2280007,110001,1989004,255) AND `latest` = '{$today}'" , true );
+				}
+			}
+
+			foreach ($q as $x) {
+				self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+			}
 		}
 	}
 
