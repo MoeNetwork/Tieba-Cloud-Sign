@@ -60,10 +60,10 @@ if (!empty($i['user']['bduss'])) {
 			if(isset($f[$pkey])) {
 				echo '<div id="tbpidpanel_' . $pkey . '" class="tbpanel" style="display:none">';
 				echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
-				echo '<th>ID</th>';
-				echo '<th>贴吧名</th>';
+				echo '<th>序号</th>';
+				echo '<th>贴吧</th>';
 				echo '<th>状态</th>';
-				echo '<th>忽略签到</th>';
+				echo '<th>忽略</th>';
 				echo '</thead><tbody>';
 				echo $f[$pkey].'</tbody></table></div></div>';
 			} else {
