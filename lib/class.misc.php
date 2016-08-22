@@ -545,36 +545,31 @@ class misc {
     	global $m;
 		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
 		$uid    = $cma['uid'];
-		$ubduss = $cma['bduss'];
+		$table  = self::getTable($uid);
+		$tb     = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
+		$bduss  = $cma['bduss'];
 		$isvip  = self::isvip($uid);
 		$pid    = $cma['id'];
-		$userid = self::getUserid($pid);
-		$table  = self::getTable($uid);
+		$bid    = self::getUserid($pid);
 		$o      = option::get('tb_max');
 		$pn     = 1;
+		$a      = 0;
 		while (true){
-			if (empty($userid)) break;
-			$rc = self::getTieba($userid,$ubduss,$pn);
-			$rc = json_decode($rc,true);
-			foreach ($rc['forum_list']['non-gconforum'] as $v){
-    			$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
-				if ($tb['c'] >= $o && !empty($o) && !$isvip) break;
-				$vn = addslashes(htmlspecialchars($v['name']));
-				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
+    		if (empty($bid)) break;
+			$rc     = self::getTieba($bid,$bduss,$pn);
+			$rc     = json_decode($rc,true);
+			$ngf    = $rc['forum_list']['non-gconforum'];
+			foreach ($rc['forum_list']['gconforum'] as $v) $ngf[] = $v;
+			foreach ($ngf as $v){
+				if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
+				$vn  = addslashes(htmlspecialchars($v['name']));
+				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
 				if ($ist['c'] == 0){
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
+					$a ++;
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
 				}
 			}
-			foreach ($rc['forum_list']['gconforum'] as $v){
-				$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
-				if ($tb['c'] >= $o && !empty($o) && !$isvip) break;
-				$vn = addslashes(htmlspecialchars($v['name']));
-				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
-				if ($ist['c'] == 0){
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
-				}
-			}
-			if ((count($rc['forum_list']['non-gconforum']) < 1) && (count($rc['forum_list']['gconforum']) < 1)) break;
+			if ((count($ngf) < 1)) break;
 			$pn ++;
 		}
 	}
