@@ -498,11 +498,10 @@ class misc {
 	public static function getUserid($pid){
 		global $m;
 		$ub  = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
-		$user = new wcurl('http://tieba.baidu.com/i/sys/user_json');
-		$user->addCookie(array('BDUSS' => $ub['bduss']));
-		$re = iconv("GB2312","UTF-8//IGNORE",$user->get());
+		$user = new wcurl("http://tieba.baidu.com/home/get/panel?ie=utf-8&un={$ub['name']}");
+		$re = $user->get();
 		$ur = json_decode($re,true);
-		$userid = $ur['creator']['id'];
+		$userid = $ur['data']['id'];
 		return $userid;
 	}
 
