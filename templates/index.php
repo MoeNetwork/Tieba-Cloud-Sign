@@ -9,7 +9,7 @@ doAction('index_1');
 		<h3 class="panel-title">程序信息</h3>
 	</div>
 	<div class="panel-body">
-		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='80px' weight='80px' onerror="$('#avatar').html('无法加载头像');"></span>
+		<span id="avatar" style="float:right;"><img src="<?php echo getGravatar() ?>" alt="您的头像" title="您的头像" class="img-rounded" height='80px' width='80px' onerror="$('#avatar').html('无法加载头像');"></span>
 		<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?>.<?php echo SYSTEM_REV ?> <?php echo SYSTEM_VER_NOTE ?>
 		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能

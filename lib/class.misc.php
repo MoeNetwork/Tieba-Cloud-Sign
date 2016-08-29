@@ -400,48 +400,50 @@ class misc {
 	}
 
 	/**
-	 * 执行一个表的签到重試任务
+     * 执行一个表的签到重試任务
 	 * @param string $table 表
 	 */
 	public static function DoSign_retry($table) {
-		global $m,$i;
+		global $m;
 		$today = date('d');
-		if (date('H') <= option::get('sign_hour')) {
-			return option::get('sign_hour').'点时忽略签到';	
-		}
-		$limit = option::get('cron_limit');
-		$sign_mode = unserialize(option::get('sign_mode'));
-		$sign_again = unserialize(option::get('cron_sign_again'));
-		$retry_max  = option::get('retry_max');
-		$q = array();
-		$x = array();
-		//重新尝试签到出错的贴吧
-		if ($limit == 0) {
-			if ($retry_max == '0' || ($sign_again['latest'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` != '0'");
-				while ($qss = $m->fetch_array($qs)) {
-					$q[] = array(
-						'id'     => $qss['id'],
-						'uid'    => $qss['uid'],
-						'pid'    => $qss['pid'],
-						'fid'    => $qss['fid'],
-						'tieba'  => $qss['tieba'],
-						'no'     => $qss['no'],
-						'status' => $qss['status'],
-						'latest' => $qss['latest'],
-						'last_error'    => $qss['last_error']
-					);
-				}
-				shuffle($q);
-			}
-		} else {
-			if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
-				$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` != '0' AND `latest` = '{$today}'" , true );
-			}
-		}
+		if (date('H') <= option::get('sign_hour')) return option::get('sign_hour').'点时忽略签到';
 
-		foreach ($q as $x) {
-			self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+		$x = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `latest` != {$today} "));
+		if ($x['c'] == 0){
+			$limit = option::get('cron_limit');
+			$sign_mode = unserialize(option::get('sign_mode'));
+			$sign_again = unserialize(option::get('cron_sign_again'));
+			$retry_max  = option::get('retry_max');
+			$q = array();
+			$x = array();
+			//重新尝试签到出错的贴吧
+			if ($limit == 0) {
+				if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+					$qs = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `no` = 0 AND `status` IN (340011,2280007,110001,1989004,255)");
+					while ($qss = $m->fetch_array($qs)) {
+						$q[] = array(
+							'id'     => $qss['id'],
+							'uid'    => $qss['uid'],
+							'pid'    => $qss['pid'],
+							'fid'    => $qss['fid'],
+							'tieba'  => $qss['tieba'],
+							'no'     => $qss['no'],
+							'status' => $qss['status'],
+							'latest' => $qss['latest'],
+							'last_error'    => $qss['last_error']
+						);
+					}
+					shuffle($q);
+				}
+			} else {
+				if ($retry_max == '0' || ($sign_again['lastdo'] == $today && $sign_again['num'] <= $retry_max && $retry_max != '-1') ) {
+					$q = rand_row( DB_PREFIX.$table , 'id' , $limit , "`no` = 0 AND `status` IN (340011,2280007,110001,1989004,255) AND `latest` = '{$today}'" , true );
+				}
+			}
+
+			foreach ($q as $x) {
+				self::DoSign_All($x['uid'] , $x['tieba'] , $x['id'] , $table , $sign_mode , $x['pid'] , $x['fid']);
+			}
 		}
 	}
 
@@ -496,11 +498,10 @@ class misc {
 	public static function getUserid($pid){
 		global $m;
 		$ub  = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
-		$user = new wcurl('http://tieba.baidu.com/i/sys/user_json');
-		$user->addCookie(array('BDUSS' => $ub['bduss']));
-		$re = iconv("GB2312","UTF-8//IGNORE",$user->get());
+		$user = new wcurl("http://tieba.baidu.com/home/get/panel?ie=utf-8&un={$ub['name']}");
+		$re = $user->get();
 		$ur = json_decode($re,true);
-		$userid = $ur['creator']['id'];
+		$userid = $ur['data']['id'];
 		return $userid;
 	}
 
@@ -540,40 +541,34 @@ class misc {
 	 * @param string $pid PID
 	 */
 	public static function scanTiebaByPid($pid) {
-    	global $i;
-		global $m;
+    	global $m;
 		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
 		$uid    = $cma['uid'];
-		$ubduss = $cma['bduss'];
+		$table  = self::getTable($uid);
+		$tb     = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
+		$bduss  = $cma['bduss'];
 		$isvip  = self::isvip($uid);
 		$pid    = $cma['id'];
-		$userid = self::getUserid($pid);
-		$table  = self::getTable($uid);
+		$bid    = self::getUserid($pid);
 		$o      = option::get('tb_max');
 		$pn     = 1;
+		$a      = 0;
 		while (true){
-			if (empty($userid)) break;
-			$rc = self::getTieba($userid,$ubduss,$pn);
-			$rc = json_decode($rc,true);
-			foreach ($rc['forum_list']['non-gconforum'] as $v){
-    			$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
-				if ($tb['c'] >= $o && !$isvip) break;
-				$vn = addslashes(htmlspecialchars($v['name']));
-				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
+    		if (empty($bid)) break;
+			$rc     = self::getTieba($bid,$bduss,$pn);
+			$rc     = json_decode($rc,true);
+			$ngf    = $rc['forum_list']['non-gconforum'];
+			foreach ($rc['forum_list']['gconforum'] as $v) $ngf[] = $v;
+			foreach ($ngf as $v){
+				if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
+				$vn  = addslashes(htmlspecialchars($v['name']));
+				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
 				if ($ist['c'] == 0){
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
+					$a ++;
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
 				}
 			}
-			foreach ($rc['forum_list']['gconforum'] as $v){
-				$tb = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = {$uid}"));
-				if ($tb['c'] >= $o && !$isvip) break;
-				$vn = addslashes(htmlspecialchars($v['name']));
-				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `uid` = ".$uid." AND `pid` = '{$pid}' AND `tieba` = '{$vn}';");
-				if ($ist['c'] == 0){
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`id`, `pid`,`fid`, `uid`, `tieba`, `no`, `latest`) VALUES (NULL, {$pid},'{$v['id']}', {$uid}, '{$vn}', 0, 0);");
-				}
-			}
-			if ((count($rc['forum_list']['non-gconforum']) < 1) && (count($rc['forum_list']['gconforum']) < 1)) break;
+			if ((count($ngf) < 1)) break;
 			$pn ++;
 		}
 	}

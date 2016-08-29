@@ -22,7 +22,7 @@ if (!empty($i['user']['bduss'])) {
 			$lpid = $x['pid'];
 			$f[$x['pid']] = '';
 		}
-		$f[$x['pid']] .= '<tr><td>'.$x['id'].'</td><td>'.$x['fid'].'</td>';
+		$f[$x['pid']] .= '<tr><td>'.$x['id'].'</td>';
 		$f[$x['pid']] .= '<td class="wrap"><a title="'.$x['tieba'].'" href="http://tieba.baidu.com/f?ie=utf-8&kw='.$x['tieba'].'" target="_blank">'. mb_substr($x['tieba'] , 0 , 30 , 'UTF-8') .'</a>';
 		if ($x['status'] != 0) {
 			$count2++;
@@ -37,7 +37,7 @@ if (!empty($i['user']['bduss'])) {
 			$count1++;
 			$f[$x['pid']] .= '</td><td><font color="green">正常</font>';
 		}
-		$f[$x['pid']] .= '</td><td>'.$no.'</td><td><a href="setting.php?mod=showtb&del&id='.$x['id'].'">删除</a></td></tr>';
+		$f[$x['pid']] .= '</td><td>'.$no.'</td></tr>';
 	}
 	echo '<div class="alert alert-info" id="tb_num">当前已列出 '.$num.' 个贴吧。已签到 '.$count1.' 个贴吧，还有 '.$count2.' 个贴吧等待签到<br/>PID 即为 账号ID';
 	if (!ISVIP) {
@@ -47,7 +47,7 @@ if (!empty($i['user']['bduss'])) {
 	if (option::get('enable_addtieba') == 1) {
 		echo ' | <a href="javascript:;" data-toggle="modal" data-target="#AddTieba">手动添加贴吧</a>';
 	}
-	echo ' | <a href="setting.php?mod=showtb&reset'.'">重签失败贴吧</a>';
+	echo ' | <a href="setting.php?mod=showtb&reset'.'">重签出错吧</a>';
 	echo ' | <a href="javascript:;" onclick="go(\'submit_button\');">前往底部</a></div>';
 	if(!empty($f)) {
 		echo '<ul class="nav nav-tabs">';
@@ -60,12 +60,11 @@ if (!empty($i['user']['bduss'])) {
 			if(isset($f[$pkey])) {
 				echo '<div id="tbpidpanel_' . $pkey . '" class="tbpanel" style="display:none">';
 				echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
-				echo '<th>ID</th>';
-				echo '<th>FID</th>';
-				echo '<th>贴吧名</th>';
+				echo '<th>序号</th>';
+				echo '<th>贴吧</th>';
 				echo '<th>状态</th>';
-				echo '<th>忽略签到</th>';
-				echo '<th>操作</th></thead><tbody>';
+				echo '<th>忽略</th>';
+				echo '</thead><tbody>';
 				echo $f[$pkey].'</tbody></table></div></div>';
 			} else {
 				echo '<br/><div class="alert alert-warning" role="alert">还没有添加任何贴吧，点击上方的按钮扫描贴吧。<br/>扫描不到贴吧？请检查百度账号BDUSS是否已经失效（尝试重新绑定）</div>';
@@ -125,4 +124,4 @@ if (!empty($i['user']['bduss'])) {
 	});
 </script>
 
-<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> 
+<br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a>

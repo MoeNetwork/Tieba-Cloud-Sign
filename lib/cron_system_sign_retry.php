@@ -9,7 +9,7 @@ if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
 function cron_system_sign_retry() {
 	global $i;
 
-	$today = date('Y-m-d');
+	$today = date('d');
 
 	$sign_again = unserialize(option::get('cron_sign_again'));
 	if ($sign_again['lastdo'] != $today) {

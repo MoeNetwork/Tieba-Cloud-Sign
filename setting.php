@@ -532,11 +532,6 @@ switch (SYSTEM_PAGE) {
 			CleanUser(UID);
 			Redirect('index.php?mod=showtb');
 		}
-		elseif (isset($_GET['del'])) {
-			$id = (int) sqladds($_REQUEST['id']);
-			$m->query('DELETE FROM  `'.DB_NAME.'`.`'.DB_PREFIX.TABLE.'` WHERE `id` ='.$id);
-			Redirect('index.php?mod=showtb&ok');
-			}
 		elseif (isset($_GET['reset'])) {
 			$max = $m->fetch_array($m->query("select max(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
 			$min = $m->fetch_array($m->query("select min(id) as id from `".DB_NAME."`.`".DB_PREFIX.TABLE."` where `uid`=".UID));
