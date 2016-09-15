@@ -960,6 +960,7 @@ function get_mime($ext) {
  * @param bool $strict 严格模式。拒绝空referer
  */
 function csrf($strict = true) {
+	if(defined('ANTI_CSRF') && !ANTI_CSRF) return;
 	global $i;
 	if(empty($i['opt']['csrf'])) {
 		if(empty($_SERVER['HTTP_REFERER']) && $strict) redirect('index.php');
