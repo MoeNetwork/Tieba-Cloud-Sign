@@ -359,6 +359,18 @@ switch (SYSTEM_PAGE) {
 				doAction('admin_users_clean');
 				break;
 
+            case 'control':
+                $uid = !empty($_POST['user'][0]) ? $_POST['user'][0] : msg('无效用户ID');
+                $osq = $m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
+                if(empty($osq['pw'])) msg('用户不存在');
+                doAction('admin_users_control');
+                setcookie("uid", $uid, time() + 999999);
+                setcookie("pwd",substr(sha1(EncodePwd($osq['pw'])) , 4 , 32), time() + 999999);
+                setcookie("con_uid", UID);
+                setcookie("con_pwd", $_COOKIE['pwd']);
+                redirect('index.php');
+                break;
+
 			case 'delete':
 				foreach ($_POST['user'] as $value) {
 					DeleteUser($value);

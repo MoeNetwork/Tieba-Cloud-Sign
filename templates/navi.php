@@ -51,6 +51,7 @@ global $i;
       <?php doAction('navi_4'); } ?>
     </ul>
     <ul class="nav navbar-nav navbar-right">
+      <?php if(defined('CON_UID')){?><li><a href="index.php?mod=usercontrolback"><span class="glyphicon glyphicon-eject"></span> 返回 <?php echo CON_NAME; ?></a></li><?php } ?>
       <li><a href="index.php?mod=admin:logout"><span class="glyphicon glyphicon-off"></span> 退出登录</a></li>
       <?php doAction('navi_6'); ?>
     </ul>

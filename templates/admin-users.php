@@ -45,12 +45,12 @@ $users = '';
 $s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users` ORDER BY `id`');
 
 while ($x = $m->fetch_array($s)) {
-	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
+	$users .= '<tr onclick="$(\'#user_'.$x['id'].'\').click();"><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" id="user_'.$x['id'].'" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
 }
 
 ?>
-<div class="alert alert-info">目前共有 <?php echo $userc[0]; ?> 名用户。点击 UID 下面的复选框表示对该用户进行操作<br/><a href="index.php?mod=admin:users&add">点击此处可以添加一名用户</a></div>
-<form action="setting.php?mod=admin:users" method="post" onsubmit="return confirm('此操作不可逆，你确定要执行吗？');">
+<div class="alert alert-info">目前共有 <?php echo $userc[0]; ?> 名用户。点击 UID 下面的复选框表示对该用户进行操作<br/><a href="index.php?mod=admin:users&add">点击此处可以添加一名用户</a> | <a href="javascript:go('submit_button');">前往底部</a></div>
+<form action="setting.php?mod=admin:users" method="post" onsubmit="return userAdminSubmit();">
 <div class="table-responsive">
 <table class="table table-hover">
 	<thead>
@@ -65,12 +65,14 @@ while ($x = $m->fetch_array($s)) {
 	</tbody>
 </table>
 </div>
-选择操作：<input type="radio" name="do" value="cookie" required> 清除 Cookie &nbsp;&nbsp;&nbsp;&nbsp;
-<input type="radio" name="do" value="clean"> 清除贴吧数据 &nbsp;&nbsp;&nbsp;&nbsp;
-<input type="radio" name="do" value="delete"> 删除用户 &nbsp;&nbsp;&nbsp;&nbsp;
-<input type="radio" name="do" value="cset"> 清除个人设置 &nbsp;&nbsp;&nbsp;&nbsp;
-<input type="radio" name="do" value="crole">
-<select name="crolev" onchange="document.getElementsByName('do')[4].checked = true">
+<a name="submit_button" id="submit_button"></a>
+选择操作：<label><input type="radio" name="do" value="control" checked> 控制用户</label> &nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="radio" name="do" value="cookie" required> 清除 Cookie</label> &nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="radio" name="do" value="clean"> 清除贴吧数据</label> &nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="radio" name="do" value="delete"> 删除用户</label> &nbsp;&nbsp;&nbsp;&nbsp;
+	<label><input type="radio" name="do" value="cset"> 清除设置</label> &nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="radio" name="do" id="userdo_crole" value="crole">
+<select name="crolev" onchange="$('#userdo_crole').attr('checked',true);">
 	<option>调整用户组为</option>
 	<option value="user">用户</option>
 	<option value="vip">VIP</option>
@@ -81,4 +83,11 @@ while ($x = $m->fetch_array($s)) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" class="btn btn-default" onclick="location = 'index.php?mod=admin:users&add'">添加用户</button>
 </form><?php } ?>
+<script>
+	function userAdminSubmit() {
+		if($("input[name='do']:checked").val() != 'control') {
+			return confirm('此操作不可逆，你确定要执行吗？');
+		}
+	}
+</script>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.longtings.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> 

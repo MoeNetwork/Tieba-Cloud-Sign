@@ -20,6 +20,13 @@ doAction('index_1');
 	</div>
 </div>
 
+<?php if(defined('CON_NAME')) {?>
+<div class="alert alert-danger" role="alert">
+	<b><?php echo CON_NAME; ?></b>，你现在正在控制用户 <b><?php echo NAME; ?></b>
+	<br/>点击<a href="index.php?mod=usercontrolback">右上角的 返回 按钮或此处</a>即可返回你的账户
+</div>
+<?php } ?>
+
 <div class="panel panel-<?php if (empty($i['user']['tbnum'])) { echo 'warning'; } else { echo 'success'; } ?>">
 	<div class="panel-heading">
 		<h3 class="panel-title">用户信息</h3>
