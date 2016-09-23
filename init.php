@@ -10,8 +10,8 @@
  * HELLO GAY!
  */
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','4.7');
-define('SYSTEM_VER_NOTE','a');
+define('SYSTEM_VER','4.75');
+define('SYSTEM_VER_NOTE','');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
 define('SYSTEM_ISCONSOLE' , ((!empty($argc) && !empty($argv)) ? true : false));

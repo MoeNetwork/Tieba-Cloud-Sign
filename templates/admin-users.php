@@ -45,7 +45,7 @@ $users = '';
 $s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users` ORDER BY `id`');
 
 while ($x = $m->fetch_array($s)) {
-	$users .= '<tr onclick="$(\'#user_'.$x['id'].'\').click();"><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" id="user_'.$x['id'].'" value="'.$x['id'].'"></td><td>'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td>'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
+	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" id="user_'.$x['id'].'" value="'.$x['id'].'"></td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()">'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()">'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
 }
 
 ?>
