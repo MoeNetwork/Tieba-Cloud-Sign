@@ -191,10 +191,174 @@ class S extends wmysql {
 	/**
 	 * 给表名加前缀
 	 * @param string $table  表名，不需要带前缀
-	 * @return 有前缀的表名
+	 * @return string 有前缀的表名
 	 */
 	private function _prefix($table) {
 		return DB_PREFIX . $table;
 	}
 
+    /**
+     * 解析Where数组返回转义、拼接后的where字符串
+     * @param null|string|array $where 条件数组或字符串
+     * @return string
+     */
+    private function _parseWhere($where)
+    {
+        if ($where === NULL) return '';
+        if (is_string($where)) return $where;
+
+        $w = array();
+        foreach ($where as $k => $v){
+            if (is_int($k) && is_string($v)){
+                $w[] = $v;
+            } elseif (preg_match('/(<|>|!|=)/', trim($k))) {
+                // 如果$k（即字段名）带有比较符（例如 > < != 之类）
+                $loc = strpos($k, ' ');
+                $field = substr($k, 0, $loc); // 取字段名
+                $code = substr($k, $loc + 1); // 取符号
+                $w[] = "`{$field}`{$code}'{$this->escape_string($v)}'";
+            } else {
+                // 没有比较符的话默认为 =
+                $w[] = "`{$k}`='{$this->escape_string($v)}'";
+            }
+        }
+        return ' WHERE ' . implode(' AND ', $w);
+    }
+
+    /**
+     * 解析字段名数组返回转义、拼接后的字符串
+     * @param string|array $field 字段数组或字符串
+     * @return string
+     */
+    private function _parseField($field)
+    {
+        if ( !is_array($field)) return $field;
+        return '`' . implode('`,`', $field) . '`';
+    }
+
+    /**
+     * 解析limit值
+     * @param string|int $limit
+     * @return string
+     */
+    private function _parseLimit($limit)
+    {
+        if ($limit === NULL) return '';
+        return ' LIMIT ' . (string)$limit;
+    }
+
+    /**
+     * 取一条数据。返回数组格式
+     * @param string      $table 表名
+     * @param null|string $where 条件
+     * @param string      $field 字段名
+     * @return array
+     */
+    public function one($table, $where, $field = '*')
+    {
+        $table = $this->_prefix($table);
+        $where = $this->_parseWhere($where);
+        $field = $this->_parseField($field);
+        return $this->once_fetch_array("SELECT {$field} FROM `{$table}` {$where} LIMIT 1");
+    }
+
+    /**
+     * 取多行数据。返回结果集，自行使用fetch_array方法读取数据
+     * @param string   $table 表名
+     * @param string   $where 条件
+     * @param string   $field 字段名
+     * @param int|null $limit 数量限制。默认不限制
+     * @return mysqli_result
+     */
+    public function all($table, $where = NULL, $field = '*', $limit = NULL)
+    {
+        $table = $this->_prefix($table);
+        $field = $this->_parseField($field);
+        $where = $this->_parseWhere($where);
+        $limit = $this->_parseLimit($limit);
+
+        return $this->query("SELECT {$field} FROM `{$table}` {$where} {$limit}");
+    }
+
+    /**
+     * 统计数据数量
+     * @param string $table 表名
+     * @param string $where 条件
+     * @param string $field 字段名
+     * @return int
+     */
+    public function count($table, $where = NULL, $field = '*')
+    {
+        $table = $this->_prefix($table);
+        $where = $this->_parseWhere($where);
+        $field = $this->_parseField($field);
+        $q = $this->once_fetch_array("SELECT COUNT({$field}) as `_s_num` FROM `{$table}` {$where}");
+        return (int)$q['_s_num'];
+    }
+
+    /**
+     * 插入一条数据
+     * @param string $table 表名
+     * @param array  $data  要插入的数据 [字段名=>值, 字段名=>值, ...]
+     * @return bool|mysqli_result
+     */
+    public function insert($table, $data)
+    {
+        // 解析data
+        $field = array();
+        $value = array();
+        if (count($data) == 0) return FALSE;
+        foreach ($data as $k => $v){
+            $field[] = $k;
+            $value[] = $this->escape_string($v);
+        }
+        $field = '`' . implode('`,`', $field) . '`';
+        $value = "'" . implode("','", $value) . "'";
+        $table = $this->_prefix($table);
+
+        return $this->query("INSERT INTO `{$table}` ({$field}) VALUES ({$value})");
+    }
+
+    /**
+     * 更新数据
+     * @param string      $table 表名
+     * @param array       $set   新的数据
+     * @param null|string $where 条件
+     * @param null|int    $limit 数量限制。默认不限制
+     * @return bool|mysqli_result
+     */
+    public function update($table, $set, $where = NULL, $limit = NULL)
+    {
+        $sql = "UPDATE `" . $this->_prefix($table) . "` SET ";
+        // 解析set
+        $s = array();
+        if (count($set) == 0) return FALSE;
+        foreach ($set as $k => $v){
+            $s[] = "`{$k}`='{$this->escape_string($v)}'";
+        }
+        $set = implode(', ', $s);
+        $sql .= $set;
+
+        $where = $this->_parseWhere($where);
+        $limit = $this->_parseLimit($limit);
+        $sql .= " {$where} {$limit}";
+
+        return $this->query($sql);
+    }
+
+    /**
+     * 删除数据
+     * @param string   $table 表名
+     * @param string   $where 条件
+     * @param null|int $limit 数量限制。默认不限制
+     * @return bool|mysqli_result
+     */
+    public function delete($table, $where, $limit = NULL)
+    {
+        $table = $this->_prefix($table);
+        $where = $this->_parseWhere($where);
+        $limit = $this->_parseLimit($limit);
+
+        return $this->query("DELETE FROM `{$table}` {$where} {$limit}");
+    }
 }
