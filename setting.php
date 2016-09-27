@@ -379,20 +379,20 @@ switch (SYSTEM_PAGE) {
 				break;
 
 			case 'crole':
+			    // 判断用户组字符串是否合法
+                $role = $_POST['crolev'];
+                if(!in_array($role, array('user', 'admin', 'vip', 'banned'))) msg('无效的用户组！');
+                // 如果准备将用户组设为admin以外时，先检测是否还有其他admin可用
+                // 避免出现所有用户都被设为非admin的问题
+                if($role != 'admin'){
+                    $user_list = implode(',', $_POST['user']); // 收集欲处理的用户id
+                    $q = "SELECT COUNT(*) as num FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE `role` = 'admin' AND `id` NOT IN ({$user_list})";
+                    $q = $m->once_fetch_array($q);
+                    if($q['num'] == 0) msg('必须保留至少一位管理员！');
+                }
+
                 foreach ($_POST['user'] as $value) {
-                    if ($_POST['crolev'] == 'user') {
-                        $role = 'user';
-                    }
-                    elseif ($_POST['crolev'] == 'admin') {
-                        $role = 'admin';
-                    }
-                    elseif ($_POST['crolev'] == 'vip') {
-                        $role = 'vip';
-                    }
-                    elseif ($_POST['crolev'] == 'banned') {
-                        $role = 'banned';
-                    }
-                    doAction('admin_users_crole_process', $value, $_POST['crolev']);
+                    doAction('admin_users_crole_process', $value, $role);
                     $m->query("UPDATE `".DB_NAME."`.`".DB_PREFIX."users` SET `role` = '{$role}' WHERE `".DB_PREFIX."users`.`id` = {$value}");
                 }
 				doAction('admin_users_crole');
