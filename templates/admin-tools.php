@@ -57,7 +57,7 @@ if (isset($_GET['ok'])) {
 
 <br/><br/>
 <!--Part 2 Warning-->
-<br/><br/><input type="button" data-toggle="modal" data-target="#TruncateTableLabel" class="btn btn-warning" value="清空指定数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;请慎用此功能，一般用于删除无用的分表
+<br/><br/><input type="button" data-toggle="modal" data-target="#TruncateTableLabel" class="btn btn-warning" value="清空指定数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;请慎用此功能，一般用于清空无用的分表
 
 <br/><br/><input type="button" data-toggle="modal" data-target="#RemoveTable" class="btn btn-warning" value="删除指定数据表" style="width:170px">&nbsp;&nbsp;&nbsp;&nbsp;请慎用此功能，一般用于删除无用的分表
 

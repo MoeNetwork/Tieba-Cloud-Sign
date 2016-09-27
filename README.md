@@ -35,7 +35,7 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 ####主要
 @Kenvix [kenvix@qq.com]     
 ####协助
-@mokeyjay [longting@longtings.com]     
+@mokeyjay [i@mokeyjay.com]     
 @fyy99 [fyod@vip.qq.com]
 ####热心贡献者
 以下几位反馈/解决了程序的不足之处，特此感谢     
