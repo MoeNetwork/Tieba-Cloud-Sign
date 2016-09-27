@@ -220,4 +220,13 @@ class wmysql {
 	public function getQueryCount() {
 		return $this->queryCount;
 	}
+
+    /**
+     * 转义 SQL 语句中使用的字符串中的特殊字符，并考虑到连接的当前字符集
+     * @param string $sql
+     * @return string
+     */
+    public function escape_string($sql) {
+        return mysql_real_escape_string($sql, $this->conn);
+    }
 }

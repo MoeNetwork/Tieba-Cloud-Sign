@@ -212,7 +212,7 @@ class wmysql {
 	}
 
 	/**
-	 * Get number of affected rows in previous MySQL operation
+	 * 获取上次操作受影响行数
 	 */
 	public function affected_rows() {
 		return $this->conn->affected_rows;
@@ -233,8 +233,10 @@ class wmysql {
 	}
 
     /**
-	 *  Escapes special characters
-	 */
+     * 转义 SQL 语句中使用的字符串中的特殊字符，并考虑到连接的当前字符集
+     * @param string $sql
+     * @return string
+     */
 	public function escape_string($sql) {
 		return $this->conn->real_escape_string($sql);
 	}
