@@ -72,7 +72,7 @@ while ($x = $m->fetch_array($s)) {
 	<label><input type="radio" name="do" value="delete"> 删除用户</label> &nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="radio" name="do" value="cset"> 清除设置</label> &nbsp;&nbsp;&nbsp;&nbsp;
 	<input type="radio" name="do" id="userdo_crole" value="crole">
-<select name="crolev" onchange="$('#userdo_crole').attr('checked',true);">
+<select class="form-control input-sm" style="display: inline; width: auto" name="crolev" onchange="$('#userdo_crole').attr('checked',true);">
 	<option>调整用户组为</option>
 	<option value="user">用户</option>
 	<option value="vip">VIP</option>

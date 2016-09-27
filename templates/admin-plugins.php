@@ -59,7 +59,7 @@ foreach($x as $key => $val) {
 		}
 	}
     if(isset($i['plugins']['info'][$val['plugin']['id']]['status'])){
-        $fortc .= '<br/>加载顺序：<input required type="number" style="width: 50%;" name="'.$val['plugin']['id'].'" value="'.$val['plugin']['order'].'">';
+        $fortc .= '<br/>加载顺序：<input required type="number" class="form-control input-sm" style="width:50%; display:inline" name="'.$val['plugin']['id'].'" value="'.$val['plugin']['order'].'">';
     }
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {

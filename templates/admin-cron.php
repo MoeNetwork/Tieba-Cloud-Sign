@@ -33,7 +33,7 @@ foreach ($i['cron'] as $cs) {
 		$status .= '<script type="text/javascript">var system_cron_log = "'.addslashes($cs['log']).'"</script>';
 		$status .= '<br/><a href="javascript:;" onclick="alert(system_cron_log);">点击查看此任务的日志</a>';
 	}
-	$status .= '<br/>运行顺序：<input required style="width:30%" type="number" name="order['.$cs['name'].']" value="'.$cs['orde'].'">';
+	$status .= '<br/>运行顺序：<input required class="form-control input-sm" style="width:30%; display:inline" type="number" name="order['.$cs['name'].']" value="'.$cs['orde'].'">';
 	$cron .= '<input type="hidden" value="'.$cs['name'].'" name="ids[]"><tr><td style="width:30%"><b>'. $cs['name'] . '</b><br/>'.$cs['file'].'<br/>'. str_replace("\n", '<br/>', $cs['desc']) .'</td><td style="width:30%">'.$freq.'<br/>上次执行：'.$lastdo.'</td><td style="width:40%">'.$status.'</td></tr>';
 }
 
