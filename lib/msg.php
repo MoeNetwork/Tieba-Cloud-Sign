@@ -145,20 +145,21 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true) {
         </style>
     </head>
     <body id="error-page">
-        <?php if($title) echo '<h3>'.$sysname.' - 提示信息</h3>';
+        <?php if($title) echo '<h3>'.$sysname.' - 提示信息</h3><br/>';
         echo $msg; ?>
+        <br/><br/><br/>
+        <a style="float:left" href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/issues" target="_blank">反馈该问题</a>
         <?php if ($url !== false) {
             if ($url === true) {
-                echo '<br/><br/><a style="float:right" href="javascript:history.back(-1)"><< 返回上一页</a>';
+                echo '<a style="float:right" href="javascript:history.back(-1)"><< 返回上一页</a>';
             } else {
-                echo '<br/><br/><a style="float:right" href="'.$url.'"><< 返回上一页</a>';
+                echo '<a style="float:right" href="'.$url.'"><< 返回上一页</a>';
             }
         } 
         ?>
+        <br/>
     </body>
     </html>
     <?php
-    if ($die == true) {
-        die;
-    }
+    $die && die;
 }
