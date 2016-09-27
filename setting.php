@@ -361,7 +361,8 @@ switch (SYSTEM_PAGE) {
 
             case 'control':
                 $uid = !empty($_POST['user'][0]) ? $_POST['user'][0] : msg('无效用户ID');
-                $osq = $m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
+                if($uid == $i['user']['uid']) msg('请勿控制自己');
+                $osq = $m->once_fetch_array("SELECT `pw` FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
                 if(empty($osq['pw'])) msg('用户不存在');
                 doAction('admin_users_control');
                 setcookie("uid", $uid, time() + 999999);
@@ -372,6 +373,7 @@ switch (SYSTEM_PAGE) {
                 break;
 
 			case 'delete':
+                MustAdminWarning($_POST['user']);
 				foreach ($_POST['user'] as $value) {
 					DeleteUser($value);
 				}
@@ -385,10 +387,7 @@ switch (SYSTEM_PAGE) {
                 // 如果准备将用户组设为admin以外时，先检测是否还有其他admin可用
                 // 避免出现所有用户都被设为非admin的问题
                 if($role != 'admin'){
-                    $user_list = implode(',', $_POST['user']); // 收集欲处理的用户id
-                    $q = "SELECT COUNT(*) as num FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE `role` = 'admin' AND `id` NOT IN ({$user_list})";
-                    $q = $m->once_fetch_array($q);
-                    if($q['num'] == 0) msg('必须保留至少一位管理员！');
+                    MustAdminWarning($_POST['user']);
                 }
 
                 foreach ($_POST['user'] as $value) {

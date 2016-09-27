@@ -233,6 +233,21 @@ function DeleteUser($id) {
 	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.'users` WHERE `'.DB_PREFIX.'users`.`id` = '.$id);
 }
 
+/**
+ * 判断`操作后`剩余的admin数量，如为0则报错
+ * `操作`通常指 删除 或 调整用户组
+ * 也就是判断`操作` $id_list 后剩余的admin数量
+ * @param array $id_list
+ */
+function MustAdminWarning($id_list)
+{
+    global $m;
+    $id_list = implode(',', $id_list); // 收集欲处理的用户id
+    $q = "SELECT COUNT(*) as num FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE `role` = 'admin' AND `id` NOT IN ({$id_list})";
+    $q = $m->once_fetch_array($q);
+    if($q['num'] == 0) msg('必须保留至少一位管理员！');
+}
+
 
 /**
  * zip压缩
