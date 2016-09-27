@@ -4,10 +4,11 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}baiduid`;
 CREATE TABLE `{VAR-PREFIX}baiduid` (
   `id` int(30) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(30) unsigned NOT NULL,
-  `bduss` text,
-  `name` varchar(40) DEFAULT NULL,
+  `bduss` text NOT NULL,
+  `name` varchar(40) DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `uid` (`uid`) USING BTREE
+  KEY `uid` (`uid`) USING BTREE,
+  KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -15,12 +16,12 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}cron`;
 CREATE TABLE `{VAR-PREFIX}cron` (
   `name` varchar(40) NOT NULL,
   `orde` int(10) NOT NULL DEFAULT '0',
-  `file` varchar(100) DEFAULT NULL,
+  `file` varchar(100) DEFAULT '' NOT NULL,
   `no` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `desc` text,
+  `desc` text NOT NULL,
   `freq` int(10) NOT NULL DEFAULT '0',
   `lastdo`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
-  `log` text,
+  `log` text NOT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -37,7 +38,7 @@ INSERT INTO `{VAR-PREFIX}cron` VALUES ('system_sign_retry', '1', 'lib/cron_syste
 DROP TABLE IF EXISTS `{VAR-PREFIX}options`;
 CREATE TABLE `{VAR-PREFIX}options` (
   `name` varchar(255) NOT NULL,
-  `value` text,
+  `value` text NOT NULL,
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -104,8 +105,8 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;
 CREATE TABLE `{VAR-PREFIX}plugins` (
   `name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `ver` varchar(15) DEFAULT NULL,
-  `options` text,
+  `ver` varchar(15) DEFAULT '' NOT NULL,
+  `options` text NOT NULL,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -124,11 +125,11 @@ CREATE TABLE `{VAR-PREFIX}tieba` (
   `uid` int(30) unsigned NOT NULL,
   `pid` int(30) unsigned NOT NULL DEFAULT '0',
   `fid` int(30) unsigned NOT NULL DEFAULT '0',
-  `tieba` varchar(200) DEFAULT NULL,
+  `tieba` varchar(200) DEFAULT '' NOT NULL,
   `no` tinyint(1) NOT NULL DEFAULT '0',
   `status`  mediumint(8) UNSIGNED NOT NULL DEFAULT '0' ,
   `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `last_error` text,
+  `last_error` text NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `uid` (`uid`) USING BTREE ,
   INDEX `latest` (`latest`) USING BTREE 
@@ -166,7 +167,7 @@ CREATE TABLE `{VAR-PREFIX}users_options` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `uid` int(30) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `value` text,
+  `value` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE,
   KEY `name` (`name`) USING BTREE
