@@ -31,7 +31,11 @@ if (isset($_GET['add'])) {	?>
 		</tr>
 		<tr>
 			<td>用户组</td>
-			<td><input type="radio" name="role" value="user" required> 用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="role" value="admin" required> 管理员</td>
+			<td>
+                <label><input type="radio" name="role" value="user" required checked="checked"> 用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input type="radio" name="role" value="vip" required> VIP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label><input type="radio" name="role" value="admin" required> 管理员&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            </td>
 		</tr>
 	</tbody>
 </table>
