@@ -136,10 +136,12 @@ class wmysql {
 		return $this->xquery($sql,$noerror = false);
 	}
 
-	/**
-	 * 从结果集中取得一行作为关联数组/数字索引数组
-	 *
-	 */
+    /**
+     * 从结果集中取得一行作为关联数组/数字索引数组
+     * @param mysqli_result $query 结果集
+     * @param int $type 可选MYSQL_ASSOC，MYSQL_NUM，MYSQL_BOTH
+     * @return array
+     */
 	public function fetch_array($query , $type = MYSQL_ASSOC) {
 		return mysql_fetch_array($query, $type);
 	}

@@ -148,7 +148,9 @@ class wmysql {
 
 	/**
 	 * 从结果集中取得一行作为关联数组/数字索引数组
-	 *
+     * @param mysqli_result $query 结果集
+     * @param int $type 可选MYSQLI_ASSOC，MYSQLI_NUM，MYSQLI_BOTH
+     * @return array
 	 */
 	public function fetch_array(mysqli_result $query, $type = MYSQLI_ASSOC) {
 		return $query->fetch_array($type);

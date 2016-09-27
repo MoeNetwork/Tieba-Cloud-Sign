@@ -582,50 +582,50 @@ switch (SYSTEM_PAGE) {
 		break;
 
     case 'set':
-			// 获取头像的url
-			if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-				$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
-				$data = $c->get();
-				$c->close();
-				$i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
-                if(empty(trim($i['post']['face_url']))) msg('获取贴吧头像失败，可能是网络问题，请重试');
-			}
-			/*
-			受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
-			具体挂载方法为：
-			global $PostArray;
-			$PostArray[] = '设置名';
-			为了兼容旧版本，可以global以后检查一下是不是空变量，为空则为旧版本
-			*/
-			$PostArray = array(
-				'face_img',
-				'face_baiduid',
-				'face_url'
-			);
-			doAction('set_save1');
-			//更改邮箱
-			if($_POST['mail'] != $i['user']['email'] && !empty($_POST['mail'])){
-				if (checkMail($_POST['mail'])) {
-					$mail = sqladds($_POST['mail']);
-					$z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
-					if ($z['total'] > 0) {
-						msg('修改失败：邮箱已经存在');
-					}
-					$m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
-				} else {
-					msg('邮箱格式有误，请检查');
-				}
-			}
-			$set = array();
-			foreach ($PostArray as $value) {
-				if (!isset($i['post'][$value])) {
-					$i['post'][$value] = '';
-				}
-				@option::uset($value , $i['post'][$value]);
-			}
-			doAction('set_save2');
-			Redirect('index.php?mod=set&ok');
-			break;
+        // 获取头像的url
+        if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
+            $c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+            $data = $c->get();
+            $c->close();
+            $i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+            if(empty(trim($i['post']['face_url']))) msg('获取贴吧头像失败，可能是网络问题，请重试');
+        }
+        /*
+        受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
+        具体挂载方法为：
+        global $PostArray;
+        $PostArray[] = '设置名';
+        为了兼容旧版本，可以global以后检查一下是不是空变量，为空则为旧版本
+        */
+        $PostArray = array(
+            'face_img',
+            'face_baiduid',
+            'face_url'
+        );
+        doAction('set_save1');
+        //更改邮箱
+        if($_POST['mail'] != $i['user']['email'] && !empty($_POST['mail'])){
+            if (checkMail($_POST['mail'])) {
+                $mail = sqladds($_POST['mail']);
+                $z=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE email='{$mail}'");
+                if ($z['total'] > 0) {
+                    msg('修改失败：邮箱已经存在');
+                }
+                $m->query("UPDATE `".DB_PREFIX."users` SET `email` = '{$mail}' WHERE `id` = '".UID."';");
+            } else {
+                msg('邮箱格式有误，请检查');
+            }
+        }
+        $set = array();
+        foreach ($PostArray as $value) {
+            if (!isset($i['post'][$value])) {
+                $i['post'][$value] = '';
+            }
+            @option::uset($value , $i['post'][$value]);
+        }
+        doAction('set_save2');
+        Redirect('index.php?mod=set&ok');
+        break;
 
 	case 'admin:testmail':
 		global $i;
