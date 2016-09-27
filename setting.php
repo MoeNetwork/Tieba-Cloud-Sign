@@ -411,13 +411,13 @@ switch (SYSTEM_PAGE) {
 				$role = isset($_POST['role']) ? strip_tags($_POST['role']) : 'user';
 
 				if (empty($name) || empty($mail) || empty($pw)) {
-					msg('添加用户失败：请正确填写账户、密码或邮箱');
+					msg('添加用户失败：请正确填写用户名、密码或邮箱');
 				}
-				$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}'");
+				$x=$m->once_fetch_array("SELECT COUNT(*) AS total FROM `".DB_NAME."`.`".DB_PREFIX."users` WHERE name='{$name}' OR `email`='{$mail}'");
 				if ($x['total'] > 0) {
-					msg('添加用户失败：用户名已经存在');
+					msg('添加用户失败：用户名或邮箱已经存在');
 				}
-				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`id`, `name`, `pw`, `email`, `role`, `t`) VALUES (NULL, \''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
+				$m->query('INSERT INTO `'.DB_NAME.'`.`'.DB_PREFIX.'users` (`name`, `pw`, `email`, `role`, `t`) VALUES (\''.$name.'\', \''.EncodePwd($pw).'\', \''.$mail.'\', \''.$role.'\', \''.getfreetable().'\');');
 				doAction('admin_users_add');
 				Redirect('index.php?mod=admin:users&ok');
 				break;
@@ -581,13 +581,14 @@ switch (SYSTEM_PAGE) {
 		doAction('showtb_set');
 		break;
 
-		case 'set':
+    case 'set':
 			// 获取头像的url
 			if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
 				$c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
 				$data = $c->get();
 				$c->close();
 				$i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
+                if(empty(trim($i['post']['face_url']))) msg('获取贴吧头像失败，可能是网络问题，请重试');
 			}
 			/*
 			受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
