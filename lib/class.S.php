@@ -205,7 +205,7 @@ class S extends wmysql {
     private function _parseWhere($where)
     {
         if ($where === NULL) return '';
-        if (is_string($where)) return $where;
+        if (is_string($where)) return ' WHERE ' . $where;
 
         $w = array();
         foreach ($where as $k => $v){
