@@ -216,7 +216,7 @@ function getfreetable() {
  */
 function CleanUser($id) {
 	global $m;
-	$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = {$id} LIMIT 1");
+	$x=$m->once_fetch_array("SELECT `t` FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = {$id} LIMIT 1");
 	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.$id);
 }
 
@@ -229,6 +229,7 @@ function CleanUser($id) {
 function DeleteUser($id) {
 	global $m;
 	CleanUser($id);
+    option::udel($id);
 	$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.'users` WHERE `'.DB_PREFIX.'users`.`id` = '.$id);
 }
 
