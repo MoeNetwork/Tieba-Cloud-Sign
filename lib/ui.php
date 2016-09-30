@@ -76,7 +76,7 @@ function loadfoot($copy = false) {
         }
     }
     if($copy) {
-        echo '<br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a> ';
+        echo '<br/><br/>'.SYSTEM_FN.' V'.SYSTEM_VER.' // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> ';
     }
 	echo '</div></div></div></div></body></html>';
 }
