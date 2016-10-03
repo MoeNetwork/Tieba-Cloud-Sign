@@ -44,7 +44,7 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 @VFleaKing [liuhaotian0520@163.com]     
 @superxzr [a457418121@gmail.com]
 #由StusGame官方人员运营的签到平台
-[MoeSign](https://MoeSign.com) [简云签到联盟](https://tbsign.cn)
+[简云签到联盟](https://tbsign.cn)
 ##许可协议与商业版本等
 ###许可协议
 请访问程序根目录下的 license.html 阅读许可协议
