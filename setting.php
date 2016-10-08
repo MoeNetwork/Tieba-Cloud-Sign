@@ -587,8 +587,8 @@ switch (SYSTEM_PAGE) {
             $c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
             $data = $c->get();
             $c->close();
-            $i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
-            if(empty(trim($i['post']['face_url']))) msg('获取贴吧头像失败，可能是网络问题，请重试');
+            $i['post']['face_url'] = trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>')));
+            if(empty($i['post']['face_url'])) msg('获取贴吧头像失败，可能是网络问题，请重试');
         }
         /*
         受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名
