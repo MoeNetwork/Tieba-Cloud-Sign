@@ -584,7 +584,7 @@ switch (SYSTEM_PAGE) {
     case 'set':
         // 获取头像的url
         if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-            $c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+            $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
             $data = $c->get();
             $c->close();
             $i['post']['face_url'] = trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>')));
