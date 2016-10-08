@@ -36,7 +36,7 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 @Kenvix [kenvix@qq.com]     
 ####协助
 @mokeyjay [i@mokeyjay.com]     
-@fyy99 [fyod@vip.qq.com]
+@fyy99 [fyod@qq.com]
 ####热心贡献者
 以下几位反馈/解决了程序的不足之处，特此感谢     
 @Ver4 [i@v4.hk]     
@@ -54,7 +54,7 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 老商业用户请联系@Kenvix [kenvix@qq.com]获取福利插件库地址
 ###耻辱柱
 这里列出的是**一小部分**违反协议者的名单
-#####1.github:@shirakun -- 发布去版权版本
+#####1.@shirakun -- 发布去版权版本
 [https://github.com/shirakun/Tieba-Cloud-Sign](https://github.com/shirakun/Tieba-Cloud-Sign)
 #####2."CCGV" -- 去版权、辱骂作者
 [http://ccgv.me/](http://ccgv.me/)  [http://ccgv.party/](http://ccgv.party/)
