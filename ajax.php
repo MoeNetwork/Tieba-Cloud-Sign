@@ -110,7 +110,6 @@ switch (SYSTEM_PAGE) {
 		$c->close();
 		break;
 
-
 	case 'admin:update:updnow':
 		if (!file_exists(UPDATE_CACHE)) {
 			mkdir(UPDATE_CACHE, 0777, true);

@@ -53,7 +53,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_mode', 'a:2:{i:0;s:1:\"1\";i:1;s
 INSERT INTO `{VAR-PREFIX}options` VALUES ('footer', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('ann', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('enable_reg', '1');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('protect_reg', '1');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('captcha', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('yr_reg', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('icp', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('trigger', '');

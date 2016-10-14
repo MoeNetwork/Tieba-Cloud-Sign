@@ -110,13 +110,11 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
 	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符<br/><a href="javascript:;" onclick="alert(\'你需要通过访问 <b>do.php?pw=密码</b> 执行计划任务<br/>例如：'.SYSTEM_URL.'do.php?pw=yourpassword<br/><br/>若您要通过命令行执行计划任务，请加上参数 <b>--pw=密码</b><br/>例如：php do.php --pw=yourpassword<br/>命令行模式注意：你需要指明do.php的绝对路径，或者将do.php加入PATH\')">帮助：启用密码功能后如何执行计划任务？</a>','type'=>'text','text'=>'','extra'=>'');
 	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
-	$reg2 = option::get('protect_reg') == 1 ? ' checked' : '' ;
 	$reg3 = option::get('yr_reg');
 	$reg4 = option::get('stop_reg');
 	$reghtml = '<tr><td><b>注册相关设置</b><br/><br/>邀请码框留空表示无需邀请码<br/><br/>停止注册提示框输入指定提示内容</td><td>
 		<div class="input-group">
-			&nbsp;&nbsp;<input type="checkbox" name="enable_reg" value="1"'.$reg1.'> 允许用户注册&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="checkbox" name="protect_reg" value="1"'.$reg2.'> 反恶意注册
+		<input type="checkbox" name="enable_reg" value="1"'.$reg1.'> 允许用户注册
 		</div><br/>
 		<div class="input-group">
 			<span class="input-group-addon">邀请码设置</span><input type="text" name="yr_reg" id="yr_reg" value="'.$reg3.'" class="form-control">
@@ -126,8 +124,16 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
+    $reghtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性</td><td>
+        <label><input type="radio" name="captcha" value="0" '.(option::get('captcha') == 0 ? ' checked' : '').'> 关闭</label><br>
+        <label><input type="radio" name="captcha" value="1" '.(option::get('captcha') == 1 ? ' checked' : '').'> 简单</label><br>
+        <label><input type="radio" name="captcha" value="2" '.(option::get('captcha') == 2 ? ' checked' : '').'> 中等</label><br>
+        <label><input type="radio" name="captcha" value="3" '.(option::get('captcha') == 3 ? ' checked' : '').'> 困难</label><br>
+        <label><input type="radio" name="captcha" value="4" '.(option::get('captcha') == 4 ? ' checked' : '').'> 反人类</label>
+		</td></tr>';
+    $content1['captcha'] = array('html'=>$reghtml,'type'=>'else');
 	$content1['icp'] = array('td1'=>'<b>ICP 备案信息</b><br/>没有请留空','type'=>'text','text'=>'','extra'=>'');
-	$content1['trigger'] = array('td1'=>'<b>依靠访客触发任务</b>','type'=>'checkbox','text'=>'建议在不支持计划任务并拒绝加入云平台时使用，开启计划任务密码后无效','extra'=>'');
+	$content1['trigger'] = array('td1'=>'<b>依靠访客触发任务</b>','type'=>'checkbox','text'=>'建议在不支持计划任务（crontab）时使用，开启计划任务密码后无效','extra'=>'');
 	$content1['cktime'] = array('td1'=>'<b>Cookie有效期</b><br/>单位为秒，过大会导致浏览器无法记录','type'=>'number','text'=>'','extra'=>'step="1" min="1"');
 	$content1['csrf'] = array('td1'=>'<b>停用CSRF防御</b>','type'=>'checkbox','text'=>'贴吧云签到可以防御CSRF攻击，开启该选项会导致站点处于危险状态','extra'=>'');
 	$content1['isapp'] = array('td1'=>'<b>环境为引擎</b>','type'=>'checkbox','text'=>'如果您的主机不支持写入或者为应用引擎，请选择此项','extra'=>'');

@@ -12,17 +12,44 @@
       <?php if (isset($_GET['msg'])): ?><div class="alert alert-info alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           <?php echo strip_tags($_GET['msg']); ?></div><?php endif;?>
-  <form name="f" method="post" action="index.php?mod=admin:login" onsubmit="//$('#pw').val($.md5($('#pw').val()));">
+  <form name="f" method="post" action="index.php?mod=admin:login">
 	<div class="input-group">
   <span class="input-group-addon">账户</span>
-  <input type="text" class="form-control" name="user" placeholder="账户可以为用户名或者邮箱地址" required>
+  <input type="text" class="form-control" name="user" placeholder="用户名或者邮箱地址" required>
 </div><br/>
 <div class="input-group">
   <span class="input-group-addon">密码</span>
   <input type="password" class="form-control" name="pw" id="pw" required>
 </div>
+      <?php if(option::get('captcha')): ?>
+          <script>
+              $(function(){
+                  $('#captcha').on('load', function(){
+                      $('#captcha_input').removeAttr('disabled').attr({'value':''});
+                  }).on('click', function(){
+                      $('#captcha_input').attr({'disabled':'disabled', 'value':'刷新中…'});
+                      $(this).attr('src', 'index.php?mod=captcha');
+                  });
+              });
+          </script>
+          <br>
+          <div class="row">
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                  <img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer">
+              </div>
+              <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
+                  <div class="input-group" style="margin-bottom: 5px">
+                      <span class="input-group-addon">验证码</span>
+                      <input type="text" class="form-control" name="captcha" id="captcha_input" value="加载中…" required disabled>
+                  </div>
+                  <label><input type="checkbox" name="ispersis" value="1" /> 记住密码及账户</label>
+              </div>
+          </div>
+      <?php endif; ?>
 	<div class="login-button"><br/>
-  <input type="checkbox" name="ispersis" id="ispersis" value="1" />&nbsp;<label for="ispersis">记住密码及账户</label><br/><br/>
+        <?php if(option::get('captcha') == 0): ?>
+            <label><input type="checkbox" name="ispersis" value="1" /> 记住密码及账户</label><br><br>
+        <?php endif; ?>
 	<?php doAction('login_page_2'); ?>
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">登陆</button>
   <?php doAction('login_page_3'); ?>

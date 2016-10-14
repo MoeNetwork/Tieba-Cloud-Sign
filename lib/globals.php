@@ -100,6 +100,20 @@ if (SYSTEM_PAGE == 'admin:login') {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
 	doAction('admin_login_1');
+    // 检查验证码
+    if(option::get('captcha')){
+        session_start();
+        if(empty($_POST['captcha'])){
+            redirect('index.php?mod=login&error_msg='.urlencode('请填写验证码'));die;
+        } else {
+            if(strtolower($_POST['captcha']) != strtolower($_SESSION['captcha'])){
+                redirect('index.php?mod=login&error_msg='.urlencode('验证码错误'));die;
+            } else {
+                session_destroy();
+            }
+        }
+    }
+    // 正常登录流程
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
 	$pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 	if (empty($name) || empty($pw)) {
@@ -140,6 +154,20 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
 	}
+    // 检查验证码
+    if(option::get('captcha')){
+        session_start();
+        if(empty($_POST['captcha'])){
+            redirect('index.php?mod=reg&error_msg='.urlencode('请填写验证码'));die;
+        } else {
+            if(strtolower($_POST['captcha']) != strtolower($_SESSION['captcha'])){
+                redirect('index.php?mod=reg&error_msg='.urlencode('验证码错误'));die;
+            } else {
+                session_destroy();
+            }
+        }
+    }
+    // 正常注册流程
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
 	$mail = isset($_POST['mail']) ? sqladds($_POST['mail']) : '';
 	$pw = isset($_POST['pw']) ? sqladds($_POST['pw']) : '';
@@ -178,7 +206,24 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	doAction('admin_reg_3');
 	ReDirect('index.php?mod=login&msg=' . urlencode('成功注册，请输入账号信息登录本站 [ 账号为用户名或邮箱地址 ]'));
 }
-
+elseif (SYSTEM_PAGE == 'captcha') {
+    $level = option::get('captcha'); // 验证码等级。0关闭，1简单，2中等，3困难，4反人类
+    if($level){
+        // 不同的验证码等级不同的配置
+        $data = array(
+            1 => array('line' => 1, 'star' => 10, 'fontsize' => 25),
+            2 => array('line' => 5, 'star' => 50, 'fontsize' => 20),
+            3 => array('line' => 20, 'star' => 100, 'fontsize' => 17),
+            4 => array('line' => 50, 'star' => 300, 'fontsize' => 15),
+        );
+        require_once SYSTEM_ROOT.'/lib/class.captcha.php';
+        $c = new Captcha($data[$level]);
+        $c->create();
+        session_start();
+        $_SESSION['captcha'] = $c->getCode();
+    }
+    exit;
+}
 elseif (SYSTEM_PAGE == 'login') { 
 	if (defined('ROLE')) {
 		ReDirect('index.php');
