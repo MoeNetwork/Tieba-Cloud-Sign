@@ -169,11 +169,13 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
     }
     // 正常注册流程
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
-	$mail = isset($_POST['mail']) ? sqladds($_POST['mail']) : '';
+    // 用户名不得含有@符号，避免登录时与邮箱混淆
+    if(stripos($name, '@') !== FALSE) msg('注册失败：用户名不得含有@符号');
+    $mail = isset($_POST['mail']) ? sqladds($_POST['mail']) : '';
 	$pw = isset($_POST['pw']) ? sqladds($_POST['pw']) : '';
 	$yr = isset($_POST['yr']) ? sqladds($_POST['yr']) : '';
 	if (empty($name) || empty($mail) || empty($pw)) {
-		msg('注册失败：请正确填写账户、密码或邮箱');
+		msg('注册失败：请正确填写用户名、密码或邮箱');
 	}
     if ($_POST['pw'] != $_POST['rpw']) {
         msg('注册失败：两次输入的密码不一致，请重新输入');
