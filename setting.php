@@ -140,15 +140,12 @@ switch (SYSTEM_PAGE) {
 			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);
             // 未加载GD库则无法开启验证码
-            if($sou['captcha']){
-                if(!function_exists('imagecreatetruecolor')){
-                    @option::set('captcha', 0);
-                    msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
-                }
-                @option::set('captcha', $sou['captcha']);
-            } else {
-				@option::set('captcha', 0);
-			}
+            if($sou['captcha'] && !function_exists('imagecreatetruecolor')){
+                @option::set('captcha', 0);
+                msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
+            }
+            @option::set('captcha', $sou['captcha']);
+            
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
