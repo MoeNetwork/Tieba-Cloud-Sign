@@ -145,7 +145,7 @@ switch (SYSTEM_PAGE) {
                 msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
             }
             @option::set('captcha', $sou['captcha']);
-            
+
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
