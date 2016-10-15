@@ -217,6 +217,9 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
         $("input[name='captcha']").on('click', function(){
 			$("#captcha").attr('src', 'index.php?mod=captcha&level='+$("input[name='captcha']:checked").val());
 		});
+        $("#captcha").on('click', function(){
+            $("#captcha").attr('src', 'index.php?mod=captcha&level='+$("input[name='captcha']:checked").val());
+        });
 	});
 </script>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
