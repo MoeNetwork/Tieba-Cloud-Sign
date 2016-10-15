@@ -124,8 +124,13 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
-    $reghtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性<br/>下图为示例，空白代表无验证码
-	    <img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer"></td><td>
+    $reghtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性<br/>下图为示例，空白代表无验证码<br>';
+    if(function_exists('imagecreatetruecolor')){
+        $reghtml .= '<img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer">';
+    } else {
+        $reghtml .= '<span style="color:#f00">当前PHP环境没有加载GD库，无法生成验证码</span>';
+    }
+    $reghtml.='</td><td>
         <label><input type="radio" name="captcha" value="0" '.(option::get('captcha') == 0 ? ' checked' : '').'> 关闭</label><br>
         <label><input type="radio" name="captcha" value="1" '.(option::get('captcha') == 1 ? ' checked' : '').'> 简单</label><br>
         <label><input type="radio" name="captcha" value="2" '.(option::get('captcha') == 2 ? ' checked' : '').'> 中等</label><br>
@@ -212,6 +217,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	echo former::create($set1,$content1);
 }
 ?>
+<?php if(function_exists('imagecreatetruecolor')): ?>
 <script>
     $(function(){
         $("input[name='captcha']").on('click', function(){
@@ -222,4 +228,5 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
         });
 	});
 </script>
+<?php endif; ?>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
