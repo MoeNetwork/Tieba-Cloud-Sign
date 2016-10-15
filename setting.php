@@ -132,6 +132,7 @@ switch (SYSTEM_PAGE) {
 				@option::set('fb_tables', serialize($fb_tab));
 			}
 		} else {
+			dump($sou);die;
 			@option::set('system_url',$sou['system_url']);
 			@option::set('system_name',$sou['system_name']);
 			@option::set('system_keywords',$sou['system_keywords']);
@@ -146,7 +147,9 @@ switch (SYSTEM_PAGE) {
                     msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
                 }
                 @option::set('captcha', $sou['captcha']);
-            }
+            } else {
+				@option::set('captcha', 0);
+			}
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);

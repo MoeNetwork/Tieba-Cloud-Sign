@@ -209,21 +209,25 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	ReDirect('index.php?mod=login&msg=' . urlencode('成功注册，请输入账号信息登录本站 [ 账号为用户名或邮箱地址 ]'));
 }
 elseif (SYSTEM_PAGE == 'captcha') {
-    $level = option::get('captcha'); // 验证码等级。0关闭，1简单，2中等，3困难，4反人类
+    $level = isset($_GET['level']) ? $_GET['level'] : option::get('captcha'); // 验证码等级。0关闭，1简单，2中等，3困难，4反人类
     if($level){
         // 不同的验证码等级不同的配置
         $data = array(
-            1 => array('line' => 1, 'star' => 10, 'fontsize' => 25),
-            2 => array('line' => 5, 'star' => 50, 'fontsize' => 20),
+            1 => array('line' => 5, 'star' => 30, 'fontsize' => 25),
+            2 => array('line' => 10, 'star' => 60, 'fontsize' => 20),
             3 => array('line' => 20, 'star' => 100, 'fontsize' => 17),
-            4 => array('line' => 50, 'star' => 300, 'fontsize' => 15),
+            4 => array('line' => 40, 'star' => 250, 'fontsize' => 15),
         );
         require_once SYSTEM_ROOT.'/lib/class.captcha.php';
         $c = new Captcha($data[$level]);
         $c->create();
         session_start();
         $_SESSION['captcha'] = $c->getCode();
-    }
+    } else {
+		require_once SYSTEM_ROOT.'/lib/class.captcha.php';
+        $c = new Captcha();
+		$c->createNoting();
+	}
     exit;
 }
 elseif (SYSTEM_PAGE == 'login') { 

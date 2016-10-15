@@ -107,6 +107,17 @@ class Captcha
     {
         $this->createBg()->createLine()->createFont()->outPut();
     }
+	
+	/**
+     * 生成空图
+     */
+    public function createNoting()
+    {
+		$this->img = imagecreatetruecolor($this->width, $this->height);
+        $color = imagecolorallocate($this->img, 255, 251, 240);
+        imagefilledrectangle($this->img, 0, $this->height, $this->width, 0, $color);
+        $this->outPut();
+    }
 
     /**
      * 获取验证码文本
