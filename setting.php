@@ -132,7 +132,6 @@ switch (SYSTEM_PAGE) {
 				@option::set('fb_tables', serialize($fb_tab));
 			}
 		} else {
-			dump($sou);die;
 			@option::set('system_url',$sou['system_url']);
 			@option::set('system_name',$sou['system_name']);
 			@option::set('system_keywords',$sou['system_keywords']);
