@@ -16,8 +16,8 @@ function loadhead($title = '') {
 	echo '<title>'.$title.'</title>';
 	echo '<meta name="generator" content="Tieba Cloud Sign Ver.'.SYSTEM_VER.'" />';
 	echo '<link href="favicon.ico" rel="shortcut icon"/>';
-	echo '<meta name="author" content="Kenvix (http://zhizhe8.net) at StusGame GROUP (http://www.stus8.com)" />';
-	echo '<link rel="canonical" href="http://www.stus8.com" />';
+	echo '<meta name="author" content="Kenvix (http://zhizhe8.net) at StusGame (http://www.stusgame.com)" />';
+	echo '<link rel="canonical" href="http://www.stusgame.com" />';
 	echo '<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />';
 	echo '<script src="source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="source/css/bootstrap.min.css">';
