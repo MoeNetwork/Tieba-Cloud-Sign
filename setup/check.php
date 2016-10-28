@@ -7,7 +7,7 @@ if (!defined('DO_NOT_LOAD_UI')) {
 	header("content-type:text/html; charset=utf-8");
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-	echo '<title>功能检查 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame (http://www.stusgame.com)" /></head><body>';
+	echo '<title>功能检查 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body>';
 	echo '<script src="../source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
 	echo '<script src="../source/js/bootstrap.min.js"></script>';
@@ -27,7 +27,7 @@ if (!defined('DO_NOT_LOAD_UI')) {
 	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	    <ul class="nav navbar-nav">
 	          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
-	          <li><a href="http://zhizhe8.net" target="_blank">Kenvix个人博客</a></li>
+	          <li><a href="https://kenvix.com" target="_blank">Kenvix个人博客</a></li>
 	    </ul>
 	  </div><!-- /.navbar-collapse -->
 	</div>

@@ -6,14 +6,14 @@ return array(
 		'version'     => '2.0',                 //插件版本号
 		'description' => '在底部显示调试信息，并为开发新架构插件提供范例和详细的注释',  //插件描述
 		'onsale'      =>  true,                 //bool 插件是否已在产品中心上架
-		'url'         => 'http://zhizhe8.net',  //插件地址，比如哪里可以下载到这个插件
+		'url'         => 'https://kenvix.com',  //插件地址，比如哪里可以下载到这个插件
 		'for'         => 'all',                 //适用的云签到版本，all为所有版本，版本后面跟+表示适用于该版本或更高版本，如V4.0+
         'forphp'      => 'all'                  //适用的PHP版本，如果定义了，系统就在安装和激活时进行版本对比，如果版本低于forphp，自动禁止下一步操作，all为所有版本
 	),
 	'author' => array(
 		'author'      => 'Kenvix',            //作者名称
 		'email'       => 'kenvix@vip.qq.com',   //作者邮箱
-		'url'         => 'http://zhizhe8.net'   //作者的个人网站
+		'url'         => 'https://kenvix.com'   //作者的个人网站
 	),
 	'view'   => array(
 		//以下设置均只影响插件列表页面是否有对应按钮

@@ -14,7 +14,7 @@ doAction('index_1');
 		<br/>
 		点击上方导航栏的 功能菜单 可以列出所有功能
 		<br/>
-		此程序作者为  <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>
+		此程序作者为  <a href="https://kenvix.com" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>
 		<br/>本站 [ <?php echo SYSTEM_NAME ?> ] 保留所有权利
 	<?php doAction('index_p_1'); ?>
 	</div>
@@ -141,7 +141,7 @@ if (ROLE == 'admin') {
 //由于历史原因，挂载点有2个
 doAction('index_3');
 doAction('index_2');
-echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>
+echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>
 
 <script type="text/javascript">
 	$.ajax({ 

@@ -78,7 +78,7 @@ if (!empty($yr_reg)) { ?>
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">继续注册</button>
   <?php doAction('reg_page_3'); ?>
 	</div><br/><br/><br/>
-	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stusgame.com/forum.php" target="_blank">StusGame</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
+	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a> @ <a href="http://www.stusgame.com/forum.php" target="_blank">StusGame</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
 	<?php
 	$icp=option::get('icp');
     if (!empty($icp)) {

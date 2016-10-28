@@ -21,7 +21,7 @@ if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	echo '<link href="../favicon.ico" rel="shortcut icon"/>';
-	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame (http://www.stusgame.com)" /></head><body>';
+	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body>';
 	echo '<script src="../source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
 	echo '<script src="../source/js/bootstrap.min.js"></script>';
