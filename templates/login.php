@@ -51,7 +51,7 @@
             <label><input type="checkbox" name="ispersis" value="1" /> 记住密码及账户</label><br><br>
         <?php endif; ?>
 	<?php doAction('login_page_2'); ?>
-  <button type="submit" class="btn btn-primary" style="width:100%;float:left;">登录</button>
+  <button type="submit" class="btn btn-primary" style="width:100%;float:left;">立即登录</button>
   <?php doAction('login_page_3'); ?>
 	</div><br/><br/><br/>
 	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
