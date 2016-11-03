@@ -60,4 +60,4 @@ ADD `order` int(10) unsigned NOT NULL DEFAULT 0;
     //------------------------------------------------//
     //unlink(__FILE__);
     option::set('core_version' , '4.0');
-    msg('您的云签到已成功升级到 V4.0 版本，请立即删除 /setup/update3.9to4.0.php，谢谢<br/><br/>若要获取 V4.0 版本新特性，请前往 <a href="http://www.stus8.com/forum.php?mod=viewthread&tid=6411">StusGame GROUP</a> ', SYSTEM_URL);
+    msg('您的云签到已成功升级到 V4.0 版本，请立即删除 /setup/update3.9to4.0.php，谢谢<br/><br/>若要获取 V4.0 版本新特性，请前往 <a href="http://www.stusgame.com/forum.php?mod=forumdisplay&fid=43">StusGame</a> ', SYSTEM_URL);
