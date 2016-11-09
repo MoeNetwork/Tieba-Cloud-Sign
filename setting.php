@@ -543,7 +543,7 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['ref'])) {
 			$r = misc::scanTiebaByUser();
-			Redirect('index.php?mod=showtb');
+            echo 1;
 		}
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
