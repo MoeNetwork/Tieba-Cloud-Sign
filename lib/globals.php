@@ -100,6 +100,20 @@ if (SYSTEM_PAGE == 'admin:login') {
 	define('ROLE', 'visitor');
 	$i['user']['role'] = 'visitor';
 	doAction('admin_login_1');
+    // 检查验证码
+    if(option::get('captcha')){
+        session_start();
+        if(empty($_POST['captcha'])){
+            redirect('index.php?mod=login&error_msg='.urlencode('请填写验证码'));die;
+        } else {
+            if(strtolower($_POST['captcha']) != strtolower($_SESSION['captcha'])){
+                redirect('index.php?mod=login&error_msg='.urlencode('验证码错误'));die;
+            } else {
+                session_destroy();
+            }
+        }
+    }
+    // 正常登录流程
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
 	$pw = isset($_POST['pw']) ? $_POST['pw'] : '';
 	if (empty($name) || empty($pw)) {
@@ -140,12 +154,28 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	if (option::get('enable_reg') != '1') {
 		msg('注册失败：该站点已关闭注册');
 	}
+    // 检查验证码
+    if(option::get('captcha')){
+        session_start();
+        if(empty($_POST['captcha'])){
+            redirect('index.php?mod=reg&error_msg='.urlencode('请填写验证码'));die;
+        } else {
+            if(strtolower($_POST['captcha']) != strtolower($_SESSION['captcha'])){
+                redirect('index.php?mod=reg&error_msg='.urlencode('验证码错误'));die;
+            } else {
+                session_destroy();
+            }
+        }
+    }
+    // 正常注册流程
 	$name = isset($_POST['user']) ? sqladds($_POST['user']) : '';
-	$mail = isset($_POST['mail']) ? sqladds($_POST['mail']) : '';
+    // 用户名不得含有@符号，避免登录时与邮箱混淆
+    if(stripos($name, '@') !== FALSE) msg('注册失败：用户名不得含有@符号');
+    $mail = isset($_POST['mail']) ? sqladds($_POST['mail']) : '';
 	$pw = isset($_POST['pw']) ? sqladds($_POST['pw']) : '';
 	$yr = isset($_POST['yr']) ? sqladds($_POST['yr']) : '';
 	if (empty($name) || empty($mail) || empty($pw)) {
-		msg('注册失败：请正确填写账户、密码或邮箱');
+		msg('注册失败：请正确填写用户名、密码或邮箱');
 	}
     if ($_POST['pw'] != $_POST['rpw']) {
         msg('注册失败：两次输入的密码不一致，请重新输入');
@@ -178,7 +208,34 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 	doAction('admin_reg_3');
 	ReDirect('index.php?mod=login&msg=' . urlencode('成功注册，请输入账号信息登录本站 [ 账号为用户名或邮箱地址 ]'));
 }
-
+elseif (SYSTEM_PAGE == 'captcha') {
+    // 防止恶意用户通过get参数临时修改验证码等级使其更易于被识别
+    // 只有管理员才能通过get参数临时修改验证码等级（用于设置页预览）
+    if(ROLE == 'admin'){
+        $level = isset($_GET['level']) ? $_GET['level'] : option::get('captcha'); // 验证码等级。0关闭，1简单，2中等，3困难，4反人类
+    } else {
+        $level = option::get('captcha');
+    }
+    if($level){
+        // 不同的验证码等级不同的配置
+        $data = array(
+            1 => array('line' => 5, 'star' => 30, 'fontsize' => 25),
+            2 => array('line' => 10, 'star' => 60, 'fontsize' => 20),
+            3 => array('line' => 20, 'star' => 100, 'fontsize' => 17),
+            4 => array('line' => 40, 'star' => 250, 'fontsize' => 15),
+        );
+        require_once SYSTEM_ROOT.'/lib/class.captcha.php';
+        $c = new Captcha($data[$level]);
+        $c->create();
+        session_start();
+        $_SESSION['captcha'] = $c->getCode();
+    } else {
+		require_once SYSTEM_ROOT.'/lib/class.captcha.php';
+        $c = new Captcha();
+		$c->createNoting();
+	}
+    exit;
+}
 elseif (SYSTEM_PAGE == 'login') { 
 	if (defined('ROLE')) {
 		ReDirect('index.php');

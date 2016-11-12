@@ -105,11 +105,10 @@ switch (SYSTEM_PAGE) {
 				$tip = '<b>检测到新版本云签到，建议您<a href="ajax.php?mod=admin:update:updnow" onclick="waitup();">立即更新</a>，下面是有关信息。</b><hr/>';
 			}
 			$tip .= $data['content'];
-			die('<div class="alert alert-success">'.$tip.'</div>');
+			die('<div class="alert alert-success">'.$tip.'<hr/><b>Tips:</b><br/>1.Git上的最新版本可能不会立即推送。<br/>2.首次安装后需要一次在线更新，这是正常现象。<br/>3.大的版本变动一般需要执行升级脚本，请留意相关提示。</div>');
 		}
 		$c->close();
 		break;
-
 
 	case 'admin:update:updnow':
 		if (!file_exists(UPDATE_CACHE)) {

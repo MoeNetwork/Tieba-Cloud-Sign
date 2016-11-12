@@ -18,7 +18,7 @@ CREATE TABLE `{VAR-PREFIX}cron` (
   `orde` int(10) NOT NULL DEFAULT '0',
   `file` varchar(100) DEFAULT '' NOT NULL,
   `no` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `desc` text NOT NULL,
+  `desc` text,
   `freq` int(10) NOT NULL DEFAULT '0',
   `lastdo`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
   `log` text NOT NULL,
@@ -53,7 +53,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_mode', 'a:2:{i:0;s:1:\"1\";i:1;s
 INSERT INTO `{VAR-PREFIX}options` VALUES ('footer', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('ann', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('enable_reg', '1');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('protect_reg', '1');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('captcha', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('yr_reg', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('icp', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('trigger', '');
@@ -106,7 +106,7 @@ CREATE TABLE `{VAR-PREFIX}plugins` (
   `name` varchar(50) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `ver` varchar(15) DEFAULT '' NOT NULL,
-  `options` text NOT NULL,
+  `options` text,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -129,7 +129,7 @@ CREATE TABLE `{VAR-PREFIX}tieba` (
   `no` tinyint(1) NOT NULL DEFAULT '0',
   `status`  mediumint(8) UNSIGNED NOT NULL DEFAULT '0' ,
   `latest` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `last_error` text NOT NULL,
+  `last_error` text,
   PRIMARY KEY (`id`),
   INDEX `uid` (`uid`) USING BTREE ,
   INDEX `latest` (`latest`) USING BTREE 

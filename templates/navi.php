@@ -66,8 +66,8 @@ global $i;
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> 关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
-          <li><a href="http://zhizhe8.net" target="_blank">Kenvix's Blog</a></li>
+          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
+          <li><a href="https://kenvix.com" target="_blank">Kenvix's Blog</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
       </li>
@@ -99,6 +99,7 @@ global $i;
                <br/>
                   <li><a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
 				  <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
+                      <li><a href="http://www.stusgame.com/" target="_blank"><span class="glyphicon glyphicon-globe"></span> 问题反馈</a></li>
                <?php doAction('navi_9'); } ?>
               </li>
               <?php } else { ?>

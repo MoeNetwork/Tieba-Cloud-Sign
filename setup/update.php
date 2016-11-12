@@ -28,7 +28,7 @@ foreach ($x as $value) {
   $v .= "<li>{$other}<a href=\"{$value}\" onclick=\"return confirm('你确定要升级到此版本吗？');\">从 {$g[1]} 升级到 {$g[2]} [ {$value} ]</a></li><br/>";
 }
 ?>
-<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>软件升级 - 百度贴吧云签到</title><meta name="generator" content="God.Kenvix's Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body><script src="../source/js/jquery.min.js"></script><link rel="stylesheet" href="../source/css/bootstrap.min.css"><script src="../source/js/bootstrap.min.js"></script><style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style><div class="navbar navbar-default" role="navigation">
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>软件升级 - 百度贴吧云签到</title><meta name="generator" content="God.Kenvix's Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body><script src="../source/js/jquery.min.js"></script><link rel="stylesheet" href="../source/css/bootstrap.min.css"><script src="../source/js/bootstrap.min.js"></script><style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style><div class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -41,7 +41,7 @@ foreach ($x as $value) {
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-          <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
+          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
     </ul>
   </div><!-- /.navbar-collapse -->
 </div>

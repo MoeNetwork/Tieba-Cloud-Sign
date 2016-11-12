@@ -139,7 +139,13 @@ switch (SYSTEM_PAGE) {
 			@option::set('footer',$sou['footer']);
 			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);
-			@option::set('protect_reg',$sou['protect_reg']);
+            // 未加载GD库则无法开启验证码
+            if($sou['captcha'] && !function_exists('imagecreatetruecolor')){
+                @option::set('captcha', 0);
+                msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
+            }
+            @option::set('captcha', $sou['captcha']);
+
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
@@ -537,7 +543,7 @@ switch (SYSTEM_PAGE) {
 		}
 		elseif (isset($_GET['ref'])) {
 			$r = misc::scanTiebaByUser();
-			Redirect('index.php?mod=showtb');
+            echo 1;
 		}
 		elseif (isset($_GET['clean'])) {
 			CleanUser(UID);
@@ -584,11 +590,11 @@ switch (SYSTEM_PAGE) {
     case 'set':
         // 获取头像的url
         if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-            $c = new wcurl('http://www.baidu.com/p/'.option::uget("face_baiduid"));
+            $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
             $data = $c->get();
             $c->close();
-            $i['post']['face_url'] = stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'));
-            if(empty(trim($i['post']['face_url']))) msg('获取贴吧头像失败，可能是网络问题，请重试');
+            $i['post']['face_url'] = trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>')));
+            if(empty($i['post']['face_url'])) msg('获取贴吧头像失败，可能是网络问题，请重试');
         }
         /*
         受信任的设置项，如果插件要使用系统的API去储存设置，必须通过set_save1或set_save2挂载点挂载设置名

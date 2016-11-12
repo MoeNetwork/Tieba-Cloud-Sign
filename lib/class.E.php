@@ -34,7 +34,7 @@ class E extends Exception {
 
     public static function display($code , $message , $file , $line , $trace) {
         ob_clean();
-        $msg = SYSTEM_FN . ' V' . SYSTEM_VER . ' 在工作时发生致命的异常 @ '.date('Y-m-d H:m:s').'<br/><b>消息：</b>#' . $code . ' - ' . $message .'<br/><br/>';
+        $msg = SYSTEM_FN . ' V' . SYSTEM_VER . ' (PHP '.phpversion().') 在工作时发生致命的异常 @ '.date('Y-m-d H:m:s').'<br/><b>消息：</b>#' . $code . ' - ' . $message .'<br/><br/>';
         $msg .= '<table style="width:100%"><thead><th>文件</th><th>行</th><th>代码</th></thead><tbody>';
         $msg .= '<tr><td>' . $file . '</td><td>' . $line . '' . '</td><td>[抛出异常]</td></tr>';
         foreach ($trace as $v) {
@@ -46,7 +46,7 @@ class E extends Exception {
         if (function_exists('doAction')) {
             doAction('error_2',$code,$message,$file,$line,$trace);
         }
-        msg($msg);
+        msg($msg,true,true,true,true);
     }
 
     /**

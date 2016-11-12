@@ -4,7 +4,7 @@
  * Kenvix cURL类
  * @version 3.1 @ 2016-04-17
  * @copyright (c) Kenvix
- * @see http://zhizhe8.net
+ * @see https://kenvix.com
  * Class wcurl
  */
 class wcurl {

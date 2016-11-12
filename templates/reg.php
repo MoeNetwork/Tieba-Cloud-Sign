@@ -49,12 +49,36 @@ if (!empty($yr_reg)) { ?>
   <input type="text" class="form-control" name="yr" id="yr" required>
 </div>
 <?php } ?>
+      <?php if(option::get('captcha')): ?>
+          <script>
+              $(function(){
+                  $('#captcha').on('load', function(){
+                      $('#captcha_input').removeAttr('disabled').attr({'value':''});
+                  }).on('click', function(){
+                      $('#captcha_input').attr({'disabled':'disabled', 'value':'刷新中…'});
+                      $(this).attr('src', 'index.php?mod=captcha');
+                  });
+              });
+          </script>
+          <br>
+          <div class="row">
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                  <img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer">
+              </div>
+              <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
+                  <div class="input-group" style="margin-bottom: 5px">
+                      <span class="input-group-addon">验证码</span>
+                      <input type="text" class="form-control" name="captcha" id="captcha_input" value="加载中…" required disabled>
+                  </div>
+              </div>
+          </div>
+      <?php endif; ?>
 	<div class="login-button"><br/>
 	<?php doAction('reg_page_2'); ?>
   <button type="submit" class="btn btn-primary" style="width:100%;float:left;">继续注册</button>
   <?php doAction('reg_page_3'); ?>
 	</div><br/><br/><br/>
-	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="http://zhizhe8.net" target="_blank">Kenvix</a> @ <a href="http://www.stus8.com/forum.php" target="_blank">StusGame GROUP</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy.l19l.com/" target="_blank">FYY</a>
+	<?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER ?> <?php echo SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a> @ <a href="http://www.stusgame.com/forum.php" target="_blank">StusGame</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
 	<?php
 	$icp=option::get('icp');
     if (!empty($icp)) {
