@@ -93,7 +93,7 @@ function getBaiduId($bduss){
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
+function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
 	$hash = md5($email);
 	if($site == 'moefont') {
 		return "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
@@ -107,7 +107,7 @@ function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
+function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
 	if(option::uget('face_img') == 1) {
 		if(option::uget('face_url') != ''){
 			return option::uget('face_url');
@@ -115,12 +115,7 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 			return 'http://tb.himg.baidu.com/sys/portrait/item/';
 		}
 	} else {
-		$hash = md5($email);
-		if($site == 'moefont') {
-			return "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
-		} else {
-			return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
-		}
+		return gravatar(EMAIL, $s, $d, $g, $site);
 	}
 }
 
@@ -986,7 +981,7 @@ function csrf($strict = true) {
 	if(empty($i['opt']['csrf'])) {
 		if(empty($_SERVER['HTTP_REFERER']) && $strict) redirect('index.php');
 		$p = parse_url($_SERVER['HTTP_REFERER']);
-		if(!$p || empty($p['host'])) msg('CSRF防御：无效请求');
-		if($p['host'] != $_SERVER['SERVER_NAME']) msg('CSRF防御：错误的请求来源');
+		if(!$p || empty($p['host'])) msg('CSRF防御：无效请求。<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
+		if($p['host'] != $_SERVER['SERVER_NAME']) msg('CSRF防御：错误的请求来源<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
 	}
 }
