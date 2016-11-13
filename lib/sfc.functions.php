@@ -93,7 +93,7 @@ function getBaiduId($bduss){
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
+function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	$hash = md5($email);
 	if($site == 'moefont') {
 		return "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
@@ -107,7 +107,7 @@ function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
+function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	if(option::uget('face_img') == 1) {
 		if(option::uget('face_url') != ''){
 			return option::uget('face_url');
@@ -115,7 +115,12 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
 			return 'http://tb.himg.baidu.com/sys/portrait/item/';
 		}
 	} else {
-		return gravatar(EMAIL, $s, $d, $g, $site);
+		$hash = md5($email);
+		if($site == 'moefont') {
+			return "https://gravatar.moefont.com/avatar/$hash?s=$s&r=$g";
+		} else {
+			return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
+		}
 	}
 }
 

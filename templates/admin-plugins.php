@@ -58,24 +58,23 @@ foreach($x as $key => $val) {
     }
 	if (in_array($val['plugin']['id'], $i['plugins']['all'])) {
 		if ($i['plugins']['info'][$val['plugin']['id']]['status'] == '1') {
-			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a><br/>';
+			$status = '<font color="green">已激活</font> | <a href="setting.php?mod=admin:plugins&dis='.$val['plugin']['id'].'">禁用插件</a>';
 			if (isset($val['core']) && ($val['core']['setting'] && $val['view']['setting']) || (isset($val['plugin']['old']) && file_exists(SYSTEM_ROOT . '/plugins/' . $val['plugin']['id'] . '/' . $val['plugin']['id'] . '_setting.php'))) {
-				$status .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'">打开插件设置</a>';
-				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span></a> ';
+				$action .= '<a href="index.php?mod=admin:setplug&plug='.$val['plugin']['id'].'" title="查看设置"><span class="glyphicon glyphicon-cog"></span><span style="padding:0 3px">设置</span></a> ';
 			}
 			if (isset($val['core']) && $val['core']['show'] && $val['view']['show']) {
-				$action .= '<a href="index.php?plugin='.$val['plugin']['id'].'" title="查看页面"><span class="glyphicon glyphicon-eye-open"></span></a> ';
+				$action .= '<a href="index.php?plugin='.$val['plugin']['id'].'" title="查看页面"><span class="glyphicon glyphicon-eye-open"></span><span style="padding:0 3px">页面</span></a> ';
 			}
 		} else {
-			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['plugin']['id'].'">激活插件</a><br/>';
+			$status = '<font color="black">已禁用</font> | <a href="setting.php?mod=admin:plugins&act='.$val['plugin']['id'].'">激活插件</a>';
 		}
-		$action .= '<a onclick="return confirm(\'你想要清除此插件的数据吗？\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&clean='.$val['plugin']['id'].'" style="color:#FF6A00;" title="清除数据"><span class="glyphicon glyphicon-remove"></span></a> ';
+		$action .= '<br/><a onclick="return confirm(\'你想要清除此插件的数据吗？文件会得到保留。\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&clean='.$val['plugin']['id'].'" style="color:#FF6A00;" title="清除数据"><span class="glyphicon glyphicon-remove"></span><span style="padding:0 3px">重置</span></a> ';
 	} else {
-		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['plugin']['id'].$for.'">安装插件</a><br/>';
+		$status = '<font color="#977C00">未安装</font> | <a href="setting.php?mod=admin:plugins&install='.$val['plugin']['id'].$for.'">安装插件</a>';
 	}
 
 	$plugins .= '<tr><td>'.$pluginfo.'</td><td>'.$authinfo.'<br/>'.$val['plugin']['id'].$fortc.'<td>'.$status.'<br/>';
-	$plugins .= $action.'<a onclick="return confirm(\'你想要要卸载此插件吗？\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载"><span class="glyphicon glyphicon-trash"></span></a></td>';
+	$plugins .= $action.'<a onclick="return confirm(\'你想要要卸载此插件吗？这将删除相关文件。\\n'.$val['plugin']['name'].' V'.$val['plugin']['version'].'\');" href="setting.php?mod=admin:plugins&uninst='.$val['plugin']['id'].'" style="color:red;" title="卸载插件"><span class="glyphicon glyphicon-trash"></span><span style="padding:0 3px">卸载</span></a></td> ';
     $plugins .= '</tr>';
 }
 

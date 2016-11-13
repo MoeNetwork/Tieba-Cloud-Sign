@@ -350,6 +350,17 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:users':
+		if(!empty($_GET['control'])){
+            $osq = $m->once_fetch_array("SELECT `role`,`pw` FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$_GET['control']}' LIMIT 1");
+            empty($osq['pw']) and msg('用户不存在');
+			$osq['role'] == 'admin' and msg('无法控制管理员');
+            doAction('admin_users_control');
+            setcookie("uid", $_GET['control'], time() + 999999);
+            setcookie("pwd",substr(sha1(EncodePwd($osq['pw'])) , 4 , 32), time() + 999999);
+            setcookie("con_uid", UID);
+            setcookie("con_pwd", $_COOKIE['pwd']);
+            redirect('index.php');
+		}
 		switch (strip_tags($_POST['do'])) {
 			case 'cookie':
 				foreach ($_POST['user'] as $value) {
@@ -364,19 +375,6 @@ switch (SYSTEM_PAGE) {
 				}
 				doAction('admin_users_clean');
 				break;
-
-            case 'control':
-                $uid = !empty($_POST['user'][0]) ? $_POST['user'][0] : msg('无效用户ID');
-                if($uid == $i['user']['uid']) msg('请勿控制自己');
-                $osq = $m->once_fetch_array("SELECT `pw` FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE `id` = '{$uid}' LIMIT 1");
-                if(empty($osq['pw'])) msg('用户不存在');
-                doAction('admin_users_control');
-                setcookie("uid", $uid, time() + 999999);
-                setcookie("pwd",substr(sha1(EncodePwd($osq['pw'])) , 4 , 32), time() + 999999);
-                setcookie("con_uid", UID);
-                setcookie("con_pwd", $_COOKIE['pwd']);
-                redirect('index.php');
-                break;
 
 			case 'delete':
                 MustAdminWarning($_POST['user']);

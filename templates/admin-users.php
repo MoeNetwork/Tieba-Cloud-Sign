@@ -46,14 +46,14 @@ if (isset($_GET['add'])) {	?>
 <?php } else {
 $userc = $m->fetch_row($m->query("SELECT COUNT(*) FROM `".DB_NAME."`.`".DB_PREFIX."users`"));
 $users = '';
-$s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users` ORDER BY `id`');
+$s = $m->query('SELECT * FROM  `'.DB_NAME.'`.`'.DB_PREFIX.'users` ORDER BY `role`,`id`');
 
 while ($x = $m->fetch_array($s)) {
-	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" id="user_'.$x['id'].'" value="'.$x['id'].'"></td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()">'.$x['name'].'<br/>用户组：'.getrole($x['role']).'</td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()">'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
+	$users .= '<tr><td>'.$x['id'].'<br/><input type="checkbox" name="user[]" id="user_'.$x['id'].'" value="'.$x['id'].'"></td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()"><a href="setting.php?mod=admin:users&control='.$x['id'].'">'.$x['name'].'</a><br/>用户组：'.getrole($x['role']).'</td><td onclick="$(\'#user_\' + \''.$x['id'].'\').click()">'.$x['email'].'<br/>数据表：'.$x['t'].'</td></tr>';
 }
 
 ?>
-<div class="alert alert-info">目前共有 <?php echo $userc[0]; ?> 名用户。点击 UID 下面的复选框表示对该用户进行操作<br/><a href="index.php?mod=admin:users&add">点击此处可以添加一名用户</a> | <a href="javascript:go('submit_button');">前往底部</a></div>
+<div class="alert alert-info">目前共有 <?php echo $userc[0]; ?> 名用户。点击用户名表示控制用户，点击复选框表示对该用户进行操作<br/><a href="index.php?mod=admin:users&add">点击此处可以添加一名用户</a> | <a href="javascript:go('submit_button');">前往底部</a></div>
 <form action="setting.php?mod=admin:users" method="post" onsubmit="return userAdminSubmit();">
 <div class="table-responsive">
 <table class="table table-hover">
@@ -70,8 +70,8 @@ while ($x = $m->fetch_array($s)) {
 </table>
 </div>
 <a name="submit_button" id="submit_button"></a>
-选择操作：<label><input type="radio" name="do" value="control" checked> 控制用户</label> &nbsp;&nbsp;&nbsp;&nbsp;
-	<label><input type="radio" name="do" value="cookie" required> 清除 Cookie</label> &nbsp;&nbsp;&nbsp;&nbsp;
+选择操作
+	<label><input type="radio" name="do" value="cookie" checked> 清除 Cookie</label> &nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="radio" name="do" value="clean"> 清除贴吧数据</label> &nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="radio" name="do" value="delete"> 删除用户</label> &nbsp;&nbsp;&nbsp;&nbsp;
 	<label><input type="radio" name="do" value="cset"> 清除设置</label> &nbsp;&nbsp;&nbsp;&nbsp;
