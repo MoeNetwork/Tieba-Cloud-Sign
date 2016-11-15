@@ -68,7 +68,7 @@ if (!empty($yr_reg)) { ?>
               <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
                   <div class="input-group" style="margin-bottom: 5px">
                       <span class="input-group-addon">验证码</span>
-                      <input type="text" class="form-control" name="captcha" id="captcha_input" value="加载中…" required disabled>
+                      <input type="text" class="form-control" name="captcha" id="captcha_input" required>
                   </div>
               </div>
           </div>
