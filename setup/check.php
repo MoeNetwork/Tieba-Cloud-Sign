@@ -7,7 +7,7 @@ if (!defined('DO_NOT_LOAD_UI')) {
 	header("content-type:text/html; charset=utf-8");
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-	echo '<title>功能检查 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
+	echo '<title>功能检查 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body>';
 	echo '<script src="../source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
 	echo '<script src="../source/js/bootstrap.min.js"></script>';
@@ -26,8 +26,8 @@ if (!defined('DO_NOT_LOAD_UI')) {
 	  </div>
 	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	    <ul class="nav navbar-nav">
-	          <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
-	          <li><a href="http://zhizhe8.net" target="_blank">Kenvix个人博客</a></li>
+	          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
+	          <li><a href="https://kenvix.com" target="_blank">Kenvix个人博客</a></li>
 	    </ul>
 	  </div><!-- /.navbar-collapse -->
 	</div>
@@ -64,7 +64,7 @@ function checkclass($f,$m = false) {
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th style="width:20%">功能 / 举例</th>
+			<th style="width:20%">功能</th>
 			<th style="width:15%">需求</th>
 			<th style="width:15%">当前</th>
 			<th style="width:50%">用途</th>
@@ -72,85 +72,73 @@ function checkclass($f,$m = false) {
 	</thead>
 	<tbody>
 		<tr>
-			<td>cURL: curl_exec()</td>
+			<td><a href="http://php.net/" target="_blank">PHP 5+</a></td>
+			<td>必须</td>
+			<td><?php echo phpversion(); ?></td>
+			<td>核心，未来云签到可能不支持 PHP 5.3 以下版本</td>
+		</tr>
+		<tr>
+			<td><a href="http://php.net/manual/zh/book.curl.php" target="_blank">Client URL</a></td>
 			<td>必须</td>
 			<td><?php echo checkfunc('curl_exec',true); ?></td>
-			<td>抓取网页</td>
+			<td>抓取网页，用于执行签到等</td>
 		</tr>
 		<tr>
-			<td>JSON: json_decode()</td>
+			<td><a href="http://php.net/manual/zh/book.json.php" target="_blank">JSON</a></td>
 			<td>必须</td>
 			<td><?php echo checkfunc('json_decode',true); ?></td>
-			<td>解析和编码 JSON</td>
+			<td>解析和编码 JSON，用于执行签到等</td>
 		</tr>
 		<tr>
-			<td>file_get_contents()</td>
+			<td><a href="http://php.net/manual/zh/function.file-get-contents.php" target="_blank">file_get_contents()</a></td>
 			<td>必须</td>
 			<td><?php echo checkfunc('file_get_contents',true); ?></td>
-			<td>读取文件</td>
+			<td>读取文件，用于执行签到等</td>
 		</tr>
 		<tr>
-			<td>Socket: fsockopen()</td>
-			<td>推荐</td>
-			<td><?php echo checkfunc('fsockopen'); ?></td>
-			<td>Socket，例如模拟多线程签到</td>
+			<td><a href="http://php.net/manual/zh/book.mbstring.php" target="_blank">MbString</a></td>
+			<td>必须</td>
+			<td><?php echo checkfunc('mb_ereg'); ?></td>
+			<td>各种字符串操作，用于读取贴吧等</td>
 		</tr>
 		<tr>
-			<td>ZipArchive</td>
-			<td>推荐</td>
-			<td><?php echo checkclass('ZipArchive'); ?></td>
-			<td>Zip 解包和压缩</td>
-		</tr>
-		<tr>
-			<td>写入权限</td>
-			<td>推荐</td>
-			<td><?php if (is_writable(SYSTEM_ROOT)) { echo '<font color="green">可用</font>'; } else { echo '<font color="black">不支持</font>'; } ?></td>
-			<td>写入文件(1/2)</td>
-		</tr>
-		<tr>
-			<td>file_put_contents()</td>
-			<td>推荐</td>
-			<td><?php echo checkfunc('file_put_contents'); ?></td>
-			<td>写入文件(2/2)</td>
-		</tr>
-		<tr>
-			<td>MySQL: mysql_connect()</td>
+			<td><a href="http://php.net/manual/zh/book.mysql.php" target="_blank">MySQL</a></td>
 			<td>必须</td>
 			<td><?php echo checkfunc('mysql_connect'); ?></td>
 			<td>数据库操作，若支持 MySQLi 可忽略本项</td>
 		</tr>
 		<tr>
-			<td>MySQLi: mysqli</td>
+			<td><a href="http://php.net/manual/zh/class.mysqli.php" target="_blank">MySQLi</a></td>
 			<td>推荐</td>
 			<td><?php echo checkclass('mysqli'); ?></td>
 			<td>数据库操作，若支持本项可忽略不支持 MySQL 函数</td>
 		</tr>
 		<tr>
-			<td>xml_parser_create()</td>
+			<td><a href="http://php.net/manual/zh/class.ziparchive.php" target="_blank">ZipArchive</a></td>
 			<td>推荐</td>
-			<td><?php echo checkfunc('xml_parser_create'); ?></td>
-			<td>XML解析</td>
+			<td><?php echo checkclass('ZipArchive'); ?></td>
+			<td>Zip 解包和压缩，用于在线更新和上传等</td>
 		</tr>
 		<tr>
-			<td>SimpleXML: simplexml_load_file()</td>
+			<td><a href="http://www.php.net/manual/zh/function.file-put-contents.php" target="_blank">写入文件</a></td>
 			<td>推荐</td>
-			<td><?php echo checkfunc('simplexml_load_file'); ?></td>
-			<td>XML 解析</td>
+			<td><?php if (is_writable(SYSTEM_ROOT) && function_exists('file_put_contents')) { echo '<font color="green">可用</font>'; } else { echo '<font color="black">不支持</font>'; } ?></td>
+			<td>本地文件写入，用于在线更新和上传等</td>
 		</tr>
 		<tr>
-			<td>MbString: mb_convert_encoding()</td>
-			<td>必须</td>
-			<td><?php echo checkfunc('mb_convert_encoding'); ?></td>
-			<td>各种字符串操作</td>
+			<td><a href="http://php.net/manual/zh/book.image.php" target="_blank">GD</a></td>
+			<td>推荐</td>
+			<td><?php echo checkfunc('imagecreatetruecolor'); ?></td>
+			<td>图像处理，用于生成验证码</td>
 		</tr>
 		<tr>
-			<td>PHP 5+</td>
-			<td>必须</td>
-			<td><?php echo phpversion(); ?></td>
-			<td>核心，未来云签到可能不支持PHP 5.3以下版本</td>
+			<td><a href="http://www.php.net/manual/zh/function.fsockopen.php" target="_blank">Socket: fsockopen()</a></td>
+			<td>推荐</td>
+			<td><?php echo checkfunc('fsockopen'); ?></td>
+			<td>Socket，用于模拟多线程签到</td>
 		</tr>
 		<tr>
-			<td>Zend Guard Loader</td>
+			<td><a href="http://www.zend.com/" target="_blank">Zend Guard Loader</a></td>
 			<td>可选</td>
 			<td>未知</td>
 			<td>安装 Zend 加密的插件，程序本身没有加密</td>
@@ -161,7 +149,7 @@ function checkclass($f,$m = false) {
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th style="width:20%">功能 / 举例</th>
+			<th style="width:20%">功能</th>
 			<th style="width:15%">需求</th>
 			<th style="width:15%">当前</th>
 			<th style="width:50%">用途</th>
@@ -184,7 +172,7 @@ function checkclass($f,$m = false) {
 							echo '<font color="red">无法连接到百度服务器。请询问您的主机商。</font>';
 						}
 					} else {
-						echo '<font color="red">请先联系您的主机商开启cURL功能。</font>';
+						echo '<font color="red">请联系您的主机商开启cURL功能。</font>';
 					}
 				?>
 			</td>

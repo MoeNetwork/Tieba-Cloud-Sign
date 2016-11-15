@@ -60,6 +60,9 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 [http://ccgv.me/](http://ccgv.me/)  [http://ccgv.party/](http://ccgv.party/)
 #####3.多星宇 -- 发布修改版权的版本
 [http://www.asp300.com/SoftView/11/SoftView_57242.html](http://www.asp300.com/SoftView/11/SoftView_57242.html)
+#####4.贴吧:国王zhang -- 去版权+辱骂作者+经提醒之后死性不改和删除提醒
+[http://52king.cn/tieba](http://52king.cn/tieba)
+[http://tieba.baidu.com/p/4822692349](http://tieba.baidu.com/p/4822692349)
 ###须知
 贴吧云签到V5.0可能成为最后的版本     
 商业版将继续支持，并提供漏洞修补程序以及接口更改

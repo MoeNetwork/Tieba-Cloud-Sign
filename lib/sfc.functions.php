@@ -981,7 +981,7 @@ function csrf($strict = true) {
 	if(empty($i['opt']['csrf'])) {
 		if(empty($_SERVER['HTTP_REFERER']) && $strict) redirect('index.php');
 		$p = parse_url($_SERVER['HTTP_REFERER']);
-		if(!$p || empty($p['host'])) msg('CSRF防御：无效请求');
-		if($p['host'] != $_SERVER['SERVER_NAME']) msg('CSRF防御：错误的请求来源');
+		if(!$p || empty($p['host'])) msg('CSRF防御：无效请求。<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
+		if($p['host'] != $_SERVER['SERVER_NAME']) msg('CSRF防御：错误的请求来源<a href="https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
 	}
 }

@@ -21,7 +21,7 @@ if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER
 	echo '<!DOCTYPE html><html><head>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0">';
 	echo '<link href="../favicon.ico" rel="shortcut icon"/>';
-	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (http://zhizhe8.net) and StusGame GROUP (http://www.stus8.com)" /></head><body>';
+	echo '<title>安装向导 - '.SYSTEM_FN.'</title><meta name="generator" content="God.Kenvix\'s Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body>';
 	echo '<script src="../source/js/jquery.min.js"></script>';
 	echo '<link rel="stylesheet" href="../source/css/bootstrap.min.css">';
 	echo '<script src="../source/js/bootstrap.min.js"></script>';
@@ -40,7 +40,7 @@ if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-          <li><a href="http://www.stus8.com" target="_blank">StusGame GROUP</a></li>
+          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
     </ul>
   </div><!-- /.navbar-collapse -->
 </div>
@@ -63,10 +63,12 @@ if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER
 
 				echo '请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
 				echo '<br/><br/><div class="alert alert-success"><pre>
-&lt?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
+&lt?php 
+//特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
+//如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
 
-//BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
-
+////////////////////////////以下选项只需在使用MySQL时填写////////////////////////////
+//若使用MySQL，则BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\'localhost\');
 //MySQL 数据库用户名
@@ -77,6 +79,18 @@ define(\'DB_PASSWD\',\'000000\');
 define(\'DB_NAME\',\'tiebacloud\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\'tc_\');
+
+////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
+//数据库前缀，建议保持默认
+define(\'DB_PREFIX\',\'tc_\');
+
+//停用CSRF防御
+//一旦停用，您的站点可能会遭到CSRF(跨站请求伪造)攻击
+//若确实要停用，请删除下面这句话开头的两个斜杠 //
+//define(\'ANTI_CSRF\', false);
+
+//加密用盐，请乱打，留空为不使用盐
+define(\'SYSTEM_SALT\','');
 </pre></div>';
 				echo '<b>参考文档：</b>BAE | SAE | JAE';
 				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=3&bae\'" class="btn btn-success" value="下一步 >>">';
@@ -196,12 +210,12 @@ define(\'DB_PREFIX\',\'tc_\');
 					}
 				}
 				if (!isset($_POST['isbae'])) {
-					$write_data = '<?php if (!defined(\'SYSTEM_ROOT\')) { die(\'Insufficient Permissions\'); }
+					$write_data = '<?php 
 //特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
 //如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
 
-//BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
-
+////////////////////////////以下选项只需在使用MySQL时填写////////////////////////////
+//若使用MySQL，则BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\''.DB_HOST.'\');
 //MySQL 数据库用户名
@@ -213,7 +227,19 @@ define(\'DB_NAME\',\''.DB_NAME.'\');
 //MySQL 数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\''.DB_PREFIX.'\');
 //加密用盐，请乱打，留空为不使用盐
-define(\'SYSTEM_SALT\',\'\');';
+define(\'SYSTEM_SALT\',\'\');
+
+////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
+//数据库前缀，建议保持默认
+define(\'DB_PREFIX\',\'tc_\');
+
+//停用CSRF防御
+//一旦停用，您的站点可能会遭到CSRF(跨站请求伪造)攻击
+//若确实要停用，请删除下面这句话开头的两个斜杠 //
+//define(\'ANTI_CSRF\', false);
+
+//加密用盐，请乱打，留空为不使用盐
+define(\'SYSTEM_SALT\','');';
 					if(empty($_POST['from_config']) && !file_put_contents('../config.php', $write_data)) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
