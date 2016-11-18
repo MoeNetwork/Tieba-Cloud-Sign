@@ -42,16 +42,8 @@ Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可
 @Ver4 [i@v4.hk]     
 @kirainmoe [kotori@wo.cn]     
 @VFleaKing [liuhaotian0520@163.com]     
-@superxzr [a457418121@gmail.com]
-#由StusGame官方人员运营的签到平台
-[简云签到联盟](https://tbsign.cn)
-##许可协议与商业版本等
-###许可协议
-请访问程序根目录下的 license.html 阅读许可协议
-###商业版本
-若要购买商业版本（￥270），请发送邮件至：kenvix@qq.com     
-购买商业版本后可以：修改版权，获取专属插件，后续更新，提供技术支持等     
-老商业用户请联系@Kenvix [kenvix@qq.com]获取福利插件库地址
+@superxzr [a457418121@gmail.com]         
+没有商业版！没有商业版！没有商业版！   
 ###耻辱柱
 这里列出的是**一小部分**违反协议者的名单
 #####1.@shirakun -- 发布去版权版本
