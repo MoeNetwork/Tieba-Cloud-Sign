@@ -3,8 +3,7 @@ if (empty($_COOKIE['uid']) || empty($_COOKIE['pwd'])) {
   header('Location: ../');
   die;
 }
-define('SYSTEM_NO_ERROR', true);
-define('SYSTEM_DO_NOT_REMIND_INSTALL', true);
+define('SYSTEM_DEV', true);
 require '../init.php';
 global $i;
 if (ROLE != 'admin') {

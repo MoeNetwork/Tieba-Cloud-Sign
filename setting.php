@@ -149,7 +149,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
-			@option::set('trigger',$sou['trigger']);
 			@option::set('bbs_us',$sou['bbs_us']);
 			@option::set('bbs_pw',$sou['bbs_pw']);
 			@option::set('mail_mode',$sou['mail_mode']);
@@ -168,7 +167,6 @@ switch (SYSTEM_PAGE) {
 			@option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
-			@option::set('isapp',$sou['isapp']);
 		}
 		doAction('admin_set_save');
 		Redirect('index.php?mod=admin:set:'. $_GET['type'].'&ok');

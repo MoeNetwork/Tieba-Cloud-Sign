@@ -1,5 +1,5 @@
 <?php
-define('SYSTEM_NO_ERROR', true);
+define('SYSTEM_DEV', true);
 define('SYSTEM_NO_CHECK_VER', true);
 define('SYSTEM_NO_CHECK_LOGIN', true);
 define('SYSTEM_NO_PLUGIN', true);

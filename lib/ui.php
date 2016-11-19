@@ -31,9 +31,6 @@ function loadhead($title = '') {
 	echo '<meta name="description" content="'.option::get('system_description').'" />';
 	doAction('header');
 	echo '</head><body>';
-	if (option::get('trigger') == 1) {
-		echo "<script>$.ajax({ async:true, url: '".SYSTEM_URL."do.php', type: 'GET', data : {},dataType: 'HTML'});</script>";
-	}
 	template('navi');
 	doAction('body');
 }

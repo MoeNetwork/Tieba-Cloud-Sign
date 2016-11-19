@@ -114,16 +114,16 @@ function checkclass($f,$m = false) {
 			<td>数据库操作，若支持本项可忽略不支持 MySQL 函数</td>
 		</tr>
 		<tr>
-			<td><a href="http://php.net/manual/zh/class.ziparchive.php" target="_blank">ZipArchive</a></td>
-			<td>推荐</td>
-			<td><?php echo checkclass('ZipArchive'); ?></td>
-			<td>Zip 解包和压缩，用于在线更新和上传等</td>
-		</tr>
-		<tr>
 			<td><a href="http://www.php.net/manual/zh/function.file-put-contents.php" target="_blank">写入文件</a></td>
 			<td>推荐</td>
 			<td><?php if (is_writable(SYSTEM_ROOT) && function_exists('file_put_contents')) { echo '<font color="green">可用</font>'; } else { echo '<font color="black">不支持</font>'; } ?></td>
 			<td>本地文件写入，用于在线更新和上传等</td>
+		</tr>
+		<tr>
+			<td><a href="http://php.net/manual/zh/class.ziparchive.php" target="_blank">ZipArchive</a></td>
+			<td>推荐</td>
+			<td><?php echo checkclass('ZipArchive'); ?></td>
+			<td>Zip 解包和压缩，用于在线更新和上传等</td>
 		</tr>
 		<tr>
 			<td><a href="http://php.net/manual/zh/book.image.php" target="_blank">GD</a></td>

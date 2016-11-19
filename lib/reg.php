@@ -96,7 +96,7 @@ if (function_exists('spl_autoload_register')) {
 	}
 }
 
-if (option::get('dev') != 1 || defined('NO_ERROR')) {
+if (option::get('dev') != 1) {
 	define('SYSTEM_DEV', false);
 } else {
 	define('SYSTEM_DEV', true);

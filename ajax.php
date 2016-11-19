@@ -56,10 +56,9 @@ switch (SYSTEM_PAGE) {
 	case 'admin:server':
 		?>
 		<li class="list-group-item">
-			<b>PHP 版本：</b><?php echo phpversion() ?>
+			<b>PHP 版本：</b><?php echo PHP_VERSION ?>
 			<?php if(ini_get('safe_mode')) { echo '线程安全'; } else { echo '非线程安全'; } ?>
 		</li>
-		<?php if(version_compare('5.3', phpversion()) === 1) { echo '<li class="list-group-item"><b>PHP 版本警告：</b><font color="red">PHP 版本太低</font>，未来云签到可能不再支持当前版本 <a href="http://php.net/manual/zh/appendices.php" target="_blank">查看如何升级</a></li>'; }?>
 		<?php if(get_magic_quotes_gpc()) { echo '<li class="list-group-item"><b>性能警告：</b><font color="red">魔术引号被激活</font>，云签到正以低效率模式运行 <a href="http://php.net/manual/zh/security.magicquotes.whynot.php" target="_blank">为什么不用魔术引号</a> <a href="http://php.net/manual/zh/security.magicquotes.disabling.php" target="
 		_blank">如何关闭魔术引号</a></li>'; }?>
 		<li class="list-group-item">

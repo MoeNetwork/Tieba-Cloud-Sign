@@ -109,8 +109,7 @@ function uninstallPlugin($plugin , $delete = true) {
 		}
 	}
 	$m->query("DELETE FROM `" . DB_PREFIX . "plugins` WHERE `name` = '{$plugin}';");
-	$isapp = option::get('isapp');
-	if (empty($isapp) && $delete) {
+	if ($delete) {
 		DeleteFile(SYSTEM_ROOT . '/plugins/' . $plugin);
 	}
 }

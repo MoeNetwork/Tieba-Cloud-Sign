@@ -40,9 +40,9 @@ if (isset($_GET['ok'])) {
 	echo '<div class="alert alert-success">计划任务操作成功</div>';
 }
 
-$crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".DB_PREFIX."cron` ");
+$count = $m->once_fetch_array("SELECT COUNT(*) AS c FROM `".DB_NAME."`.`".DB_PREFIX."cron`");
 ?>
-<div class="alert alert-info" id="tb_num">当前共有 <?php echo $crount['ffffff'] ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:editcron">添加新计划任务</a> | <a href="do.php?pw=<?php echo option::get('cron_pw') ?>">运行全部计划任务</a></div>
+<div class="alert alert-info" id="tb_num">当前共有 <?php echo $count['c'] ?> 个计划任务，您需要添加根目录下 do.php 到您主机的计划任务后，下面的任务才能被执行<br/><a href="index.php?mod=admin:editcron">添加新计划任务</a> | <a href="do.php?pw=<?php echo option::get('cron_pw') ?>">运行全部计划任务</a></div>
 <form action="setting.php?mod=admin:cron&xorder" method="post">
 <div class="table-responsive">
 <table class="table table-hover">
@@ -58,7 +58,7 @@ $crount = $m->once_fetch_array("SELECT COUNT(*) AS ffffff FROM `".DB_NAME."`.`".
 	</tbody>
 </table>
 </div>
-<input type="submit" class="btn btn-primary" value="提交更改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="location = 'index.php?mod=admin:cron&add'">添加计划任务</button>
+<input type="submit" class="btn btn-primary" value="提交更改">
 </form>
 <br/>
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp;  <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>

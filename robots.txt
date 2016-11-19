@@ -1,2 +1,12 @@
 User-agent: *
-Disallow: /
+Disallow: /setting.php
+Disallow: /ajax.php
+Disallow: /config.php
+Disallow: /do.php
+Disallow: /init.php
+Disallow: /license.html
+Disallow: /README.md
+Disallow: /lib/
+Disallow: /setup/
+Disallow: /source/
+Disallow: /templates/

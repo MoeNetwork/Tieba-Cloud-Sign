@@ -60,7 +60,7 @@ doAction('index_1');
 				echo '<span id="baiduid_limit">禁止绑定</span>'; 
 			} else { 
 				echo '<span id="baiduid_limit">无限</span>'; 
-			} // ('.getrole(ROLE).')
+			}
 			echo '<div class="progress hidden-xs" style="float:right;width:45%">
   <div class="progress-bar" role="progressbar" aria-valuenow="0" id="baiduid_prog" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
   </div>
@@ -114,14 +114,13 @@ if (ROLE == 'admin') {
 				echo '<br/><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>警告：</b></font>计划任务今天尚未运行，是否已设置 <b>do.php</b> 到您的主机的计划任务？';
 			}
 			echo '</li>';
-			if (!file_exists(SYSTEM_ROOT . '/setup/install.lock')) {
-				echo '<li class="list-group-item"><font color="red"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>未找到 <b>/setup/install.lock</b> 文件，站点将有被恶意重装的风险，请务必建立一个空的 install.lock 文件，<a href="setting.php?mod=admin:create_lock">点此建立</a>';
+			if (defined('ANTI_CSRF') && !ANTI_CSRF) {
+				echo '<li class="list-group-item"><font color="#FF6600"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>站点的<a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">CSRF防御</a>被关闭，站点有一定的安全风险。</li>';
+			}
+			if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+				echo '<li class="list-group-item"><font color="#FF6600"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>站点使用的PHP版本较落后，云签到效率和安全水平下降。</li>';
 			}
 			doAction('index_p_3');
-		
-            if(defined('SYSTEM_KEY')) {
-                echo '<li class="list-group-item">商业授权密钥：' . SYSTEM_KEY . '</li>';
-            }
 		?>
 		</li>
 	</ul>
@@ -138,7 +137,6 @@ if (ROLE == 'admin') {
 <?php
 }
 
-//由于历史原因，挂载点有2个
 doAction('index_3');
 doAction('index_2');
 echo '<br/>'.SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a> &amp; <a href="http://www.stusgame.com/" target="_blank">StusGame</a>

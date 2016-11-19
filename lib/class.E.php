@@ -23,7 +23,7 @@ class E extends Exception {
 
     public static function error($errno, $errstr, $errfile, $errline) {
         $errnoo = self::getErrorType($errno);
-        if (SYSTEM_DEV == true && !defined('SYSTEM_NO_ERROR')) {
+        if (SYSTEM_DEV == true) {
             echo '<div class="alert alert-danger alert-dismissable">';
             echo '<strong>'.$errnoo.'：</strong>'.$errstr.'<br/>文件：'.$errfile.' @ '.$errline.'行</div>';
         }
