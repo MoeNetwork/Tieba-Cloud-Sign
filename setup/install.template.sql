@@ -80,7 +80,6 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_pw', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_sleep', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('cktime', '999999');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bduss_num', '0');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('csrf', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_multith', '1');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_asyn', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_asyn', '');

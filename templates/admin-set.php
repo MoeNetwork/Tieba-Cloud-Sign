@@ -141,7 +141,6 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content1['icp'] = array('td1'=>'<b>ICP 备案信息</b><br/>没有请留空','type'=>'text','text'=>'','extra'=>'');
 	$content1['trigger'] = array('td1'=>'<b>依靠访客触发任务</b>','type'=>'checkbox','text'=>'建议在不支持计划任务（crontab）时使用，开启计划任务密码后无效','extra'=>'');
 	$content1['cktime'] = array('td1'=>'<b>Cookie有效期</b><br/>单位为秒，过大会导致浏览器无法记录','type'=>'number','text'=>'','extra'=>'step="1" min="1"');
-	$content1['csrf'] = array('td1'=>'<b>停用CSRF防御</b>','type'=>'checkbox','text'=>'贴吧云签到可以防御CSRF攻击，开启该选项会导致站点处于危险状态','extra'=>'');
 	$content1['isapp'] = array('td1'=>'<b>环境为引擎</b>','type'=>'checkbox','text'=>'如果您的主机不支持写入或者为应用引擎，请选择此项','extra'=>'');
 	$content1['dev'] = array('td1'=>'<b>开发者模式</b>','type'=>'checkbox','text'=>'生产环境下请勿开启','extra'=>'');
 		/*警告：超长内容*/

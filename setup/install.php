@@ -128,7 +128,7 @@ define(\'SYSTEM_SALT\',\'\');
 				if (isset($_GET['isbae']) || isset($_GET['bae'])) {
 					echo '<b>提示：</b>如果以下内容有错误，说明您上一步手动修改出现了问题，您可以 <a href="install.php?step=100" class="btn btn-warning btn-xs">返回</a><br/><br/>';
 					@include_once(SYSTEM_ROOT2.'/../config.php');
-					echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" value="localhost" value="'.DB_HOST.'" disabled></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" value="'.DB_HOST.'" disabled></div><br/>';
 					echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" value="'.DB_USER.'" disabled></div><br/>';
 					echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" value="'.DB_PASSWD.'" disabled></div><br/>';
 					echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" value="'.DB_NAME.'" disabled></div><br/>';
