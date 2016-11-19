@@ -61,37 +61,35 @@ if ( isset($_GET['step']) && ( empty($csrf['host']) || $csrf['host'] != $_SERVER
   </div>
 </div>';
 
-				echo '请按照注释修改 /<b>config.php</b><br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
-				echo '<br/><br/><div class="alert alert-success"><pre>
+				echo '请按照注释修改 /<b>config.php</b> ，重要位置已经用星号(*)标明<br/><br/><font color="red">警告：</font>切勿使用记事本修改；文件编码应该为 UTF-8 ( 无BOM )';
+				echo '<br/><br/><div class="highlight"><pre><code class="html">
 &lt?php 
-//特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
-//如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
+
+//特别警告：禁止使用记事本编辑！
 
 ////////////////////////////以下选项只需在使用MySQL时填写////////////////////////////
-//若使用MySQL，则BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 //MySQL 数据库地址，普通主机一般为localhost
-define(\'DB_HOST\',\'localhost\');
+define(\'DB_HOST\',\'******\');
 //MySQL 数据库用户名
-define(\'DB_USER\',\'root\');
+define(\'DB_USER\',\'******\');
 //MySQL 数据库密码
-define(\'DB_PASSWD\',\'000000\');
-//MySQL 数据库名称(存放百度贴吧云签到的)
-define(\'DB_NAME\',\'tiebacloud\');
+define(\'DB_PASSWD\',\'******\');
+//MySQL 数据库名称
+define(\'DB_NAME\',\'******\');
 
-////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
+////////////////////////////以下选项使用任何数据库都需填写////////////////////////////
 //数据库前缀，建议保持默认
 define(\'DB_PREFIX\',\'tc_\');
 
+///////////////////////////////////////其他设置///////////////////////////////////////
 //停用CSRF防御
-//一旦停用，您的站点可能会遭到CSRF(跨站请求伪造)攻击
-//若确实要停用，请删除下面这句话开头的两个斜杠 //
-//define(\'ANTI_CSRF\', false);
+//说明在 http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/关于云签到CSRF防御
+define(\'ANTI_CSRF\',true);
 
-//加密用盐，请乱打，留空为不使用盐
+//加密用盐，留空为不使用
 define(\'SYSTEM_SALT\',\'\');
-</pre></div>';
-				echo '<b>参考文档：</b>BAE | SAE | JAE';
-				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=3&bae\'" class="btn btn-success" value="下一步 >>">';
+</code></pre></div>';
+				echo '<br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=3&bae\'" class="btn btn-success" value="下一步 >>">';
 				break;
 
 			case '1':
@@ -125,21 +123,31 @@ define(\'SYSTEM_SALT\',\'\');
     <span class="sr-only">30%</span>
   </div>
 </div>';
-				echo '<h4>数据库信息</h4><br/>';
 				echo '<form action="install.php?step=4" method="post">';
+				echo '<h4>数据库信息</h4>';
 				if (isset($_GET['isbae']) || isset($_GET['bae'])) {
+					echo '<b>提示：</b>如果以下内容有错误，说明您上一步手动修改出现了问题，您可以 <a href="install.php?step=100" class="btn btn-warning btn-xs">返回</a><br/><br/>';
+					@include_once(SYSTEM_ROOT2.'/../config.php');
+					echo '<div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" value="localhost" value="'.DB_HOST.'" disabled></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" value="'.DB_USER.'" disabled></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" value="'.DB_PASSWD.'" disabled></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" value="'.DB_NAME.'" disabled></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" value="'.DB_PREFIX.'" disabled></div><br/>';
 					echo '<input type="hidden" name="isbae" value="1">';
+					echo '<input type="hidden" name="from_config" value="1">';
+				} else {
+					echo '<br/><b>提示 1：</b>如果您已经手动写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/>';
+					echo '<b>提示 2：</b>如果程序并未写入数据库 [ 安装完成后进入首页提示 Table XX doesn\'t exist  ] 请选择强制手动导入 SQL<br/><br/>';
+					echo '<input type="checkbox" name="nosql" value="1"> 强制手动导入 SQL<br/><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">自动获得数据库配置信息</span><select name="from_config" class="form-control"  onchange="if(this.value == \'0\') { $(\'#db_config\').show(); } else { $(\'#db_config\').hide(); }"><option value="0">否</option><option value="1">是</option></select></div><br/>';
+					echo '<div id="db_config"><div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" name="dbuser" placeholder=""></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" name="dbname" placeholder=""></div><br/>';
+					echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
+					echo '</div>';
 				}
-				echo '<b>提示 1：</b>如果您的主机没有明确给出数据库信息 (例如SAE给出的是常量) 并且您已经写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/>';
-				echo '<b>提示 2：</b>如果程序并未写入数据库 [ 安装完成后进入首页提示 Table XX doesn\'t exist  ] 请选择强制手动导入 SQL<br/><br/>';
-				echo '<input type="checkbox" name="nosql" value="1"> 强制手动导入 SQL<br/><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">自动获得数据库配置信息</span><select name="from_config" class="form-control"  onchange="if(this.value == \'0\') { $(\'#db_config\').show(); } else { $(\'#db_config\').hide(); }"><option value="0">否</option><option value="1">是</option></select></div><br/>';
-				echo '<div id="db_config"><div class="input-group"><span class="input-group-addon">数据库地址</span><input type="text" class="form-control" name="dbhost" value="localhost" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据库用户名</span><input type="text" class="form-control" name="dbuser" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" name="dbname" placeholder=""></div><br/>';
-				echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
-				echo '</div><h4>站点创始人信息</h4><br/>';
+				echo '<h4>站点创始人信息</h4><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人用户名</span><input type="text" required class="form-control" name="user" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人邮箱</span><input type="email" required class="form-control" name="mail" placeholder=""></div><br/>';
 				echo '<div class="input-group"><span class="input-group-addon">创始人密码</span><input type="password" required class="form-control" name="pw" placeholder=""></div><br/>';
@@ -209,30 +217,29 @@ define(\'SYSTEM_SALT\',\'\');
 				}
 				if (!isset($_POST['isbae'])) {
 					$write_data = '<?php 
-//特别警告：请勿使用记事本编辑！！！如果你正在使用记事本并且还没有保存，赶紧关掉！！！
-//如果你已经用记事本保存了，请立即下载最新版的云签到包解压并覆盖本文件
+
+//特别警告：禁止使用记事本编辑！
 
 ////////////////////////////以下选项只需在使用MySQL时填写////////////////////////////
-//若使用MySQL，则BAE/SAE/JAE的数据库地址，用户名，密码请参考相关文档
 //MySQL 数据库地址，普通主机一般为localhost
 define(\'DB_HOST\',\''.DB_HOST.'\');
 //MySQL 数据库用户名
 define(\'DB_USER\',\''.DB_USER.'\');
 //MySQL 数据库密码
 define(\'DB_PASSWD\',\''.DB_PASSWD.'\');
-//MySQL 数据库名称(存放百度贴吧云签到的)
+//MySQL 数据库名称
 define(\'DB_NAME\',\''.DB_NAME.'\');
 
-////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
+////////////////////////////以下选项使用任何数据库都需填写////////////////////////////
 //数据库前缀，建议保持默认
-define(\'DB_PREFIX\',\'tc_\');
+define(\'DB_PREFIX\',\''.DB_PREFIX.'\');
 
+///////////////////////////////////////其他设置///////////////////////////////////////
 //停用CSRF防御
-//一旦停用，您的站点可能会遭到CSRF(跨站请求伪造)攻击
-//若确实要停用，请删除下面这句话开头的两个斜杠 //
-//define(\'ANTI_CSRF\', false);
+//说明在 http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/关于云签到CSRF防御
+define(\'ANTI_CSRF\',true);
 
-//加密用盐，请乱打，留空为不使用盐
+//加密用盐，留空为不使用
 define(\'SYSTEM_SALT\',\'\');';
 					if(empty($_POST['from_config']) && !file_put_contents('../config.php', $write_data)) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
