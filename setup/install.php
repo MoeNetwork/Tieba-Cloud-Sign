@@ -77,8 +77,6 @@ define(\'DB_USER\',\'root\');
 define(\'DB_PASSWD\',\'000000\');
 //MySQL 数据库名称(存放百度贴吧云签到的)
 define(\'DB_NAME\',\'tiebacloud\');
-//MySQL 数据库前缀，建议保持默认
-define(\'DB_PREFIX\',\'tc_\');
 
 ////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
 //数据库前缀，建议保持默认
@@ -90,7 +88,7 @@ define(\'DB_PREFIX\',\'tc_\');
 //define(\'ANTI_CSRF\', false);
 
 //加密用盐，请乱打，留空为不使用盐
-define(\'SYSTEM_SALT\','');
+define(\'SYSTEM_SALT\',\'\');
 </pre></div>';
 				echo '<b>参考文档：</b>BAE | SAE | JAE';
 				echo '<br/><br/><br/><br/>修改完成后，请点击下一步<br/><br/><input type="button" onclick="location = \'install.php?step=3&bae\'" class="btn btn-success" value="下一步 >>">';
@@ -224,10 +222,6 @@ define(\'DB_USER\',\''.DB_USER.'\');
 define(\'DB_PASSWD\',\''.DB_PASSWD.'\');
 //MySQL 数据库名称(存放百度贴吧云签到的)
 define(\'DB_NAME\',\''.DB_NAME.'\');
-//MySQL 数据库前缀，建议保持默认
-define(\'DB_PREFIX\',\''.DB_PREFIX.'\');
-//加密用盐，请乱打，留空为不使用盐
-define(\'SYSTEM_SALT\',\'\');
 
 ////////////////////////////以下选项使用任何数据库都得填写////////////////////////////
 //数据库前缀，建议保持默认
@@ -239,7 +233,7 @@ define(\'DB_PREFIX\',\'tc_\');
 //define(\'ANTI_CSRF\', false);
 
 //加密用盐，请乱打，留空为不使用盐
-define(\'SYSTEM_SALT\','');';
+define(\'SYSTEM_SALT\',\'\');';
 					if(empty($_POST['from_config']) && !file_put_contents('../config.php', $write_data)) {
 						$errorhappen .= '<b>无法写入配置文件 config.php ，请打开本程序根目录的 config.php 并按照注释修改它</b><br/><br/>';
 					}
