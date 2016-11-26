@@ -21,7 +21,7 @@ CREATE TABLE `{VAR-PREFIX}cron` (
   `desc` text,
   `freq` int(10) NOT NULL DEFAULT '0',
   `lastdo`  int(10) UNSIGNED NOT NULL DEFAULT 0 ,
-  `log` text NOT NULL,
+  `log` text,
   PRIMARY KEY (`name`),
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
