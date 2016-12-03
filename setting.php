@@ -139,13 +139,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('footer',$sou['footer']);
 			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);
-            // 未加载GD库则无法开启验证码
-            if($sou['captcha'] && !function_exists('imagecreatetruecolor')){
-                @option::set('captcha', 0);
-                msg('当前PHP环境没有加载GD库，无法开启 注册/登录验证码 功能');
-            }
-            @option::set('captcha', $sou['captcha']);
-
+            isset($sou['captcha']) and @option::set('captcha', $sou['captcha']);
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
@@ -159,12 +153,10 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_auth',$sou['mail_auth']);
 			@option::set('mail_ssl',$sou['mail_ssl']);
 			@option::set('mail_smtpname',$sou['mail_smtpname']);
-			if (isset($sou['mail_smtppw'])) {
-				@option::set('mail_smtppw',$sou['mail_smtppw']);
-			}
+			isset($sou['mail_smtppw']) and @option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
 			@option::set('cron_pw',$sou['cron_pw']);
-			@option::set('cron_asyn',$sou['cron_asyn']);
+			isset($sou['cron_asyn']) and @option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
 		}

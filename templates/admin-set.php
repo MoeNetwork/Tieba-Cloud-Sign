@@ -107,7 +107,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</td></tr>';
 	$content1['ann'] = array('html'=>$annhtml,'type'=>'else');
 	$content1['sign_multith'] = array('td1'=>'<b>计划任务线程数</b><br/>0单线程，此为模拟多线程','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
-	$content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>主机需支持fsockopen','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率，在高配机器上会加速任务，低配机器上可能会导致减速','extra'=>'');
+	function_exists('imagecreatetruecolor') and $content1['cron_asyn'] = array('td1'=>'<b>计划任务同时运行</b><br/>在高配机器上会加速任务，低配机器上可能会导致减速','type'=>'checkbox','text'=>'当 do.php 被运行时，所有计划任务同时运行，有效提高计划任务效率','extra'=>'');
 	$content1['cron_pw'] = array('td1'=>'<b>计划任务密码</b><br/>留空为无密码，不能包含空格等特殊字符<br/><a href="javascript:;" onclick="alert(\'你需要通过访问 <b>do.php?pw=密码</b> 执行计划任务<br/>例如：'.SYSTEM_URL.'do.php?pw=yourpassword<br/><br/>若您要通过命令行执行计划任务，请加上参数 <b>--pw=密码</b><br/>例如：php do.php --pw=yourpassword<br/>命令行模式注意：你需要指明do.php的绝对路径，或者将do.php加入PATH\')">帮助：启用密码功能后如何执行计划任务？</a>','type'=>'text','text'=>'','extra'=>'');
 	$reg1 = option::get('enable_reg') == 1 ? ' checked' : '' ;
 	$reg3 = option::get('yr_reg');
@@ -124,20 +124,19 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
-    $reghtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性<br/>下图为示例，空白代表无验证码<br>';
-    if(function_exists('imagecreatetruecolor')){
-        $reghtml .= '<img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer">';
-    } else {
-        $reghtml .= '<span style="color:#f00">当前PHP环境没有加载GD库，无法生成验证码</span>';
-    }
-    $reghtml.='</td><td>
+	if(function_exists('imagecreatetruecolor')){
+		$captchahtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性<br/>点选难度可以查看示例。<br>';
+        $captchahtml .= '<img alt="验证码" id="captcha" class="img-thumbnail" style="cursor:pointer;display:none;">';
+        $captchahtml.='</td><td>
         <label><input type="radio" name="captcha" value="0" '.(option::get('captcha') == 0 ? ' checked' : '').'> 关闭</label><br>
         <label><input type="radio" name="captcha" value="1" '.(option::get('captcha') == 1 ? ' checked' : '').'> 简单</label><br>
         <label><input type="radio" name="captcha" value="2" '.(option::get('captcha') == 2 ? ' checked' : '').'> 中等</label><br>
         <label><input type="radio" name="captcha" value="3" '.(option::get('captcha') == 3 ? ' checked' : '').'> 困难</label><br>
         <label><input type="radio" name="captcha" value="4" '.(option::get('captcha') == 4 ? ' checked' : '').'> 反人类</label>
 		</td></tr>';
-    $content1['captcha'] = array('html'=>$reghtml,'type'=>'else');
+		$content1['captcha'] = array('html'=>$captchahtml,'type'=>'else');
+	}
+    
 	$content1['icp'] = array('td1'=>'<b>ICP 备案信息</b><br/>没有请留空','type'=>'text','text'=>'','extra'=>'');
 	$content1['cktime'] = array('td1'=>'<b>Cookie有效期</b><br/>单位为秒，过大会导致浏览器无法记录','type'=>'number','text'=>'','extra'=>'step="1" min="1"');
 	$content1['dev'] = array('td1'=>'<b>开发者模式</b>','type'=>'checkbox','text'=>'生产环境下请勿开启','extra'=>'');
@@ -217,8 +216,12 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 <?php if(function_exists('imagecreatetruecolor')): ?>
 <script>
     $(function(){
-        $("input[name='captcha']").on('click', function(){
+        $("input[name='captcha'][value!='0']").on('click', function(){
 			$("#captcha").attr('src', 'index.php?mod=captcha&level='+$("input[name='captcha']:checked").val());
+			$("#captcha").fadeIn();
+		});
+		$("input[name='captcha'][value='0']").on('click', function(){
+			$("#captcha").fadeOut();
 		});
         $("#captcha").on('click', function(){
             $("#captcha").attr('src', 'index.php?mod=captcha&level='+$("input[name='captcha']:checked").val());
