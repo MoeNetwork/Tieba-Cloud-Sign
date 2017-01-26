@@ -211,7 +211,8 @@ elseif (SYSTEM_PAGE == 'admin:reg') {
 elseif (SYSTEM_PAGE == 'captcha') {
     // 防止恶意用户通过get参数临时修改验证码等级使其更易于被识别
     // 只有管理员才能通过get参数临时修改验证码等级（用于设置页预览）
-    if(ROLE == 'admin'){
+    define('SYSTEM_NO_ERROR',true);
+    if(defined('ROLE') && ROLE == 'admin'){
         $level = isset($_GET['level']) ? $_GET['level'] : option::get('captcha'); // 验证码等级。0关闭，1简单，2中等，3困难，4反人类
     } else {
         $level = option::get('captcha');

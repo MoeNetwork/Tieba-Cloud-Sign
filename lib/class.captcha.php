@@ -1,11 +1,10 @@
 <?php
-
 /**
  * 验证码类
  * Class Captcha
  */
-class Captcha
-{
+class Captcha {
+
     private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789'; // 字符集
     private $code; // 验证码文本
     private $length = 4; // 验证码长度
@@ -93,8 +92,7 @@ class Captcha
     /**
      * 输出图片
      */
-    private function outPut()
-    {
+    private function outPut() {
         header('Content-type:image/png');
         imagepng($this->img);
         imagedestroy($this->img);

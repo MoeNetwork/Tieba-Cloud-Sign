@@ -128,15 +128,15 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		</div>
 		</td></tr>';
 	$content1['reg'] = array('html'=>$reghtml,'type'=>'else');
-	if(!function_exists('imagecreatetruecolor')){
+	if(function_exists('imagecreatetruecolor')){
 		$captchahtml = '<tr><td><b>注册/登录验证码</b><br/>可防止恶意用户爆破数据库，提升安全性<br/>点选难度可以查看示例。<br>';
-        $captchahtml .= '<img alt="验证码" id="captcha" class="img-thumbnail" style="cursor:pointer;display:none;">';
+        $captchahtml .= '<img alt="验证码" id="captcha" class="img-thumbnail" style="cursor:pointer;display:none;" alt="示例验证码加载失败">';
         $captchahtml .='</td><td>
         <label><input type="radio" name="captcha" value="0" '.(option::get('captcha') == 0 ? ' checked' : '').'> 关闭</label><br>
-        <label><input type="radio" name="captcha" value="1" '.(option::get('captcha') == 1 ? ' checked' : '').'> 简单</label><br>
-        <label><input type="radio" name="captcha" value="2" '.(option::get('captcha') == 2 ? ' checked' : '').'> 中等</label><br>
-        <label><input type="radio" name="captcha" value="3" '.(option::get('captcha') == 3 ? ' checked' : '').'> 困难</label><br>
-        <label><input type="radio" name="captcha" value="4" '.(option::get('captcha') == 4 ? ' checked' : '').'> 反人类</label>
+        <label><input type="radio" name="captcha" value="1" '.(option::get('captcha') == 1 ? ' checked' : '').'> 简单</label> (容易被破解)<br>
+        <label><input type="radio" name="captcha" value="2" '.(option::get('captcha') == 2 ? ' checked' : '').'> 中等</label> (可能被破解)<br>
+        <label><input type="radio" name="captcha" value="3" '.(option::get('captcha') == 3 ? ' checked' : '').'> 困难</label> (推荐)<br>
+        <label><input type="radio" name="captcha" value="4" '.(option::get('captcha') == 4 ? ' checked' : '').'> 极难</label> (难以辨识)
 		</td></tr>';
 		$content1['captcha'] = array('html'=>$captchahtml,'type'=>'else');
 	} else {

@@ -10,13 +10,14 @@
  * HELLO GAY!
  */
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','4.77');
+define('SYSTEM_VER','4.8');
 define('SYSTEM_VER_NOTE','');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
 define('SYSTEM_ISCONSOLE' , PHP_SAPI === 'cli' OR defined('STDIN'));
 define('SYSTEM_PAGE',isset($_REQUEST['mod']) ? strip_tags($_REQUEST['mod']) : 'default');
 define('SUPPORT_URL', 'http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home');
+if(defined('SYSTEM_NO_ERROR')) error_reporting(0);
 if(SYSTEM_ISCONSOLE)  {
     function console_htmltag_delete($v) {
         $v = str_ireplace(array('</td>','</th>') , ' | ', $v);

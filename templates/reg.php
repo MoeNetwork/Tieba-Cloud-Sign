@@ -61,16 +61,10 @@ if (!empty($yr_reg)) { ?>
               });
           </script>
           <br>
-          <div class="row">
-              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
-                  <img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer">
-              </div>
-              <div class="col-xs-6 col-sm-8 col-md-8 col-lg-9">
-                  <div class="input-group" style="margin-bottom: 5px">
-                      <span class="input-group-addon">验证码</span>
-                      <input type="text" class="form-control" name="captcha" id="captcha_input" required>
-                  </div>
-              </div>
+          <img src="index.php?mod=captcha" alt="验证码" class="img-thumbnail" id="captcha" style="cursor: pointer; float: right; margin-left: 10px; margin-bottom: 10px;">
+          <div class="input-group" style="margin-bottom: 5px">
+              <span class="input-group-addon">验证码</span>
+              <input type="text" class="form-control" name="captcha" id="captcha_input" required>
           </div>
       <?php endif; ?>
 	<div class="login-button"><br/>
