@@ -321,7 +321,11 @@ switch (SYSTEM_PAGE) {
 			$rdc = explode('/', $z->getNameIndex(0), 2);
 			$rd  = $rdc[0];
 			if($z->getFromName($rd . '/' . $rd . '.php') === false) {
-				msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
+				if($z->getFromName($rd . '/' . str_ireplace(array('-master','master-'),'',$rd) . '.php')) {
+                    $z->renameIndex(0, str_ireplace(array('-master','master-'),'',$rd));
+                } else {
+                    msg('插件安装失败：插件包不合法，请确认此插件为'.SYSTEM_FN.'插件');
+                }
 			}
 			if(!$z->extractTo(SYSTEM_ROOT . '/plugins')) {
 				msg('插件安装失败：解压缩失败');
