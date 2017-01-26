@@ -139,7 +139,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('footer',$sou['footer']);
 			@option::set('ann',$sou['ann']);
 			@option::set('enable_reg',$sou['enable_reg']);
-            @option::set('captcha', $sou['captcha']);
+            isset($sou['captcha']) and @option::set('captcha', $sou['captcha']);
 			@option::set('yr_reg',$sou['yr_reg']);
 			@option::set('stop_reg',$sou['stop_reg']);
 			@option::set('icp',$sou['icp']);
@@ -156,7 +156,7 @@ switch (SYSTEM_PAGE) {
 			isset($sou['mail_smtppw']) and @option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
 			@option::set('cron_pw',$sou['cron_pw']);
-			@option::set('cron_asyn',$sou['cron_asyn']);
+			isset($sou['cron_asyn']) and @option::set('cron_asyn',$sou['cron_asyn']);
 			@option::set('sign_multith',$sou['sign_multith']);
 			@option::set('cktime',$sou['cktime']);
 		}
