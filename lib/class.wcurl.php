@@ -119,16 +119,20 @@ class wcurl {
      * @param string $text 网页内容
      * @return array Cookies
      */
-    public static function readCookies($text) {
-        preg_match("/set\-cookie:([^\r\n]*)/i", $text, $m1);
-        preg_match_all("/(.*?)=(.*?);/", $m1[1], $m2, PREG_SET_ORDER);
-        $r = array();
-        foreach ($m2 as $value) {
-            $r1 = trim($value[1]);
-            $r[$r1] = trim($value[2]);
-        }
-        return $r;
-    }
+	public static function readCookies($text) {
+		$r=Array();
+		$sz=0;
+		preg_match_all("/set\-cookie:([^\r\n]*)/i", $text, $m1,PREG_SET_ORDER);
+		while(!empty($m1[$sz][1])) {
+			preg_match_all("/(.*?)=(.*?);/", $m1[$sz][1], $m2, PREG_SET_ORDER);
+			foreach ($m2 as $value) {
+				$r1 = trim($value[1]);
+				$r[$r1] = trim($value[2]);
+			}
+			$sz++;
+		}
+		return $r;
+	}
 
     /**
      * GET/POST获取网页返回的所有Cookies [自行抓取网页] [不写文件]
