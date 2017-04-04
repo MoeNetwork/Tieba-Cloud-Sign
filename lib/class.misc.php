@@ -467,14 +467,15 @@ class misc {
 			$p['vcode_md5'] = $vcodestr;
 		}
         self::addTiebaSign($p);
-		//print_r($p);
 		if(!$data = $x->post($p)) return array(-1, '网络请求失败');
 		if(!$v = json_decode($data, true)) return array(-2, 'json解析失败');
-		$md5pos = strpos($v['user']['BDUSS'], '|');
-		if(!empty($md5pos)) {
-			$bduss = substr($v['user']['BDUSS'], 0 , $md5pos);
-		} else {
-			$bduss = $v['user']['BDUSS'];
+		if(!empty($v['user'])) {
+			$md5pos = strpos($v['user']['BDUSS'], '|');
+			if(!empty($md5pos)) {
+				$bduss = substr($v['user']['BDUSS'], 0 , $md5pos);
+			} else {
+				$bduss = $v['user']['BDUSS'];
+			}
 		}
         if($v['error_code'] == '0') {
             return array(0, $bduss, $v['user']['name']);
