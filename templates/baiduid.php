@@ -103,6 +103,7 @@ global $m;
                       }
                   },
                   error: function(x) {
+                      $('#addbdid_prog').fadeOut(500);
                       $('#addbdid_msg').html('操作失败，未知错误。这可能是网络原因所致，请重试绑定#2');
                   }
               });
