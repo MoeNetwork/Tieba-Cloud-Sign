@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Kenvix cURL类
- * @version 3.1 @ 2016-04-17
+ * @version 4.0 @ 2017-05-12
  * @copyright (c) Kenvix
  * @see https://kenvix.com
  * Class wcurl
@@ -21,18 +20,13 @@ class wcurl {
      * @param array $head 可选，HTTP头
      * @throws Exception
      */
-    public function __construct($file, array $head = array('User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36')) {
+    public function __construct($file = '', array $head = array()) {
         if (!function_exists('curl_exec')) {
             throw new Exception('服务器不支持cURL', -1);
         }
         $this->conn = curl_init();
         if($this->conn === FALSE) throw new Exception('初始化cURL失败', -1);
-
-        $this->setUrl($file)->setHeader($head)->setAll(array( //wcurl默认设定
-                                                              CURLOPT_RETURNTRANSFER  => true, //将curl获取的信息以文件流的形式返回，而不是直接输出
-                                                              CURLOPT_SSL_VERIFYPEER  => false, //cURL将终止从服务端进行验证
-                                                              CURLOPT_FOLLOWLOCATION  => true //跟随重定向 会将服务器服务器返回的"Location: "放在header中递归的返回给服务器
-        ));
+        $this->init($file, $head);
     }
 
     /**
@@ -87,11 +81,29 @@ class wcurl {
      */
     public function post($data) {
         $this->set(CURLOPT_POST, 1);
-        if (is_array($data)) {
-            $this->set(CURLOPT_POSTFIELDS, http_build_query($data));
-        } else {
-            $this->set(CURLOPT_POSTFIELDS, $data);
-        }
+        $this->set(CURLOPT_POSTFIELDS, self::buildFields($data));
+        return $this->exec();
+    }
+
+    /**
+     * PUT 并获取返回获取的内容
+     * @param $data array|string 可选。提交的数据
+     * @return string 获取的内容
+     */
+    public function put($data = null) {
+        $this->set(CURLOPT_CUSTOMREQUEST, 'PUT');
+        if(!is_null($data)) $this->set(CURLOPT_POSTFIELDS, self::buildFields($data));
+        return $this->exec();
+    }
+
+    /**
+     * DELETE 并获取返回获取的内容
+     * @param $data array|string 可选。提交的数据
+     * @return string 获取的内容
+     */
+    public function delete($data = null) {
+        $this->set(CURLOPT_CUSTOMREQUEST, 'DELETE');
+        if(!is_null($data)) $this->set(CURLOPT_POSTFIELDS, self::buildFields($data));
         return $this->exec();
     }
 
@@ -223,8 +235,8 @@ class wcurl {
     }
 
     /**
-     * 设置HTTP头
-     * @param array $head HTTP头
+     * 设置全部的HTTP Header
+     * @param array $head
      * @return $this
      */
     public function setHeader(array $head) {
@@ -240,6 +252,73 @@ class wcurl {
     public function setUrl($url) {
         $this->set(CURLOPT_URL, $url);
         return $this;
+    }
+
+    /**
+     * 设置Referrer(Referer)
+     * @param $ref
+     * @return $this
+     */
+    public function setReferrer($ref) {
+        $this->set(CURLOPT_REFERER, $ref);
+        return $this;
+    }
+
+    /**
+     * 是否允许自动跟随
+     * @param bool $v
+     * @return $this
+     */
+    public function allowAutoReferrer($v) {
+        $this->set(CURLOPT_AUTOREFERER, $v);
+        return $this;
+    }
+
+    /**
+     * 重置会话句柄的所有的选项到LIBCURL默认值。要初始化到WCURL默认值，使用init()方法
+     * @return $this
+     */
+    public function reset() {
+        curl_reset($this->conn);
+        return $this;
+    }
+
+    /**
+     * 初始化wcurl或重置会话句柄的所有的选项到wcurl默认值
+     * @param string $file
+     * @param array  $head
+     * @return $this
+     */
+    public function init($file = '', array $head = array('User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36')) {
+        $this->reset();
+        if(!empty($file)) $this->setUrl($file);
+        $this->setHeader($head)->setAll(array(//wcurl默认设定
+            CURLOPT_RETURNTRANSFER  => true, //将curl获取的信息以文件流的形式返回，而不是直接输出
+            CURLOPT_SSL_VERIFYPEER  => false, //cURL将终止从服务端进行验证
+            CURLOPT_FOLLOWLOCATION  => true //跟随重定向 会将服务器服务器返回的"Location: "放在header中递归的返回给服务器
+        ));
+        return $this;
+    }
+
+    /**
+     * 构建用于CURL的POST表单
+     * @param string|array $data
+     * @return string
+     */
+    public static function buildFields($data) {
+        if (is_array($data)) {
+            return http_build_query($data);
+        } else {
+            return $data;
+        }
+    }
+
+    /**
+     * 获取CURL连接
+     * @return resource
+     */
+    public function getConnection() {
+        return $this->conn;
     }
 
     /**
