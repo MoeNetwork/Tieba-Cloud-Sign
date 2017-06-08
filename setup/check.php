@@ -145,38 +145,3 @@ function checkclass($f,$m = false) {
 		</tr>
 	</tbody>
 </table>
-<h3>功能检查</h3>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th style="width:20%">功能</th>
-			<th style="width:15%">需求</th>
-			<th style="width:15%">当前</th>
-			<th style="width:50%">用途</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>连接百度服务器</td>
-			<td>必须</td>
-			<td>
-				<?php
-					if(function_exists('curl_exec')){
-						require_once SYSTEM_ROOT.'/lib/class.wcurl.php';
-						$x = new wcurl('http://wappass.baidu.com/passport/',array('User-Agent: Phone'.mt_rand()));
-						$result = $x->exec();
-						$result = strpos($result,'登录百度帐号');
-						if(!empty($result)){
-							echo '<font color="green">可用</font>';
-						} else {
-							echo '<font color="red">无法连接到百度服务器。请询问您的主机商。</font>';
-						}
-					} else {
-						echo '<font color="red">请联系您的主机商开启cURL功能。</font>';
-					}
-				?>
-			</td>
-			<td>执行签到等</td>
-		</tr>
-</tbody>
-</table>
