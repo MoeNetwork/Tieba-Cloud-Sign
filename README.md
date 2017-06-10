@@ -4,7 +4,7 @@
 获取插件，教程，扩展，资料等请前往Wiki [Git@OSC](https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home) [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)              
 
 ## 常见问题解决方案
-“往往大部分人安装出错第一反应都是：没错啊，哪里错了，一定是程序错了”
+往往大部分人安装出错第一反应都是：“没错啊，哪里错了，一定是程序错了”
 ##### 1.如何安装程序
 上传此程序到您的网站，然后访问您的网站
 ##### 2.如何开启 MySQL 连接方式强制功能
