@@ -279,7 +279,12 @@ class wcurl {
      * @return $this
      */
     public function reset() {
-        curl_reset($this->conn);
+        if(function_exists('curl_reset')){
+            curl_reset($this->conn);
+        } else {
+            if(is_resource($this->conn)) curl_close($this->conn);
+            $this->conn = curl_init();
+        }
         return $this;
     }
 
