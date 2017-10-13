@@ -60,7 +60,7 @@ class SMTP {
         $header .= "To: " . $to . "\r\n";
         if ($cc!="") $header .= "Cc: " . $cc . "\r\n";
         $header .= "From: " . $from . "\r\n";
-        $header .= "Subject: " . $subject . "\r\n";
+        $header .= "Subject: " . "=?UTF-8?B?".base64_encode($subject)."?= " . "\r\n";
         $header .= $additional_headers;
         $header .= "Date: " . date("r") . "\r\n";
         $header .= 'Reply-To: ' . $reply . "\r\n";
@@ -162,8 +162,8 @@ class SMTP {
         $head = '';
         foreach ($this->att as $n => $v) {
             $head .= "\r\n\r\n" . '--' .  $this->part_boundary;
-            $head .= "\r\n" . 'Content-Type: ' . get_mime(get_extname($n)) . '; charset="utf-8"; name="'.$n.'"';
-            $head .= "\r\n" . 'Content-Disposition: attachment; filename="'.$n.'"';
+            $head .= "\r\n" . 'Content-Type: ' . get_mime(get_extname($n)) . '; charset="utf-8"; name="=?UTF-8?B?'.base64_encode($n).'?= "';
+            $head .= "\r\n" . 'Content-Disposition: attachment; filename="=?UTF-8?B?'.base64_encode($n).'?= "';
             $head .= "\r\n" . 'Content-Transfer-Encoding: base64';
             $head .= "\r\n\r\n" . base64_encode($v);
         }
