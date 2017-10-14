@@ -61,8 +61,13 @@ global $m;
 <!-- END PAGE1 -->
 
 <!-- PAGE2: NEWID -->
+<script src="https://wappass.baidu.com/static/touch/js/base_ed949bc.js"></script>
 <div class="tab-pane fade" id="newid" style="display:none">
   <script type="text/javascript">
+    var rsa = "B3C61EBBA4659C4CE3639287EE871F1F48F7930EA977991C7AFE3CC442FEA49643212E7D570C853F368065CC57A2014666DA8AE7D493FD47D171C0D894EEE3ED7F99F6798B7FFD7B5873227038AD23E3197631A8CB642213B9F27D4901AB0D92BFA27542AE890855396ED92775255C977F5C302F1E7ED4B1E369C12CB6B1822F",
+        serverTime = "e362bacbae";
+    setMaxDigits(131);
+    var g = new RSAKeyPair("10001", "", rsa);
       $(document).ready(function(){
           $("#addbdid_form").submit(function(e){
               $('#addbdid_submit').attr('disabled',true);
@@ -76,7 +81,7 @@ global $m;
                   type:'POST',
                   data: {
                       'bd_name': $('#bd_name').val() ,
-                      'bd_pw': $('#bd_pw').val()
+                      'bd_en_pw': encryptedString(g, $('#bd_pw').val() + serverTime)
                   },
                   beforeSend: function(x) {
                       this.data += "&vcode=" + $('#bd_v').val() + "&vcodestr=" + $('#vcodeStr').val();
@@ -138,6 +143,7 @@ global $m;
 <div class="input-group">
   <span class="input-group-addon">百度密码</span>
   <input type="password" class="form-control" id="bd_pw" placeholder="你的百度账号密码" required>
+  <input type="hidden" id="bd_en_pw">
 </div>
 <br/>
   <div id="addbdid_ver" style="display: none">
