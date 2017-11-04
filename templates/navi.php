@@ -66,7 +66,7 @@ global $i;
       <li class="dropdown" class="active">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> 关于 <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="http://www.stusgame.com" target="_blank">StusGame</a></li>
+          <li><a href="http://lovelive.us" target="_blank">StusGame</a></li>
           <li><a href="https://kenvix.com" target="_blank">Kenvix's Blog</a></li>
           <?php doAction('navi_5'); ?>
         </ul>
