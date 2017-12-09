@@ -96,7 +96,7 @@ function getBaiduId($bduss){
 function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
 	$hash = md5($email);
 	if($site == 'moefont') {
-		return "https://cdn.lovelive.us/avatar/$hash?s=$s&r=$g";
+		return "https://cdn.lovelive.us/$hash?s=$s&r=$g";
 	} else {
 		return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
 	}
