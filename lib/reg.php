@@ -91,7 +91,7 @@ function class_autoload($c) {
 if (function_exists('spl_autoload_register')) {
 	spl_autoload_register('class_autoload');
 } else {
-	function __autoload($c){
+	function __sql_autoload($c){
 		class_autoload($c);
 	}
 }
