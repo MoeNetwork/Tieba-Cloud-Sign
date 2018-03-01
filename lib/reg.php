@@ -87,14 +87,7 @@ function class_autoload($c) {
 		throw new Exception('无法加载此类：' . $c , 10001);
 	}
 }
-
-if (function_exists('spl_autoload_register')) {
-	spl_autoload_register('class_autoload');
-} else {
-	function __autoload($c){
-		class_autoload($c);
-	}
-}
+spl_autoload_register('class_autoload');
 
 if (option::get('dev') != 1) {
 	define('SYSTEM_DEV', false);
