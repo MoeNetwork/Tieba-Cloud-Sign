@@ -93,10 +93,10 @@ function getBaiduId($bduss){
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
+function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	$hash = md5($email);
-	if($site == 'moefont') {
-		return "https://cdn.lovelive.us/$hash?s=$s&r=$g";
+	if($site == 'secure') {
+		return "https://secure.gravatar.com/avatar/$hash?s=$s&r=$g";
 	} else {
 		return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
 	}
