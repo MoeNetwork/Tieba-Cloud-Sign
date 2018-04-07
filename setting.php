@@ -584,7 +584,7 @@ switch (SYSTEM_PAGE) {
             $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
             $data = $c->get();
             $c->close();
-            $i['post']['face_url'] = trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>')));
+            $i['post']['face_url'] = str_replace('http://', 'https://', trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'))));
             if(empty($i['post']['face_url'])) msg('获取贴吧头像失败，可能是网络问题，请重试');
         }
         /*
