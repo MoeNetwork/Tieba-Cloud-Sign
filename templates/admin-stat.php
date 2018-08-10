@@ -18,7 +18,7 @@ case 'sign' :
   <?php doAction('stat_navi'); ?>
 </ul>
 <h3>查看签到信息和用户信息</h3>
-<?php /* 数据缓存于 <?php echo date('Y-m-d H:m:s' , C::getTime('admin_stat')) ?>，点击刷新 */ ?>
+<?php /* 数据缓存于 <?php echo date('Y-m-d H:i:s' , C::getTime('admin_stat')) ?>，点击刷新 */ ?>
 <table class="table table-striped">
 	<thead>
 		<th>UID</th>

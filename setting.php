@@ -218,7 +218,7 @@ switch (SYSTEM_PAGE) {
 			$dump  = '#Warning: Do not change the comments!!!'  . "\n";
 			$dump .= '#Tieba-Cloud-Sign Database Backup' . "\n";
 			$dump .= '#Version:' . SYSTEM_VER . "\n";
-			$dump .= '#Date:' . date('Y-m-d H:m:s') . "\n";
+			$dump .= '#Date:' . date('Y-m-d H:i:s') . "\n";
 			$dump .= '############## Start ##############' . "\n";
 			foreach ($list as $table) {
 				$dump .= dataBak($table);

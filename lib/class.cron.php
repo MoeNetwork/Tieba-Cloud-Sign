@@ -191,11 +191,11 @@ class cron {
 			if (function_exists('cron_'.$name)) {
 				return call_user_func('cron_'.$name);
 			} else {
-				self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，处理此任务的函数不存在'));
+				self::aset($name , array('log' => '['.date('Y-m-d H:i:s').']计划任务启动失败，处理此任务的函数不存在'));
 				return false;
 			}
 		}  else {
-			self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败，任务文件不存在'));
+			self::aset($name , array('log' => '['.date('Y-m-d H:i:s').']计划任务启动失败，任务文件不存在'));
 			return false;
 		}
 	}
@@ -213,7 +213,7 @@ class cron {
 
 		if(!sendRequest($url)) {
 			@option::set('cron_asyn',0);
-			self::aset($name , array('log' => '['.date('Y-m-d H:m:s').']计划任务启动失败：在调用 fsockopen() 时失败，请检查主机是否支持此函数。目前系统已将[计划任务同时运行]关闭。'));
+			self::aset($name , array('log' => '['.date('Y-m-d H:i:s').']计划任务启动失败：在调用 fsockopen() 时失败，请检查主机是否支持此函数。目前系统已将[计划任务同时运行]关闭。'));
 		}
 	}
 

@@ -7,7 +7,6 @@
  * Class wcurl
  */
 class wcurl {
-
     /**
      * curl句柄
      * @var resource
@@ -33,8 +32,18 @@ class wcurl {
      * 当wcurl类被当成字符串时的操作:执行curl并返回结果
      * @return string 返回值
      */
-    public function __tostring() {
+    public function __toString() {
         return $this->exec();
+    }
+
+    /**
+     * 设置自定义的 Method 来代替"GET"或"HEAD"
+     * @param $method
+     * @return $this
+     */
+    public function setRequestMethod($method) {
+        $this->set(CURLOPT_CUSTOMREQUEST, $method);
+        return $this;
     }
 
     /**
@@ -50,7 +59,7 @@ class wcurl {
 
     /**
      * 通过数组批量设置cURL传输选项
-     * @param string $option 需要设置的选项
+     * @param array $option 需要设置的选项
      * @return $this
      */
     public function setAll($option) {
