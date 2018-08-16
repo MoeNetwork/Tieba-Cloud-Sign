@@ -15,8 +15,6 @@ services:
       - db
     depends_on:
       - db
-    volumes:
-      - /opt/tieba/web:/srv/www
 
 
   db:
