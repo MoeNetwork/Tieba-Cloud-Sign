@@ -1,0 +1,26 @@
+version: '3'
+services:
+
+  web:
+    image: "zsnmwy/tieba-cloud-sign"
+    environment:
+      DB_HOST: db:3306
+      DB_USER: root
+      DB_PASSWD: janejane123456
+      DB_NAME: tiebacloud
+      CSRF: "true"
+    ports:
+      - "80:8080"
+    links:
+      - db
+    depends_on:
+      - db
+
+
+  db:
+    image: "mysql:5.5"
+    environment:
+      MYSQL_DATABASE: tiebacloud
+      MYSQL_ROOT_PASSWORD: janejane123456
+    volumes:
+      - /opt/tieba/mysql:/var/lib/mysql

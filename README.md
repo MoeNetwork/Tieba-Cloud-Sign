@@ -3,6 +3,24 @@
 配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
 获取插件，教程，扩展，资料等请前往Wiki [Git@OSC](https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home) [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)              
 
+## 使用Docker-Compose快速部署
+##### 1.安装Docker
+[安装docker，安装docker-compose](http://get.daocloud.io/#install-docker)
+##### 2.下载`docker-compose.yml`并启动服务
+下载 `wget https://raw.githubusercontent.com/zsnmwy/Tieba-Cloud-Sign/master/docker-compose.yml`  
+开始部署 `docker-compose up -d` 参数`-d`为后台运行。(主要时间消耗在下载，启动不用啥时间)  
+这里已经包含了`MySQL`部署
+##### 3.进入网页配置
+启动完之后，直接访问`远程机子的IP`，本机就访问`127.0.0.1`  
+在配置数据库连接的时候，选择`自动导入`即可,不用自己输入。  
+然后就配置好了。
+##### 4.注意事项
+如果你使用Windows，请先去`docker-compose.yml`修改mysql的持久化路径，默认`/opt/tieba/mysql`。  
+或者直接去掉`volumes`也行。  
+映射出来的端口，可以修改`docker-compose.yml`的`"80:8080"`。默认`80端口`  
+`CSRF的设置`在`docker-compose.yml`的`CSRF: "true"`,默认`true`  
+除去docker安装，整个安装流程不超两分钟(网速快)。
+
 ## 常见问题解决方案
 往往大部分人安装出错第一反应都是：“没错啊，哪里错了，一定是程序错了”
 ##### 1.如何安装程序
@@ -15,7 +33,7 @@
 ##### 3.如何开启数据库长连接
 打开   mysql_autoload.php     
 找到   define('LONGSQL', false);     
-替换为 define('LONGSQL', true); 
+替换为 define('LONGSQL', true);
 ##### 4.如何手动修改数据库配置
 打开 config.php 并按照里面的注释修改     
 切勿使用记事本编辑，否则程序将不能工作
@@ -30,7 +48,7 @@
 ## 参与开发
 贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
 Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可能不会被处理     
-如需加入开发组请联系 @Kenvix 
+如需加入开发组请联系 @Kenvix
 ### 开发者列表
 #### 主要
 @Kenvix [kenvix@qq.com]     
