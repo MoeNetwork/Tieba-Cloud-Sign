@@ -151,7 +151,7 @@ switch (SYSTEM_PAGE) {
 			@option::set('mail_host',$sou['mail_host']);
 			@option::set('mail_port',$sou['mail_port']);
 			@option::set('mail_auth',$sou['mail_auth']);
-			@option::set('mail_ssl',$sou['mail_ssl']);
+			@option::set('mail_secure',$sou['mail_secure']);
 			@option::set('mail_smtpname',$sou['mail_smtpname']);
 			isset($sou['mail_smtppw']) and @option::set('mail_smtppw',$sou['mail_smtppw']);
 			@option::set('dev',$sou['dev']);
