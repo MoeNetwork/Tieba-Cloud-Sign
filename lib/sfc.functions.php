@@ -107,12 +107,12 @@ function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string
  */
-function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'moefont') {
+function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	if(option::uget('face_img') == 1) {
 		if(option::uget('face_url') != ''){
 			return option::uget('face_url');
 		} else {
-			return 'http://tb.himg.baidu.com/sys/portrait/item/';
+			return '//tb.himg.baidu.com/sys/portrait/item/';
 		}
 	} else {
 		return gravatar(EMAIL, $s, $d, $g, $site);
