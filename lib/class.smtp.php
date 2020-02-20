@@ -20,15 +20,13 @@ class SMTP {
     public $log;
     public $error;
     public $att = array(); //附件内容
-    public $ssl = false;
+    public $secure = 'none';
 
-    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass , $ssl = false) {
+    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass , $secure = 'none') {
         $this ->debug = false;
         $this ->smtp_port = $smtp_port;
-        if ($ssl == true) {
-            $this->ssl = true;
-            $relay_host = 'ssl://' . $relay_host;
-        }
+        $this ->secure = $secure;
+        if ($secure == 'ssl') $relay_host = 'ssl://' . $relay_host;
         $this ->relay_host = $relay_host;
         $this ->time_out = 30;
         $this ->auth = $auth;
@@ -91,6 +89,11 @@ class SMTP {
 
     private function smtp_send($helo, $from, $to, $header, $body = "") {
         if (!$this ->smtp_putcmd("HELO", $helo)) return $this ->smtp_error("sending HELO command");
+        if ($this ->secure == 'tls') {
+            if (!$this ->smtp_putcmd("STARTTLS")) return $this ->smtp_error("sending STARTTLS command");
+            if (!stream_socket_enable_crypto($this ->sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) return $this ->smtp_error("sending CRYPTO command");
+            if (!$this ->smtp_putcmd("HELO", $helo)) return $this ->smtp_error("sending HELO command");
+        }
         if ($this ->auth) {
             if (!$this ->smtp_putcmd("AUTH LOGIN", base64_encode($this ->user))) return $this ->smtp_error("sending HELO command");
             if (!$this ->smtp_putcmd("", base64_encode($this ->pass))) return $this ->smtp_error("sending HELO command");

@@ -154,6 +154,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 		<br/><br/>测试前请先保存设置
 		<br/><br/>无加密的SMTP服务器端口号通常为 25
 		<br/>SSL加密的SMTP服务器端口号通常为 465
+		<br/>TLS加密的SMTP服务器端口号通常为 587
 		</td><td>
 		<div class="input-group">
 			  <span class="input-group-addon">邮件发送模式</span>
@@ -183,10 +184,11 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 					<input type="number" name="mail_port" class="form-control"  value="<?php echo option::get('mail_port') ?>">
 				</div><br/>
 				<div class="input-group">
-					<span class="input-group-addon">SSL 加密</span>
-					<select name="mail_ssl" class="form-control">
-				  	<option value="0" <?php if(option::get('mail_ssl') == '0') { echo 'selected'; } ?>>否</option>
-				  	<option value="1" <?php if(option::get('mail_ssl') == '1') { echo 'selected'; } ?>>是</option>
+					<span class="input-group-addon">加密方式</span>
+					<select name="mail_secure" class="form-control">
+				  	<option value="none" <?php if(option::get('mail_secure') == 'none') { echo 'selected'; } ?>>无</option>
+				  	<option value="ssl" <?php if(option::get('mail_secure') == 'ssl') { echo 'selected'; } ?>>SSL</option>
+				  	<option value="tls" <?php if(option::get('mail_secure') == 'tls') { echo 'selected'; } ?>>TLS</option>
 				  </select>
 				</div>
 				<br/><div class="input-group">
