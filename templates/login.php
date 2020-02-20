@@ -52,7 +52,7 @@
 	<?php
   $icp=option::get('icp');
     if (!empty($icp)) {
-      echo ' | <a href="http://www.miitbeian.gov.cn/" target="_blank">'.$icp.'</a>';
+      echo ' | <a href="http://beian.miit.gov.cn/" target="_blank">'.$icp.'</a>';
     }
     echo '<br/>'.option::get('footer');
     doAction('footer');
