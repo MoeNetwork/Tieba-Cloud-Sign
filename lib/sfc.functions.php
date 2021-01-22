@@ -81,11 +81,11 @@ function textMiddle($text, $left, $right) {
  * @return string|bool 百度用户名，失败返回FALSE
  */
 function getBaiduId($bduss){
-	$c = new wcurl('http://wapp.baidu.com/');
-    $c->addCookie(array('BDUSS' => $bduss,'BAIDUID' => strtoupper(md5(time()))));
+	$c = new wcurl('http://i.baidu.com/');
+	$c->addCookie(array('BDUSS' => $bduss,'BAIDUID' => strtoupper(md5(time()))));
 	$data = $c->get();
 	$c->close();
-	return urldecode(textMiddle($data,'i?un=','">'));
+	return urldecode(textMiddle($data,'main?un=','&fr=ibaidu&ie=utf-8'));
 }
 
 /**
