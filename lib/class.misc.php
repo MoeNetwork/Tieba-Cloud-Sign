@@ -146,7 +146,7 @@ class misc {
 			return $f; 
 		} else {
 		*/
-			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded','Cookie:BAIDUID='.strtoupper(md5(time()))));
+			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded','Cookie:BAIDUID='.strtoupper(md5(time()))));
 			$s  = $ch->exec();
 			//self::mSetFid($kw,$fid[1]);
 			$x  = easy_match('<input type="hidden" name="fid" value="*"/>',$s);
@@ -163,7 +163,7 @@ class misc {
 	 */
 
 	public static function getTbs($uid,$bduss){
-		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
+		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
 		$ch->addcookie("BDUSS=". $bduss);
 		$x = json_decode($ch->exec(),true);
 		return $x['tbs'];
@@ -228,7 +228,7 @@ class misc {
 	 */
 	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
 		//没问题了
-		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: fuck phone','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
+		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
 		$ch->addcookie(array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time()))));
 		return $ch->exec();
 	}
@@ -239,7 +239,7 @@ class misc {
 	public static function DoSign_Default($uid,$kw,$id,$pid,$fid,$ck) {
 		global $m,$today;
         $cookie = array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time())));
-		$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+		$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 		$ch->addcookie($cookie);
 		$s  = $ch->exec();
 		$ch->close();
@@ -249,13 +249,13 @@ class misc {
 				array(
 					'Accept: text/html, application/xhtml+xml, */*',
 					'Accept-Language: zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3',
-					'User-Agent: Fucking Phone'
+					'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1'
 				));
 			$ch->addcookie($cookie);
 			$ch->exec();
 			$ch->close();
 			//临时判断解决方案
-			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: fuck phone','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
+			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw).'&fid='.$fid, array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded'));
 			$ch->addcookie($cookie);
 			$s = $ch->exec();
 			$ch->close();
@@ -270,7 +270,7 @@ class misc {
 	 * 客户端签到
 	 */
 	public static function DoSign_Client($uid,$kw,$id,$pid,$fid,$ck){
-		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded','User-Agent: Fucking iPhone/1.0 BadApple/99.1'));
+		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded','User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1'));
 		$ch->addcookie("BDUSS=".$ck);
 		$temp = array(
 			'BDUSS' => misc::getCookie($pid),
