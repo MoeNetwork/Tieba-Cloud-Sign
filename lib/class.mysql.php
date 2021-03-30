@@ -69,7 +69,7 @@ class wmysql {
             }
 		}
 		if ($this->getMysqlVersion() > '4.1') {
-			mysql_query("SET NAMES 'utf8'");
+			mysql_query("SET NAMES 'utf8mb4'");
 		}
 		if(!mysql_select_db($name, $this->conn)) {
 			throw new Exception("连接数据库失败，未找到您填写的数据库",10000);
