@@ -101,7 +101,6 @@ class misc {
 	 * @param string $kw 贴吧名
 	 * @return string|boolean FID，如果没有缓存则返回false
 	 */
-	/*
 	public static function findFid($kw) {
 		global $i;
 		global $m;
@@ -114,7 +113,6 @@ class misc {
 		}
 		return false;
 	}
-	*/
 
 	/**
 	 * 批量设置贴吧 FID
@@ -140,22 +138,14 @@ class misc {
 
 	public static function getFid($kw) {
 		global $m;
-		/*
 		$f  = misc::findFid($kw);
 		if ($f) {
 			return $f; 
 		} else {
-		*/
-			$ch = new wcurl('http://tieba.baidu.com/mo/m?kw='.urlencode($kw), array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://wapp.baidu.com/','Content-Type: application/x-www-form-urlencoded','Cookie:BAIDUID='.strtoupper(md5(time()))));
-			$s  = $ch->exec();
-			//self::mSetFid($kw,$fid[1]);
-			$x  = easy_match('<input type="hidden" name="fid" value="*"/>',$s);
-			if (isset($x[1])) {
-				return $x[1];
-			} else {
-				return false;
-			}
-		//}
+			$ch = new wcurl('http://tieba.baidu.com/f/commit/share/fnameShareApi?ie=utf-8&fname=' . urlencode($kw), array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/'));
+			$r = json_decode($ch->exec(), true);
+			return $r['no'] === '0' ? $r['data']['fid'] : false;
+		}
 	}
 
 	/**
@@ -163,7 +153,7 @@ class misc {
 	 */
 
 	public static function getTbs($uid,$bduss){
-		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/','X-Forwarded-For: 115.28.1.'.mt_rand(1,255)));
+		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/','X-Forwarded-For: ' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255)));
 		$ch->addcookie("BDUSS=". $bduss);
 		$x = json_decode($ch->exec(),true);
 		return $x['tbs'];
@@ -228,7 +218,7 @@ class misc {
 	 */
 	public static function DoSign_Mobile($uid,$kw,$id,$pid,$fid,$ck) {
 		//没问题了
-		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: 115.28.1.'.mt_rand(1,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
+		$ch = new wcurl('http://tieba.baidu.com/mo/q/sign?tbs='.misc::getTbs($uid,$ck).'&kw='.urlencode($kw).'&is_like=1&fid='.$fid ,array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/f?kw='.$kw , 'Host: tieba.baidu.com','X-Forwarded-For: ' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255), 'Origin: http://tieba.baidu.com', 'Connection: Keep-Alive'));
 		$ch->addcookie(array('BDUSS' => $ck,'BAIDUID' => strtoupper(md5(time()))));
 		return $ch->exec();
 	}

@@ -87,7 +87,7 @@ class wmysql {
 			}
 		}
 
-		$this->conn->set_charset('utf8');
+		$this->conn->set_charset('utf8mb4');
 		self::$instance = $this->conn;
 		return self::$instance;
 	}
