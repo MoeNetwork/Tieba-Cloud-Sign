@@ -78,14 +78,34 @@ function textMiddle($text, $left, $right) {
  * 获取一个bduss对应的百度用户名
  *
  * @param string $bduss BDUSS
- * @return string|bool 百度用户名，失败返回FALSE
+ * @return string 百度用户名，失败返回""
  */
-function getBaiduId($bduss){
-	$c = new wcurl('http://i.baidu.com/');
-	$c->addCookie(array('BDUSS' => $bduss,'BAIDUID' => strtoupper(md5(time()))));
-	$data = $c->get();
-	$c->close();
-	return urldecode(textMiddle($data,'main?un=','&fr=ibaidu&ie=utf-8'));
+function getBaiduId(string $bduss){
+    //$c = new wcurl('http://top.baidu.com/user/pass');
+    //$c->addCookie(array('BDUSS' => $bduss));
+    //$data = $c->get();
+    //$c->close();
+	$userData = getBaiduUserInfo($bduss);
+    return isset($userData["name"]) ? $userData["name"] : "";
+}
+
+/**
+ * 获取一个bduss对应的百度用户信息
+ *
+ * @param string $bduss BDUSS
+ * @return array|bool 百度用户信息，失败返回FALSE
+ */
+function getBaiduUserInfo(string $bduss){
+    $c = new wcurl('https://tieba.baidu.com/mg/o/profile?format=json');
+    $c->addCookie(array('BDUSS' => $bduss));
+    $data = $c->get();
+    $c->close();
+    $data = json_decode($data, true);
+	$data = isset($data["data"]["user"]) ? $data["data"]["user"] : false;
+    if ($data) {
+        $data["portrait"] = preg_replace("/\?t=.*/", "", $data["portrait"]);
+    }
+    return $data;
 }
 
 /**

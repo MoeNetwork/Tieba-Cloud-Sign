@@ -224,16 +224,11 @@ function getPluginInfo($plugin) {
 		);
 	}
 	$r['plugin']['id'] = $plugin;
-	if (file_exists($path . $plugin . '_setting.php'))
-		$r['core']['setting'] = true;
-	if (file_exists($path . $plugin . '_show.php'))
-		$r['core']['show'] = true;
-	if (file_exists($path . $plugin . '_vip.php'))
-		$r['core']['vip'] = true;
-	if (file_exists($path . $plugin . '_private.php'))
-		$r['core']['private'] = true;
-	if (file_exists($path . $plugin . '_public.php'))
-		$r['core']['public'] = true;
+    $r['core']['setting'] = file_exists($path . $plugin . '_setting.php');
+    $r['core']['show'] = file_exists($path . $plugin . '_show.php');
+    $r['core']['vip'] = file_exists($path . $plugin . '_vip.php');
+    $r['core']['private'] = file_exists($path . $plugin . '_private.php');
+    $r['core']['public'] = file_exists($path . $plugin . '_public.php');
 	//取插件加载顺序
 	global $m;
 	$q = $m->once_fetch_array('Select `order` From `'.DB_NAME.'`.`'.DB_PREFIX."plugins` Where `name`='{$plugin}' LIMIT 1");
