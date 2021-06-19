@@ -14,18 +14,6 @@ $i['db']['prefix'] = DB_PREFIX;
 $i['db']['passwd'] = DB_PASSWD;
 $i['db']['name'] = DB_NAME;
 
-@ini_set('magic_quotes_runtime',0);
-if (get_magic_quotes_gpc()) {
-    function fuck_magic_quotes($value) {
-        $value = is_array($value) ? array_map('fuck_magic_quotes', $value) : stripslashes($value);
-        return $value;
-    }
-    $_POST    = array_map('fuck_magic_quotes', $_POST);
-    $_GET     = array_map('fuck_magic_quotes', $_GET);
-    $_COOKIE  = array_map('fuck_magic_quotes', $_COOKIE);
-    $_REQUEST = array_map('fuck_magic_quotes', $_REQUEST);
-}
-
 //_POST _GET _REQUEST
 $i['post']    = $_POST;
 $i['get']     = $_GET;

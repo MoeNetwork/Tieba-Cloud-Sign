@@ -523,12 +523,18 @@ class misc {
 		return $rt;
 	}
 
+	public static function getTieba2(string $bduss, int $pn = 1): string{
+        $tl = new wcurl("https://tieba.baidu.com/mg/o/getForumHome?st=0&pn={$pn}&rn=200",['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36']);
+        $tl->addCookie(array('BDUSS' => $bduss));
+        return $tl->get();
+    }
+
 	/**
 	 * 扫描指定PID的所有贴吧
 	 * @param string $pid PID
 	 */
 	public static function scanTiebaByPid($pid) {
-    	global $m;
+		global $m;
 		$cma    = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
 		$uid    = $cma['uid'];
 		$table  = self::getTable($uid);
@@ -541,22 +547,23 @@ class misc {
 		$pn     = 1;
 		$a      = 0;
 		while (true){
-    		if (empty($bid)) break;
-			$rc     = self::getTieba($bid,$bduss,$pn);
-			$rc     = json_decode($rc,true);
-			$ngf    = $rc['forum_list']['non-gconforum'];
-			foreach ($rc['forum_list']['gconforum'] as $v) $ngf[] = $v;
+			if (empty($bid)) break;
+			$rc = self::getTieba2($bduss,$pn);//fetch forum list //default 200 per page
+			$rc = json_decode($rc,true);
+			$ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
 			foreach ($ngf as $v){
 				if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
-				$vn  = addslashes(htmlspecialchars($v['name']));
+				$vn  = addslashes(htmlspecialchars($v['forum_name']));
 				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
 				if ($ist['c'] == 0){
 					$a ++;
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
 				}
 			}
-			if ((count($ngf) < 1)) break;
-			$pn ++;
+			$pn++;
+			if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
+			    break;
+			}
 		}
 	}
 
@@ -582,4 +589,49 @@ class misc {
 			$t = self::scanTiebaByPid($pid);
 		}
 	}
+
+	/**
+     * 获得二维码及sign
+     */
+    public static function get_login_qrcode() :array {
+        $resp = ["sign" => null, "imgurl" => null];
+        $get_qrcode = json_decode((new wcurl("https://passport.baidu.com/v2/api/getqrcode?lp=pc"))->get(), true);
+        if(isset($get_qrcode["imgurl"]) && isset($get_qrcode["sign"])){
+            $resp = ["sign" => $get_qrcode["sign"], "imgurl" => $get_qrcode["imgurl"]];
+        }
+        return $resp;
+    }
+    public static function get_real_bduss(string $sign) :array{
+        //status code
+        //errno不等于0或1时需要要求更换二维码及sign
+        //-1 更换二维码
+        //0 进入下一步
+        //1 无需操作
+        //2 已确认
+        $r = ["error" => 1, "bduss" => "", "msg" => ""];
+        $response = (new wcurl("https://passport.baidu.com/channel/unicast?channel_id={$sign}&callback="))->get();
+        if ($response) {
+            $responseParse = json_decode(str_replace(array("(",")"),'',$response),true);
+            if(!$responseParse["errno"]){
+                $channel_v = json_decode($responseParse["channel_v"],true);
+                if($channel_v["status"]){
+                    $r["error"] = -1;
+                    $r["msg"] = "Continue";
+                }else{
+                    $s_bduss = json_decode(preg_replace("/'([^'']+)'/", '"$1"', str_replace("\\&", "&", (new wcurl('https://passport.baidu.com/v3/login/main/qrbdusslogin?bduss='.$channel_v["v"]))->get())), true);
+                    if ($s_bduss && $s_bduss["code"] === "110000") {
+                        $r["error"] = 0;
+                        $r["msg"] = "Success";
+                        $r["bduss"] = $s_bduss["data"]["session"]["bduss"];
+                    }
+                }
+            }else{
+                $r["error"] = $responseParse["errno"];
+            }
+        }else{
+            $r["error"] = -2;
+            $r["msg"] = "Invalid QR Code";
+        }
+        return $r;
+    }
 }

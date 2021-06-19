@@ -580,6 +580,7 @@ switch (SYSTEM_PAGE) {
 
     case 'set':
         // 获取头像的url
+		// 无法获取无id帐号头像, 不建议使用 *wontfix
         if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
             $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
             $data = $c->get();

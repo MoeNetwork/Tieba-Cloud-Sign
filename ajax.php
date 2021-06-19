@@ -59,8 +59,6 @@ switch (SYSTEM_PAGE) {
 			<b>PHP 版本：</b><?php echo PHP_VERSION ?>
 			<?php if(ini_get('safe_mode')) { echo '线程安全'; } else { echo '非线程安全'; } ?>
 		</li>
-		<?php if(get_magic_quotes_gpc()) { echo '<li class="list-group-item"><b>性能警告：</b><font color="red">魔术引号被激活</font>，云签到正以低效率模式运行 <a href="http://php.net/manual/zh/security.magicquotes.whynot.php" target="_blank">为什么不用魔术引号</a> <a href="http://php.net/manual/zh/security.magicquotes.disabling.php" target="
-		_blank">如何关闭魔术引号</a></li>'; }?>
 		<li class="list-group-item">
 			<b>MySQL 版本：</b><?php echo $m->getMysqlVersion() ?>
 		</li>
@@ -217,7 +215,45 @@ switch (SYSTEM_PAGE) {
             echo '{"error":"'.$loginResult[0].'","msg":"'.$loginResult[1].'"}';
         }
 		break;
+	case "baiduid:qrlogin":
+		global $m;
+		if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
+		if (option::get('bduss_num') != '0' && ISVIP == false) {
+			$count = $m->once_fetch_array("SELECT COUNT(*) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `uid` = ".UID);
+			if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
+		}
+		$sign = !empty($_POST['sign']) ? $_POST['sign'] : die();
+		$loginResult = misc::get_real_bduss($sign);
+		if($loginResult["error"] == 0) {
+			$baiduUserInfo = getBaiduUserInfo($loginResult["bduss"]);
+			if (!empty($baiduUserInfo["name"])) {
+				$baidu_name = $baiduUserInfo["name"];
+				if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
+					$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `name` = '{$baidu_name}'");
+					if(!empty($checkSame)) {
+						if(option::get('same_pid') == '2') {
+							$loginResult["error"] == -11;
+							$loginResult["msg"] == "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
+						} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
+							$loginResult["error"] == -10;
+							$loginResult["msg"] == "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
+						}
+						$loginResult["bduss"] = "";
+					} else {
+						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
+						$loginResult["msg"] == "获取BDUSS成功";
+						$loginResult["name"] = $baidu_name;
+					}
+				} else {
+					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
+					$loginResult["msg"] == "获取BDUSS成功";
+					$loginResult["name"] = $baidu_name;
+				}
+			}
+		}
+		echo json_encode($loginResult, JSON_UNESCAPED_UNICODE);
 
+		break;
 	default:
 		msg('未定义操作');
 		break;
