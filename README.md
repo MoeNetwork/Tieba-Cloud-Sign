@@ -1,7 +1,9 @@
 # 百度贴吧云签到
 在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。     
 配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
-获取插件，教程，扩展，资料等请前往Wiki [Git@OSC](https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/home) [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)              
+获取插件，教程，扩展，资料等请前往Wiki [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)     
+**注意**：Gitee (原Git@osc) 仓库将不再维护，目前唯一指定的仓库为 Github。本项目**没有官方交流群**，如需交流可以直接使用Github的Discussions。**没有商业版本**，目前贴吧云签到由社区共同维护，**不会停止更新**（PR 通常在一天内处理）。
+
 
 ## 使用Docker-Compose快速部署
 ##### 1.安装Docker
@@ -42,12 +44,12 @@
 ##### 6.如何安装新版本
 （1）自动更新：前往 检查更新 更新程序即可     
 （2）手动更新：直接下载 Zip，删除压缩包内的 config.php ，然后上传到您的网站即可     
-另外，每一个大版本都会有一个升级脚本，别忘了运行它     
-（文件名一般为 update旧版本to新版本.php ，例如 update1.0to2.0.php）
+另外，每一个大版本都会有一个升级脚本，别忘了运行它    
+（文件名一般为 update旧版本to新版本.php ，例如 update1.0to2.0.php）      
 
 ## 参与开发
 贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
-Pull Request和Issue请提交到 Git@OSC 代码库，在其他代码库提交可能不会被处理     
+Pull Request和Issue请提交到 Github 代码库，在其他代码库提交可能不会被处理     
 如需加入开发组请联系 @Kenvix
 ### 开发者列表
 #### 主要
