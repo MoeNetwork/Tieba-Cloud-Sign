@@ -22,7 +22,7 @@ class SMTP {
     public $att = array(); //附件内容
     public $secure = 'none';
 
-    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user, $pass , $secure = 'none') {
+    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user= '', $pass= '', $secure = 'none') {
         $this ->debug = false;
         $this ->smtp_port = $smtp_port;
         $this ->secure = $secure;
