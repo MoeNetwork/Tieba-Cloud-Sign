@@ -523,7 +523,7 @@ class misc {
 		return $rt;
 	}
 
-	public static function getTieba2(string $bduss, int $pn = 1): string{
+	public static function getTieba2($bduss, $pn = 1) {
         $tl = new wcurl("https://tieba.baidu.com/mg/o/getForumHome?st=0&pn={$pn}&rn=200",['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36']);
         $tl->addCookie(array('BDUSS' => $bduss));
         return $tl->get();
@@ -593,7 +593,7 @@ class misc {
 	/**
      * 获得二维码及sign
      */
-    public static function get_login_qrcode() :array {
+    public static function get_login_qrcode() {
         $resp = ["sign" => null, "imgurl" => null];
         $get_qrcode = json_decode((new wcurl("https://passport.baidu.com/v2/api/getqrcode?lp=pc"))->get(), true);
         if(isset($get_qrcode["imgurl"]) && isset($get_qrcode["sign"])){
@@ -601,7 +601,7 @@ class misc {
         }
         return $resp;
     }
-    public static function get_real_bduss(string $sign) :array{
+    public static function get_real_bduss($sign) {
         //status code
         //errno不等于0或1时需要要求更换二维码及sign
         //-1 更换二维码
