@@ -7,20 +7,21 @@
 
 ## 使用Docker-Compose快速部署
 ##### 1.安装Docker
-[安装docker，安装docker-compose](http://get.daocloud.io/#install-docker)
+[安装docker](http://get.daocloud.io/#install-docker)，[安装docker-compose](https://hub.docker.com/r/gists/docker-compose-bin)
 ##### 2.下载`docker-compose.yml`并启动服务
-下载 `wget https://raw.githubusercontent.com/zsnmwy/Tieba-Cloud-Sign/master/docker-compose.yml`  
-开始部署 `docker-compose up -d` 参数`-d`为后台运行。(主要时间消耗在下载，启动不用啥时间)  
+下载 `wget https://raw.githubusercontent.com/MoeNetwork/Tieba-Cloud-Sign/master/docker/docker-compose.yml`
+如下载不下来，就直接访问 [这个链接](https://github.com/MoeNetwork/Tieba-Cloud-Sign/blob/master/docker/docker-compose.yml)，参考它修改为你自己的`docker-compose.yml`
+开始部署 `docker-compose up -d` 参数`-d`为后台运行。(主要时间消耗在下载，启动不用啥时间)
 这里已经包含了`MySQL`部署
 ##### 3.进入网页配置
-启动完之后，直接访问`远程机子的IP`，本机就访问`127.0.0.1`  
+启动完之后，直接访问`http://<ip>:8080`，本机就访问`http:127.0.0.1:8080`  
 在配置数据库连接的时候，选择`自动导入`即可,不用自己输入。  
 然后就配置好了。
 ##### 4.注意事项
-如果你使用Windows，请先去`docker-compose.yml`修改mysql的持久化路径，默认`/opt/tieba/mysql`。  
+如果你使用Windows，请先去`docker-compose.yml`修改mysql的持久化路径，默认当前目录下的`mysql`文件夹。  
 或者直接去掉`volumes`也行。  
 映射出来的端口，可以修改`docker-compose.yml`的`"80:8080"`。默认`80端口`  
-`CSRF的设置`在`docker-compose.yml`的`CSRF: "true"`,默认`true`  
+`CSRF的设置`在`docker-compose.yml`的`CSRF=true`,默认`true`  
 除去docker安装，整个安装流程不超两分钟(网速快)。
 
 ## 常见问题解决方案

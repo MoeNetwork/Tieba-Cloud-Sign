@@ -1,0 +1,29 @@
+version: "2.0"
+services:
+
+  web:
+    image: moenetwork/tieba-cloud-sign
+    environment:
+      - PUID=1000  # 可修改为你想以什么用户运行caddy，该用户的UID
+      - PGID=1000  # 可修改为你想以什么用户运行caddy，该用户的UID
+      - DB_HOST=db:3306
+      - DB_USER=root
+      - DB_PASSWD=janejane123456  # 数据库密码
+      - DB_NAME=tiebacloud        # 数据库名
+      - CSRF=true
+    #volumes:  # 如果重新创建或更新镜像希望保留之前的所有信息，请解除这两行注释，并在当前目录下自行新建文件install.lock
+      #- ./install.lock:/var/www/setup/install.lock  # install.lock内容为：1
+    ports:
+      - 8080:8080
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5
+    environment:
+      MYSQL_DATABASE: tiebacloud           # 数据库名
+      MYSQL_ROOT_PASSWORD: janejane123456  # 数据库密码
+    volumes:
+      - ./mysql:/var/lib/mysql
