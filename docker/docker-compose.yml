@@ -23,7 +23,7 @@ services:
   db:
     image: mysql:5
     environment:
-      MYSQL_DATABASE: tiebacloud           # 数据库名
-      MYSQL_ROOT_PASSWORD: janejane123456  # 数据库密码
+      - MYSQL_DATABASE=tiebacloud           # 数据库名
+      - MYSQL_ROOT_PASSWORD=janejane123456  # 数据库密码
     volumes:
       - ./mysql:/var/lib/mysql
