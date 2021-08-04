@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+
+exec s6-setuidgid caddy caddy run -config /etc/caddy/Caddyfile

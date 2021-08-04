@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bash
+
+fix_owner() {
+    PUID=${PUID:-1000}
+    PGID=${PGID:-1000}
+    echo "Change $WORKDIR owner to user caddy..."
+    echo "PUID=${PUID}"
+    echo "PGID=${PGID}"
+    groupmod -o -g "$PGID" caddy
+    usermod -o -u "$PUID" caddy
+    chown -R caddy:caddy $WORKDIR
+}
+
+fix_owner 2>&1 | sed "s#^#[cont-init.d] $(basename $0): \1#g"
