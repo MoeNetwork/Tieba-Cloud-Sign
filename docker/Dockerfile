@@ -11,7 +11,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories 
        tzdata \
        shadow \
        caddy \
-       mariadb \
        php7 \
        php7-fpm \
        php7-curl \
@@ -26,7 +25,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories 
     && echo -e "[global]\nerror_log = /dev/stdout\ndaemonize = no\ninclude=/etc/php7/php-fpm.d/*.conf" > /etc/php7/php-fpm.conf \
     && echo -e "[www]\nuser = caddy\ngroup = caddy\nlisten = 127.0.0.1:9000\nlisten.owner = caddy\nlisten.group = caddy\npm = ondemand\npm.max_children = 75\npm.max_requests = 500\npm.process_idle_timeout = 10s\nchdir = $WORKDIR" > /etc/php7/php-fpm.d/www.conf \
     && echo -e ":8080\nroot * $WORKDIR\nlog {\n    level warn\n}\nphp_fastcgi 127.0.0.1:9000\nfile_server" > /etc/caddy/Caddyfile \
-    && mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql \
     && rm -rf \
        $WORKDIR/* \
        /var/cache/apk/* \
