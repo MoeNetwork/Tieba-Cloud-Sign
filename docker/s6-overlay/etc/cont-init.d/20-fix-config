@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+fix_config() {
+    DB_HOST=${DB_HOST:-127.0.0.1}
+    DB_USER=${DB_USER:-root}
+    DB_NAME=${DB_NAME:-tiebacloud}
+    CSRF=${CSRF:-true}
+
+    file_config=$WORKDIR/config.php
+    
+    echo "Modify $WORKDIR/config.php to the value set by the user..."
+    sed -i ''"$(cat $file_config -n | grep "DB_HOST" | awk '{print $1}')"'c '"$(echo "define('DB_HOST','${DB_HOST}');")"'' $file_config
+    sed -i ''"$(cat $file_config -n | grep "DB_USER" | awk '{print $1}')"'c '"$(echo "define('DB_USER','${DB_USER}');")"'' $file_config
+    sed -i ''"$(cat $file_config -n | grep "DB_PASSWD" | awk '{print $1}')"'c '"$(echo "define('DB_PASSWD','${DB_PASSWD}');")"'' $file_config
+    sed -i ''"$(cat $file_config -n | grep "DB_NAME" | awk '{print $1}')"'c '"$(echo "define('DB_NAME','${DB_NAME}');")"'' $file_config
+    sed -i ''"$(cat $file_config -n | grep "ANTI_CSRF" | awk '{print $1}')"'c '"$(echo "define('ANTI_CSRF',"${CSRF}");")"'' $file_config
+}
+
+fix_config 2>&1 | sed "s#^#[cont-init.d] $(basename $0): \1#g"
