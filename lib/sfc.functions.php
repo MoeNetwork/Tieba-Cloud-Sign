@@ -116,9 +116,9 @@ function getBaiduUserInfo($bduss){
 function gravatar($email, $s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 	$hash = md5($email);
 	if($site == 'secure') {
-		return "https://secure.gravatar.com/avatar/$hash?s=$s&r=$g";
+		return "https://gravatar.loli.top/avatar/$hash?s=$s&r=$g";
 	} else {
-		return "//{$site}.gravatar.com/avatar/$hash?s=$s&r=$g";
+		return "//gravatar.loli.top/avatar/$hash?s=$s&r=$g";
 	}
 }
 
