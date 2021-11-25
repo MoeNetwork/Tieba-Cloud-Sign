@@ -232,21 +232,21 @@ switch (SYSTEM_PAGE) {
 					$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `name` = '{$baidu_name}'");
 					if(!empty($checkSame)) {
 						if(option::get('same_pid') == '2') {
-							$loginResult["error"] == -11;
-							$loginResult["msg"] == "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
+							$loginResult["error"] = -11;
+							$loginResult["msg"] = "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
 						} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
-							$loginResult["error"] == -10;
-							$loginResult["msg"] == "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
+							$loginResult["error"] = -10;
+							$loginResult["msg"] = "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
 						}
 						$loginResult["bduss"] = "";
 					} else {
 						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
-						$loginResult["msg"] == "获取BDUSS成功";
+						$loginResult["msg"] = "获取BDUSS成功";
 						$loginResult["name"] = $baidu_name;
 					}
 				} else {
 					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
-					$loginResult["msg"] == "获取BDUSS成功";
+					$loginResult["msg"] = "获取BDUSS成功";
 					$loginResult["name"] = $baidu_name;
 				}
 			}

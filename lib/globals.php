@@ -67,7 +67,7 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
 				$i['user']['baidu'][$bdspid] = $bd['name'] ;
 			}
 			$optss = $m->query("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users_options` WHERE uid = ".UID);
-			$GLOBALS = $i['user'];
+			//$GLOBALS = $i['user'];
 			while ($opts = $m->fetch_array($optss)) {
 				$name = $opts['name'];
 				$i['user']['opt'][$name] = $opts['value'];
