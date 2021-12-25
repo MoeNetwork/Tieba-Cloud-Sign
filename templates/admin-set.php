@@ -50,8 +50,8 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$sign_mode = unserialize(option::get('sign_mode'));
 	$smhtml = '<tr><td><b>签到模式设置</b><br/>选择多个将在某个模式失败后使用下一种<br/>启用的签到模式越多，消耗的流量和时间越多</td><td>
 	            <label><input type="checkbox" name="sign_mode[]" value="1" '.(in_array('1',$sign_mode) ? 'checked' : '').'> 模拟手机客户端签到</label><br/>
-	            <label><input type="checkbox" name="sign_mode[]" value="3" '.(in_array('2',$sign_mode) ? 'checked' : '').'> 手机网页签到</label><br/>
-	            <label><input type="checkbox" name="sign_mode[]" value="2" '.(in_array('3',$sign_mode) ? 'checked' : '').'> 网页签到</label>
+	            <label><input type="checkbox" name="sign_mode[]" value="3" '.(in_array('3',$sign_mode) ? 'checked' : '').'> 手机网页签到</label><br/>
+	            <label><input type="checkbox" name="sign_mode[]" value="2" '.(in_array('2',$sign_mode) ? 'checked' : '').'> 网页签到</label>
 	        </td>
 	    </tr>';
 	$content2['sign_mode'] = array('html'=>$smhtml,'type'=>'else');
