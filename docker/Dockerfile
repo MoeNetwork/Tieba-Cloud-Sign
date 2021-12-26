@@ -7,7 +7,7 @@ ENV LANG=zh_CN.UTF-8 \
     
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-nobin.tar.gz /tmp/
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
-    && apk add --no-cache --update curl \
+    && apk add --no-cache --update curl tar \
     && curl -sSL "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-$(uname -m | sed s/x86_64/amd64/).tar.gz" | tar -xzf - -C / \
     && apk add --no-cache --update \
        bash \
