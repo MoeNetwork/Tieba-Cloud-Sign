@@ -1,7 +1,7 @@
-FROM alpine
+FROM alpine:3.12.7
 ENV LANG=zh_CN.UTF-8 \
     TZ=Asia/Shanghai \
-    WORKDIR=/var/www \
+    WORKDIR=/var/www \https://github.com/MoeNetwork/Tieba-Cloud-Sign/blob/master/docker/Dockerfile
     PS1="\u@\h:\w \$ "
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
     && apk add --no-cache --update \
