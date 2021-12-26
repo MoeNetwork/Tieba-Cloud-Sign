@@ -1,13 +1,14 @@
-FROM alpine:3.12.7
+FROM alpine:3.13
 
 ENV LANG=zh_CN.UTF-8 \
     TZ=Asia/Shanghai \
     WORKDIR=/var/www \
     PS1="\u@\h:\w \$ "
     
+ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-nobin.tar.gz /tmp/
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
+    && curl -sSL "https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-$(uname -m | sed s/x86_64/amd64/).tar.gz" | tar -xzf - -C / \
     && apk add --no-cache --update \
-       s6-overlay \
        bash \
        git \
        tzdata \
