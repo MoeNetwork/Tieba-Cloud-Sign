@@ -1,8 +1,10 @@
 FROM alpine:3.12.7
+
 ENV LANG=zh_CN.UTF-8 \
     TZ=Asia/Shanghai \
-    WORKDIR=/var/www \https://github.com/MoeNetwork/Tieba-Cloud-Sign/blob/master/docker/Dockerfile
+    WORKDIR=/var/www \
     PS1="\u@\h:\w \$ "
+    
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
     && apk add --no-cache --update \
        s6-overlay \
@@ -29,7 +31,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories 
        $WORKDIR/* \
        /var/cache/apk/* \
        /tmp/* \
-    && git clone -b master https://github.com/MoeNetwork/Tieba-Cloud-Sign $WORKDIR \
+    && git clone --depth=1 -b master https://github.com/MoeNetwork/Tieba-Cloud-Sign $WORKDIR \
     && cp -r $WORKDIR/docker/s6-overlay/etc/cont-init.d/* /etc/cont-init.d \
     && cp -r $WORKDIR/docker/s6-overlay/etc/services.d/* /etc/services.d
 WORKDIR $WORKDIR
