@@ -92,7 +92,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('update_server', '0');
 #INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '{VAR-TOOLPW}');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_scan', '2');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('system_keywords', '贴吧云签到');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '百度贴吧云签到，在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。Git代码库 https://git.oschina.net/kenvix/Tieba-Cloud-Sign');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '百度贴吧云签到，在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。Git代码库 https://github.com/MoeNetwork/Tieba-Cloud-Sign');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_us', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_pw', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('same_pid', '0');

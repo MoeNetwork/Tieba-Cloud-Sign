@@ -1,9 +1,9 @@
 <?php
 /**
  * 贴吧云签到
- * Copyright (c) 2012~2016 StusGame All Rights Reserved.
+ * Copyright (c) 2012~2022 Tieba-Cloud-Sign team and its contributors
  * 
- * 获取开发文档：https://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/
+ * 获取开发文档：https://github.com/MoeNetwork/Tieba-Cloud-Sign/wikis/
  */
 require dirname(__FILE__).'/init.php';
 global $i;

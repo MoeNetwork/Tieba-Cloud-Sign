@@ -2,7 +2,7 @@
 /**
  * 表单生成类
  * @copyright (c) FYY
- * @help  http://git.oschina.net/fyy99/former/wikis/home
+ * @help  http://github.com/fyy99/former/wikis/home
  */
 
 class former {
@@ -16,7 +16,7 @@ class former {
 	public static function create(array $set,array $content){
 		//检查信息
 		if(empty($set['name']) || empty($set['url']) || empty($set['method']) || !is_array($content)){
-			throw new Exception('错误：在使用form::create时，表单必需内容不足<br/><b>提示：</b>$set和$content参数的说明和范例请访问<a href="http://git.oschina.net/fyy99/former/wikis/home#$set和$content参数说明" target="_blank">$set和$content参数说明</a>');
+			throw new Exception('错误：在使用form::create时，表单必需内容不足<br/><b>提示：</b>$set和$content参数的说明和范例请访问<a href="http://github.com/fyy99/former/wikis/home#$set和$content参数说明" target="_blank">$set和$content参数说明</a>');
 			return;
 		}
 		$set['th1'] = empty($set['th1']) ? '参数' : $set['th1'];
@@ -76,7 +76,7 @@ class former {
 					break;
 
 				default:
-					throw new Exception('错误：在使用form::create时，发现意外的type('.$show['type'].')<br/><b>提示：</b>$set和$content参数的说明和范例请访问<a href="http://git.oschina.net/fyy99/former/wikis/home#$set和$content参数说明" target="_blank">$set和$content参数说明</a>');
+					throw new Exception('错误：在使用form::create时，发现意外的type('.$show['type'].')<br/><b>提示：</b>$set和$content参数的说明和范例请访问<a href="http://github.com/fyy99/former/wikis/home#$set和$content参数说明" target="_blank">$set和$content参数说明</a>');
 					break;
 			}
 		}

@@ -45,7 +45,7 @@ global $i;
         <ul class="dropdown-menu">
             <?php doAction('navi_3'); ?>
             <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
-            <li><a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
+            <li><a href="http://github.com/MoeNetwork/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
         </ul>
       </li>
       <?php doAction('navi_4'); } ?>
@@ -97,7 +97,7 @@ global $i;
                 <li class="<?php checkIfActive('admin:plugins') ?>" ><a href="index.php?mod=admin:plugins"><span class="glyphicon glyphicon-tasks"></span> 插件管理</a></li>
                <?php doAction('navi_8'); ?>
                <br/>
-                  <li><a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
+                  <li><a href="http://github.com/MoeNetwork/Tieba-Cloud-Sign/wikis/%E8%B4%B4%E5%90%A7%E4%BA%91%E7%AD%BE%E5%88%B0%E6%8F%92%E4%BB%B6%E5%BA%93" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> 插件库</a></li>
 				  <li class="<?php checkIfActive('admin:update') ?>" ><a href="index.php?mod=admin:update"><span class="glyphicon glyphicon-open"></span> 检查更新</a></li>
                       <li><a href="http://www.stusgame.com/" target="_blank"><span class="glyphicon glyphicon-globe"></span> 问题反馈</a></li>
                <?php doAction('navi_9'); } ?>

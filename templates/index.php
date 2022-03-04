@@ -115,7 +115,7 @@ if (ROLE == 'admin') {
 			}
 			echo '</li>';
 			if (defined('ANTI_CSRF') && !ANTI_CSRF) {
-				echo '<li class="list-group-item"><font color="#FF6600"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>站点的<a href="http://git.oschina.net/kenvix/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">CSRF防御</a>被关闭，站点有一定的安全风险。</li>';
+				echo '<li class="list-group-item"><font color="#FF6600"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>站点的<a href="http://github.com/MoeNetwork/Tieba-Cloud-Sign/wikis/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">CSRF防御</a>被关闭，站点有一定的安全风险。</li>';
 			}
 			if (version_compare(PHP_VERSION, '5.4.0') < 0) {
 				echo '<li class="list-group-item"><font color="#FF6600"><span class="glyphicon glyphicon-warning-sign"></span> <b>安全性警告：</b></font>站点使用的PHP版本较落后，云签到效率和安全水平下降。</li>';
