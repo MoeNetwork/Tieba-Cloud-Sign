@@ -501,17 +501,11 @@ class misc {
 		$head[] = 'User-Agent: Mozilla/5.0 (SymbianOS/9.3; Series60/3.2 NokiaE72-1/021.021; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 BrowserNG/7.1.16352';
 		$tl = new wcurl('http://c.tieba.baidu.com/c/f/forum/like',$head);
 		$data = array(
-			'_client_id' => 'wappc_' . time() . '_' . '258',
-			'_client_type' => 2,
-			'_client_version' => '6.5.8',
-			'_phone_imei' => '357143042411618',
-			'from' => 'baidu_appstore',
-			'is_guest' => 1,
-			'model' => 'H60-L01',
+			'BDUSS' => $bduss,
+			'_client_version' => '12.22.1.0',
+			'friend_uid' => $userid,
 			'page_no' => $pn,
 			'page_size' => 200,
-			'timestamp' => time(). '903',
-			'uid' => $userid,
 		);
 		$sign_str = '';
 		foreach($data as $k=>$v) $sign_str .= $k.'='.$v;
@@ -548,22 +542,23 @@ class misc {
 		$a      = 0;
 		while (true){
 			if (empty($bid)) break;
-			$rc = self::getTieba2($bduss,$pn);//fetch forum list //default 200 per page
-			$rc = json_decode($rc,true);
-			$ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
+			$rc     = self::getTieba($bid,$bduss,$pn);
+			$rc     = json_decode($rc,true);
+			$ngf    = $rc['forum_list']['non-gconforum'];
+			if (isset($rc['forum_list']['gconforum'])) {
+				foreach ($rc['forum_list']['gconforum'] as $v) $ngf[] = $v;
+			}
 			foreach ($ngf as $v){
 				if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
-				$vn  = addslashes(htmlspecialchars($v['forum_name']));
+				$vn  = addslashes(htmlspecialchars($v['name']));
 				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
 				if ($ist['c'] == 0){
 					$a ++;
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
+					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
 				}
 			}
-			$pn++;
-			if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
-			    break;
-			}
+			if ($rc["has_more"] === "0") break;
+			$pn ++;
 		}
 	}
 
