@@ -96,15 +96,18 @@ function getBaiduId($bduss){
  * @return array|bool 百度用户信息，失败返回FALSE
  */
 function getBaiduUserInfo($bduss){
-    $c = new wcurl('https://tieba.baidu.com/mg/o/profile?format=json');
+    $c = new wcurl('http://c.tieba.baidu.com/c/s/login');
     $c->addCookie(array('BDUSS' => $bduss));
-    $data = $c->get();
+    $temp = array('_client_version' => '12.22.1.0', 'bdusstoken' => $bduss);
+    $x = '';
+    foreach($temp as $k=>$v) {
+        $x .= $k.'='.$v;
+    }
+    $temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+    $data = $c->post($temp);
     $c->close();
     $data = json_decode($data, true);
-	$data = isset($data["data"]["user"]) ? $data["data"]["user"] : false;
-    if ($data) {
-        $data["portrait"] = preg_replace("/\?t=.*/", "", $data["portrait"]);
-    }
+    $data = isset($data["user"]) ? $data["user"] : false;
     return $data;
 }
 
