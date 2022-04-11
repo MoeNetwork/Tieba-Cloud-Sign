@@ -12,7 +12,7 @@ if (!empty($cv) && $cv >= '4.97') {
 $m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;", true);
 $m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` DROP INDEX `name`;", true);
 $m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` CHANGE `name` `name` VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '';", true);
-$m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` ADD `portrait` VARCHAR(40) NOT NULL AFTER `name`;", true);
+$m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` ADD `portrait` VARCHAR(40) DEFAULT '' NOT NULL AFTER `name`;", true);
 $m->query("ALTER TABLE `" . DB_PREFIX . "baiduid` ADD INDEX(`portrait`);", true);
 
 //update name_show and portrait
