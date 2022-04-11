@@ -6,7 +6,7 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
   `uid` int(30) unsigned NOT NULL,
   `bduss` text NOT NULL,
   `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
-  `portrait` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `portrait` varchar(40) COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE,
   KEY `portrait` (`portrait`) USING BTREE
