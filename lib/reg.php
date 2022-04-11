@@ -1,5 +1,6 @@
 <?php
 if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
+global $m;
 /**
  * 环境准备
  */

@@ -486,12 +486,15 @@ switch (SYSTEM_PAGE) {
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = str_replace(' ', '', $bduss);
 			$bduss = sqladds($bduss);
-			$baidu_name = sqladds(getBaiduId($bduss));
-			if (empty($baidu_name)) {
+			//get user info
+			$baiduUserInfo = getBaiduUserInfo($bduss);
+			if (empty($baiduUserInfo["portrait"])) {
 				msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
 			}
+			$baidu_name = sqladds($baiduUserInfo["name"]);
+			$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 			doAction('baiduid_set_2');
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`,`portrait`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}', '{$baidu_name_portrait}')");
 		}
 		elseif (!empty($_GET['del'])) {
 			$del = (int) $_GET['del'];
@@ -499,6 +502,8 @@ switch (SYSTEM_PAGE) {
 			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
+		} elseif (empty($_GET["bduss"])) {
+			msg('BDUSS为空，请核验后重新绑定');
 		}
 		/*
 		elseif (!empty($_GET['reget'])){
