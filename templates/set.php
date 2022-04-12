@@ -31,8 +31,8 @@ function addset($name,$type,$x,$other = '',$text = '') {
 		<tr>
 			<td>头像设置<br/>使用Gravatar头像或贴吧头像</td>
 			<td>
-				<input type="radio" name="face_img" value="0" <?php if (option::uget('face_img') == '0') { echo 'checked'; } ?>> 使用Gravatar头像<br/>
-				<input type="radio" name="face_img" value="1" <?php if (option::uget('face_img') == '1') { echo 'checked'; } ?>> 使用贴吧头像（推荐） 贴吧用户名：
+				<input type="radio" name="face_img" value="0" <?php if (option::uget('face_img') == '0') { echo 'checked'; } ?>> 使用Gravatar头像（推荐）<br/>
+				<input type="radio" name="face_img" value="1" <?php if (option::uget('face_img') == '1') { echo 'checked'; } ?>> 使用贴吧头像 贴吧用户名：
 				<input type="text" name="face_baiduid" value="<?php if (option::uget('face_baiduid')) { echo option::uget('face_baiduid'); } ?>" class="form-control" >
 			</td>
 		</tr>

@@ -26,7 +26,9 @@ class SMTP {
         $this ->debug = false;
         $this ->smtp_port = $smtp_port;
         $this ->secure = $secure;
-        if ($secure == 'ssl') $relay_host = 'ssl://' . $relay_host;
+        if ($secure == 'ssl') {
+            $relay_host = 'ssl://' . $relay_host;
+        }
         $this ->relay_host = $relay_host;
         $this ->time_out = 30;
         $this ->auth = $auth;

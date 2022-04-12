@@ -226,10 +226,11 @@ switch (SYSTEM_PAGE) {
 		$loginResult = misc::get_real_bduss($sign);
 		if($loginResult["error"] == 0) {
 			$baiduUserInfo = getBaiduUserInfo($loginResult["bduss"]);
-			if (!empty($baiduUserInfo["name"])) {
+			if (!empty($baiduUserInfo["portrait"])) {
 				$baidu_name = $baiduUserInfo["name"];
+				$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 				if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
-					$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `name` = '{$baidu_name}'");
+					$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
 					if(!empty($checkSame)) {
 						if(option::get('same_pid') == '2') {
 							$loginResult["error"] = -11;
@@ -240,14 +241,14 @@ switch (SYSTEM_PAGE) {
 						}
 						$loginResult["bduss"] = "";
 					} else {
-						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
+						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
 						$loginResult["msg"] = "获取BDUSS成功";
-						$loginResult["name"] = $baidu_name;
+						$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 					}
 				} else {
-					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}')");
+					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
 					$loginResult["msg"] = "获取BDUSS成功";
-					$loginResult["name"] = $baidu_name;
+					$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 				}
 			}
 		}

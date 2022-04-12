@@ -23,7 +23,7 @@ if (!empty($i['user']['bduss'])) {
 			$f[$x['pid']] = '';
 		}
 		$f[$x['pid']] .= '<tr><td>'.$x['id'].'</td>';
-		$f[$x['pid']] .= '<td class="wrap"><a title="'.$x['tieba'].'" href="http://tieba.baidu.com/f?ie=utf-8&kw='.$x['tieba'].'" target="_blank">'. mb_substr($x['tieba'] , 0 , 30 , 'UTF-8') .'</a>';
+		$f[$x['pid']] .= '<td class="wrap"><a title="'.$x['tieba'].'" href="https://tieba.baidu.com/f?ie=utf-8&kw='.$x['tieba'].'" target="_blank">'. mb_substr($x['tieba'] , 0 , 30 , 'UTF-8') .'</a>';
 		if ($x['status'] != 0) {
 			$count2++;
 			$f[$x['pid']] .= '<br/><b>错误:</b>' . $x['last_error'] . '</td>';
@@ -52,11 +52,11 @@ if (!empty($i['user']['bduss'])) {
 	if(!empty($f)) {
 		echo '<ul class="nav nav-tabs">';
 		foreach($i['user']['baidu'] as $pkey => $pval) {
-			echo '<li role="presentation" class="pidlist"><a data-toggle="tab" onclick="showtbpanel(\''.$pkey.'\');">'.$pval.'</a></li>';
+			echo '<li role="presentation" class="pidlist"><a data-toggle="tab" onclick="showtbpanel(\''.$pkey.'\');">'.($pval ?: $i['user']['baidu_portrait'][$pkey]).'</a></li>';
 		}
 		echo '</ul>';
 		echo '<form action="setting.php?mod=showtb&set" method="post">';
-		foreach($i['user']['baidu'] as $pkey => $pval) {
+		foreach($i['user']['baidu_portrait'] as $pkey => $pval) {
 			if(isset($f[$pkey])) {
 				echo '<div id="tbpidpanel_' . $pkey . '" class="tbpanel" style="display:none">';
 				echo '<div class="table-responsive"><table class="table table-hover"><thead><tr>';
@@ -93,7 +93,7 @@ if (!empty($i['user']['bduss'])) {
 						<span class="input-group-addon">请选择对应账号</span>
 						<select name="pid" required class="form-control">
 							<?php foreach ($i['user']['bduss'] as $key => $value) {
-								$name = empty($i['user']['baidu'][$key]) ? ' [未知]' : (' ('.$i['user']['baidu'][$key].')');
+								$name = empty($i['user']['baidu'][$key]) ? " [{$i['user']['baidu_portrait'][$key]}]" : (' ('.$i['user']['baidu'][$key] . " [{$i['user']['baidu_portrait'][$key]}]".')');
 								echo '<option value="'.$key.'">'.$key.$name.'</option>';
 							}
 							?>

@@ -98,17 +98,26 @@ function getBaiduId($bduss){
 function getBaiduUserInfo($bduss){
     $c = new wcurl('http://c.tieba.baidu.com/c/s/login');
     $c->addCookie(array('BDUSS' => $bduss));
-    $temp = array('_client_version' => '12.22.1.0', 'bdusstoken' => $bduss);
-    $x = '';
-    foreach($temp as $k=>$v) {
-        $x .= $k.'='.$v;
-    }
-    $temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+    $temp = array('bdusstoken' => $bduss);
+    misc::addTiebaSign($temp);
     $data = $c->post($temp);
     $c->close();
     $data = json_decode($data, true);
     $data = isset($data["user"]) ? $data["user"] : false;
     return $data;
+}
+
+/**
+ * 获取指定 portrait/baiduid 的用户信息
+ * 
+ * @param string $id portrait/baiduid
+ * @param bool $isBaiduId $id是否为百度id
+ * @return array 用户信息
+ */
+function getUserInfo($id, $isBaiduId = true){
+	$user = new wcurl("https://tieba.baidu.com/home/get/panel?ie=utf-8&" . ($isBaiduId ? "un={$id}" : "id={$id}"));
+	$re = $user->get();
+	return json_decode($re,true);
 }
 
 /**
@@ -135,7 +144,7 @@ function getGravatar($s = 140, $d = 'mm', $g = 'g', $site = 'secure') {
 		if(option::uget('face_url') != ''){
 			return option::uget('face_url');
 		} else {
-			return '//tb.himg.baidu.com/sys/portrait/item/';
+			return 'https://himg.bdimg.com/sys/portrait/item/0';
 		}
 	} else {
 		return gravatar(EMAIL, $s, $d, $g, $site);

@@ -153,7 +153,7 @@ class misc {
 	 */
 
 	public static function getTbs($uid,$bduss){
-		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs', array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/','X-Forwarded-For: ' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255) . '.' . mt_rand(0,255)));
+		$ch = new wcurl('http://tieba.baidu.com/dc/common/tbs');
 		$ch->addcookie("BDUSS=". $bduss);
 		$x = json_decode($ch->exec(),true);
 		return $x['tbs'];
@@ -163,13 +163,12 @@ class misc {
      * 对输入的数组添加客户端验证代码（tiebaclient!!!）
      * @param array $data 数组
      */
-    public static function addTiebaSign(&$data) {
-        $data = array(
-            '_client_id' => '03-00-DA-59-05-00-72-96-06-00-01-00-04-00-4C-43-01-00-34-F4-02-00-BC-25-09-00-4E-36',
-            '_client_type' => '4',
-            '_client_version' => '6.0.1',
-            '_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
-        ) + $data;
+    public static function addTiebaSign(&$data, $withClientType = true) {
+        $data["_client_version"] = "12.22.1.0";
+		if ($withClientType) {
+			$data["_client_type"] = "4";
+		}
+		ksort($data);
         $x = '';
         foreach($data as $k=>$v) {
             $x .= $k.'='.$v;
@@ -199,14 +198,8 @@ class misc {
 		));	
 		$ch->addcookie(array('BDUSS' => $ck));
 		$temp = array(
-			'BDUSS' => misc::getCookie($pid),
-			'_client_id' => '03-00-DA-59-05-00-72-96-06-00-01-00-04-00-4C-43-01-00-34-F4-02-00-BC-25-09-00-4E-36',
-			'_client_type' => '4',
-			'_client_version' => '1.2.1.17',
-			'_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
 			'fid' => $fid,
 			'kw' => $kw,
-			'net_type' => '3',
 			'tbs' => misc::getTbs($uid,$ck)
 		);
         self::addTiebaSign($temp);
@@ -260,24 +253,15 @@ class misc {
 	 * 客户端签到
 	 */
 	public static function DoSign_Client($uid,$kw,$id,$pid,$fid,$ck){
-		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign', array('Content-Type: application/x-www-form-urlencoded','User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1'));
+		$ch = new wcurl('http://c.tieba.baidu.com/c/c/forum/sign');
 		$ch->addcookie("BDUSS=".$ck);
 		$temp = array(
 			'BDUSS' => misc::getCookie($pid),
-			'_client_id' => '03-00-DA-59-05-00-72-96-06-00-01-00-04-00-4C-43-01-00-34-F4-02-00-BC-25-09-00-4E-36',
-			'_client_type' => '4',
-			'_client_version' => '1.2.1.17',
-			'_phone_imei' => '540b43b59d21b7a4824e1fd31b08e9a6',
 			'fid' => $fid,
 			'kw' => $kw,
-			'net_type' => '3',
 			'tbs' => misc::getTbs($uid,$ck)
 		);
-		$x = '';
-		foreach($temp as $k=>$v) {
-			$x .= $k.'='.$v;
-		}
-		$temp['sign'] = strtoupper(md5($x.'tiebaclient!!!'));
+		self::addTiebaSign($temp);
 		return $ch->post($temp);
 	}
 
@@ -484,14 +468,29 @@ class misc {
 	 */
 	public static function getUserid($pid){
 		global $m;
-		$ub  = $m->once_fetch_array("SELECT * FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
-		$user = new wcurl("http://tieba.baidu.com/home/get/panel?ie=utf-8&un={$ub['name']}");
-		$re = $user->get();
-		$ur = json_decode($re,true);
-		$userid = $ur['data']['id'];
+		$ub  = $m->once_fetch_array("SELECT portrait FROM `".DB_PREFIX."baiduid` WHERE `id` = '{$pid}';");
+		return self::getUseridByPortrait($ub['portrait']);
+	}
+	/*
+	 * 获取指定portrait的userid
+	 */
+	public static function getUseridByPortrait($portrait){
+		$ur = getUserInfo($portrait, false);
+		$userid = (isset($ur["no"]) && $ur["no"] === 0) ? $ur['data']['id'] : 0;
 		return $userid;
 	}
-
+	/*
+	 * uid转旧版portrait
+	 */
+	public static function uid2LegacyPortrait ($uid) {
+		//貌似对uid较大的新账号没啥效果?
+		$stric = str_pad(dechex(trim($uid)), 8, 0, STR_PAD_LEFT);
+		$sc = '';
+		for ($i = 6; $i >= 0; $i -=2) {
+			$sc .= substr($stric, $i, 2);
+		}
+		return $sc;
+	}
 	/*
 	 * 获取指定pid
 	 */
@@ -502,15 +501,11 @@ class misc {
 		$tl = new wcurl('http://c.tieba.baidu.com/c/f/forum/like',$head);
 		$data = array(
 			'BDUSS' => $bduss,
-			'_client_version' => '12.22.1.0',
 			'friend_uid' => $userid,
 			'page_no' => $pn,
 			'page_size' => 200,
 		);
-		$sign_str = '';
-		foreach($data as $k=>$v) $sign_str .= $k.'='.$v;
-		$sign = strtoupper(md5($sign_str.'tiebaclient!!!'));
-		$data['sign'] = $sign;
+		self::addTiebaSign($data, false);
 		$tl->addCookie(array('BDUSS' => $bduss));
 		$tl->set(CURLOPT_RETURNTRANSFER,true);
 		$rt = $tl->post($data);
@@ -557,7 +552,7 @@ class misc {
 					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
 				}
 			}
-			if ($rc["has_more"] === "0") break;
+			if (!isset($rc["has_more"]) || $rc["has_more"] === "0") break;
 			$pn ++;
 		}
 	}

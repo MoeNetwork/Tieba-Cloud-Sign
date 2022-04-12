@@ -38,8 +38,9 @@ global $m;
   <thead>
     <tr>
       <th>PID</th>
-      <th style="width:25%">百度名称</th>
-      <th style="width:65%">BDUSS Cookie</th>
+      <th style="width:20%">百度名称</th>
+      <th style="width:20%">Portrait</th>
+      <th style="width:60%">BDUSS Cookie</th>
       <th>操作</th>
     </tr>
   </thead>
@@ -50,7 +51,7 @@ global $m;
       $name = empty($i['user']['baidu'][$key]) ? '未记录百度ID' : $i['user']['baidu'][$key];
       if($name == '[E]') $name='<font color="red">已失效</font>';
       //echo '<td><a href="setting.php?mod=baiduid&reget='.$key.'"">'.$name.'</a></td>';
-      echo '<td>'.$name.'</td>';
+      echo '<td>'.$name.'</td><td><input type="text" class="form-control" readonly value="'.$i['user']['baidu_portrait'][$key].'"></td>';
       echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
     }
    ?>

@@ -486,12 +486,15 @@ switch (SYSTEM_PAGE) {
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = str_replace(' ', '', $bduss);
 			$bduss = sqladds($bduss);
-			$baidu_name = sqladds(getBaiduId($bduss));
-			if (empty($baidu_name)) {
+			//get user info
+			$baiduUserInfo = getBaiduUserInfo($bduss);
+			if (empty($baiduUserInfo["portrait"])) {
 				msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
 			}
+			$baidu_name = sqladds($baiduUserInfo["name"]);
+			$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 			doAction('baiduid_set_2');
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}')");
+			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`,`portrait`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}', '{$baidu_name_portrait}')");
 		}
 		elseif (!empty($_GET['del'])) {
 			$del = (int) $_GET['del'];
@@ -499,6 +502,8 @@ switch (SYSTEM_PAGE) {
 			$x=$m->once_fetch_array("SELECT * FROM  `".DB_NAME."`.`".DB_PREFIX."users` WHERE  `id` = ".UID." LIMIT 1");
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
+		} elseif (empty($_GET["bduss"])) {
+			msg('BDUSS为空，请核验后重新绑定');
 		}
 		/*
 		elseif (!empty($_GET['reget'])){
@@ -582,10 +587,8 @@ switch (SYSTEM_PAGE) {
         // 获取头像的url
 		// 无法获取无id帐号头像, 不建议使用 *wontfix
         if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-            $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
-            $data = $c->get();
-            $c->close();
-            $i['post']['face_url'] = str_replace('http://', 'https://', trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'))));
+			$data = getUserInfo($i['post']['face_baiduid']);
+            $i['post']['face_url'] = "https://himg.bdimg.com/sys/portrait/item/{$data["data"]["portrait"]}";
             if(empty($i['post']['face_url'])) msg('获取贴吧头像失败，可能是网络问题，请重试');
         }
         /*
