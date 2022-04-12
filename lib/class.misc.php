@@ -475,9 +475,7 @@ class misc {
 	 * 获取指定portrait的userid
 	 */
 	public static function getUseridByPortrait($portrait){
-		$user = new wcurl("https://tieba.baidu.com/home/get/panel?ie=utf-8&id={$portrait}");
-		$re = $user->get();
-		$ur = json_decode($re,true);
+		$ur = getUserInfo($portrait, false);
 		$userid = (isset($ur["no"]) && $ur["no"] === 0) ? $ur['data']['id'] : 0;
 		return $userid;
 	}

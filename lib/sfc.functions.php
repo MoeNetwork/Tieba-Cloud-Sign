@@ -108,6 +108,19 @@ function getBaiduUserInfo($bduss){
 }
 
 /**
+ * 获取指定 portrait/baiduid 的用户信息
+ * 
+ * @param string $id portrait/baiduid
+ * @param bool $isBaiduId $id是否为百度id
+ * @return array 用户信息
+ */
+function getUserInfo($id, $isBaiduId = true){
+	$user = new wcurl("https://tieba.baidu.com/home/get/panel?ie=utf-8&" . ($isBaiduId ? "un={$id}" : "id={$id}"));
+	$re = $user->get();
+	return json_decode($re,true);
+}
+
+/**
  * 获取指定邮箱的的Gravatar头像
  * http://en.gravatar.com/site/implement/images/
  * @return bool|string

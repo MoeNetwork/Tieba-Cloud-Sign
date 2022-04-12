@@ -587,10 +587,8 @@ switch (SYSTEM_PAGE) {
         // 获取头像的url
 		// 无法获取无id帐号头像, 不建议使用 *wontfix
         if($i['post']['face_img'] == 1 && $i['post']['face_baiduid'] != ''){
-            $c = new wcurl('http://www.baidu.com/p/'.$i['post']['face_baiduid']);
-            $data = $c->get();
-            $c->close();
-            $i['post']['face_url'] = str_replace('http://', 'https://', trim(stripslashes(textMiddle($data,'<img class=portrait-img src=\x22','\x22>'))));
+			$data = getUserInfo($i['post']['face_baiduid']);
+            $i['post']['face_url'] = "https://himg.bdimg.com/sys/portrait/item/{$data["data"]["portrait"]}";
             if(empty($i['post']['face_url'])) msg('获取贴吧头像失败，可能是网络问题，请重试');
         }
         /*
