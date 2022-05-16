@@ -241,12 +241,12 @@ switch (SYSTEM_PAGE) {
 						}
 						$loginResult["bduss"] = "";
 					} else {
-						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
+						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$loginResult["stoken"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
 						$loginResult["msg"] = "获取BDUSS成功";
 						$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 					}
 				} else {
-					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
+					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$loginResult["stoken"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
 					$loginResult["msg"] = "获取BDUSS成功";
 					$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 				}

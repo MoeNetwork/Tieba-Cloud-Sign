@@ -598,7 +598,7 @@ class misc {
         //0 进入下一步
         //1 无需操作
         //2 已确认
-        $r = ["error" => 1, "bduss" => "", "msg" => ""];
+        $r = ["error" => 1, "bduss" => "", "stoken" => "", "msg" => ""];
         $response = (new wcurl("https://passport.baidu.com/channel/unicast?channel_id={$sign}&callback="))->get();
         if ($response) {
             $responseParse = json_decode(str_replace(array("(",")"),'',$response),true);
@@ -613,6 +613,7 @@ class misc {
                         $r["error"] = 0;
                         $r["msg"] = "Success";
                         $r["bduss"] = $s_bduss["data"]["session"]["bduss"];
+						$r["stoken"] = self::qrlogin_parse_stoken($s_bduss["data"]["session"]["stokenList"])["tb"];
                     }
                 }
             }else{
@@ -623,5 +624,14 @@ class misc {
             $r["msg"] = "Invalid QR Code";
         }
         return $r;
+    }
+
+	public static function qrlogin_parse_stoken(string $stokenList) {
+        $tmpStokenList = [];
+        foreach (json_decode(str_replace("&quot;", '"', $stokenList), true) as $stoken) {
+            preg_match("/([\w]+)#(.*)/", $stoken, $tmpStoken);
+            $tmpStokenList[$tmpStoken[1]] = $tmpStoken[2];
+        }
+        return $tmpStokenList;
     }
 }

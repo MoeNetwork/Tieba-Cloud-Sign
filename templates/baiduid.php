@@ -40,7 +40,8 @@ global $m;
       <th>PID</th>
       <th style="width:20%">百度名称</th>
       <th style="width:20%">Portrait</th>
-      <th style="width:60%">BDUSS Cookie</th>
+      <th style="width:40%">BDUSS</th>
+      <th style="width:20%">STOKEN</th>
       <th>操作</th>
     </tr>
   </thead>
@@ -52,7 +53,8 @@ global $m;
       if($name == '[E]') $name='<font color="red">已失效</font>';
       //echo '<td><a href="setting.php?mod=baiduid&reget='.$key.'"">'.$name.'</a></td>';
       echo '<td>'.$name.'</td><td><input type="text" class="form-control" readonly value="'.$i['user']['baidu_portrait'][$key].'"></td>';
-      echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
+      echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td>';
+      echo '<td><input type="text" class="form-control" readonly value="'.$i['user']['stoken'][$key].'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
     }
    ?>
   </tbody>
