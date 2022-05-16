@@ -5,7 +5,7 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
   `id` int(30) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(30) unsigned NOT NULL,
   `bduss` text NOT NULL,
-  `stoken` text COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
+  `stoken` text NULL DEFAULT NULL,
   `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
   `portrait` varchar(40) COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`),
