@@ -144,12 +144,18 @@ global $m;
 <!-- PAGE3: NEWID2 -->
 <div class="tab-pane fade" id="newid2" style="display:none">
 <form action="setting.php" method="get">
+<input type="hidden" name="mod" value="baiduid">
 <div class="input-group">
-  <input type="hidden" name="mod" value="baiduid">
   <span class="input-group-addon">输入BDUSS</span>
   <input type="text" class="form-control" name="bduss" id="bduss_input">
-  <span class="input-group-btn"><input type="submit" class="btn btn-primary" value="点击提交"></span>
 </div>
+<br>
+<div class="input-group">
+  <span class="input-group-addon">输入STOKEN</span>
+  <input type="text" class="form-control" name="stoken" id="stoken_input">
+</div>
+<br>
+<input type="submit" class="btn btn-primary" value="点击提交">
 </form>
 
 <br/><br/><b>以下是贴吧账号手动绑定教程：</b><br/><br/>
