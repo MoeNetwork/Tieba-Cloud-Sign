@@ -225,15 +225,16 @@ switch (SYSTEM_PAGE) {
 			if (!empty($baiduUserInfo["portrait"])) {
 				$baidu_name = $baiduUserInfo["name"];
 				$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
+				$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
 				if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
-					$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
 					if(!empty($checkSame)) {
 						if(option::get('same_pid') == '2') {
 							$loginResult["error"] = -11;
 							$loginResult["msg"] = "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
 						} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
-							$loginResult["error"] = -10;
-							$loginResult["msg"] = "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
+							$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$loginResult["bduss"]}', `stoken`='{$loginResult["stoken"]}' WHERE `id` = '{$checkSame["id"]}';");
+							$loginResult["msg"] = "更新BDUSS成功";
+							$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 						}
 						$loginResult["bduss"] = "";
 					} else {
@@ -242,8 +243,13 @@ switch (SYSTEM_PAGE) {
 						$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 					}
 				} else {
-					$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$loginResult["stoken"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
-					$loginResult["msg"] = "获取BDUSS成功";
+					if(!empty($checkSame)) {
+						$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$loginResult["bduss"]}', `stoken`='{$loginResult["stoken"]}' WHERE `id` = '{$checkSame["id"]}';");
+						$loginResult["msg"] = "更新BDUSS成功";
+					} else {
+						$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$loginResult["bduss"]}', '{$loginResult["stoken"]}', '{$baidu_name}', '{$baidu_name_portrait}')");
+						$loginResult["msg"] = "获取BDUSS成功";
+					}
 					$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 				}
 			}

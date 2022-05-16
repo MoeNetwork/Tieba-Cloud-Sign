@@ -499,7 +499,12 @@ switch (SYSTEM_PAGE) {
 			$baidu_name = sqladds($baiduUserInfo["name"]);
 			$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 			doAction('baiduid_set_2');
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (".UID.", '{$bduss}', '{$stoken}', '{$baidu_name}', '{$baidu_name_portrait}')");
+			$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
+			if(!empty($checkSame)) {
+				$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$bduss}', `stoken`='{$stoken}' WHERE `id` = '{$checkSame["id"]}';");
+			} else {
+				$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$bduss}', '{$stoken}', '{$baidu_name}', '{$baidu_name_portrait}')");
+			}
 		}
 		elseif (!empty($_GET['del'])) {
 			$del = (int) $_GET['del'];
