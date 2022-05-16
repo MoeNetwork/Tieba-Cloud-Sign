@@ -6,7 +6,6 @@ doAction('admin_update_1');
 	<span class="input-group-addon">更新服务器</span>
 	<select id="server" class="form-control">
 		<option value="0">Github [默认,国外]</option>
-		<option value="5">Coding [国内]</option>
 	</select>
 	<span class="input-group-btn">
 		<input id="save_btn" type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">

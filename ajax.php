@@ -86,23 +86,22 @@ switch (SYSTEM_PAGE) {
 		break;
 
 	case 'admin:update':
-		$c = new wcurl('http://kenvix.oschina.io/tieba-cloud-sign/');
+		$c = new wcurl('https://api.github.com/repos/moenetwork/tieba-cloud-sign/commits?per_page=1', ['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36']);
+		$data = json_decode($c->exec(), true);
+		if (!isset($data[0]["sha"])) {
+			die('<div class="alert alert-danger"><b>检查更新失败：无法获取最新版本信息。</b></div>');
+		}
+		$c = new wcurl('https://api.github.com/repos/moenetwork/tieba-cloud-sign/commits/' . $data[0]["sha"], ['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36']);
 		$data = json_decode($c->exec(),true);
 		if(empty($data)){
 			die('<div class="alert alert-danger"><b>检查更新失败：无法获取最新版本信息。</b></div>');
 		} else {
-			global $i;
+			$tip = "";
 			if(isset($_GET['ok'])){
-				$tip = '<b>更新成功，下面是当前版本信息。</b><hr/>';
-			} elseif($i['opt']['vid'] > $data['vid']){
-				die('<div class="alert alert-warning"><b>您可能正处于开发模式或在使用测试版本，因此不支持在线更新。</b></div>');
-		    } elseif($i['opt']['vid'] == $data['vid']) {
-				$tip = '<b>您当前正在使用最新版本的云签到程序，下面是有关信息。</b><hr/>';
-			} else {
-				$tip = '<b>检测到新版本云签到，建议您<a href="ajax.php?mod=admin:update:updnow" onclick="waitup();">立即更新</a>，下面是有关信息。</b><hr/>';
+				$tip .= '<b>更新成功，下面是最新版本信息。</b><hr/>';
 			}
-			$tip .= $data['content'];
-			die('<div class="alert alert-success">'.$tip.'<hr/><b>Tips:</b><br/>1.Git上的最新版本可能不会立即推送。<br/>2.首次安装后需要一次在线更新，这是正常现象。<br/>3.大的版本变动一般需要执行升级脚本，请留意相关提示。</div>');
+			$tip .= '<div class="text-right"> <div class="label label-primary">commit</div> <a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/commit/' . $data["sha"] . '" target="_blank" class="label label-info">' . substr($data["sha"], 0, 7) . '</a> <div class="label label-warning"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> ' . $data["commit"]["committer"]["date"] . '</div> <div class="label label-' . ($data["commit"]["verification"]["verified"] ? 'success' : 'warning') . '">' . ($data["commit"]["verification"]["verified"] ? 'Verified' : 'Not verified') . '</div></div><br /><div>' . nl2br($data["commit"]["message"]) . '</div>';
+			echo '<div class="panel panel-default" style="background-color: #F9F9F9;"><div class="panel-body">'.$tip.'<hr/><b>Tips:</b><br/>1.commit模式会使用最新commit，但不是所有commit都安全可用，建议等待一段时间再更新。<br/>2.任何时候都能检查到最新commit，即使云签已经是最新版本。<br/>3.大的版本变动一般需要执行升级脚本，请留意相关提示。<div class="text-right"><a href="ajax.php?mod=admin:update:updnow" class="btn btn-primary" type="button" onclick="waitup();">立即更新</a></div></div></div>';
 		}
 		$c->close();
 		break;
@@ -113,17 +112,14 @@ switch (SYSTEM_PAGE) {
 		}
 
 		//下载zip包
-		switch (option::get('update_server')){
-			//OSCGIT禁止了直接下载
-			case '5':
-				$c = new wcurl(UPDATE_SERVER_CODING);
-				$floderName = UPDATE_FNAME_CODING;
-				break;
-			default:
-				$c = new wcurl(UPDATE_SERVER_GITHUB);
-				$floderName = UPDATE_FNAME_GITHUB;
-				break;
-		}
+		//switch (option::get('update_server')){
+		//	//OSCGIT禁止了直接下载
+		//	//CODING仓库都没了
+		//	default:
+		$c = new wcurl(UPDATE_SERVER_GITHUB);
+		$floderName = UPDATE_FNAME_GITHUB;
+		//		break;
+		//}
 		$file = $c->exec();
 		$c->close();
 		$zipPath = UPDATE_CACHE.'update_'.time().'.zip';
@@ -161,12 +157,12 @@ switch (SYSTEM_PAGE) {
 			msg('错误 - 更新失败：<br/><br/>无法更新文件');
 		}
 		DeleteFile(UPDATE_CACHE);
-		//获取最新的版本号
-		$c = new wcurl('http://kenvix.oschina.io/tieba-cloud-sign/');
-		$data = json_decode($c->exec(),true);
-		$c->close();
-		//修改版本号
-		option::set('vid',$data['vid']);
+		////获取最新的版本号
+		//$c = new wcurl('http://kenvix.oschina.io/tieba-cloud-sign/');
+		//$data = json_decode($c->exec(),true);
+		//$c->close();
+		////修改版本号
+		//option::set('vid',$data['vid']);
 		//暂不支持更新脚本
 		msg('恭喜您，更新成功！', SYSTEM_URL.'index.php?mod=admin:update&ok');
 		break;
