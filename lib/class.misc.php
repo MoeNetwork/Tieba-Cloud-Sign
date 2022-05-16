@@ -179,14 +179,15 @@ class misc {
 	/**
 	 * 得到BDUSS 
 	 * @param int|string $pid 用户PID
+	 * @param bool $withStoken 是否带有stoken
 	 */
-	public static function getCookie($pid) {
+	public static function getCookie($pid, $withStoken = false) {
 		global $m;
 		if (empty($pid)) {
 			return false;
 		}
 		$temp = $m->fetch_array($m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `id` = {$pid} LIMIT 1"));
-		return $temp['bduss'];
+		return $withStoken ? ["bduss" => $temp['bduss'], "stoken" => $temp['stoken']] : $temp['bduss'];
 	}
 
 	/**
