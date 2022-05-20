@@ -50,7 +50,17 @@ if(is_writable("setup")){
 
 <div id="comsys"></div>
 <div id="comsys2"></div>
-<div id="comsys3"></div>';
+<div id="comsys3"></div>
+<div id="comsys4">
+  <form action="ajax.php" method="get">
+    <input type="hidden" name="mod" value="admin:update:updnow">
+    <div class="input-group">
+      <span class="input-group-addon">输入 commit id</span>
+      <input type="text" class="form-control" name="commit" id="commit_input">
+      <span class="input-group-btn"><input type="submit" class="btn btn-primary" onclick="waitup();" value="立即更新"></span>
+    </div>
+  </form>
+</div>';
 	$writable="1";
 } else {
 	echo '<div class="alert alert-danger" role="alert">你的服务器不支持文件写入，请手动更新</div>';

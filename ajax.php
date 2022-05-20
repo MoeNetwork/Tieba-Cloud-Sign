@@ -101,7 +101,13 @@ switch (SYSTEM_PAGE) {
 				$tip .= '<b>更新成功，下面是最新版本信息。</b><hr/>';
 			}
 			$tip .= '<div class="text-right"> <div class="label label-primary">commit</div> <a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/commit/' . $data["sha"] . '" target="_blank" class="label label-info">' . substr($data["sha"], 0, 7) . '</a> <div class="label label-warning"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> ' . $data["commit"]["committer"]["date"] . '</div> <div class="label label-' . ($data["commit"]["verification"]["verified"] ? 'success' : 'warning') . '">' . ($data["commit"]["verification"]["verified"] ? 'Verified' : 'Not verified') . '</div></div><br /><div>' . nl2br($data["commit"]["message"]) . '</div>';
-			echo '<div class="panel panel-default" style="background-color: #F9F9F9;"><div class="panel-body">'.$tip.'<hr/><b>Tips:</b><br/>1.commit模式会使用最新commit，但不是所有commit都安全可用，建议等待一段时间再更新。<br/>2.任何时候都能检查到最新commit，即使云签已经是最新版本。<br/>3.大的版本变动一般需要执行升级脚本，请留意相关提示。<div class="text-right"><a href="ajax.php?mod=admin:update:updnow" class="btn btn-primary" type="button" onclick="waitup();">立即更新</a></div></div></div>';
+			//check update scripts
+			foreach($data["files"] as $file_info) {
+				if ($file_info["status"] === "added" && strpos($file_info["filename"], 'setup/update') !== false) {
+					$tip .= '<hr>本提交包含一个升级脚本，更新后及时执行 <b>' . $file_info["filename"] . '</b>';
+				}
+			} 
+			echo '<div class="panel panel-default" style="background-color: #F9F9F9;"><div class="panel-body">'.$tip.'<hr/><b>Tips:</b><br/>1.commit模式会使用最新commit，但不是所有commit都安全可用，建议等待一段时间再更新。<br/>2.任何时候都能检查到最新commit，即使云签已经是最新版本。<br/>3.部分版本变动需要执行升级脚本，请留意相关提示；若没有提示可能是因为更新前后跨越的版本较大。<div class="text-right"><a href="ajax.php?mod=admin:update:updnow" class="btn btn-primary" type="button" onclick="waitup();">立即更新</a></div></div></div>';
 		}
 		$c->close();
 		break;
@@ -110,14 +116,18 @@ switch (SYSTEM_PAGE) {
 		if (!file_exists(UPDATE_CACHE)) {
 			mkdir(UPDATE_CACHE, 0777, true);
 		}
-
+		$commit_mode = isset($_GET["commit"]) && $_GET["commit"];
 		//下载zip包
 		//switch (option::get('update_server')){
 		//	//OSCGIT禁止了直接下载
 		//	//CODING仓库都没了
 		//	default:
-		$c = new wcurl(UPDATE_SERVER_GITHUB);
-		$floderName = UPDATE_FNAME_GITHUB;
+		if ($commit_mode) {
+			$c = new wcurl("https://github.com/MoeNetwork/Tieba-Cloud-Sign/archive/{$_GET["commit"]}.zip");
+		} else {
+			$c = new wcurl(UPDATE_SERVER_GITHUB);
+		}
+		$floderName = $commit_mode ? 'Tieba-Cloud-Sign-' . $_GET["commit"] : UPDATE_FNAME_GITHUB;
 		//		break;
 		//}
 		$file = $c->exec();
