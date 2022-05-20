@@ -60,6 +60,18 @@ if(is_writable("setup")){
       <span class="input-group-btn"><input type="submit" class="btn btn-primary" onclick="waitup();" value="立即更新"></span>
     </div>
   </form>
+</div>
+<br>
+<div id="comsys5">
+  <div class="panel panel-default" style="background-color: #F9F9F9;">
+    <div class="panel-body">
+	  <b>Tips:</b><br/>
+	  1.commit模式会使用最新commit，但不是所有commit都安全可用，建议等待一段时间再更新。<br/>
+	  2.任何时候都能检查到最新commit，即使云签已经是最新版本。<br/>
+	  3.部分版本变动需要执行升级脚本，请留意相关提示；若没有提示可能是因为更新前后跨越的版本较大，请前往<a href="./setup/update.php" target="_blank">脚本列表</a>查看。<br>
+	  4.输入框可填写commit id，提交后将下载任意未删除的commit的文件。
+    </div>
+  </div>
 </div>';
 	$writable="1";
 } else {

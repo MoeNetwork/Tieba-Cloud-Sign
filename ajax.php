@@ -104,10 +104,10 @@ switch (SYSTEM_PAGE) {
 			//check update scripts
 			foreach($data["files"] as $file_info) {
 				if ($file_info["status"] === "added" && strpos($file_info["filename"], 'setup/update') !== false) {
-					$tip .= '<hr>本提交包含一个升级脚本，更新后及时执行 <b>' . $file_info["filename"] . '</b>';
+					$tip .= '<hr>本提交包含一个升级脚本，更新后请及时执行 <b>' . $file_info["filename"] . '</b>';
 				}
 			} 
-			echo '<div class="panel panel-default" style="background-color: #F9F9F9;"><div class="panel-body">'.$tip.'<hr/><b>Tips:</b><br/>1.commit模式会使用最新commit，但不是所有commit都安全可用，建议等待一段时间再更新。<br/>2.任何时候都能检查到最新commit，即使云签已经是最新版本。<br/>3.部分版本变动需要执行升级脚本，请留意相关提示；若没有提示可能是因为更新前后跨越的版本较大。<div class="text-right"><a href="ajax.php?mod=admin:update:updnow" class="btn btn-primary" type="button" onclick="waitup();">立即更新</a></div></div></div>';
+			echo '<div class="panel panel-default" style="background-color: #F9F9F9;"><div class="panel-body">'.$tip.'<hr/><div class="text-right"><a href="ajax.php?mod=admin:update:updnow" class="btn btn-primary" type="button" onclick="waitup();">立即更新</a></div></div></div>';
 		}
 		$c->close();
 		break;
