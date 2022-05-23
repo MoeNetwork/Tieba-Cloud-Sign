@@ -40,7 +40,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	            <label><input type="radio" name="same_pid" value="0" '.(option::get('same_pid') == '0' ? 'checked' : '').'> 不禁止(可以重复添加)</label><br/>
 	            <label><input type="radio" name="same_pid" value="1" '.(option::get('same_pid') == '1' ? 'checked' : '').'> 仅禁止同一云签到账号重复添加</label><br/>
 	            <label><input type="radio" name="same_pid" value="2" '.(option::get('same_pid') == '2' ? 'checked' : '').'> 全局禁止(一旦有用户添加则其他用户不能添加)</label>
-				<label><input type="radio" name="same_pid" value="4" '.(option::get('same_pid') == '4' ? 'checked' : '').'> 自动处理(检查到同一百度帐号时更新BDUSS与STOKEN)</label>
+				<label><input type="radio" name="same_pid" value="3" '.(option::get('same_pid') == '3' ? 'checked' : '').'> 自动处理(检查到同一百度帐号时更新BDUSS与STOKEN)</label>
 	        </td>
 	    </tr>';
 	$content2['same_pid'] = array('html'=>$bsphtml,'type'=>'else');

@@ -236,7 +236,7 @@ switch (SYSTEM_PAGE) {
 				$baidu_name = $baiduUserInfo["name"];
 				$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 				$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
-				if((option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
+				if(option::get('same_pid') != '3' && (option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
 					if(!empty($checkSame)) {
 						if(option::get('same_pid') == '2') {
 							$loginResult["error"] = -11;
