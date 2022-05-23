@@ -242,9 +242,8 @@ switch (SYSTEM_PAGE) {
 							$loginResult["error"] = -11;
 							$loginResult["msg"] = "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
 						} elseif(option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
-							$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$loginResult["bduss"]}', `stoken`='{$loginResult["stoken"]}' WHERE `id` = '{$checkSame["id"]}';");
-							$loginResult["msg"] = "更新BDUSS成功";
-							$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
+							$loginResult["error"] = -10;
+							$loginResult["msg"] = "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
 						}
 						$loginResult["bduss"] = "";
 					} else {
@@ -253,7 +252,7 @@ switch (SYSTEM_PAGE) {
 						$loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
 					}
 				} else {
-					if(!empty($checkSame)) {
+					if(option::get('same_pid') == '3' && !empty($checkSame)) {
 						$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$loginResult["bduss"]}', `stoken`='{$loginResult["stoken"]}' WHERE `id` = '{$checkSame["id"]}';");
 						$loginResult["msg"] = "更新BDUSS成功";
 					} else {

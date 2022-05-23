@@ -482,12 +482,12 @@ switch (SYSTEM_PAGE) {
 				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
 			}
 			// 去除双引号和bduss=
-			$bduss = str_replace('"', '', $_GET['bduss']);
+			$bduss = str_replace('"', '', isset($_GET['bduss']) ? $_GET['bduss'] : "");
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = str_replace(' ', '', $bduss);
 			$bduss = sqladds($bduss);
 			// 同上操作取得stoken
-			$stoken = str_replace('"', '', $_GET['stoken']);
+			$stoken = str_replace('"', '', isset($_GET['stoken']) ? $_GET['stoken'] : "");
 			$stoken = str_ireplace('STOKEN=', '', $stoken);
 			$stoken = str_replace(' ', '', $stoken);
 			$stoken = sqladds($stoken);
@@ -500,7 +500,7 @@ switch (SYSTEM_PAGE) {
 			$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 			doAction('baiduid_set_2');
 			$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
-			if(!empty($checkSame)) {
+			if(option::get('same_pid') == '3' && !empty($checkSame)) {
 				$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$bduss}', `stoken`='{$stoken}' WHERE `id` = '{$checkSame["id"]}';");
 			} else {
 				$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$bduss}', '{$stoken}', '{$baidu_name}', '{$baidu_name_portrait}')");
