@@ -6,7 +6,7 @@ CREATE TABLE `{VAR-PREFIX}baiduid` (
   `uid` int(30) unsigned NOT NULL,
   `bduss` text NOT NULL,
   `stoken` text NULL DEFAULT NULL,
-  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
   `portrait` varchar(40) COLLATE utf8mb4_general_ci DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`) USING BTREE,
@@ -97,7 +97,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('system_keywords', '贴吧云签到');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('system_description', '百度贴吧云签到，在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。Git代码库 https://github.com/MoeNetwork/Tieba-Cloud-Sign');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_us', '');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('bbs_pw', '');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('same_pid', '0');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('same_pid', '3');
 
 
 DROP TABLE IF EXISTS `{VAR-PREFIX}plugins`;
