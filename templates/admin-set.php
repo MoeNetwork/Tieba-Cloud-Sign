@@ -36,10 +36,11 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
 	$content2['cron_limit'] = array('td1'=>'<b>单表单次签到执行数量</b><br/>0为一次性全部签到。此功能非常重要，设置为0会导致每次都扫描贴吧表，效率极低，请按需修改','type'=>'number','text'=>'注意这是控制单个表的，当你有N个表时，单次签到数量为 N × 分表数','extra'=>'min="0" step="1"');
 	$content2['bduss_num'] = array('td1'=>'<b>最大允许用户绑定账号数</b><br/>0为无限，-1为禁止绑定，对管理员无效','type'=>'number','text'=>'','extra'=>'min="-1" step="1"');
 	$content2['tb_max'] = array('td1'=>'<b>最大关注贴吧数量</b><br/>0为不限,对管理员无效','type'=>'number','text'=>'','extra'=>'min="0" step="1"');
-	$bsphtml = '<tr><td><b>禁止重复添加同一百度账号</b><br/>禁止添加用户名一样的百度账号<br/>对管理员无效</td><td>
+	$bsphtml = '<tr><td><b>禁止重复添加同一百度账号</b><br/>禁止添加用户名一样的百度账号<br/>对管理员无效(自动处理除外)</td><td>
 	            <label><input type="radio" name="same_pid" value="0" '.(option::get('same_pid') == '0' ? 'checked' : '').'> 不禁止(可以重复添加)</label><br/>
 	            <label><input type="radio" name="same_pid" value="1" '.(option::get('same_pid') == '1' ? 'checked' : '').'> 仅禁止同一云签到账号重复添加</label><br/>
 	            <label><input type="radio" name="same_pid" value="2" '.(option::get('same_pid') == '2' ? 'checked' : '').'> 全局禁止(一旦有用户添加则其他用户不能添加)</label>
+				<label><input type="radio" name="same_pid" value="3" '.(option::get('same_pid') == '3' ? 'checked' : '').'> 自动处理(检查到同一百度帐号时更新BDUSS与STOKEN)</label>
 	        </td>
 	    </tr>';
 	$content2['same_pid'] = array('html'=>$bsphtml,'type'=>'else');

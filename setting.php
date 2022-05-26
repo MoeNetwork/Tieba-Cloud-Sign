@@ -474,7 +474,7 @@ switch (SYSTEM_PAGE) {
 			CleanUser(UID);
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID);
 		}
-		elseif (!empty($_GET['bduss'])) {
+		elseif (!empty($_GET['bduss']) && !empty($_GET["stoken"])) {
 			if (option::get('bduss_num') == '-1' && ROLE != 'admin') msg('本站禁止绑定新账号');
 
 			if (option::get('bduss_num') != '0' && ISVIP == false) {
@@ -482,19 +482,29 @@ switch (SYSTEM_PAGE) {
 				if (($count['c'] + 1) > option::get('bduss_num')) msg('您当前绑定的账号数已达到管理员设置的上限<br/><br/>您当前已绑定 '.$count['c'].' 个账号，最多只能绑定 '.option::get('bduss_num').' 个账号');
 			}
 			// 去除双引号和bduss=
-			$bduss = str_replace('"', '', $_GET['bduss']);
+			$bduss = str_replace('"', '', isset($_GET['bduss']) ? $_GET['bduss'] : "");
 			$bduss = str_ireplace('BDUSS=', '', $bduss);
 			$bduss = str_replace(' ', '', $bduss);
 			$bduss = sqladds($bduss);
+			// 同上操作取得stoken
+			$stoken = str_replace('"', '', isset($_GET['stoken']) ? $_GET['stoken'] : "");
+			$stoken = str_ireplace('STOKEN=', '', $stoken);
+			$stoken = str_replace(' ', '', $stoken);
+			$stoken = sqladds($stoken);
 			//get user info
 			$baiduUserInfo = getBaiduUserInfo($bduss);
 			if (empty($baiduUserInfo["portrait"])) {
-				msg('您的 BDUSS Cookie 信息有误，请核验后重新绑定');
+				msg('您的 Cookie 信息有误，请核验后重新绑定');
 			}
 			$baidu_name = sqladds($baiduUserInfo["name"]);
 			$baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
 			doAction('baiduid_set_2');
-			$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX."baiduid` (`uid`,`bduss`,`name`,`portrait`) VALUES  (".UID.", '{$bduss}', '{$baidu_name}', '{$baidu_name_portrait}')");
+			$checkSame = $m->once_fetch_array("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
+			if(option::get('same_pid') == '3' && !empty($checkSame)) {
+				$m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$bduss}', `stoken`='{$stoken}' WHERE `id` = '{$checkSame["id"]}';");
+			} else {
+				$m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$bduss}', '{$stoken}', '{$baidu_name}', '{$baidu_name_portrait}')");
+			}
 		}
 		elseif (!empty($_GET['del'])) {
 			$del = (int) $_GET['del'];
@@ -503,7 +513,7 @@ switch (SYSTEM_PAGE) {
 			$m->query("DELETE FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `".DB_PREFIX."baiduid`.`uid` = ".UID." AND `".DB_PREFIX."baiduid`.`id` = " . $del);
 			$m->query('DELETE FROM `'.DB_NAME.'`.`'.DB_PREFIX.$x['t'].'` WHERE `'.DB_PREFIX.$x['t'].'`.`uid` = '.UID.' AND `'.DB_PREFIX.$x['t'].'`.`pid` = '.$del);
 		} elseif (empty($_GET["bduss"])) {
-			msg('BDUSS为空，请核验后重新绑定');
+			msg('BDUSS或STOKEN不合法，请核验后重新绑定');
 		}
 		/*
 		elseif (!empty($_GET['reget'])){

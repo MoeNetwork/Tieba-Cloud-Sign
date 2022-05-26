@@ -5,7 +5,7 @@
  */
 
 define('SYSTEM_FN','百度贴吧云签到');
-define('SYSTEM_VER','4.97');
+define('SYSTEM_VER','4.98');
 define('SYSTEM_VER_NOTE','');
 define('SYSTEM_ROOT',dirname(__FILE__));
 define('PLUGIN_ROOT',dirname(__FILE__) . '/plugins/');
@@ -50,10 +50,8 @@ define('SYSTEM_NAME', option::get('system_name'));
 define('SYSTEM_REV',option::get('core_revision'));
 //压缩包链接
 define('UPDATE_SERVER_GITHUB','https://github.com/MoeNetwork/Tieba-Cloud-Sign/archive/master.zip');
-define('UPDATE_SERVER_CODING','https://coding.net/u/kenvix/p/Tieba-Cloud-Sign/git/archive/master');
 //压缩包内文件夹名
 define('UPDATE_FNAME_GITHUB','Tieba-Cloud-Sign-master');
-define('UPDATE_FNAME_CODING','Tieba-Cloud-Sign-master');
 //压缩包解压路径
 define('UPDATE_CACHE',SYSTEM_ROOT.'/setup/update_cache/');
 require SYSTEM_ROOT.'/lib/sfc.functions.php';

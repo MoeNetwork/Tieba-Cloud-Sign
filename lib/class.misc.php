@@ -179,14 +179,15 @@ class misc {
 	/**
 	 * 得到BDUSS 
 	 * @param int|string $pid 用户PID
+	 * @param bool $withStoken 是否带有stoken
 	 */
-	public static function getCookie($pid) {
+	public static function getCookie($pid, $withStoken = false) {
 		global $m;
 		if (empty($pid)) {
 			return false;
 		}
 		$temp = $m->fetch_array($m->query("SELECT * FROM `".DB_NAME."`.`".DB_PREFIX."baiduid` WHERE `id` = {$pid} LIMIT 1"));
-		return $temp['bduss'];
+		return $withStoken ? ["bduss" => $temp['bduss'], "stoken" => $temp['stoken']] : $temp['bduss'];
 	}
 
 	/**
@@ -598,7 +599,7 @@ class misc {
         //0 进入下一步
         //1 无需操作
         //2 已确认
-        $r = ["error" => 1, "bduss" => "", "msg" => ""];
+        $r = ["error" => 1, "bduss" => "", "stoken" => "", "msg" => ""];
         $response = (new wcurl("https://passport.baidu.com/channel/unicast?channel_id={$sign}&callback="))->get();
         if ($response) {
             $responseParse = json_decode(str_replace(array("(",")"),'',$response),true);
@@ -613,6 +614,7 @@ class misc {
                         $r["error"] = 0;
                         $r["msg"] = "Success";
                         $r["bduss"] = $s_bduss["data"]["session"]["bduss"];
+						$r["stoken"] = self::qrlogin_parse_stoken($s_bduss["data"]["session"]["stokenList"])["tb"];
                     }
                 }
             }else{
@@ -623,5 +625,14 @@ class misc {
             $r["msg"] = "Invalid QR Code";
         }
         return $r;
+    }
+
+	public static function qrlogin_parse_stoken(string $stokenList) {
+        $tmpStokenList = [];
+        foreach (json_decode(str_replace("&quot;", '"', $stokenList), true) as $stoken) {
+            preg_match("/([\w]+)#(.*)/", $stoken, $tmpStoken);
+            $tmpStokenList[$tmpStoken[1]] = $tmpStoken[2];
+        }
+        return $tmpStokenList;
     }
 }
