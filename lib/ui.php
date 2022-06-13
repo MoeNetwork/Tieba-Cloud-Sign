@@ -52,22 +52,14 @@ function loadfoot($copy = false) {
             $plug = $i['plugins']['desc'][$copy];
             echo '<br/><br/>';
             if(!empty($plug['plugin']['url'])) {
-                echo '<a href="'.htmlspecialchars($plug['plugin']['url']).'" target="_blank">';
-            }
-            echo $plug[ 'plugin' ][ 'name' ];
-            if(!empty($plug['plugin']['url'])) {
-                echo '</a>';
+				echo sanitize_html_link($plug['plugin']['url'], $plug['plugin']['name']);
             }
             if(!empty($plug['plugin'][ 'version' ])) {
                 echo ' V'.$plug['plugin'][ 'version' ];
             }
             echo ' // 作者：';
             if(!empty($plug['author']['url'])) {
-                echo '<a href="'.htmlspecialchars($plug['author']['url']).'" target="_blank">';
-            }
-            echo $plug[ 'author' ][ 'author' ];
-            if(!empty($plug['author']['url'])) {
-                echo '</a>';
+				echo sanitize_html_link($plug['author']['url'], $plug['author']['author']);
             }
         }
     }
