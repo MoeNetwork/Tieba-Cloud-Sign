@@ -16,7 +16,7 @@ foreach($x as $key => $val) {
 	$pluginfo = '';
 	$action   = '';
 	if (!empty($val['plugin']['url'])) {
-		$pluginfo .= '<b><a href="'.htmlspecialchars($val['plugin']['url']).'" target="_blank">'.$val['plugin']['name'].'</a></b>';
+		$pluginfo .= '<b>' . sanitize_html_link($val['plugin']['url'], $val['plugin']['name']) . '</b>';
 	} else {
 		$pluginfo .= '<b>'.$val['plugin']['name'].'</b>';
 	}
@@ -36,7 +36,7 @@ foreach($x as $key => $val) {
 	}
 
 	if (!empty($val['author']['url'])) {
-		$authinfo = '<a href="'.htmlspecialchars($val['author']['url']).'" target="_blank">'.$val['author']['author'].'</a>';
+		$authinfo = sanitize_html_link($val['author']['url'], $val['author']['author']);
 	} else {
 		$authinfo = $val['author']['author'];
 	}

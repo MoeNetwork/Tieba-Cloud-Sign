@@ -1018,3 +1018,21 @@ function csrf($strict = true) {
 		if($p['host'] != (isset($parse_system_url['host']) ? $parse_system_url['host'] : '')) msg('CSRF防御：错误的请求来源<a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
 	}
 }
+
+/**
+ * 检查URL，防XSS
+ * @param string $url 待处理的url
+ * @param string $linktext 链接文字
+ * @return string 纯文本或者链接dom
+ */
+function sanitize_html_link($url = "", $linktext = "") {
+	if (!$url) {
+		htmlspecialchars($linktext ?: "");
+	}
+	$parseUrl = parse_url($url);
+	if (isset($parseUrl["scheme"]) && in_array($parseUrl["scheme"], ["http", "https"])) {
+		return '<a href="'.$url.'" target="_blank">' . htmlspecialchars($linktext ?: "") . '</a>';
+	} else {
+		htmlspecialchars($linktext ?: "");
+	}
+}
