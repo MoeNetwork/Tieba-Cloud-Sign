@@ -437,11 +437,13 @@ function sendRequest($url , $post = '' , $cookie = '') {
 	if (function_exists('fsockopen')) {
 		$matches = parse_url($url);
         $host = $matches['host'];
+		$useSSL = false;
         if (substr($url, 0, 8) == 'https://') {
         	$host = 'ssl://' . $host;
+			$useSSL = true;
         }
         $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
-        $port = !empty($matches['port']) ? $matches['port'] : 80;
+        $port = !empty($matches['port']) ? $matches['port'] : ($useSSL ? 443 : 80);
         if(!empty($post)) {
                 $out = "POST $path HTTP/1.1\r\n";
                 $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
@@ -453,12 +455,15 @@ function sendRequest($url , $post = '' , $cookie = '') {
                 $out .= "Host: $host\r\n";
                 $out .= "Connection: Close\r\n\r\n";
         }
-        $fp = fsockopen($host, $port);
+		$socketErrno = 0;
+		$socketErrorStr = "";
+        $fp = fsockopen($host, $port, $socketErrno, $socketErrorStr, 0.5);
 		if (!$fp) {
+			error_log("sendRequest 失败: 未能调用 fsockopen: #$socketErrno - $socketErrorStr");
 			return false;
 		} else {
-			stream_set_blocking($fp , 0);
-			stream_set_timeout($fp , 0);
+			stream_set_blocking($fp , false);
+			stream_set_timeout($fp , 500);
 			fwrite($fp, $out);
 			fclose($fp);
 			return true;
