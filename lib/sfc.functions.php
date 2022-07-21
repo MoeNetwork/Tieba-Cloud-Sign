@@ -439,7 +439,7 @@ function sendRequest($url , $post = '' , $cookie = '') {
         $host = $matches['host'];
 		$useSSL = false;
         if (substr($url, 0, 8) == 'https://') {
-        	$host = 'ssl://' . $host;
+        	$host = 'tls://' . $host;
 			$useSSL = true;
         }
         $path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
@@ -457,13 +457,13 @@ function sendRequest($url , $post = '' , $cookie = '') {
         }
 		$socketErrno = 0;
 		$socketErrorStr = "";
-        $fp = fsockopen($host, $port, $socketErrno, $socketErrorStr, 0.5);
+        $fp = fsockopen($host, $port, $socketErrno, $socketErrorStr, 1);
 		if (!$fp) {
 			error_log("sendRequest 失败: 未能调用 fsockopen: #$socketErrno - $socketErrorStr");
 			return false;
 		} else {
 			stream_set_blocking($fp , false);
-			stream_set_timeout($fp , 500);
+			stream_set_timeout($fp , 1);
 			fwrite($fp, $out);
 			fclose($fp);
 			return true;
