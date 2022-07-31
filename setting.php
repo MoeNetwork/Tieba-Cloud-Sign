@@ -535,7 +535,7 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
                 $m->query("UPDATE `" . DB_PREFIX . TABLE . "` SET `no` =  '{$xv}' WHERE  `id` = '{$id}' AND `uid` = '" . UID . "' ;");
             }
             Redirect('index.php?mod=showtb&ok');
-        } elseif (isset($_GET['ref'])) {
+        } elseif (isset($_GET['refreshTiebaList'])) {
             $r = misc::scanTiebaByUser();
             echo 1;
         } elseif (isset($_GET['clean'])) {
