@@ -6,8 +6,9 @@
  * @param bool $die 是否终止PHP
  * @param bool $title 是否显示标题
  */
-function msg($msg = '未知的异常',$url = true,$die = true,$title = true,$issue = false) {
-    if(defined('SYSTEM_ISCONSOLE') && SYSTEM_ISCONSOLE) {
+function msg($msg = '未知的异常', $url = true, $die = true, $title = true, $issue = false)
+{
+    if (defined('SYSTEM_ISCONSOLE') && SYSTEM_ISCONSOLE) {
         echo $msg . PHP_EOL;
         die;
     }
@@ -146,16 +147,20 @@ function msg($msg = '未知的异常',$url = true,$die = true,$title = true,$iss
     </head>
     <body id="error-page">
         <?php
-		if ($title) echo '<h3>'.$sysname.' - 提示信息</h3><br/>';
+        if ($title) {
+            echo '<h3>' . $sysname . ' - 提示信息</h3><br/>';
+        }
         echo $msg;
-		if ($issue) echo '<br/><a style="float:left" href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/issues" target="_blank">反馈该问题</a><br/>';
-		if ($url !== false) {
+        if ($issue) {
+            echo '<br/><a style="float:left" href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/issues" target="_blank">反馈该问题</a><br/>';
+        }
+        if ($url !== false) {
             if ($url === true) {
                 echo '<br/><a style="float:right" href="javascript:history.back(-1)"><< 返回上一页</a>';
             } else {
-                echo '<br/><a style="float:right" href="'.$url.'"><< 返回上一页</a>';
+                echo '<br/><a style="float:right" href="' . $url . '"><< 返回上一页</a>';
             }
-        } 
+        }
         ?>
         <br/>
     </body>

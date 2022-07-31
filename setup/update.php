@@ -1,30 +1,30 @@
 <?php
 if (empty($_COOKIE['uid']) || empty($_COOKIE['pwd'])) {
-  header('Location: ../');
-  die;
+    header('Location: ../');
+    die;
 }
 define('SYSTEM_DEV', true);
 require '../init.php';
 global $i;
 if (ROLE != 'admin') {
-  msg('您需要先登录旧版本的云签到，才能继续升级');
+    msg('您需要先登录旧版本的云签到，才能继续升级');
 }
 $x = scandir(dirname(__FILE__));
 $v = '';
 foreach ($x as $value) {
-  if ($value == '.' || $value == '..') {
-    continue;
-  }
-  preg_match('/update(.*)to(.*).php/', $value, $g);
-  if (!isset($g[2])) {
-    continue;
-  }
-  if (SYSTEM_VER > $g[2] || SYSTEM_VER == $i['opt']['core_version']) {
-    $other = '[ <font color="red">已安装</font> ] ';
-  } else {
-    $other = '';
-  }
-  $v .= "<li>{$other}<a href=\"{$value}\" onclick=\"return confirm('你确定要升级到此版本吗？');\">从 {$g[1]} 升级到 {$g[2]} [ {$value} ]</a></li><br/>";
+    if ($value == '.' || $value == '..') {
+        continue;
+    }
+    preg_match('/update(.*)to(.*).php/', $value, $g);
+    if (!isset($g[2])) {
+        continue;
+    }
+    if (SYSTEM_VER > $g[2] || SYSTEM_VER == $i['opt']['core_version']) {
+        $other = '[ <font color="red">已安装</font> ] ';
+    } else {
+        $other = '';
+    }
+    $v .= "<li>{$other}<a href=\"{$value}\" onclick=\"return confirm('你确定要升级到此版本吗？');\">从 {$g[1]} 升级到 {$g[2]} [ {$value} ]</a></li><br/>";
 }
 ?>
 <!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>软件升级 - 百度贴吧云签到</title><meta name="generator" content="God.Kenvix's Blog (https://kenvix.com) and StusGame (http://www.stusgame.com)" /></head><body><script src="../source/js/jquery.min.js"></script><link rel="stylesheet" href="../source/css/bootstrap.min.css"><script src="../source/js/bootstrap.min.js"></script><style type="text/css">body { font-family:"微软雅黑","Microsoft YaHei";background: #eee; }</style><div class="navbar navbar-default" role="navigation">

@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
+<?php if (!defined('SYSTEM_ROOT')) {
+    die('Insufficient Permissions');
+}
 global $i;
 global $m;
 ?>
@@ -8,8 +10,10 @@ global $m;
 <!-- NAVI -->
 <ul class="nav nav-tabs" id="PageTab">
   <li class="active"><a href="#adminid" data-toggle="tab" onclick="$('#newid2').css('display','none');$('#newid').css('display','none');$('#adminid').css('display','');">管理账号</a></li>
-  <?php if (option::get('bduss_num') != '-1' || ISVIP) { ?><li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');$('#newid2').css('display','none');">扫码绑定</a></li>
-  <li><a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');">手动绑定</a></li><?php } ?>
+  <?php if (option::get('bduss_num') != '-1' || ISVIP) {
+        ?><li><a href="#newid" data-toggle="tab" onclick="$('#newid').css('display','');$('#adminid').css('display','none');$('#newid2').css('display','none');">扫码绑定</a></li>
+  <li><a href="#newid2" data-toggle="tab" onclick="$('#newid2').css('display','');$('#adminid').css('display','none');$('#newid').css('display','none');">手动绑定</a></li>
+  <?php } ?>
 </ul>
 <br/>
 <!-- END NAVI -->
@@ -17,22 +21,33 @@ global $m;
 <!-- PAGE1: ADMINID-->
 <div class="tab-pane fade in active" id="adminid">
 <a name="#adminid"></a>
-<?php if (option::get('bduss_num') == '-1' && ISVIP != true) { ?>
+<?php if (option::get('bduss_num') == '-1' && ISVIP != true) {
+    ?>
 <div class="alert alert-danger" role="alert">
   本站禁止绑定百度账号，当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
 </div>
-<?php } elseif(empty($i['user']['bduss'])) { ?>
+    <?php
+} elseif (empty($i['user']['bduss'])) {
+    ?>
 <div class="alert alert-warning">
   无法显示列表，因为当前还没有绑定任何百度账号
   <br/>若要绑定账号，请点击上方的 [ 绑定新账号 ]
-  <?php if (option::get('bduss_num') != '0' && ISVIP != true) echo '，您最多能够绑定 '.option::get('bduss_num').' 个账号'; ?>
+    <?php if (option::get('bduss_num') != '0' && ISVIP != true) {
+        echo '，您最多能够绑定 ' . option::get('bduss_num') . ' 个账号';
+    } ?>
 </div>
-<?php } else { ?>
+    <?php
+} else {
+    ?>
 <div class="alert alert-info">
   当前已绑定 <?php echo sizeof($i['user']['bduss']) ?> 个账号，PID 即为 账号ID
-  <?php if (option::get('bduss_num') != '0' && ISVIP != true) echo '，您最多能够绑定 '.option::get('bduss_num').' 个账号'; ?>
+    <?php if (option::get('bduss_num') != '0' && ISVIP != true) {
+        echo '，您最多能够绑定 ' . option::get('bduss_num') . ' 个账号';
+    } ?>
 。</div>
-<?php } if(!empty($i['user']['bduss'])) { ?>
+    <?php
+} if (!empty($i['user']['bduss'])) {
+    ?>
 <div class="table-responsive">
 <table class="table table-striped">
   <thead>
@@ -46,21 +61,24 @@ global $m;
     </tr>
   </thead>
   <tbody>
-   <?php
+    <?php
     foreach ($i['user']['bduss'] as $key => $value) {
-      echo '<tr><td>'.$key.'</td>';
-      $name = empty($i['user']['baidu'][$key]) ? '未记录百度ID' : $i['user']['baidu'][$key];
-      if($name == '[E]') $name='<font color="red">已失效</font>';
+        echo '<tr><td>' . $key . '</td>';
+        $name = empty($i['user']['baidu'][$key]) ? '未记录百度ID' : $i['user']['baidu'][$key];
+        if ($name == '[E]') {
+            $name = '<font color="red">已失效</font>';
+        }
       //echo '<td><a href="setting.php?mod=baiduid&reget='.$key.'"">'.$name.'</a></td>';
-      echo '<td>'.$name.'</td><td><input type="text" class="form-control" readonly value="'.$i['user']['baidu_portrait'][$key].'"></td>';
-      echo '<td><input type="text" class="form-control" readonly value="'.$value.'"></td>';
-      echo '<td><input type="text" class="form-control" readonly value="'.$i['user']['stoken'][$key].'"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del='.$key.'">解绑</a></td></tr>';
+        echo '<td>' . $name . '</td><td><input type="text" class="form-control" readonly value="' . $i['user']['baidu_portrait'][$key] . '"></td>';
+        echo '<td><input type="text" class="form-control" readonly value="' . $value . '"></td>';
+        echo '<td><input type="text" class="form-control" readonly value="' . $i['user']['stoken'][$key] . '"></td><td><a class="btn btn-default" href="setting.php?mod=baiduid&del=' . $key . '">解绑</a></td></tr>';
     }
-   ?>
+    ?>
   </tbody>
 </table>
 </div>
-<?php } ?>
+    <?php
+} ?>
 </div>
 <!-- END PAGE1 -->
 
