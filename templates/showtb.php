@@ -42,7 +42,7 @@ if (!empty($i['user']['bduss'])) {
     if (!ISVIP) {
         echo '，您最多可以添加 ' . option::get('tb_max') . ' 个贴吧';
     }
-    echo '，移动设备可能需要左右滑动表格才能显示所有内容<br/>功能：<a onclick="tiebaRef();">刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean" onclick="return confirm(\'你真的要清空所有贴吧吗？\');">清空列表</a>';
+    echo '，移动设备可能需要左右滑动表格才能显示所有内容<br/>功能：<a onclick="refreshTiebaList();">刷新贴吧列表</a> | <a href="setting.php?mod=showtb&clean" onclick="return confirm(\'你真的要清空所有贴吧吗？\');">清空列表</a>';
     if (option::get('enable_addtieba') == 1) {
         echo ' | <a href="javascript:;" data-toggle="modal" data-target="#AddTieba">手动添加贴吧</a>';
     }
@@ -113,31 +113,32 @@ if (!empty($i['user']['bduss'])) {
 </div><!-- /.modal -->
 
 <script>
- function showtbpanel(pid) {
-        $('.tbpanel').css('display','none');
-       $("#tbpidpanel_" + pid).fadeIn(200);
-   }
-  $(document).ready(function(){
-      $(".pidlist:first").addClass('active');
-        $(".tbpanel:first").css('display','');
- });
-    function tiebaRef() {
-      var ds = $('#tb_num');
-     ds.html('正在刷新贴吧列表，可能需要较长时间，请耐心等待...')
-      $.ajax({
-           type      : "GET",
-         url       : 'setting.php?mod=showtb&ref',
-          dataType  : "text",
-            beforeSend: function () {},
-            success   : function (data) {
-              if (data == "1") self.location.reload();
-           },
-         complete  : function (XMLHttpRequest, textStatus) {},
-          error     : function () {
-              self.location.reload();
-            }
-      });
-    }
+function showtbpanel(pid) {
+    $('.tbpanel').css('display', 'none');
+    $("#tbpidpanel_" + pid).fadeIn(200);
+}
+$(document).ready(function() {
+    $(".pidlist:first").addClass('active');
+    $(".tbpanel:first").css('display', '');
+});
+
+function refreshTiebaList() {
+    var ds = $('#tb_num');
+    ds.html('正在刷新贴吧列表，可能需要较长时间，请耐心等待...')
+    $.ajax({
+        type: "GET",
+        url: 'setting.php?mod=showtb&refreshTiebaList',
+        dataType: "text",
+        beforeSend: function() {},
+        success: function(data) {
+            if (data == "1") self.location.reload();
+        },
+        complete: function(XMLHttpRequest, textStatus) {},
+        error: function() {
+            self.location.reload();
+        }
+    });
+}
 </script>
 
 <br/><br/><?php echo SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a>  &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a>
