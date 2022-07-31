@@ -1,7 +1,10 @@
-<?php if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); }
-if (ROLE != 'admin') { msg('权限不足！'); }
+<?php if (!defined('SYSTEM_ROOT')) {
+    die('Insufficient Permissions');
+}
+if (ROLE != 'admin') {
+    msg('权限不足！');
+}
 global $m;
-
 /*
 $cookies = isset($_COOKIE['toolpw']) ? sqladds($_COOKIE['toolpw']) : '';
 $toolpw = option::get('toolpw');
@@ -33,7 +36,7 @@ die;
 */
 doAction('admin_tools_1');
 if (isset($_GET['ok'])) {
-  echo '<div class="alert alert-success">应用成功</div>';
+    echo '<div class="alert alert-success">应用成功</div>';
 }
 ?>
 <div id="comsys"></div>
@@ -98,9 +101,9 @@ if (isset($_GET['ok'])) {
         请选择你要导出的表，按住 Ctrl 可以多选：<br/><br/>
         <select class="form-control" name="tab[]" multiple="" style="height:300px">
         <?php $e = $m->query('SHOW TABLES');
-        $aaa = 'Tables_in_'.DB_NAME;
+        $aaa = 'Tables_in_' . DB_NAME;
         while ($v = $m->fetch_array($e)) {
-          echo '<option value="'.$v[$aaa].'" selected>'.$v[$aaa].'</option>';
+            echo '<option value="' . $v[$aaa] . '" selected>' . $v[$aaa] . '</option>';
         }
         ?>
         </select>
@@ -128,9 +131,9 @@ if (isset($_GET['ok'])) {
         <select class="form-control" name="tab">
         <option value="">请选择</option>
         <?php $e = $m->query('SHOW TABLES');
-        $aaa = 'Tables_in_'.DB_NAME;
+        $aaa = 'Tables_in_' . DB_NAME;
         while ($v = $m->fetch_array($e)) {
-        	echo '<option value="'.$v[$aaa].'">'.$v[$aaa].'</option>';
+            echo '<option value="' . $v[$aaa] . '">' . $v[$aaa] . '</option>';
         }
         ?>
         </select>
@@ -156,9 +159,9 @@ if (isset($_GET['ok'])) {
         <select class="form-control" name="tab">
         <option value="">请选择</option>
         <?php $e = $m->query('SHOW TABLES');
-        $aaa = 'Tables_in_'.DB_NAME;
+        $aaa = 'Tables_in_' . DB_NAME;
         while ($v = $m->fetch_array($e)) {
-          echo '<option value="'.$v[$aaa].'">'.$v[$aaa].'</option>';
+            echo '<option value="' . $v[$aaa] . '">' . $v[$aaa] . '</option>';
         }
         ?>
         </select>

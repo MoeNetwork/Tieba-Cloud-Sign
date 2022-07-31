@@ -1,10 +1,11 @@
 <?php
+
 /**
  * 验证码类
  * Class Captcha
  */
-class Captcha {
-
+class Captcha
+{
     private $charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789'; // 字符集
     private $code; // 验证码文本
     private $length = 4; // 验证码长度
@@ -26,7 +27,7 @@ class Captcha {
         $this->font = SYSTEM_ROOT . '/source/fonts/captcha.ttf';
 
         // 初始化各项参数
-        foreach ($params as $k => $v){
+        foreach ($params as $k => $v) {
             $this->$k = $v;
         }
 
@@ -39,7 +40,7 @@ class Captcha {
     private function createCode()
     {
         $_len = strlen($this->charset) - 1;
-        for ($i = 0; $i < $this->length; $i++){
+        for ($i = 0; $i < $this->length; $i++) {
             $this->code .= $this->charset[mt_rand(0, $_len)];
         }
     }
@@ -63,7 +64,7 @@ class Captcha {
     private function createFont()
     {
         $_x = $this->width / $this->length;
-        for ($i = 0; $i < $this->length; $i++){
+        for ($i = 0; $i < $this->length; $i++) {
             $color = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
             imagettftext($this->img, $this->fontsize, mt_rand(-30, 30), $_x * $i + mt_rand(1, 5), $this->height / 1.4, $color, $this->font, $this->code[$i]);
         }
@@ -77,12 +78,12 @@ class Captcha {
     private function createLine()
     {
         // 线条
-        for ($i = 0; $i < $this->line; $i++){
+        for ($i = 0; $i < $this->line; $i++) {
             $color = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
             imageline($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height), $color);
         }
         // 星号
-        for ($i = 0; $i < $this->star; $i++){
+        for ($i = 0; $i < $this->star; $i++) {
             $color = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
             imagestring($this->img, mt_rand(1, 5), mt_rand(0, $this->width), mt_rand(0, $this->height), '*', $color);
         }
@@ -92,7 +93,8 @@ class Captcha {
     /**
      * 输出图片
      */
-    private function outPut() {
+    private function outPut()
+    {
         header('Content-type:image/png');
         imagepng($this->img);
         imagedestroy($this->img);
@@ -105,13 +107,13 @@ class Captcha {
     {
         $this->createBg()->createLine()->createFont()->outPut();
     }
-	
-	/**
+
+    /**
      * 生成空图
      */
     public function createNoting()
     {
-		$this->img = imagecreatetruecolor($this->width, $this->height);
+        $this->img = imagecreatetruecolor($this->width, $this->height);
         $color = imagecolorallocate($this->img, 255, 251, 240);
         imagefilledrectangle($this->img, 0, $this->height, $this->width, 0, $color);
         $this->outPut();

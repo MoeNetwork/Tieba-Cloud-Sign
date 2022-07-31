@@ -1,39 +1,39 @@
 .container .nav>.active>a, .container .nav>.active:hover>a, .container .nav>.active:focus>a {
-	padding-left: 18px;
-	font-weight: 700;
-	color: #563d7c;
-	background-color: transparent;
-	border-left: 2px solid #563d7c;
+    padding-left: 18px;
+    font-weight: 700;
+    color: #563d7c;
+    background-color: transparent;
+    border-left: 2px solid #563d7c;
 }
 .container .nav>li>a {
-	color: #333;
+    color: #333;
 }
 .bs-callout {
-	padding: 20px;
-	margin: 20px 0;
-	border: 1px solid #DFD8D8;
-	border-left-width: 5px;
-	border-radius: 3px;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #DFD8D8;
+    border-left-width: 5px;
+    border-radius: 3px;
 }
 .bs-callout-info {
-	border-left-color: #5bc0de;
+    border-left-color: #5bc0de;
 }
 .bs-callout-info h4 {
-	color: #5bc0de;
+    color: #5bc0de;
 }
 .bs-callout-warning {
-	border-left-color: #f0ad4e;
+    border-left-color: #f0ad4e;
 }
 .bs-callout-warning h4 {
-	color: #f0ad4e;
+    color: #f0ad4e;
 }
 .bs-callout-danger {
-	border-left-color: #d9534f;
+    border-left-color: #d9534f;
 }
 .bs-callout-danger h4 {
-	color: #d9534f;
+    color: #d9534f;
 }
-.wrap{ 
-	word-wrap: break-word !important; 
-	word-break: break-all !important; 
+.wrap{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
 }
