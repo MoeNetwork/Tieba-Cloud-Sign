@@ -6,6 +6,10 @@ on:
     branches:
       - master
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   IMAGE_NAME: tieba-cloud-sign
 

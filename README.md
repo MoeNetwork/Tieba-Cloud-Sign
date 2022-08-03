@@ -2,6 +2,7 @@
 在服务器上配置好就无需进行任何操作便可以实现贴吧的全自动签到。     
 配合插件使用还可实现云灌水、点赞、封禁、删帖、审查等功能。     
 获取插件，教程，扩展，资料等请前往Wiki [GitHub](https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki)     
+
 **注意**：Gitee (原Git@osc) 仓库将不再维护，目前唯一指定的仓库为 Github。本项目**没有官方交流群**，如需交流可以直接使用Github的Discussions。**没有商业版本**，目前贴吧云签到由社区共同维护，**不会停止更新**（PR 通常在一天内处理）。
 
 
@@ -49,24 +50,37 @@
 （文件名一般为 update旧版本to新版本.php ，例如 update1.0to2.0.php）      
 
 ## 参与开发
+
 贴吧云签到是一个开放的开源项目，任何人均可参与开发，Pull Request即可提交您修改的代码     
-Pull Request和Issue请提交到 Github 代码库，在其他代码库提交可能不会被处理     
-如需加入开发组请联系 @Kenvix
+Pull Request和Issue请提交到 Github 代码库，在其他代码库提交可能不会被处理。所有 PR 通常在一天内答复。     
+
 ### 开发者列表
-#### 主要
-@Kenvix [kenvix@qq.com]     
-#### 协助
+[@Kenvix](https://kenvix.com) [i@kenvix.com]     
+[@BANKA2017](https://blog.nest.moe)       
+[@n0099](https://n0099.net/)
+
+<details>
+  <summary>点击展开更多开发者和贡献者</summary>
+
+#### 早期版本开发者
 @mokeyjay [i@mokeyjay.com]     
 @fyy99 [fyod@qq.com]
+
 #### 热心贡献者
 以下几位反馈/解决了程序的不足之处，特此感谢     
 @Ver4 [i@v4.hk]     
 @kirainmoe [kotori@wo.cn]     
 @VFleaKing [liuhaotian0520@163.com]     
 @superxzr [a457418121@gmail.com]         
-没有商业版！没有商业版！没有商业版！   
+
+[更多贡献者](https://github.com/MoeNetwork/Tieba-Cloud-Sign/graphs/contributors)
+</details>
+
 ### 耻辱柱
-这里列出的是**一小部分**违反协议者的名单
+
+<details>
+  <summary>这里列出的是 **一小部分** 违反协议者的名单</summary>
+
 ##### 1.@shirakun -- 发布去版权版本
 [https://github.com/shirakun/Tieba-Cloud-Sign](https://github.com/shirakun/Tieba-Cloud-Sign)
 ##### 2."CCGV" -- 去版权、辱骂作者
@@ -76,3 +90,5 @@ Pull Request和Issue请提交到 Github 代码库，在其他代码库提交可�
 ##### 4.贴吧:国王zhang -- 去版权+辱骂作者+经提醒之后死性不改和删除提醒
 [http://52king.cn/tieba](http://52king.cn/tieba)
 [http://tieba.baidu.com/p/4822692349](http://tieba.baidu.com/p/4822692349)
+
+</details>
