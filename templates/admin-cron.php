@@ -35,7 +35,7 @@ foreach ($i['cron'] as $cs) {
         $status .= '<br/><a href="javascript:;" onclick="alert(\'' . str_replace('\'', '\\\'', str_replace('"', '&quot;', str_replace("\n", '<br/>', str_replace("\r", '', $cs['log'])))) . '\');">点击查看此任务的日志</a>';
     }
     $status .= '<br/>运行顺序：<input required class="form-control input-sm" style="width:30%; display:inline" type="number" name="order[' . $cs['name'] . ']" value="' . $cs['orde'] . '">';
-    $cron .= '<input type="hidden" value="' . $cs['name'] . '" name="ids[]"><tr><td style="width:30%"><b>' . $cs['name'] . '</b><br/>' . $cs['file'] . '<br/>' . str_replace(array("\n", "\r\n"), '<br/>', $cs['desc']) . '</td><td style="width:30%">' . $freq . '<br/>上次执行：' . $lastdo . '</td><td style="width:40%">' . $status . '</td></tr>';
+    $cron .= '<input type="hidden" value="' . $cs['name'] . '" name="ids[]"><tr><td style="width:30%"><b>' . $cs['name'] . '</b><br/>' . $cs['file'] . '<br/>' . str_replace(array("\n", "\r\n"), '<br/>', $cs['desc'] ? $cs['desc'] : '') . '</td><td style="width:30%">' . $freq . '<br/>上次执行：' . $lastdo . '</td><td style="width:40%">' . $status . '</td></tr>';
 }
 
 if (isset($_GET['ok'])) {
