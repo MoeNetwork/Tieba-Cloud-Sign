@@ -576,25 +576,25 @@ class misc
         $pn     = 1;
         $a      = 0;
         while (true){
-			//if (empty($bid)) break;
-			$rc = self::getTieba2($bduss, $stoken, $pn);//fetch forum list //default 200 per page
-			$rc = json_decode($rc,true);
+            //if (empty($bid)) break;
+            $rc = self::getTieba2($bduss, $stoken, $pn);//fetch forum list //default 200 per page
+            $rc = json_decode($rc,true);
             if(!$rc) {break;}
-			$ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
-			foreach ($ngf as $v){
-				if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
-				$vn  = addslashes(htmlspecialchars($v['forum_name']));
-				$ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
-				if ($ist['c'] == 0){
-					$a ++;
-					$m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
-				}
-			}
-			$pn++;
-			if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
-			    break;
-			}
-		}
+            $ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
+            foreach ($ngf as $v){
+                if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
+                $vn  = addslashes(htmlspecialchars($v['forum_name']));
+                $ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
+                if ($ist['c'] == 0){
+                    $a ++;
+                    $m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
+                }
+            }
+            $pn++;
+            if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
+                break;
+            }
+        }
     }
 
     /**
