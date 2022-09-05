@@ -491,6 +491,7 @@ class misc
     /*
      * 获取指定pid用户userid
      */
+    // out to date
     public static function getUserid($pid)
     {
 
@@ -499,8 +500,9 @@ class misc
         return self::getUseridByPortrait($ub['portrait']);
     }
     /*
-   * 获取指定portrait的userid
+     * 获取指定portrait的userid
      */
+    // out to date
     public static function getUseridByPortrait($portrait)
     {
 
@@ -545,11 +547,11 @@ class misc
         return $rt;
     }
 
-    public static function getTieba2($bduss, $pn = 1)
+    public static function getTieba2($bduss, $stoken, $pn = 1)
     {
 
         $tl = new wcurl("https://tieba.baidu.com/mg/o/getForumHome?st=0&pn={$pn}&rn=200", ['User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36']);
-        $tl->addCookie(array('BDUSS' => $bduss));
+        $tl->addCookie(array('BDUSS' => $bduss, 'STOKEN' => $stoken));
         return $tl->get();
     }
 
@@ -566,39 +568,32 @@ class misc
         $table  = self::getTable($uid);
         $tb     = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` WHERE `uid` = {$uid}"));
         $bduss  = $cma['bduss'];
+        $stoken = $cma['stoken'];
         $isvip  = self::isvip($uid);
         $pid    = $cma['id'];
-        $bid    = self::getUserid($pid);
+        //$bid    = self::getUserid($pid);
         $o      = option::get('tb_max');
         $pn     = 1;
         $a      = 0;
-        while (true) {
-            if (empty($bid)) {
-                break;
-            }
-            $rc     = self::getTieba($bid, $bduss, $pn);
-            $rc     = json_decode($rc, true);
-            $ngf    = $rc['forum_list']['non-gconforum'];
-            if (isset($rc['forum_list']['gconforum'])) {
-                foreach ($rc['forum_list']['gconforum'] as $v) {
-                    $ngf[] = $v;
+        while (true){
+            //if (empty($bid)) break;
+            $rc = self::getTieba2($bduss, $stoken, $pn);//fetch forum list //default 200 per page
+            $rc = json_decode($rc,true);
+            if(!$rc) {break;}
+            $ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
+            foreach ($ngf as $v){
+                if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) break;
+                $vn  = addslashes(htmlspecialchars($v['forum_name']));
+                $ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `".DB_NAME."`.`".DB_PREFIX.$table."` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
+                if ($ist['c'] == 0){
+                    $a ++;
+                    $m->query("INSERT INTO `".DB_NAME."`.`".DB_PREFIX.$table."` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
                 }
-            }
-            foreach ($ngf as $v) {
-                if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) {
-                    break;
-                }
-                $vn  = addslashes(htmlspecialchars($v['name']));
-                $ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
-                if ($ist['c'] == 0) {
-                    $a++;
-                    $m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['id']}', {$uid}, '{$vn}');");
-                }
-            }
-            if (!isset($rc["has_more"]) || $rc["has_more"] === "0") {
-                break;
             }
             $pn++;
+            if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
+                break;
+            }
         }
     }
 
