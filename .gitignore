@@ -1,4 +1,3 @@
 .idea/
 setup/install.lock
-plugins/
 !plugins/wmzz_debug
