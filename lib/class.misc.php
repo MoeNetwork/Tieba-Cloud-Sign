@@ -149,7 +149,7 @@ class misc
         } else {
             $ch = new wcurl('http://tieba.baidu.com/f/commit/share/fnameShareApi?ie=utf-8&fname=' . urlencode($kw), array('User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1','Referer: http://tieba.baidu.com/'));
             $r = json_decode($ch->exec(), true);
-            return $r['no'] === '0' ? $r['data']['fid'] : false;
+            return $r['no'] === 0 ? $r['data']['fid'] : false;
         }
     }
 
