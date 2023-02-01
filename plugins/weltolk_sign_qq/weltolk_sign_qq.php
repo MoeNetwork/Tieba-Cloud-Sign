@@ -52,4 +52,3 @@ $weltolk_sign_qq_report_url = SYSTEM_URL . 'index.php?pub_plugin=weltolk_sign_qq
     addAction('navi_3', 'weltolk_sign_qq_set_navi3');
     addAction('set_2', 'weltolk_sign_qq_setting');
     ?>
-</tr>
