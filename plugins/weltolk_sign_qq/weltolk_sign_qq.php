@@ -23,6 +23,7 @@ $weltolk_sign_qq_report_url = SYSTEM_URL . 'index.php?pub_plugin=weltolk_sign_qq
         <a href="<?php echo $weltolk_sign_qq_report_url; ?>" target="_blank">点击查看</a>（有效期至<span
                 style="padding: 2px 4px;color: #c7254e;background-color: #f9f2f4;border-radius: 4px;"><?php echo date('Y-m-d 23:59:59'); ?></span>）
     </td>
+</tr>
     <?php
     }
 
