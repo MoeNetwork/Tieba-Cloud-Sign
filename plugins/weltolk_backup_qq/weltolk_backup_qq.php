@@ -15,7 +15,8 @@ For: V3.8+
 function weltolk_backup_qq_set_navi3()
 {
     ?>
-    <li><a href="index.php?mod=admin:setplug&plug=weltolk_backup_qq"><span class="glyphicon glyphicon-ban-circle"></span> 每日数据库备份qq推送管理</a>
+    <li><a href="index.php?mod=admin:setplug&plug=weltolk_backup_qq"><span
+                    class="glyphicon glyphicon-ban-circle"></span> 每日数据库备份qq推送管理</a>
     </li>
     <?php
 }
@@ -23,4 +24,3 @@ function weltolk_backup_qq_set_navi3()
 //addAction('set_save1', 'weltolk_backup_qq_set');
 addAction('navi_3', 'weltolk_backup_qq_set_navi3');
 ?>
-</tr>
