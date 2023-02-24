@@ -105,7 +105,7 @@ class WebSocketClient
         $this->protocol = $uriData['scheme'];
         $this->host = $uriData['host'];
 
-        if ($uriData['port']) {
+        if ($uriData['port'] ?? 默认值) {
             $this->port = (int)$uriData['port'];
         } else {
             if ($this->protocol == self::PROTOCOL_WSS) {
