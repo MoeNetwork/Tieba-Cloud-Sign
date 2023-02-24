@@ -114,11 +114,8 @@ class WebSocketClient
                 $this->port = 80;
             }
         }
-        $this->path = $uriData['path'] ?: '/';
-        if ($uriData['query']) {
-            $this->path .= '?' . $uriData['query'];
-        }
-        if ($uriData['fragment']) {
+        $this->path = ($uriData['path'] ?? '/') . '?' . ($uriData['query'] ?? '');
+        if (array_key_exists('fragment', $uriData)) {
             $this->path .= '#' . $uriData['fragment'];
         }
     }
