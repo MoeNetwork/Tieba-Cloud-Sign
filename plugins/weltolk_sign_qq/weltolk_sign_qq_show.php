@@ -14,7 +14,7 @@ if (!$is_open) {
         $is_open = false;
     }
 }
-$page = $_GET['page'];
+$page = $_GET['page'] ?? '';
 if ($page == 'user_settings') {
     $act = $_GET['act'];
 
