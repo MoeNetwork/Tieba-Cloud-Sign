@@ -11,7 +11,7 @@ $enable = option::get('weltolk_backup_qq_enable');
 $log = option::get('weltolk_backup_qq_log');
 
 global $i, $m;
-$page = $_GET['page'];
+$page = isset($_GET['page']) ? $_GET['page'] : '';
 if ($page == 'user_settings') {
     $act = $_GET['act'];
 
