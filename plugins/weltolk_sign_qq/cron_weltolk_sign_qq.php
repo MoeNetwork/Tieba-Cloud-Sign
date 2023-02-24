@@ -63,9 +63,9 @@ function cron_weltolk_sign_qq()
                         $msg_body .= $style_prefix
                             . ' ' . ($i['user']['baidu'][$tieba['pid']])
                             . ' 账号的 ' . $tieba['tieba'] . ' 吧: '
-                            . $status_str . '\n'
+                            . $status_str . "\n"
                             . $style_prefix . ' 详细信息: ' . $msg
-                            . '\n\n';
+                            . "\n\n";
                     }
                 }
                 if (empty($tieba_count)) {
