@@ -105,7 +105,7 @@ class weltolk_backup_qq_WebSocketClient
         $this->protocol = $uriData['scheme'];
         $this->host = $uriData['host'];
 
-        if ($uriData['port']) {
+        if (isset($uriData['port']) && $uriData['port']) {
             $this->port = (int)$uriData['port'];
         } else {
             if ($this->protocol == self::PROTOCOL_WSS) {
