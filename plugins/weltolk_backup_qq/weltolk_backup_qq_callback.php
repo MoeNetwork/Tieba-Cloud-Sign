@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 function callback_init()
@@ -50,7 +52,6 @@ function callback_inactive()
 {
     //cron_tab setting
     cron::del('weltolk_backup_qq');
-
 }
 
 function callback_remove()
@@ -64,5 +65,3 @@ function callback_remove()
     $m->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "weltolk_backup_qq_connect`");
     $m->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "weltolk_backup_qq_target`");
 }
-
-?>

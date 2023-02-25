@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -10,18 +12,15 @@ function cron_weltolk_backup_qq()
     }
 
     require_once "weltolk_backup_qq_websocket.php";
-
     global $m;
     $limit = option::get('weltolk_backup_qq_limit');
     $enable = option::get('weltolk_backup_qq_enable');
     $is_open = $enable == "on";
-
     $today = date('Y-m-d');
     $now = time();
     $hour = date('H');
     $y = $m->query("SELECT * FROM `" . DB_PREFIX . "weltolk_backup_qq_target` WHERE `nextdo` <= '{$now}' LIMIT {$limit}");
     $log = "";
-
     $e = $m->query('SHOW TABLES');
     $dump = '/*' . PHP_EOL;
     $dump .= 'Warning: Do not change the comments!!!' . PHP_EOL . PHP_EOL;
@@ -47,7 +46,7 @@ function cron_weltolk_backup_qq()
         . "plugins" . DIRECTORY_SEPARATOR . "weltolk_backup_qq"
         . DIRECTORY_SEPARATOR;
     $file_name_length = 18;
-    //字符组合
+//字符组合
     $str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $len = strlen($str) - 1;
     for ($i = 0; $i < $file_name_length; $i++) {
@@ -55,25 +54,20 @@ function cron_weltolk_backup_qq()
         $file_name .= $str[$num];
     }
     $file_name .= ".cache";
-
     file_put_contents($file_name, $dump);
-
     while ($x = $m->fetch_array($y)) {
         if ($is_open) {
             if ($hour >= $x['hour']) {
                 $y2 = $m->query("SELECT * FROM `" . DB_PREFIX . "weltolk_backup_qq_connect` WHERE `id` = '{$x['connect_id']}' LIMIT 1");
                 $x2 = $m->fetch_array($y2);
                 $sign = "sign" . mt_rand(1000, 9999);
-
                 $text = $today . " 备份文件已附上,请查看文件: ";
                 $msg_dict = [];
                 if ($x2['client'] == 'go-cqhttp') {
                     $access_token = $x2['access_token'];
-
                     if ($x2['connect_type'] == '正向WebSocket') {
                         $headers = [];
                         if (empty($access_token)) {
-
                         } else {
                             $headers = ["Authorization: Bearer " . $access_token];
                         }
@@ -85,7 +79,6 @@ function cron_weltolk_backup_qq()
                             ],
                             "echo" => $sign,
                         ];
-
                         $msg_dict["file"] = [
                             "action" => "",
                             "params" => [
@@ -93,31 +86,28 @@ function cron_weltolk_backup_qq()
                             ],
                             "echo" => $sign,
                         ];
-
                         if ($x['type'] == '群') {
                             $msg_dict["text"]["params"]["message_type"] = "group";
                             $msg_dict["text"]["params"]["group_id"] = $x['type_id'];
                             $msg_dict["file"]["action"] = "upload_group_file";
                             $msg_dict["file"]["params"]["group_id"] = $x['type_id'];
-
                             $folder_id = "";
                             $path = $x["path"];
-                            if (empty($path)
-                                || $path == "/") {
+                            if (
+                                empty($path)
+                                || $path == "/"
+                            ) {
                                 $text .= $message_file_name;
                             } else {
                                 $text .= $path . '/' . $message_file_name;
-                                $get_root_folder = json_encode(
-                                    [
+                                $get_root_folder = json_encode([
                                         "action" => "get_group_root_files",
                                         "params" => [
                                             "group_id" => $x["type_id"],
                                         ],
                                         "echo" => $sign,
-                                    ]
-                                );
-                                $create_root_folder = json_encode(
-                                    [
+                                    ]);
+                                $create_root_folder = json_encode([
                                         "action" => "create_group_file_folder",
                                         "params" => [
                                             "group_id" => $x["type_id"],
@@ -125,57 +115,67 @@ function cron_weltolk_backup_qq()
                                             "parent_id	" => "/",
                                         ],
                                         "echo" => $sign,
-                                    ]
-                                );
-
+                                    ]);
                                 try {
-                                    $ws = new weltolk_backup_qq_WebSocketClient($x2["address"], $headers);
-//                            var_dump($ws->ping());
+                                        $ws = new weltolk_backup_qq_WebSocketClient($x2["address"], $headers);
+                                        //                            var_dump($ws->ping());
                                     $ws->ping();
-                                    $ws->send($get_root_folder);
-                                    $frame = $ws->recv();
-                                    //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
-//                            var_dump($ws->close());
+                                        $ws->send($get_root_folder);
+                                        $frame = $ws->recv();
+                                        //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
+                                        //                            var_dump($ws->close());
                                     $ws->close();
                                     $result_json = json_decode(
-                                        str_replace(": None", ": []"
-                                            , trim($frame->playload)), true);
-                                    $cache_folders = $result_json["data"]["folders"];
-                                    if ($result_json["echo"] == $sign
-                                        && $result_json["retcode"] == 0
-                                        && $result_json["status"] == "ok") {
+                                        str_replace(
+                                            ": None",
+                                            ": []",
+                                            trim($frame->playload)
+                                        ),
+                                        true
+                                    );
+                                                    $cache_folders = $result_json["data"]["folders"];
+                                    if (
+                                                        $result_json["echo"] == $sign
+                                                        && $result_json["retcode"] == 0
+                                                        && $result_json["status"] == "ok"
+                                    ) {
                                         foreach ($cache_folders as $cache_folders_i) {
                                             if ($cache_folders_i["folder_name"] == $path) {
                                                 $folder_id = $cache_folders_i["folder_id"];
                                             }
                                         }
                                         if (empty($folder_id)) {
-
                                             $ws = new weltolk_backup_qq_WebSocketClient($x2["address"], $headers);
-//                            var_dump($ws->ping());
+                                //                            var_dump($ws->ping());
                                             $ws->ping();
                                             $ws->send($create_root_folder);
                                             $frame = $ws->recv();
-                                            //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
-//                            var_dump($ws->close());
+                                //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
+                                //                            var_dump($ws->close());
                                             $ws->close();
                                             $result_json = json_decode(trim($frame->playload), true);
-
                                             $ws = new weltolk_backup_qq_WebSocketClient($x2["address"], $headers);
-//                            var_dump($ws->ping());
+                                //                            var_dump($ws->ping());
                                             $ws->ping();
                                             $ws->send($get_root_folder);
                                             $frame = $ws->recv();
-                                            //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
-//                            var_dump($ws->close());
+                                //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
+                                //                            var_dump($ws->close());
                                             $ws->close();
                                             $result_json = json_decode(
-                                                str_replace(": None", ": []"
-                                                    , trim($frame->playload)), true);
+                                                str_replace(
+                                                    ": None",
+                                                    ": []",
+                                                    trim($frame->playload)
+                                                ),
+                                                true
+                                            );
                                             $cache_folders = $result_json["data"]["folders"];
-                                            if ($result_json["echo"] == $sign
+                                            if (
+                                                $result_json["echo"] == $sign
                                                 && $result_json["retcode"] == 0
-                                                && $result_json["status"] == "ok") {
+                                                && $result_json["status"] == "ok"
+                                            ) {
                                                 foreach ($cache_folders as $cache_folders_i) {
                                                     if ($cache_folders_i["folder_name"] == $path) {
                                                         $folder_id = $cache_folders_i["folder_id"];
@@ -189,70 +189,68 @@ function cron_weltolk_backup_qq()
                                                     continue;
                                                 }
                                             } else {
-                                                $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "创建后获取根目录"
-                                                    . "\n";
-                                                continue;
+                                                            $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
+                                                            . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                                            . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "创建后获取根目录"
+                                                            . "\n";
+                                                            continue;
                                             }
                                         }
                                     } else {
                                         $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                            . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                            . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "获取根目录"
-                                            . "\n";
+                                        . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                        . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "获取根目录"
+                                        . "\n";
                                         continue;
                                     }
                                 } catch (\Exception $e) {
-                                    echo "错误: ";
-                                    var_dump($e->__toString());
-                                    $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
+                                            echo "错误: ";
+                                            var_dump($e->__toString());
+                                            $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
                                         . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
                                         . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "目录处理"
                                         . "\n";
-                                    continue;
+                                            continue;
                                 }
                             }
                             if (!empty($folder_id)) {
                                 $msg_dict["file"]["params"]["folder"] = $folder_id;
                             }
-
-                        } else if ($x['type'] == '私聊') {
+                        } elseif ($x['type'] == '私聊') {
                             $text .= $message_file_name;
                             $msg_dict["text"]["params"]["message_type"] = "private";
                             $msg_dict["text"]["params"]["user_id"] = $x['type_id'];
                             $msg_dict["file"]["action"] = "upload_private_file";
                             $msg_dict["file"]["params"]["user_id"] = $x['type_id'];
-
                         } else {
-                            continue;
+                                continue;
                         }
                         $msg_dict["file"]["params"]["name"] = $message_file_name;
                         $msg_dict["file"]["params"]["file"] = $file_name;
-
                         $msg_dict["text"]["params"]["message"] = $text;
-
                         $send_status = false;
                         foreach ($msg_dict as $msg_dict_i_key => $msg_dict_i_value) {
                             try {
                                 $send_json = json_encode($msg_dict_i_value);
                                 $ws = new weltolk_backup_qq_WebSocketClient($x2["address"], $headers);
-//                            var_dump($ws->ping());
+                //                            var_dump($ws->ping());
                                 $ws->ping();
                                 $ws->send($send_json);
                                 $frame = $ws->recv();
-                                //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
-//                            var_dump($ws->close());
+                //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
+                //                            var_dump($ws->close());
                                 $ws->close();
                                 $result_json = json_decode(trim($frame->playload), true);
-                                if ($result_json["echo"] == $sign
+                                if (
+                                    $result_json["echo"] == $sign
                                     && $result_json["retcode"] == 0
-                                    && $result_json["status"] == "ok") {
-                                    $send_status = true;
-                                    $log .= $today . " 成功 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                        . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                        . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
-                                        . "\n";
+                                    && $result_json["status"] == "ok"
+                                ) {
+                                        $send_status = true;
+                                        $log .= $today . " 成功 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
+                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
+                                    . "\n";
                                 } else {
                                     $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
                                         . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
@@ -266,84 +264,82 @@ function cron_weltolk_backup_qq()
                             usleep(250000);
                         }
                         if ($send_status) {
-                            $next = strtotime($today) + 86400 + $x['hour'] * 3600;
-                            $m->query("UPDATE `" . DB_PREFIX . "weltolk_backup_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
+                                $next = strtotime($today) + 86400 + $x['hour'] * 3600;
+                                $m->query("UPDATE `" . DB_PREFIX . "weltolk_backup_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
                         }
-                    } else if ($x2['connect_type'] == 'HTTP API') {
+                    } elseif ($x2['connect_type'] == 'HTTP API') {
                         $url = substr($x2["address"], -1) == "/"
-                            ? substr($x2["address"], 0, -1)
-                            : $x2["address"];
+                        ? substr($x2["address"], 0, -1)
+                        : $x2["address"];
                         $msg_url = $url . "/send_msg";
                         $file_url = $url;
-
                         $headers = [];
                         if (empty($access_token)) {
-
                         } else {
                             $headers = [
-                                "Content-Type" => "application/json",
-                                "Authorization" => "Bearer " . $access_token,
+                            "Content-Type" => "application/json",
+                            "Authorization" => "Bearer " . $access_token,
                             ];
                         }
 
                         // go-cqhttp HTTP API post 未支持echo
-//                        "echo" => $sign,
+            //                        "echo" => $sign,
 
                         $msg_dict["text"] = [
-                            "url" => $msg_url,
-                            "data" => [
+                        "url" => $msg_url,
+                        "data" => [
 
-                            ]
+                        ]
 
                         ];
-
                         $msg_dict["file"] = [
-                            "url" => "",
-                            "data" => [
+                        "url" => "",
+                        "data" => [
 
-                            ]
+                        ]
 
                         ];
-
                         if ($x['type'] == '群') {
-                            $msg_dict["text"]["data"]["message_type"] = "group";
-                            $msg_dict["text"]["data"]["group_id"] = $x['type_id'];
-                            $msg_dict["file"]["url"] = $file_url . "/upload_group_file";
-                            $msg_dict["file"]["data"]["group_id"] = $x['type_id'];
-
-                            $folder_id = "";
-                            $path = $x["path"];
-                            if (empty($path)
-                                || $path == "/") {
+                                $msg_dict["text"]["data"]["message_type"] = "group";
+                                $msg_dict["text"]["data"]["group_id"] = $x['type_id'];
+                                $msg_dict["file"]["url"] = $file_url . "/upload_group_file";
+                                $msg_dict["file"]["data"]["group_id"] = $x['type_id'];
+                                $folder_id = "";
+                                $path = $x["path"];
+                            if (
+                                    empty($path)
+                                || $path == "/"
+                            ) {
                                 $text .= $message_file_name;
                             } else {
                                 $text .= $path . '/' . $message_file_name;
                                 $get_url = $url . "get_group_root_files";
                                 $create_url = $url . "create_group_file_folder";
-
-                                $get_root_folder = json_encode(
-                                    [
-                                        "group_id" => $x["type_id"],
-                                    ]
-                                );
-                                $create_root_folder = json_encode(
-                                    [
-                                        "group_id" => $x["type_id"],
-                                        "name" => $path,
-                                        "parent_id	" => "/",
-                                    ]
-                                );
-
+                                $get_root_folder = json_encode([
+                                    "group_id" => $x["type_id"],
+                                ]);
+                                $create_root_folder = json_encode([
+                                    "group_id" => $x["type_id"],
+                                    "name" => $path,
+                                    "parent_id	" => "/",
+                                ]);
                                 try {
-                                    $c = new wcurl($get_url, $headers);
-                                    $c->setTimeOut(5000);
-                                    $res = $c->post($get_root_folder);
+                                            $c = new wcurl($get_url, $headers);
+                                            $c->setTimeOut(5000);
+                                            $res = $c->post($get_root_folder);
                                     $result_json = json_decode(
-                                        str_replace(": None", ": []"
-                                            , trim($res)), true);
-                                    $cache_folders = $result_json["data"]["folders"];
-                                    if ($result_json["retcode"] == 0
-                                        && $result_json["status"] == "ok") {
+                                        str_replace(
+                                            ": None",
+                                            ": []",
+                                            trim($res)
+                                        ),
+                                        true
+                                    );
+                                            $cache_folders = $result_json["data"]["folders"];
+                                    if (
+                                                    $result_json["retcode"] == 0
+                                                            && $result_json["status"] == "ok"
+                                    ) {
                                         foreach ($cache_folders as $cache_folders_i) {
                                             if ($cache_folders_i["folder_name"] == $path) {
                                                 $folder_id = $cache_folders_i["folder_id"];
@@ -354,19 +350,30 @@ function cron_weltolk_backup_qq()
                                             $c->setTimeOut(5000);
                                             $res = $c->post($create_root_folder);
                                             $result_json = json_decode(
-                                                str_replace(": None", ": []"
-                                                    , trim($res)), true);
-
+                                                str_replace(
+                                                    ": None",
+                                                    ": []",
+                                                    trim($res)
+                                                ),
+                                                true
+                                            );
                                             $c = new wcurl($get_url, $headers);
                                             $c->setTimeOut(5000);
                                             $res = $c->post($get_root_folder);
                                             $result_json = json_decode(
-                                                str_replace(": None", ": []"
-                                                    , trim($res)), true);
+                                                str_replace(
+                                                    ": None",
+                                                    ": []",
+                                                    trim($res)
+                                                ),
+                                                true
+                                            );
                                             $cache_folders = $result_json["data"]["folders"];
-                                            if ($result_json["echo"] == $sign
+                                            if (
+                                                $result_json["echo"] == $sign
                                                 && $result_json["retcode"] == 0
-                                                && $result_json["status"] == "ok") {
+                                                && $result_json["status"] == "ok"
+                                            ) {
                                                 foreach ($cache_folders as $cache_folders_i) {
                                                     if ($cache_folders_i["folder_name"] == $path) {
                                                         $folder_id = $cache_folders_i["folder_id"];
@@ -374,78 +381,74 @@ function cron_weltolk_backup_qq()
                                                 }
                                                 if (empty($folder_id)) {
                                                     $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                                        . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                                        . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "根目录创建后仍未空"
-                                                        . "\n";
+                                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "根目录创建后仍未空"
+                                                    . "\n";
                                                     continue;
                                                 }
                                             } else {
                                                 $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "创建后获取根目录"
-                                                    . "\n";
+                                                . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                                . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "创建后获取根目录"
+                                                . "\n";
                                                 continue;
                                             }
                                         }
                                     } else {
                                         $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                            . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                            . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "获取根目录"
-                                            . "\n";
-                                        continue;
-                                    }
-                                } catch (\Exception $e) {
-                                    echo "错误: ";
-                                    var_dump($e->__toString());
-                                    $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
                                         . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
                                         . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "获取根目录"
                                         . "\n";
-                                    continue;
+                                        continue;
+                                    }
+                                } catch (\Exception $e) {
+                                        echo "错误: ";
+                                        var_dump($e->__toString());
+                                        $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
+                                        . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                        . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . "获取根目录"
+                                        . "\n";
+                                        continue;
                                 }
                             }
                             if (!empty($folder_id)) {
                                 $msg_dict["file"]["data"]["folder"] = $folder_id;
                             }
-
-                        } else if ($x['type'] == '私聊') {
+                        } elseif ($x['type'] == '私聊') {
                             $text .= $message_file_name;
                             $msg_dict["text"]["data"]["message_type"] = "private";
                             $msg_dict["text"]["data"]["user_id"] = $x['type_id'];
                             $msg_dict["file"]["url"] = $file_url . "/upload_private_file";
                             $msg_dict["file"]["data"]["user_id"] = $x['type_id'];
-
                         } else {
                             continue;
                         }
-                        $msg_dict["file"]["data"]["name"] = $message_file_name;
-                        $msg_dict["file"]["data"]["file"] = $file_name;
-
-                        $msg_dict["text"]["data"]["message"] = $text;
-
-                        $send_status = false;
+                            $msg_dict["file"]["data"]["name"] = $message_file_name;
+                            $msg_dict["file"]["data"]["file"] = $file_name;
+                            $msg_dict["text"]["data"]["message"] = $text;
+                            $send_status = false;
                         foreach ($msg_dict as $msg_dict_i_key => $msg_dict_i_value) {
                             $send_json = json_encode($msg_dict_i_value["data"]);
-
                             $c = new wcurl($msg_dict_i_value["url"], $headers);
                             $c->setTimeOut(5000);
                             $res = $c->post($send_json);
-                            $res = json_decode($res, TRUE);
-                            if ($res['retcode'] == 0
-                                && $res['status'] == 'ok'
-                                // go-cqhttp HTTP API post 未支持echo
-//                        && $res['echo'] == $sign
+                            $res = json_decode($res, true);
+                            if (
+                                $res['retcode'] == 0
+                                            && $res['status'] == 'ok'
+                                            // go-cqhttp HTTP API post 未支持echo
+                                //                        && $res['echo'] == $sign
                             ) {
                                 $send_status = true;
                                 $log .= $today . " 成功 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
-                                    . "\n";
+                                . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
+                                . "\n";
                             } else {
                                 $log .= $today . " 失败 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
-                                    . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
-                                    . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
-                                    . "\n";
+                                . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
+                                . " 的消息: " . $x["type"] . " " . $x["type_id"] . " " . $message_file_name . "(" . $file_name . ")"
+                                . "\n";
                             }
 
                             usleep(250000);
@@ -454,14 +457,12 @@ function cron_weltolk_backup_qq()
                             $next = strtotime($today) + 86400 + $x['hour'] * 3600;
                             $m->query("UPDATE `" . DB_PREFIX . "weltolk_backup_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
                         }
-
                     } else {
                         continue;
                     }
                 } else {
                     continue;
                 }
-
             } else {
                 $next = strtotime($today) + $x['hour'] * 3600;
                 $m->query("UPDATE `" . DB_PREFIX . "weltolk_backup_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
