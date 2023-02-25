@@ -1,6 +1,4 @@
-<?php
-
-if (!defined('SYSTEM_ROOT')) {
+<?php if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -15,6 +13,7 @@ function ver4_rank_nav()
 
 addAction('navi_1', 'ver4_rank_nav');
 addAction('navi_7', 'ver4_rank_nav');
+
 function dorank($bduss, $fid, $nid)
 {
     $tbs = misc::getTbs(0, $bduss);

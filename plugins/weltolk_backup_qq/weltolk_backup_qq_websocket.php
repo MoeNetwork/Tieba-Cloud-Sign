@@ -139,6 +139,7 @@ class weltolk_backup_qq_WebSocketClient
         );
 
         if (!$this->sock) {
+
             if ($errstr) {
                 throw new weltolk_backup_qq_ServerConnectException('连接ws服务器失败：' . $errstr, $errno);
             }
@@ -502,6 +503,7 @@ class weltolk_backup_qq_WebSocketClient
     {
         $dataFrame = $this->readFrame();
         switch ($dataFrame->opcode) {
+
             case self::OPCODE_PING:
                 $this->pong();
                 break;

@@ -1,6 +1,4 @@
-<?php
-
-if (!defined('SYSTEM_ROOT')) {
+<?php if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 //没有标注必填的，都是选填，但是按照规范，请保留该键，只需将值留空即可

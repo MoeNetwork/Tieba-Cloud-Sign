@@ -1,6 +1,4 @@
-<?php
-
-if (!defined('SYSTEM_ROOT')) {
+<?php if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -15,6 +13,8 @@ function ver4_ban_nav()
 
 addAction('navi_1', 'ver4_ban_nav');
 addAction('navi_7', 'ver4_ban_nav');
+
+
 /*
  * 执行封禁操作 网页
  * */
@@ -51,7 +51,7 @@ function ver4_ban($pid, $portrait, $name, $name_show, $tieba, $reason, int $day 
 /*
  * 执行封禁操作 客户端
  * */
-function ver4_ban_client($pid, $portrait, $name, $tieba, $reason, int $day = 1)
+function ver4_ban_client ($pid, $portrait, $name, $tieba, $reason, int $day = 1)
 {
     $bduss = misc::getCookie($pid);
     $r = empty($reason) ? '您因为违反吧规，已被吧务封禁，如有疑问请联系吧务！' : $reason;
@@ -95,8 +95,10 @@ function ver4_get_manager_web_backstage($pid, string $tieba_name)
         $tl->set(CURLOPT_CONNECTTIMEOUT, 3);
         $rt = $tl->get();
         $tl->close();
-    //遍码转换
+
+        //遍码转换
         $rt = mb_convert_encoding($rt, "utf-8", "gbk");
+
         return $rt;
     } catch (Exception $exception) {
         return '';
@@ -104,17 +106,13 @@ function ver4_get_manager_web_backstage($pid, string $tieba_name)
 }
 
 //某个pid下帐号是否为吧务
-function ver4_is_manager($pid, string $tieba_name): array
-{
-
+function ver4_is_manager($pid, string $tieba_name): array {
     return [
         "isManager" => (bool)preg_match('/<p class="forum_list_position">([^<]+)<\/p>/', ver4_get_manager_web_backstage($pid, $tieba_name), $managerType),
         "managerType" => empty($managerType[1]) ? "" : $managerType[1],
     ];
 }
-function ver4_ban_get_userinfo_by_words($word): array
-{
-
+function ver4_ban_get_userinfo_by_words ($word) :array {
     $getInfo = json_decode((new wcurl("https://tieba.baidu.com/mo/q/search/user?word={$word}", ['User-Agent: tieba/12.5.1']))->get(), true);
     $userInfo = [];
     if (isset($getInfo["data"]["exactMatch"]["id"])) {
@@ -141,9 +139,7 @@ function ver4_ban_get_userinfo_by_words($word): array
 }
 
 //生成封禁列表
-function ver4_ban_global_ban_list_generate(array $i, $m): array
-{
-
+function ver4_ban_global_ban_list_generate (array $i, $m):array {
     $globalBanList = [];
     foreach ($i["user"]["baidu"] as $userId => $userBaiduName) {
         $globalBanList[$userId] = [

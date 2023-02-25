@@ -38,52 +38,52 @@ if (isset($_GET["api"])) {
                 $pid = isset($_POST['pid']) ? sqladds($_POST['pid']) : '';
                 $user = isset($_POST['user']) ? sqladds($_POST['user']) : '';
                 $tieba = isset($_POST['tieba']) ? sqladds($_POST['tieba']) : '';
-
+            
                 //判定吧务权限
                 if (option::get('ver4_ban_break_check') === '0' && !ver4_is_manager($pid, $tieba)["isManager"]) {
                     $apiReturnArray["message"] = "您不是 {$tieba}吧 的吧务";
                 }
-
+            
                 $rts = isset($_POST['rts']) && !empty($_POST['rts']) ? sqladds($_POST['rts']) : date('Y-m-d');
                 $rte = isset($_POST['rte']) ? sqladds($_POST['rte']) : '2026-12-31';
-
+            
                 $sy = (int)substr($rts, 0, 4);//取得年份
                 $sm = (int)substr($rts, 5, 2);//取得月份
                 $sd = (int)substr($rts, 8, 2);//取得日期
                 $stime = mktime(0, 0, 0, $sm, $sd, $sy);
-
+            
                 $ey = (int)substr($rte, 0, 4);//取得年份
                 $em = (int)substr($rte, 5, 2);//取得月份
                 $ed = (int)substr($rte, 8, 2);//取得日期
                 $etime = mktime(0, 0, 0, $em, $ed, $ey);
-
+            
                 if (empty($pid) || empty($user) || empty($tieba)) {
                     $apiReturnArray["message"] = "信息不完整，添加失败";
                     break;
                 }
-
+            
                 if ($stime > 1988150400 || $etime > 1988150400 || $stime < 0 || $etime < 0) {
                     $apiReturnArray["message"] = "开始或者结束时间格式不正确";
                     break;
                 }
-
+            
                 if (date('Y-m-d', $stime) != $rts || date('Y-m-d', $etime) != $rte) {
                     $apiReturnArray["message"] = "开始或者结束时间格式不正确";
                     break;
                 }
-
+            
                 if ($stime > $etime) {
                     $apiReturnArray["message"] = "开始时间不能大于结束时间";
                     break;
                 }
-
+            
                 global $m;
                 $p = $m->fetch_array($m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `id` = '{$pid}'"));
                 if ($p['uid'] != UID) {
                     $apiReturnArray["message"] = "你不能替他人添加帖子";
                     break;
                 }
-
+            
                 $limit = option::get('ver4_ban_limit');
                 $t = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `uid` = {$uid}"));
                 if ($t['c'] >= $limit) {
@@ -328,7 +328,7 @@ if (isset($_GET['newuser'])) {
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
         <?php
         foreach ($globalBanList as $order => $list) {
-            echo '<li role="presentation" class="' . ($order === array_keys($globalBanList)[0] ? 'active' : '') . '"><a href="#b' . $order . '" role="tab" data-toggle="tab">' . $list['name'] . '</a></li>';
+            echo '<li role="presentation" class="' . ($order === array_keys($globalBanList)[0] ? 'active' : '') . '"><a href="#b' . $order .'" role="tab" data-toggle="tab">' . $list['name'] . '</a></li>';
         }
         ?>
     </ul>
@@ -338,7 +338,7 @@ if (isset($_GET['newuser'])) {
         foreach ($globalBanList as $order => $list) {?>
         <div role="tabpanel" class="tab-pane fade <?= ($order === array_keys($globalBanList)[0] ? 'active in' : '') ?>" id="b<?= $order ?>">
             <?php
-            if (count($list["list"]) === 0) {
+            if (count($list["list"]) === 0 ) {
                 echo '<div class="text-center">封禁列表为空</div>';
             } else {
                 foreach ($list["list"] as $itemOrder => $item) { ?>
@@ -414,8 +414,7 @@ if (isset($_GET['newuser'])) {
                             </div><!-- /.modal-dialog -->
                         </div><!-- /.modal -->
                     </div>
-                <?php }
-            } ?>
+                <?php }} ?>
         </div>
         <?php } ?>
     </div>

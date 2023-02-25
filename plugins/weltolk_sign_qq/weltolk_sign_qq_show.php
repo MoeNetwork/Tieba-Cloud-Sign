@@ -10,7 +10,7 @@ if (!$is_open) {
 } else {
     if ($is_open == "on") {
         $is_open = true;
-    } elseif ($is_open == "off") {
+    } else if ($is_open == "off") {
         $is_open = false;
     }
 }
@@ -26,8 +26,7 @@ if ($page == 'user_settings') {
         if (!empty($data['weltolk_sign_qq_enable'])) {
             $cache_weltolk_sign_qq_enable = addslashes(strip_tags($data['weltolk_sign_qq_enable']));
         }
-        if (
-            empty($cache_weltolk_sign_qq_enable)
+        if (empty($cache_weltolk_sign_qq_enable)
         ) {
             $return_arr = array('code' => 0, 'msg' => '无效请求!');
         } else {
@@ -161,7 +160,7 @@ if ($page == 'config') {
         default:
             break;
     }
-} elseif ($page == 'list') {
+} else if ($page == 'list') {
     switch ($_GET['act']) {
         case 'ok'://成功回显
             echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>插件设置成功</div>';
@@ -181,8 +180,7 @@ if ($page == 'config') {
             if (!empty($data['type_id'])) {
                 $cache_type_id = addslashes(strip_tags($data['type_id']));
             }
-            if (
-                empty($cache_connect_id)
+            if (empty($cache_connect_id)
                 || empty($cache_type)
                 || empty($cache_type_id)
             ) {
@@ -215,6 +213,7 @@ if ($page == 'config') {
                     if ($x2['connect_type'] == '正向WebSocket') {
                         $headers = [];
                         if (empty($access_token)) {
+
                         } else {
                             $headers = ["Authorization: Bearer " . $access_token];
                         }
@@ -230,10 +229,13 @@ if ($page == 'config') {
                         if ($cache_type == '群') {
                             $send["params"]["message_type"] = "group";
                             $send["params"]["group_id"] = $cache_type_id;
-                        } elseif ($cache_type == '私聊') {
+
+                        } else if ($cache_type == '私聊') {
                             $send["params"]["message_type"] = "private";
                             $send["params"]["user_id"] = $cache_type_id;
+
                         } else {
+
                         }
 
                         $cache_status = true;
@@ -249,11 +251,10 @@ if ($page == 'config') {
                             //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
                             $ws->close();
                             $result_json = json_decode(trim($frame->playload), true);
-                            if (
-                                $result_json["echo"] == $sign
+                            if ($result_json["echo"] == $sign
                                 && $result_json["retcode"] == 0
-                                && $result_json["status"] == "ok"
-                            ) {
+                                && $result_json["status"] == "ok") {
+
                             } else {
                                 $cache_status = false;
                             }
@@ -276,11 +277,10 @@ if ($page == 'config') {
                             //                echo "收到服务器响应数据：" . $frame->playload . PHP_EOL;
                             $ws->close();
                             $result_json = json_decode(trim($frame->playload), true);
-                            if (
-                                $result_json["echo"] == $sign
+                            if ($result_json["echo"] == $sign
                                 && $result_json["retcode"] == 0
-                                && $result_json["status"] == "ok"
-                            ) {
+                                && $result_json["status"] == "ok") {
+
                             } else {
                                 $cache_status = false;
                             }
@@ -295,7 +295,7 @@ if ($page == 'config') {
                         } else {
                             $return_arr = array('code' => 0, 'msg' => '发送给' . $cache_type_id . '的测试消息发送失败!');
                         }
-                    } elseif ($x2['connect_type'] == 'HTTP API') {
+                    } else if ($x2['connect_type'] == 'HTTP API') {
                         $url = substr($x2["address"], -1) == "/"
                             ? substr($x2["address"], 0, -1)
                             : $x2["address"];
@@ -303,6 +303,7 @@ if ($page == 'config') {
 
                         $headers = [];
                         if (empty($access_token)) {
+
                         } else {
                             $headers = [
                                 "Content-Type" => "application/json",
@@ -319,10 +320,13 @@ if ($page == 'config') {
                         if ($cache_type == '群') {
                             $send["message_type"] = "group";
                             $send["group_id"] = $cache_type_id;
-                        } elseif ($cache_type == '私聊') {
+
+                        } else if ($cache_type == '私聊') {
                             $send["message_type"] = "private";
                             $send["user_id"] = $cache_type_id;
+
                         } else {
+
                         }
 
                         $cache_status = true;
@@ -333,9 +337,8 @@ if ($page == 'config') {
                         $c->setTimeOut(5000);
 
                         $res = $c->post($send);
-                        $res = json_decode($res, true);
-                        if (
-                            $res['retcode'] == 0
+                        $res = json_decode($res, TRUE);
+                        if ($res['retcode'] == 0
                             && $res['status'] == 'ok'
                             // go-cqhttp HTTP API post 未支持echo
 //                        && $res['echo'] == $sign
@@ -352,9 +355,8 @@ if ($page == 'config') {
                         $c->setTimeOut(5000);
 
                         $res = $c->post($send);
-                        $res = json_decode($res, true);
-                        if (
-                            $res['retcode'] == 0
+                        $res = json_decode($res, TRUE);
+                        if ($res['retcode'] == 0
                             && $res['status'] == 'ok'
                             // go-cqhttp HTTP API post 未支持echo
 //                        && $res['echo'] == $sign
@@ -368,9 +370,12 @@ if ($page == 'config') {
                         } else {
                             $return_arr = array('code' => 0, 'msg' => '发送给' . $cache_type_id . '的测试消息发送失败!');
                         }
+
                     } else {
+
                     }
                 } else {
+
                 }
             }
             if ($return_arr['code'] == 1) {
@@ -387,12 +392,14 @@ if ($page == 'config') {
             $connect_id = !empty($_POST['connect_id']) ? addslashes(strip_tags($_POST['connect_id'])) : msg('请输入使用的推送地址');
             $hour = $_POST['hour'];
             if ($hour == '0') {
-            } elseif (empty($hour)) {
+
+            } else if (empty($hour)) {
                 msg('请输入每日推送时间');
             } else {
                 $hour = addslashes(strip_tags($hour));
             }
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
@@ -427,17 +434,17 @@ if ($page == 'config') {
             $hour = (!empty($_POST['hour']) or $_POST['hour'] == 0) ? addslashes(strip_tags($_POST['hour'])) : "";
             $hour2 = (!empty($_POST['hour2']) or $_POST['hour2'] == 0) ? addslashes(strip_tags($_POST['hour2'])) : "";
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
             if ($hour2 >= 0 && $hour2 <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
-            if (
-                ((empty($hour) && $hour != 0) && (!empty($hour2) || $hour2 == 0))
-                || ((!empty($hour) || $hour == 0) && (empty($hour2) && $hour2 != 0))
-            ) {
+            if (((empty($hour) && $hour != 0) && (!empty($hour2) || $hour2 == 0))
+                || ((!empty($hour) || $hour == 0) && (empty($hour2) && $hour2 != 0))) {
                 msg('请正确输入每日推送时间');
             }
             $type = !empty($_POST['type']) ? addslashes(strip_tags($_POST['type'])) : "";
@@ -471,10 +478,8 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                (!empty($hour) or $hour == 0)
-                && (!empty($hour2) or $hour == 0)
-            ) {
+            if ((!empty($hour) or $hour == 0)
+                && (!empty($hour2) or $hour == 0)) {
                 if ($status) {
                     $sql1 .= ", `hour` = '{$hour2}'";
                     $sql2 .= " AND `hour` = '{$hour}'";
@@ -526,12 +531,14 @@ if ($page == 'config') {
             $connect_id = !empty($_POST['connect_id']) ? addslashes(strip_tags($_POST['connect_id'])) : msg('请输入使用的推送地址');
             $hour = $_POST['hour'];
             if ($hour == '0') {
-            } elseif (empty($hour)) {
+
+            } else if (empty($hour)) {
                 msg('请输入每日推送时间');
             } else {
                 $hour = addslashes(strip_tags($hour));
             }
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
@@ -557,6 +564,7 @@ if ($page == 'config') {
             break;
     }
 } else {
+
 }
 
 ?>

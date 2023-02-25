@@ -27,8 +27,7 @@ if ($page == 'user_settings') {
         if (!empty($data['weltolk_backup_qq_limit'])) {
             $cache_weltolk_backup_qq_limit = addslashes(strip_tags($data['weltolk_backup_qq_limit']));
         }
-        if (
-            empty($cache_weltolk_backup_qq_enable
+        if (empty($cache_weltolk_backup_qq_enable
             || empty($cache_weltolk_backup_qq_limit))
         ) {
             $return_arr = array('code' => 0, 'msg' => '无效请求!');
@@ -164,7 +163,7 @@ if ($page == 'config') {
         default:
             break;
     }
-} elseif ($page == 'list') {
+} else if ($page == 'list') {
     switch ($_GET['act']) {
         case 'ok'://成功回显
             echo '<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>插件设置成功</div>';
@@ -188,8 +187,7 @@ if ($page == 'config') {
             if (!empty($data['path'])) {
                 $cache_path = addslashes(strip_tags($data['path']));
             }
-            if (
-                empty($cache_connect_id)
+            if (empty($cache_connect_id)
                 || empty($cache_type)
                 || empty($cache_type_id)
                 || empty($cache_path)
@@ -219,6 +217,7 @@ if ($page == 'config') {
                     if ($x2['connect_type'] == '正向WebSocket') {
                         $headers = [];
                         if (empty($access_token)) {
+
                         } else {
                             $headers = ["Authorization: Bearer " . $access_token];
                         }
@@ -247,10 +246,9 @@ if ($page == 'config') {
 
                             $folder_id = "";
                             $path = $cache_path;
-                            if (
-                                empty($path)
-                                || $path == "/"
-                            ) {
+                            if (empty($path)
+                                || $path == "/") {
+
                             } else {
                                 $get_root_folder = json_encode(
                                     [
@@ -283,19 +281,12 @@ if ($page == 'config') {
 //                            var_dump($ws->close());
                                     $ws->close();
                                     $result_json = json_decode(
-                                        str_replace(
-                                            ": None",
-                                            ": []",
-                                            trim($frame->playload)
-                                        ),
-                                        true
-                                    );
+                                        str_replace(": None", ": []"
+                                            , trim($frame->playload)), true);
                                     $cache_folders = $result_json["data"]["folders"];
-                                    if (
-                                        $result_json["echo"] == $sign
+                                    if ($result_json["echo"] == $sign
                                         && $result_json["retcode"] == 0
-                                        && $result_json["status"] == "ok"
-                                    ) {
+                                        && $result_json["status"] == "ok") {
                                         foreach ($cache_folders as $cache_folders_i) {
                                             if ($cache_folders_i["folder_name"] == $path) {
                                                 $folder_id = $cache_folders_i["folder_id"];
@@ -321,19 +312,12 @@ if ($page == 'config') {
 //                            var_dump($ws->close());
                                             $ws->close();
                                             $result_json = json_decode(
-                                                str_replace(
-                                                    ": None",
-                                                    ": []",
-                                                    trim($frame->playload)
-                                                ),
-                                                true
-                                            );
+                                                str_replace(": None", ": []"
+                                                    , trim($frame->playload)), true);
                                             $cache_folders = $result_json["data"]["folders"];
-                                            if (
-                                                $result_json["echo"] == $sign
+                                            if ($result_json["echo"] == $sign
                                                 && $result_json["retcode"] == 0
-                                                && $result_json["status"] == "ok"
-                                            ) {
+                                                && $result_json["status"] == "ok") {
                                                 foreach ($cache_folders as $cache_folders_i) {
                                                     if ($cache_folders_i["folder_name"] == $path) {
                                                         $folder_id = $cache_folders_i["folder_id"];
@@ -358,12 +342,14 @@ if ($page == 'config') {
                             if (!empty($folder_id)) {
                                 $msg_dict["file"]["params"]["folder"] = $folder_id;
                             }
-                        } elseif ($cache_type == '私聊') {
+                        } else if ($cache_type == '私聊') {
                             $msg_dict["text"]["params"]["message_type"] = "private";
                             $msg_dict["text"]["params"]["user_id"] = $cache_type_id;
                             $msg_dict["file"]["action"] = "upload_private_file";
                             $msg_dict["file"]["params"]["user_id"] = $cache_type_id;
+
                         } else {
+
                         }
                         $msg_dict["file"]["params"]["name"] = $file_name;
                         $msg_dict["file"]["params"]["file"] = SYSTEM_ROOT . DIRECTORY_SEPARATOR
@@ -384,11 +370,10 @@ if ($page == 'config') {
 //                            var_dump($ws->close());
                                 $ws->close();
                                 $result_json = json_decode(trim($frame->playload), true);
-                                if (
-                                    $result_json["echo"] == $sign
+                                if ($result_json["echo"] == $sign
                                     && $result_json["retcode"] == 0
-                                    && $result_json["status"] == "ok"
-                                ) {
+                                    && $result_json["status"] == "ok") {
+
                                 } else {
                                     $cache_status = false;
                                 }
@@ -398,7 +383,7 @@ if ($page == 'config') {
                             }
                             usleep(250000);
                         }
-                    } elseif ($x2['connect_type'] == 'HTTP API') {
+                    } else if ($x2['connect_type'] == 'HTTP API') {
                         $url = substr($x2["address"], -1) == "/"
                             ? substr($x2["address"], 0, -1)
                             : $x2["address"];
@@ -407,6 +392,7 @@ if ($page == 'config') {
 
                         $headers = [];
                         if (empty($access_token)) {
+
                         } else {
                             $headers = [
                                 "Content-Type" => "application/json",
@@ -441,10 +427,9 @@ if ($page == 'config') {
 
                             $folder_id = "";
                             $path = $cache_path;
-                            if (
-                                empty($path)
-                                || $path == "/"
-                            ) {
+                            if (empty($path)
+                                || $path == "/") {
+
                             } else {
                                 $get_url = $url . "get_group_root_files";
                                 $create_url = $url . "create_group_file_folder";
@@ -467,18 +452,11 @@ if ($page == 'config') {
                                     $c->setTimeOut(5000);
                                     $res = $c->post($get_root_folder);
                                     $result_json = json_decode(
-                                        str_replace(
-                                            ": None",
-                                            ": []",
-                                            trim($res)
-                                        ),
-                                        true
-                                    );
+                                        str_replace(": None", ": []"
+                                            , trim($res)), true);
                                     $cache_folders = $result_json["data"]["folders"];
-                                    if (
-                                        $result_json["retcode"] == 0
-                                        && $result_json["status"] == "ok"
-                                    ) {
+                                    if ($result_json["retcode"] == 0
+                                        && $result_json["status"] == "ok") {
                                         foreach ($cache_folders as $cache_folders_i) {
                                             if ($cache_folders_i["folder_name"] == $path) {
                                                 $folder_id = $cache_folders_i["folder_id"];
@@ -489,31 +467,19 @@ if ($page == 'config') {
                                             $c->setTimeOut(5000);
                                             $res = $c->post($create_root_folder);
                                             $result_json = json_decode(
-                                                str_replace(
-                                                    ": None",
-                                                    ": []",
-                                                    trim($res)
-                                                ),
-                                                true
-                                            );
+                                                str_replace(": None", ": []"
+                                                    , trim($res)), true);
 
                                             $c = new wcurl($get_url, $headers);
                                             $c->setTimeOut(5000);
                                             $res = $c->post($get_root_folder);
                                             $result_json = json_decode(
-                                                str_replace(
-                                                    ": None",
-                                                    ": []",
-                                                    trim($res)
-                                                ),
-                                                true
-                                            );
+                                                str_replace(": None", ": []"
+                                                    , trim($res)), true);
                                             $cache_folders = $result_json["data"]["folders"];
-                                            if (
-                                                $result_json["echo"] == $sign
+                                            if ($result_json["echo"] == $sign
                                                 && $result_json["retcode"] == 0
-                                                && $result_json["status"] == "ok"
-                                            ) {
+                                                && $result_json["status"] == "ok") {
                                                 foreach ($cache_folders as $cache_folders_i) {
                                                     if ($cache_folders_i["folder_name"] == $path) {
                                                         $folder_id = $cache_folders_i["folder_id"];
@@ -538,12 +504,14 @@ if ($page == 'config') {
                             if (!empty($folder_id)) {
                                 $msg_dict["file"]["data"]["folder"] = $folder_id;
                             }
-                        } elseif ($cache_type == '私聊') {
+                        } else if ($cache_type == '私聊') {
                             $msg_dict["text"]["data"]["message_type"] = "private";
                             $msg_dict["text"]["data"]["user_id"] = $cache_type_id;
                             $msg_dict["file"]["url"] = $file_url . "/upload_private_file";
                             $msg_dict["file"]["data"]["user_id"] = $cache_type_id;
+
                         } else {
+
                         }
                         $msg_dict["file"]["data"]["name"] = $file_name;
                         $msg_dict["file"]["data"]["file"] = SYSTEM_ROOT . DIRECTORY_SEPARATOR
@@ -558,13 +526,13 @@ if ($page == 'config') {
                             $c = new wcurl($msg_dict_i_value["url"], $headers);
                             $c->setTimeOut(5000);
                             $res = $c->post($send_json);
-                            $res = json_decode($res, true);
-                            if (
-                                $res['retcode'] == 0
+                            $res = json_decode($res, TRUE);
+                            if ($res['retcode'] == 0
                                 && $res['status'] == 'ok'
                                 // go-cqhttp HTTP API post 未支持echo
 //                        && $res['echo'] == $sign
                             ) {
+
                             } else {
                                 $cache_status = false;
                             }
@@ -572,6 +540,7 @@ if ($page == 'config') {
                             usleep(250000);
                         }
                     } else {
+
                     }
                 } else {
                 }
@@ -595,12 +564,14 @@ if ($page == 'config') {
             $connect_id = !empty($_POST['connect_id']) ? addslashes(strip_tags($_POST['connect_id'])) : msg('请输入使用的推送地址');
             $hour = $_POST['hour'];
             if ($hour == '0') {
-            } elseif (empty($hour)) {
+
+            } else if (empty($hour)) {
                 msg('请输入每日推送时间');
             } else {
                 $hour = addslashes(strip_tags($hour));
             }
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
@@ -636,17 +607,17 @@ if ($page == 'config') {
             $hour = (!empty($_POST['hour']) or $_POST['hour'] == 0) ? addslashes(strip_tags($_POST['hour'])) : "";
             $hour2 = (!empty($_POST['hour2']) or $_POST['hour2'] == 0) ? addslashes(strip_tags($_POST['hour2'])) : "";
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
             if ($hour2 >= 0 && $hour2 <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
-            if (
-                ((empty($hour) && $hour != 0) && (!empty($hour2) || $hour2 == 0))
-                || ((!empty($hour) || $hour == 0) && (empty($hour2) && $hour2 != 0))
-            ) {
+            if (((empty($hour) && $hour != 0) && (!empty($hour2) || $hour2 == 0))
+                || ((!empty($hour) || $hour == 0) && (empty($hour2) && $hour2 != 0))) {
                 msg('请正确输入每日推送时间');
             }
             $path = !empty($_POST['path']) ? addslashes(strip_tags($_POST['path'])) : "/";
@@ -672,8 +643,7 @@ if ($page == 'config') {
             $status = false;
             $sql1 = "UPDATE `" . DB_PREFIX . "weltolk_backup_qq_target` SET ";
             $sql2 = " WHERE ";
-            if (
-                !empty($connect_id) && !empty($connect_id2)
+            if (!empty($connect_id) && !empty($connect_id2)
                 && ($connect_id != $connect_id2)
             ) {
                 if ($status) {
@@ -685,8 +655,7 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                (!empty($hour) or $hour == 0)
+            if ((!empty($hour) or $hour == 0)
                 && (!empty($hour2) or $hour == 0)
                 && ($hour != $hour2)
             ) {
@@ -699,8 +668,7 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                !empty($path) && !empty($path2)
+            if (!empty($path) && !empty($path2)
                 && ($path != $path2)
             ) {
                 if ($status) {
@@ -712,8 +680,7 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                !empty($type) && !empty($type2)
+            if (!empty($type) && !empty($type2)
                 && ($type != $type2)
             ) {
                 if ($status) {
@@ -725,8 +692,7 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                !empty($type_id) && !empty($type_id2)
+            if (!empty($type_id) && !empty($type_id2)
                 && ($type_id != $type_id2)
             ) {
                 if ($status) {
@@ -738,8 +704,7 @@ if ($page == 'config') {
                 }
                 $status = true;
             }
-            if (
-                !empty($nextdo) && !empty($nextdo2)
+            if (!empty($nextdo) && !empty($nextdo2)
                 && ($nextdo != $nextdo2)
             ) {
                 if ($status) {
@@ -763,12 +728,14 @@ if ($page == 'config') {
             $connect_id = !empty($_POST['connect_id']) ? addslashes(strip_tags($_POST['connect_id'])) : msg('请输入使用的推送地址');
             $hour = $_POST['hour'];
             if ($hour == '0') {
-            } elseif (empty($hour)) {
+
+            } else if (empty($hour)) {
                 msg('请输入每日推送时间');
             } else {
                 $hour = addslashes(strip_tags($hour));
             }
             if ($hour >= 0 && $hour <= 23) {
+
             } else {
                 msg("请输入正确的每日推送时间");
             }
@@ -795,6 +762,7 @@ if ($page == 'config') {
             break;
     }
 } else {
+
 }
 
 

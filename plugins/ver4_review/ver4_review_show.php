@@ -125,239 +125,239 @@ if (isset($_GET['ctieba'])) {
 <h4>基本设置</h4>
 <br>
 <form action="index.php?plugin=ver4_review&save" method="post">
-    <table class="table table-hover">
-        <tbody>
-        <tr>
-            <td>
-                <b>开启审查功能</b><br>
-                开启后会对设置的贴吧的首页内容进行关键字审查
-            </td>
-            <td>
-                <input type="radio" name="c_rv"
-                       value="1" <?php echo empty(option::uget('ver4_review_crv', $uid)) ? '' : 'checked' ?>> 开启
-                <input type="radio" name="c_rv"
-                       value="0" <?php echo empty(option::uget('ver4_review_crv', $uid)) ? 'checked' : '' ?>> 关闭
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" class="btn btn-primary" value="保存设置">
-            </td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
+	<table class="table table-hover">
+		<tbody>
+		<tr>
+			<td>
+				<b>开启审查功能</b><br>
+				开启后会对设置的贴吧的首页内容进行关键字审查
+			</td>
+			<td>
+				<input type="radio" name="c_rv"
+				       value="1" <?php echo empty(option::uget('ver4_review_crv', $uid)) ? '' : 'checked' ?>> 开启
+				<input type="radio" name="c_rv"
+				       value="0" <?php echo empty(option::uget('ver4_review_crv', $uid)) ? 'checked' : '' ?>> 关闭
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="submit" class="btn btn-primary" value="保存设置">
+			</td>
+			<td></td>
+		</tr>
+		</tbody>
+	</table>
 </form>
 <br>
 <h4>贴吧扫描日志</h4>
 <br>
 
 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
-    <?php
+	<?php
     $a = 0;
     $bid = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `uid` = {$uid}");
     ?>
-    <ul id="myTabs" class="nav nav-tabs" role="tablist">
-        <?php
+	<ul id="myTabs" class="nav nav-tabs" role="tablist">
+		<?php
         while ($x = $m->fetch_array($bid)) {
             ?>
-            <li role="presentation" class="<?= empty($a) ? 'active' : '' ?>"><a href="#b<?= $x['id'] ?>" role="tab"
-                                                                                data-toggle="tab"><?= $x['name'] ?></a>
-            </li>
-            <?php
+			<li role="presentation" class="<?= empty($a) ? 'active' : '' ?>"><a href="#b<?= $x['id'] ?>" role="tab"
+			                                                                    data-toggle="tab"><?= $x['name'] ?></a>
+			</li>
+			<?php
             $a++;
         }
         ?>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-        <?php
+	</ul>
+	<div id="myTabContent" class="tab-content">
+		<?php
         $b = 0;
         $bid = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `uid` = {$uid}");
         while ($r = $m->fetch_array($bid)) {
             ?>
-            <div role="tabpanel" class="tab-pane fade <?= empty($b) ? 'active in' : '' ?>" id="b<?= $r['id'] ?>">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <td>序号</td>
-                        <td>贴吧名称</td>
-                        <td>间隔(秒)</td>
-                        <td>上次执行</td>
-                        <td>可选操作</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
+			<div role="tabpanel" class="tab-pane fade <?= empty($b) ? 'active in' : '' ?>" id="b<?= $r['id'] ?>">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<td>序号</td>
+						<td>贴吧名称</td>
+						<td>间隔(秒)</td>
+						<td>上次执行</td>
+						<td>可选操作</td>
+					</tr>
+					</thead>
+					<tbody>
+					<?php
                     $a = 0;
-                    $uu = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_review_list` WHERE `pid` = {$r['id']}");
-                    while ($r1 = $m->fetch_array($uu)) {
-                        $a++;
-                        $b = 0;
-                        $con = '';
-                        $rk = json_decode($r1['kw'], true);
-                        foreach ($rk as $v) {
-                            if (!empty($v)) {
-                                if (empty($b)) {
-                                    $con .= $v;
-                                } else {
-                                    $con .= "\n" . $v;
-                                }
-                                $b++;
-                            }
-                        } ?>
-                        <tr>
-                            <td><?= $r1['id'] ?></td>
-                            <td><a href="http://tieba.baidu.com/f?kw=<?= $r1['tieba'] ?>"
-                                   target="_blank"><?= $r1['tname'] ?></a></td>
-                            <td><?= $r1['space'] ?></td>
-                            <td><?= date('Y-m-d H:i:s', $r1['date']) ?></td>
-                            <td>
-                                <a href="javascript:;" data-toggle="modal" data-target="#LogUser<?= $r1['id'] ?>">编辑</a>
-                                <a href="javascript:;" data-toggle="modal"
-                                   data-target="#DelTieba<?= $r1['id'] ?>">删除</a>
-                            </td>
-                        </tr>
-                        <div class="modal fade" id="LogUser<?= $r1['id'] ?>" tabindex="-1" role="dialog"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"><span
-                                                aria-hidden="true">&times;</span><span
-                                                class="sr-only">Close</span></button>
-                                        <h4 class="modal-title">编辑信息</h4>
-                                    </div>
-                                    <form action="index.php?plugin=ver4_review&ctieba&id=<?= $r1['id'] ?>"
-                                          method="post">
-                                        <div class="modal-body">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">扫描间隔(秒)</span>
-                                                <input type="number" class="form-control" name="space" min="<?= option::get('ver4_review_time')?>"
-                                                       max="86400" value="<?= $r1['space'] ?>" placeholder="最少<?= option::get('ver4_review_time')?>秒"
-                                                       required>
-                                            </div>
-                                            <br>
-                                            <textarea name="kw" class="form-control" rows="10"
-                                                      placeholder="请在此处输入审查关键字，一行一个关键字"><?= $con ?></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
-                                            </button>
-                                            <button type="submit" class="btn btn-primary">确定</button>
-                                        </div>
-                                    </form>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
-
-                        <div class="modal fade" id="DelTieba<?= $r1['id'] ?>" tabindex="-1" role="dialog"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"><span
-                                                aria-hidden="true">&times;</span><span
-                                                class="sr-only">Close</span></button>
-                                        <h4 class="modal-title">温馨提示</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="index.php?plugin=ver4_review&dtieba&id=<?= $r1['id'] ?>"
-                                              method="post">
-                                            <div class="input-group">
-                                                您确定要删除这个贴吧嘛(删除后无法恢复)？
-                                            </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                        <button type="submit" class="btn btn-primary">确定</button>
-                                    </div>
-                                    </form>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
-                        <?php
+            $uu = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_review_list` WHERE `pid` = {$r['id']}");
+            while ($r1 = $m->fetch_array($uu)) {
+                $a++;
+                $b = 0;
+                $con = '';
+                $rk = json_decode($r1['kw'], true);
+                foreach ($rk as $v) {
+                    if (!empty($v)) {
+                        if (empty($b)) {
+                            $con .= $v;
+                        } else {
+                            $con .= "\n" . $v;
+                        }
+                        $b ++;
                     }
-                    if (empty($a)) {
-                        echo '<tr><td>暂无需要扫描的贴吧</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-                    } ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php
+                } ?>
+						<tr>
+							<td><?= $r1['id'] ?></td>
+							<td><a href="http://tieba.baidu.com/f?kw=<?= $r1['tieba'] ?>"
+							       target="_blank"><?= $r1['tname'] ?></a></td>
+							<td><?= $r1['space'] ?></td>
+							<td><?= date('Y-m-d H:i:s', $r1['date']) ?></td>
+							<td>
+								<a href="javascript:;" data-toggle="modal" data-target="#LogUser<?= $r1['id'] ?>">编辑</a>
+								<a href="javascript:;" data-toggle="modal"
+								   data-target="#DelTieba<?= $r1['id'] ?>">删除</a>
+							</td>
+						</tr>
+						<div class="modal fade" id="LogUser<?= $r1['id'] ?>" tabindex="-1" role="dialog"
+						     aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span
+												aria-hidden="true">&times;</span><span
+												class="sr-only">Close</span></button>
+										<h4 class="modal-title">编辑信息</h4>
+									</div>
+									<form action="index.php?plugin=ver4_review&ctieba&id=<?= $r1['id'] ?>"
+									      method="post">
+										<div class="modal-body">
+											<div class="input-group">
+												<span class="input-group-addon">扫描间隔(秒)</span>
+												<input type="number" class="form-control" name="space" min="<?= option::get('ver4_review_time')?>"
+												       max="86400" value="<?= $r1['space'] ?>" placeholder="最少<?= option::get('ver4_review_time')?>秒"
+												       required>
+											</div>
+											<br>
+											<textarea name="kw" class="form-control" rows="10"
+											          placeholder="请在此处输入审查关键字，一行一个关键字"><?= $con ?></textarea>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">取消
+											</button>
+											<button type="submit" class="btn btn-primary">确定</button>
+										</div>
+									</form>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+
+						<div class="modal fade" id="DelTieba<?= $r1['id'] ?>" tabindex="-1" role="dialog"
+						     aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span
+												aria-hidden="true">&times;</span><span
+												class="sr-only">Close</span></button>
+										<h4 class="modal-title">温馨提示</h4>
+									</div>
+									<div class="modal-body">
+										<form action="index.php?plugin=ver4_review&dtieba&id=<?= $r1['id'] ?>"
+										      method="post">
+											<div class="input-group">
+												您确定要删除这个贴吧嘛(删除后无法恢复)？
+											</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+										<button type="submit" class="btn btn-primary">确定</button>
+									</div>
+									</form>
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+						<?php
+            }
+            if (empty($a)) {
+                echo '<tr><td>暂无需要扫描的贴吧</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+            } ?>
+					</tbody>
+				</table>
+			</div>
+			<?php
             $b++;
         }
         ?>
-    </div>
+	</div>
 </div>
 
 <a class="btn btn-success" href="javascript:;" data-toggle="modal" data-target="#AddTieba">添加贴吧</a>
 <a class="btn btn-danger" href="javascript:;" data-toggle="modal" data-target="#DelTieba">清空列表</a>
 
 <div class="modal fade" id="DelTieba" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span
-                        aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">温馨提示</h4>
-            </div>
-            <div class="modal-body">
-                <form action="index.php?plugin=ver4_review&datieba" method="post">
-                    <div class="input-group">
-                        您确定要清空列表（该执行后无法恢复）？
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">确定</button>
-            </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span
+						aria-hidden="true">&times;</span><span
+						class="sr-only">Close</span></button>
+				<h4 class="modal-title">温馨提示</h4>
+			</div>
+			<div class="modal-body">
+				<form action="index.php?plugin=ver4_review&datieba" method="post">
+					<div class="input-group">
+						您确定要清空列表（该执行后无法恢复）？
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="submit" class="btn btn-primary">确定</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <div class="modal fade" id="AddTieba" tabindex="-1" role="dialog" aria-labelledby="AddTieba" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title">添加扫描贴吧信息</h4>
-            </div>
-            <div class="modal-body">
-                <form action="index.php?plugin=ver4_review&newtieba" method="post">
-                    <div class="input-group">
-                        <span class="input-group-addon">请选择对应账号</span>
-                        <select name="pid" required="" class="form-control">
-                            <?php
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+						class="sr-only">Close</span></button>
+				<h4 class="modal-title">添加扫描贴吧信息</h4>
+			</div>
+			<div class="modal-body">
+				<form action="index.php?plugin=ver4_review&newtieba" method="post">
+					<div class="input-group">
+						<span class="input-group-addon">请选择对应账号</span>
+						<select name="pid" required="" class="form-control">
+							<?php
                             global $m;
                             $b = $m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `uid` = {$uid}");
                             while ($x = $m->fetch_array($b)) {
                                 echo '<option value="' . $x['id'] . '">' . $x['name'] . '</option>';
                             }
                             ?>
-                        </select>
-                    </div>
-                    <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">贴吧名称</span>
-                        <input type="text" class="form-control" name="tieba" placeholder="输入要扫描的贴吧吧名" required>
-                    </div>
-                    <br>
-                    <div class="input-group">
-                        <span class="input-group-addon">扫描间隔(秒)</span>
-                        <input type="number" class="form-control" name="space" min="<?= option::get('ver4_review_time')?>" max="86400"
-                               placeholder="最少<?= option::get('ver4_review_time')?>秒" required>
-                    </div>
-                    <br>
-                    <textarea name="kw" class="form-control" rows="10" placeholder="请在此处输入审查关键字，一行一个关键字"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">提交</button>
-            </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+						</select>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">贴吧名称</span>
+						<input type="text" class="form-control" name="tieba" placeholder="输入要扫描的贴吧吧名" required>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">扫描间隔(秒)</span>
+						<input type="number" class="form-control" name="space" min="<?= option::get('ver4_review_time')?>" max="86400"
+						       placeholder="最少<?= option::get('ver4_review_time')?>秒" required>
+					</div>
+					<br>
+					<textarea name="kw" class="form-control" rows="10" placeholder="请在此处输入审查关键字，一行一个关键字"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+			</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

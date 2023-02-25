@@ -1,6 +1,4 @@
-<?php
-
-if (!defined('SYSTEM_ROOT')) {
+<?php if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -15,6 +13,7 @@ function ver4_review_nav()
 
 addAction('navi_1', 'ver4_review_nav');
 addAction('navi_7', 'ver4_review_nav');
+
 function dopost($tieba, $kw, $bduss)
 {
     $a = 0;
@@ -40,9 +39,9 @@ function dopost($tieba, $kw, $bduss)
                 if (empty($a)) {
                     $tid = $tv['id'];
                 } else {
-                    $tid .= '_' . $tv['id'];
+                    $tid .= '_'.$tv['id'];
                 }
-                $a++;
+                $a ++;
             }
         }
         if (!empty($a)) {
