@@ -32,7 +32,7 @@ function weltolk_sign_qq_set_navi()
     ?>
     <li <?php if (isset($_GET['plugin']) && $_GET['plugin'] == 'weltolk_sign_qq') {
         echo 'class="active"';
-    } ?>><a href="index.php?plugin=weltolk_sign_qq"><span
+        } ?>><a href="index.php?plugin=weltolk_sign_qq"><span
                     class="glyphicon glyphicon-circle-arrow-up"></span> 每日签到qq推送</a></li>
 
     <?php

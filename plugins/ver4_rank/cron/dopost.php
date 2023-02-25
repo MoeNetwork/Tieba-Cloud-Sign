@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 global $m;
@@ -31,7 +33,7 @@ if ($id < $max['c']) {
                     $error = '助攻失败，发生了一些未知错误~';
                     break;
             }
-            $result .= '<br/>'.date('Y-m-d').' #'.$r['no'].','.$error.$b['log'];
+            $result .= '<br/>' . date('Y-m-d') . ' #' . $r['no'] . ',' . $error . $b['log'];
             $m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_rank_log` SET `log` = '{$result}',`date` = {$now} WHERE `id` = {$b['id']}");
         }
     }

@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 /**
@@ -9,7 +11,7 @@ function callback_install()
     //在这里做点事
     global $m;
     $m->query("
-		CREATE TABLE IF NOT EXISTS `".DB_PREFIX."ver4_rank_log` (
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ver4_rank_log` (
 		  `id` int(10) NOT NULL AUTO_INCREMENT,
 		  `uid` int(10) NOT NULL,
 		  `pid` int(10) NOT NULL,
@@ -50,7 +52,7 @@ function callback_remove()
 {
     //在这里做点事
     global $m;
-    $m->query("DROP TABLE IF EXISTS `".DB_PREFIX."ver4_rank_log`");
+    $m->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ver4_rank_log`");
 }
 
 /**

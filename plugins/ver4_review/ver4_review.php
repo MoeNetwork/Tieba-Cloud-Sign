@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -39,9 +41,9 @@ function dopost($tieba, $kw, $bduss)
                 if (empty($a)) {
                     $tid = $tv['id'];
                 } else {
-                    $tid .= '_'.$tv['id'];
+                    $tid .= '_' . $tv['id'];
                 }
-                $a ++;
+                $a++;
             }
         }
         if (!empty($a)) {
