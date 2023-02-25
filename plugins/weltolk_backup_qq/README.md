@@ -11,17 +11,31 @@
 
 一. 下载和上传:
 
-- 通过git:
--
-    - 在云签到站点的/plugins/目录下git clone本项目
-- 通过下载整个项目的压缩包
--
-    - 1.下载整个项目的压缩包
--
-    - 2.通过云签到平台"插件管理"页面的上传功能上传或手动上传本项目压缩包到云签到站点的/plugins/目录下
--
-    - 3.解压压缩包
-- 正确的目录情况: 云签到站点/plugins/weltolk_backup_qq/*.php
+云签到现在自带本插件: 
+
+[https://github.com/MoeNetwork/Tieba-Cloud-Sign/tree/master/plugins/weltolk_backup_qq](https://github.com/MoeNetwork/Tieba-Cloud-Sign/tree/master/plugins/weltolk_backup_qq)
+
+[//]: # (- 通过git:)
+
+[//]: # (-)
+
+[//]: # (    - 在云签到站点的/plugins/目录下git clone本项目)
+
+[//]: # (- 通过下载整个项目的压缩包)
+
+[//]: # (-)
+
+[//]: # (    - 1.下载整个项目的压缩包)
+
+[//]: # (-)
+
+[//]: # (    - 2.通过云签到平台"插件管理"页面的上传功能上传或手动上传本项目压缩包到云签到站点的/plugins/目录下)
+
+[//]: # (-)
+
+[//]: # (    - 3.解压压缩包)
+
+[//]: # (- 正确的目录情况: 云签到站点/plugins/weltolk_backup_qq/*.php)
 
 二. 安装和配置:
 
