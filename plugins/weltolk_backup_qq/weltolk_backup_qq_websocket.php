@@ -114,11 +114,11 @@ class weltolk_backup_qq_WebSocketClient
                 $this->port = 80;
             }
         }
-        $this->path = $uriData['path'] ?: '/';
-        if ($uriData['query']) {
+        $this->path = (isset($uriData['path']) && $uriData['path']) ? $uriData['path'] : '/';
+        if (isset($uriData['query']) && $uriData['query']) {
             $this->path .= '?' . $uriData['query'];
         }
-        if ($uriData['fragment']) {
+        if (isset($uriData['fragment']) && $uriData['fragment']) {
             $this->path .= '#' . $uriData['fragment'];
         }
     }

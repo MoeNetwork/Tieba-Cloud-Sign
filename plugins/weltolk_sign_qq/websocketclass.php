@@ -105,7 +105,7 @@ class WebSocketClient
         $this->protocol = $uriData['scheme'];
         $this->host = $uriData['host'];
 
-        if ($uriData['port'] ?? 默认值) {
+        if (isset($uriData['port']) && $uriData['port']) {
             $this->port = (int)$uriData['port'];
         } else {
             if ($this->protocol == self::PROTOCOL_WSS) {
@@ -114,8 +114,11 @@ class WebSocketClient
                 $this->port = 80;
             }
         }
-        $this->path = ($uriData['path'] ?? '/') . '?' . ($uriData['query'] ?? '');
-        if (array_key_exists('fragment', $uriData)) {
+        $this->path = $uriData['path'] ?: '/';
+        if ($uriData['query']) {
+            $this->path .= '?' . $uriData['query'];
+        }
+        if ($uriData['fragment']) {
             $this->path .= '#' . $uriData['fragment'];
         }
     }
