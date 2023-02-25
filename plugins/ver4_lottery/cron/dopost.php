@@ -1,12 +1,14 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 global $m;
-
 if (date('H') >= 12) {
     $id = option::get('ver4_lottery_pid');
     $sql = "`uid` IN (SELECT `uid` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "users_options` WHERE `name` = 'ver4_lottery_check' AND `value` = '1')";
-    $max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE {$sql}")); //获取ID最大值
+    $max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE {$sql}"));
+//获取ID最大值
     if ($id < $max['c']) {
         $b = $m->fetch_array($m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `id` > {$id} AND {$sql} ORDER BY `id` ASC"));
         $td = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
@@ -14,7 +16,8 @@ if (date('H') >= 12) {
         $rc = $m->fetch_array($m->query("SELECT count(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_lottery_log` WHERE `date` > {$td} AND `date` < {$ad} AND `pid` = {$b['id']}"));
         if ($rc['c'] < 2) {
             $now = time();
-            $md = $m->fetch_array($m->query("SELECT max(`date`) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_lottery_log` WHERE `pid` = {$b['id']}")); //获取ID最大值
+            $md = $m->fetch_array($m->query("SELECT max(`date`) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_lottery_log` WHERE `pid` = {$b['id']}"));
+        //获取ID最大值
             $tjg = $now - $md['c'];
             if ($tjg > 1200) {
                 $token = getToken($b['id']);

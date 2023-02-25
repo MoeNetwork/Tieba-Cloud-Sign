@@ -1,10 +1,13 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 global $m;
 $now = time();
 $id = option::get('ver4_review_id');
-$max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_review_list`")); //获取ID最大值
+$max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_review_list`"));
+//获取ID最大值
 if ($id < $max['c']) {
     $b = $m->fetch_array($m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_review_list` WHERE `id` > {$id} ORDER BY `id` ASC"));
     $open = (int)option::uget('ver4_review_crv', $b['uid']);

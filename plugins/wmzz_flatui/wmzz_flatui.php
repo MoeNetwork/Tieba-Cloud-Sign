@@ -1,4 +1,5 @@
 <?php
+
 /*
 Plugin Name: Flat UI
 Version: 1.0
@@ -10,10 +11,14 @@ Author URL: http://zhizhe8.net
 For: V3.0+
 */
 
-if (!defined('SYSTEM_ROOT')) { die('Insufficient Permissions'); } 
-
-function wmzz_flatui_core() {
-	echo '<link rel="stylesheet" href="'.SYSTEM_URL.'plugins/wmzz_flatui/css/flat-ui.min.css">';
+if (!defined('SYSTEM_ROOT')) {
+    die('Insufficient Permissions');
 }
 
-addAction('header','wmzz_flatui_core');
+function wmzz_flatui_core()
+{
+
+    echo '<link rel="stylesheet" href="' . SYSTEM_URL . 'plugins/wmzz_flatui/css/flat-ui.min.css">';
+}
+
+addAction('header', 'wmzz_flatui_core');

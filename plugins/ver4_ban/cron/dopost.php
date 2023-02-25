@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 $id = option::get('ver4_ban_id');
@@ -7,7 +9,8 @@ global $m;
 $time = time();
 $otime = $time - 86400;
 $sql = "`date` < {$otime} AND `stime` < {$time} AND `etime` > {$time}  AND `uid` IN (SELECT `uid` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "users_options` WHERE `name` = 'ver4_ban_open' AND `value` = '1')";
-$max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE {$sql}")); //获取ID最大值
+$max = $m->fetch_array($m->query("SELECT max(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE {$sql}"));
+//获取ID最大值
 if ($id < $max['c']) {
     $ls = $m->fetch_array($m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `id` > {$id} AND {$sql} ORDER BY `id` ASC"));
     $us = $m->fetch_array($m->query("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_userset` WHERE `uid` = {$ls['uid']}"));

@@ -5,12 +5,12 @@
 <br>
 <?php
 if (isset($_GET['msg'])) {
-    echo '<div class="alert alert-success">'.htmlspecialchars($_GET['msg']).'</div>';
+    echo '<div class="alert alert-success">' . htmlspecialchars($_GET['msg']) . '</div>';
 }
 if (isset($_GET['save'])) {
     option::set('ver4_ban_limit', $_POST['limit']);
     option::set('ver4_ban_break_check', $_POST['break_check'] === 'on' ? '1' : '0');
-    redirect('index.php?mod=admin:setplug&plug=ver4_ban&msg='.urlencode('设置已保存成功！'));
+    redirect('index.php?mod=admin:setplug&plug=ver4_ban&msg=' . urlencode('设置已保存成功！'));
 }
 ?>
 <br>
@@ -20,7 +20,7 @@ if (isset($_GET['save'])) {
         <input type="text" class="form-control" name="limit" placeholder="此处填写用户最多可以添加多少条封禁" value="<?= option::get('ver4_ban_limit') ?>" required>
     </div>
     <br>
-    <label for="break-check">允许跳过权限检查</label>   <input type="checkbox" id="break-check" name="break_check" <?= option::get('ver4_ban_break_check') === '1' ? 'checked': '' ?>>
+    <label for="break-check">允许跳过权限检查</label>   <input type="checkbox" id="break-check" name="break_check" <?= option::get('ver4_ban_break_check') === '1' ? 'checked' : '' ?>>
     <br>
     <br>
     <input type="submit" class="btn btn-primary" value="保存设置">

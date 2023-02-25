@@ -139,7 +139,6 @@ class WebSocketClient
         );
 
         if (!$this->sock) {
-
             if ($errstr) {
                 throw new ServerConnectException('连接ws服务器失败：' . $errstr, $errno);
             }
@@ -503,7 +502,6 @@ class WebSocketClient
     {
         $dataFrame = $this->readFrame();
         switch ($dataFrame->opcode) {
-
             case self::OPCODE_PING:
                 $this->pong();
                 break;

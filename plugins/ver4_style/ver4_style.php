@@ -1,4 +1,5 @@
 <?php
+
 /*
 Plugin Name: AmazeUI
 Version: 1.0
@@ -16,7 +17,7 @@ if (!defined('SYSTEM_ROOT')) {
 
 function ver4_style_ui()
 {
-    echo '<link rel="stylesheet" href="'.SYSTEM_URL.'plugins/ver4_style/css/ui.css">';
+    echo '<link rel="stylesheet" href="' . SYSTEM_URL . 'plugins/ver4_style/css/ui.css">';
 }
 
 addAction('header', 'ver4_style_ui');
