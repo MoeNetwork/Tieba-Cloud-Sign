@@ -23,51 +23,12 @@ $doa = unserialize(option::get('wmzz_anno_doa'));
 <div class="input-group">
   <span class="input-group-addon">公告栏挂载点 <br/><br/> 按住Ctrl可以多选</span>
   <select class="form-control" name="wmzz_anno_doa[]" multiple="" style="height:200px">
-    <option value="index_1" <?php if (in_array('index_1', $doa)) {
-        echo 'selected';
-                            } ?> >index_1</option>
-    <option value="index_2" <?php if (in_array('index_2', $doa)) {
-        echo 'selected';
-                            } ?> >index_2</option>
-    <option value="index_3" <?php if (in_array('index_3', $doa)) {
-        echo 'selected';
-                            } ?> >index_3</option>
-      <option value="navi_7" <?php if (in_array('navi_7', $doa)) {
-            echo 'selected';
-                             } ?> >navi_7</option>
-    <option value="navi_8" <?php if (in_array('navi_8', $doa)) {
-        echo 'selected';
-                           } ?> >navi_8</option>
-    <option value="navi_9" <?php if (in_array('navi_9', $doa)) {
-        echo 'selected';
-                           } ?> >navi_9</option>
-    <option value="navi_9" <?php if (in_array('navi_9', $doa)) {
-        echo 'selected';
-                           } ?> >navi_9</option>
-    <option value="login_page_1" <?php if (in_array('login_page_1', $doa)) {
-        echo 'selected';
-                                 } ?> >login_page_1</option>
-    <option value="login_page_2" <?php if (in_array('login_page_2', $doa)) {
-        echo 'selected';
-                                 } ?> >login_page_2</option>
-    <option value="login_page_3" <?php if (in_array('login_page_3', $doa)) {
-        echo 'selected';
-                                 } ?> >login_page_3</option>
-    <option value="reg_page_1" <?php if (in_array('reg_page_1', $doa)) {
-        echo 'selected';
-                               } ?> >reg_page_1</option>
-    <option value="reg_page_2" <?php if (in_array('reg_page_2', $doa)) {
-        echo 'selected';
-                               } ?> >reg_page_2</option>
-    <option value="reg_page_3" <?php if (in_array('reg_page_3', $doa)) {
-        echo 'selected';
-                               } ?> >reg_page_3</option>
-    <option value="header" <?php if (in_array('header', $doa)) {
-        echo 'selected';
-                           } ?> >header</option>
-    <option value="footer" <?php if (in_array('footer', $doa)) {
-        echo 'selected';
-                           } ?> >footer</option>
+    <?php 
+      $options = ["index_1", "index_2", "index_3", "navi_7", "navi_8", "navi_9", "navi_9", "login_page_1", "login_page_2", "login_page_3", "reg_page_1", "reg_page_2", "reg_page_3", "header", "footer"];
+      foreach($options as $option) {
+        echo '<option value="' . in_array($option, $doa) ? 'selected' : '' . '">' . $option . '</option>';
+      }
+    ?>
   </select>
 </div>
 <br/><br/>
