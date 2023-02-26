@@ -1,28 +1,28 @@
 /*! Amaze UI v2.6.2 | by Amaze UI Team | (c) 2016 AllMobilize, Inc. | Licensed under MIT | 2016-04-22T15:38:46+0800 */
 body{
-	background: white;
+    background: white;
 }
 .navbar{
-	border-radius: 0px;
-	border-width: 0 0 1px;
-	position: fixed;
-	z-index: 9999;
-	width: 100%;
+    border-radius: 0px;
+    border-width: 0 0 1px;
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
 }
 .navbar-default{
-	background-color: #0e90d2;
+    background-color: #0e90d2;
 }
 .navbar-default .navbar-collapse, .navbar-default .navbar-form {
-	border-color: #0E90D2;
-	border-width: 0;
+    border-color: #0E90D2;
+    border-width: 0;
 }
 
 .row{
-	margin-top: 80px;
+    margin-top: 80px;
 }
 
 .modal-content {
-	margin-top: 80px;
+    margin-top: 80px;
 }
 
 .navbar-default .navbar-brand{ color: white; }
@@ -32,7 +32,7 @@ body{
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover { color : #fff; background-color : transparent }
 
 .navbar-toggle{
-	background-color: white;
+    background-color: white;
 }
 
 .alert-success { background-color : #5eb95e; border-color : #4bad4b; color : #fff }
@@ -68,22 +68,22 @@ body{
 .btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled], .btn-primary[disabled].active, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover {  background-color : #0e90d2; border-color : #0e90d2 }
 
 .panel-primary {
-	border-color: #ddd;
+    border-color: #ddd;
 }
 .panel-primary > .panel-heading { color : #444; background-color : #f5f5f5; border-color : #ddd }
 
 .panel-warning {
-	border-color: #ddd;
+    border-color: #ddd;
 }
 .panel-warning > .panel-heading { color : #444; background-color : #f5f5f5; border-color : #ddd}
 
 .panel-danger{
-	border-color: #ddd;
+    border-color: #ddd;
 }
 .panel-danger > .panel-heading { color : #444; background-color : #f5f5f5; border-color : #ddd }
 
 .panel-success{
-	border-color: #ddd;
+    border-color: #ddd;
 }
 .panel-success > .panel-heading { color : #444; background-color : #f5f5f5; border-color : #ddd }
 
@@ -100,23 +100,23 @@ body{
 
 
 @media (max-width : 767px) {
-	.navbar-default .navbar-nav .open .dropdown-menu > li > a { color : white }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a { color : white }
 
-	.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus, .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover { color : white; background-color : orange }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus, .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover { color : white; background-color : orange }
 }
 
 @media (max-width: 1199px) and (min-width: 992px){
-	.visible-md {
-		display: none!important;
-	}
+    .visible-md {
+        display: none!important;
+    }
 }
 @media (min-width: 1200px){
-	.visible-lg {
-		display: none!important;
-	}
+    .visible-lg {
+        display: none!important;
+    }
 }
 @media (min-width: 992px){
-	.col-md-9 {
-		width: 100%;
-	}
+    .col-md-9 {
+        width: 100%;
+    }
 }

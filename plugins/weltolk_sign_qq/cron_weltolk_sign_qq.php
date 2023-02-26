@@ -1,4 +1,6 @@
-<?php if (!defined('SYSTEM_ROOT')) {
+<?php
+
+if (!defined('SYSTEM_ROOT')) {
     die('Insufficient Permissions');
 }
 
@@ -25,7 +27,7 @@ function cron_weltolk_sign_qq()
         } else {
             if ($is_open == "on") {
                 $is_open = true;
-            } else if ($is_open == "off") {
+            } elseif ($is_open == "off") {
                 $is_open = false;
             }
         }
@@ -94,7 +96,7 @@ function cron_weltolk_sign_qq()
                             $msg_dict[] = $msg_cache;
                             $page += 1;
                             $msg_cache = $date;
-                        } else if ($keyyy == (count($msg_array) - 1) && $keyyy % 20 != 0) {
+                        } elseif ($keyyy == (count($msg_array) - 1) && $keyyy % 20 != 0) {
                             $msg_cache .=
                                 "\n\n第" . $page . "/" . $max_page . "页";
                             $msg_dict[] = $msg_cache;
@@ -115,7 +117,6 @@ function cron_weltolk_sign_qq()
                     if ($x2['connect_type'] == '正向WebSocket') {
                         $headers = [];
                         if (empty($access_token)) {
-
                         } else {
                             $headers = ["Authorization: Bearer " . $access_token];
                         }
@@ -131,11 +132,9 @@ function cron_weltolk_sign_qq()
                         if ($x['type'] == '群') {
                             $send["params"]["message_type"] = "group";
                             $send["params"]["group_id"] = $x['type_id'];
-
-                        } else if ($x['type'] == '私聊') {
+                        } elseif ($x['type'] == '私聊') {
                             $send["params"]["message_type"] = "private";
                             $send["params"]["user_id"] = $x['type_id'];
-
                         } else {
                             continue;
                         }
@@ -155,9 +154,11 @@ function cron_weltolk_sign_qq()
 //                            var_dump($ws->close());
                                 $ws->close();
                                 $result_json = json_decode(trim($frame->playload), true);
-                                if ($result_json["echo"] == $sign
+                                if (
+                                    $result_json["echo"] == $sign
                                     && $result_json["retcode"] == 0
-                                    && $result_json["status"] == "ok") {
+                                    && $result_json["status"] == "ok"
+                                ) {
                                     $send_status = true;
                                     $log .= date('Y-m-d') . " 成功 " . $x2["client"] . " 客户端通过 " . $x2["connect_type"] . " 方式给 "
                                         . $x2["address"] . " 地址推送access_token为 " . $x2["access_token"]
@@ -179,7 +180,7 @@ function cron_weltolk_sign_qq()
                             $next = strtotime(date('Y-m-d')) + 86400 + $x['hour'] * 3600;
                             $m->query("UPDATE `" . DB_PREFIX . "weltolk_sign_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
                         }
-                    } else if ($x2['connect_type'] == 'HTTP API') {
+                    } elseif ($x2['connect_type'] == 'HTTP API') {
                         $url = substr($x2["address"], -1) == "/"
                             ? substr($x2["address"], 0, -1)
                             : $x2["address"];
@@ -187,7 +188,6 @@ function cron_weltolk_sign_qq()
 
                         $headers = [];
                         if (empty($access_token)) {
-
                         } else {
                             $headers = [
                                 "Content-Type" => "application/json",
@@ -204,11 +204,9 @@ function cron_weltolk_sign_qq()
                         if ($x['type'] == '群') {
                             $send["message_type"] = "group";
                             $send["group_id"] = $x['type_id'];
-
-                        } else if ($x['type'] == '私聊') {
+                        } elseif ($x['type'] == '私聊') {
                             $send["message_type"] = "private";
                             $send["user_id"] = $x['type_id'];
-
                         } else {
                             continue;
                         }
@@ -221,8 +219,9 @@ function cron_weltolk_sign_qq()
                             $c->setTimeOut(5000);
 
                             $res = $c->post($send);
-                            $res = json_decode($res, TRUE);
-                            if ($res['retcode'] == 0
+                            $res = json_decode($res, true);
+                            if (
+                                $res['retcode'] == 0
                                 && $res['status'] == 'ok'
                                 // go-cqhttp HTTP API post 未支持echo
 //                        && $res['echo'] == $sign
@@ -245,14 +244,12 @@ function cron_weltolk_sign_qq()
                             $next = strtotime(date('Y-m-d')) + 86400 + $x['hour'] * 3600;
                             $m->query("UPDATE `" . DB_PREFIX . "weltolk_sign_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
                         }
-
                     } else {
                         continue;
                     }
                 } else {
                     continue;
                 }
-
             } else {
                 $next = strtotime(date('Y-m-d')) + $x['hour'] * 3600;
                 $m->query("UPDATE `" . DB_PREFIX . "weltolk_sign_qq_target` SET `nextdo` = '{$next}' WHERE `id` = '{$x['id']}'");
