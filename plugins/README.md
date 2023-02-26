@@ -60,3 +60,9 @@ ALTER TABLE `tc_ver4_rank_list`
 ### Gzip插件
 将页面直接 GZip 压缩后传输给用户，可大幅减少流量使用，增加加载速度
 
+### 每日用户签到结果qq推送
+每日用户签到结果qq推送,目前支持go-cqhttp的正向WebSocket和HTTP API,基于D丶L和quericy的版本重写
+
+### 每日数据库备份qq推送
+每日数据库备份qq推送，目前支持go-cqhttp的正向WebSocket和HTTP API，基于D丶L的版本重写
+
