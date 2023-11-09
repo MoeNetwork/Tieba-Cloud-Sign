@@ -76,7 +76,10 @@ if (isset($_GET['ok'])) {
       </div>
       <form action="<?php echo SYSTEM_URL ?>setting.php?mod=admin:tools&setting=runsql" onsubmit="$('#runsql_button').attr('disabled',true);" method="post">
       <div class="modal-body">
-        支持这些变量：<b>{VAR-PREFIX}</b> - 当前数据表前缀 | <b>{VAR-DBNAME}</b> - 当前数据库名称
+        <ul>
+          <li>支持这些变量：<b>{VAR-PREFIX}</b> - 当前数据表前缀 | <b>{VAR-DBNAME}</b> - 当前数据库名称</li>
+          <li>输入多条语句时请用<code>;</code>结尾并分行</li>
+        </ul>
         <br/><br/>
         <textarea name="sql" class="form-control" style="height:150px"></textarea>
       </div>
