@@ -145,7 +145,7 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
 CREATE TABLE `{VAR-PREFIX}users` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
-  `pw` char(32) NOT NULL,
+  `pw` TEXT NOT NULL,
   `email` varchar(40) NOT NULL,
   `role` varchar(10) NOT NULL DEFAULT 'user',
   `t` varchar(20) NOT NULL DEFAULT 'tieba',
