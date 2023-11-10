@@ -34,13 +34,51 @@ class P
     }
 
     /**
-     * 对数据（通常是密码）进行不可逆加密
+     * [弃用] 对数据（通常是密码）进行不可逆加密
      * @param string $pwd 密码
      * @return string 加密的密码
      */
-    public function pwd($pwd)
+    public function legacy_pwd($pwd)
     {
         return eval('return ' . option::get('pwdmode') . ';');
+    }
+
+    /**
+     * 对数据（通常是密码）进行不可逆加密
+     * @param string $pwd 密码
+     * @param boolean $with_legacy 是否包含旧密码(不支持 `password_hash()` 时无效)
+     * @return string|object 新密码(和带旧版密码的 array)
+     */
+    public function pwd($pwd, $with_legacy = false)
+    {
+        if (function_exists("password_hash")) {
+            $newHash = password_hash($pwd, PASSWORD_BCRYPT, ["cost" => 12]);
+            if ($with_legacy) {
+                $legacy_hash = $this->legacy_pwd($pwd);
+                return [
+                    "new" => $newHash,
+                    "legacy" => $legacy_hash,
+                ];
+            } else {
+                return $newHash;
+            }
+        } else {
+            return $this->legacy_pwd($pwd);
+        }
+    }
+
+    /**
+     * 校验密码是否合法
+     * @param string $pwd 密码
+     * @return boolean 密码是否合法
+     */
+    public function pwd_verify($pwd, $hash)
+    {
+        if (function_exists("password_verify") && password_verify($pwd, $hash)) {
+            return true;
+        }
+        // legacy
+        return $hash === $this->legacy_pwd($pwd);
     }
 
     /**

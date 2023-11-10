@@ -6,7 +6,7 @@
  */
 
 define('SYSTEM_FN', '百度贴吧云签到');
-define('SYSTEM_VER', '5.00');
+define('SYSTEM_VER', '5.01');
 define('SYSTEM_VER_NOTE', '');
 define('SYSTEM_ROOT', dirname(__FILE__));
 define('PLUGIN_ROOT', dirname(__FILE__) . '/plugins/');

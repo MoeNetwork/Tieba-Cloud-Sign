@@ -88,7 +88,7 @@ INSERT INTO `{VAR-PREFIX}options` VALUES ('cron_sign_again', 'a:2:{s:3:\"num\";i
 INSERT INTO `{VAR-PREFIX}options` VALUES ('sign_hour', '0');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('mail_secure', 'none');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('freetable', 'tieba');
-INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '4.98');
+INSERT INTO `{VAR-PREFIX}options` VALUES ('core_version', '5.01');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('vid', '10000');
 INSERT INTO `{VAR-PREFIX}options` VALUES ('update_server', '0');
 #INSERT INTO `{VAR-PREFIX}options` VALUES ('toolpw', '{VAR-TOOLPW}');
@@ -145,7 +145,7 @@ DROP TABLE IF EXISTS `{VAR-PREFIX}users`;
 CREATE TABLE `{VAR-PREFIX}users` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
-  `pw` char(32) NOT NULL,
+  `pw` TEXT NOT NULL,
   `email` varchar(40) NOT NULL,
   `role` varchar(10) NOT NULL DEFAULT 'user',
   `t` varchar(20) NOT NULL DEFAULT 'tieba',
