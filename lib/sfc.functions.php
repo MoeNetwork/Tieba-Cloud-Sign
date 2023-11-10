@@ -37,7 +37,7 @@ function EncodePwd($pwd, $with_legacy = false)
  * 校验密码
  * @param string $pwd 密码
  * @param string $hash hash 值
- * @return boolean 新密码和旧版密码
+ * @return boolean 密码是否合法
  */
 function VerifyPwd($pwd, $hash)
 {

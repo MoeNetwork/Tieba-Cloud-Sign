@@ -13,7 +13,7 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
         $con_uid = isset($_COOKIE['uid']) ? sqladds($_COOKIE['con_uid']) : '';
         $con_pw  = isset($_COOKIE['pwd']) ? sqladds($_COOKIE['con_pwd']) : '';
         $con_p   = $m->once_fetch_array("SELECT * FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users` WHERE `id` = '{$con_uid}' LIMIT 1");
-        if (empty($con_p['id']) || !VerifyPwd($con_p['pw'], $con_pw)) {
+        if (empty($con_p['id']) || hash_hmac('sha256', $con_p['pw'], ($con_p['id'] % 1024) . $con_p['pw']) !== $con_pw) {
             setcookie("con_uid", '', time() - 3600);
             setcookie("con_pwd", '', time() - 3600);
         } else {
@@ -42,7 +42,7 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
     }
     doAction('globals_1');
     $p = $m->fetch_array($osq);
-    if (!VerifyPwd($p['pw'], $pw)) {
+    if (hash_hmac('sha256', $p['pw'], ($p['id'] % 1024) . $p['pw']) !== $pw) {
         setcookie("uid", '', time() - 3600);
         setcookie("pwd", '', time() - 3600);
         ReDirect("index.php?mod=login&error_msg=" . urlencode('Cookies 所记录的账号信息不正确，请重新登录(#2)') . "");
@@ -147,11 +147,11 @@ if (SYSTEM_PAGE == 'admin:login') {
                 $cktime = 999999;
             }
             setcookie("uid", $p['id'], time() + $cktime);
-            setcookie("pwd", EncodePwd($p['pw']), time() + $cktime);
+            setcookie("pwd", hash_hmac('sha256', $p['pw'], ($p['id'] % 1024) . $p['pw']), time() + $cktime);
             ReDirect('index.php');
         } else {
             setcookie("uid", $p['id']);
-            setcookie("pwd", EncodePwd($p['pw']));
+            setcookie("pwd", hash_hmac('sha256', $p['pw'], ($p['id'] % 1024) . $p['pw']));
             ReDirect('index.php');
         }
     }
