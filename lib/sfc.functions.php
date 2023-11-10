@@ -24,13 +24,25 @@ function getIp()
 /**
  * 加密密码
  * @param string $pwd 密码
- * @return string 加密的密码
+ * @param boolean $with_legacy 是否包含旧密码
+ * @return string|object 新密码和旧版密码
  */
-function EncodePwd($pwd)
+function EncodePwd($pwd, $with_legacy = false)
 {
-
     $p = new P();
-    return $p->pwd($pwd);
+    return $p->pwd($pwd, $with_legacy);
+}
+
+/**
+ * 校验密码
+ * @param string $pwd 密码
+ * @param string $hash hash 值
+ * @return boolean 新密码和旧版密码
+ */
+function VerifyPwd($pwd, $hash)
+{
+    $p = new P();
+    return $p->pwd_verify($pwd, $hash);
 }
 
 /**
