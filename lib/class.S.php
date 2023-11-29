@@ -289,7 +289,7 @@ class S extends wmysql
      * @param string   $where 条件
      * @param string   $field 字段名
      * @param int|null $limit 数量限制。默认不限制
-     * @return mysqli_result
+     * @return mysqli_result|PDOStatement
      */
     public function all($table, $where = null, $field = '*', $limit = null)
     {

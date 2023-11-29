@@ -7,7 +7,7 @@
 
 /**
  * 数据库连接模式
- * mysqli 或 mysql
+ * mysqli 或 mysql 或 pdo
  */
 define('SQLMODE', 'mysqli');
 /**
@@ -16,7 +16,9 @@ define('SQLMODE', 'mysqli');
  */
 define('LONGSQL', false);
 
-if (class_exists("mysqli") && SQLMODE != 'mysql') {
+if (class_exists("pdo") && SQLMODE === 'pdo') {
+    require SYSTEM_ROOT . '/lib/class.pdo.php';
+} elseif (class_exists("mysqli") && SQLMODE !== 'mysql') {
     require SYSTEM_ROOT . '/lib/class.mysqli.php';
 } else {
     require SYSTEM_ROOT . '/lib/class.mysql.php';
