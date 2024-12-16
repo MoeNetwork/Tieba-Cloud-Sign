@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 //特别警告：禁止使用记事本编辑！
 
@@ -11,6 +11,8 @@ define('DB_USER', 'root');
 define('DB_PASSWD', '');
 //MySQL 数据库名称
 define('DB_NAME', 'tiebacloud');
+//MySQL 启用SSL连接，如需启用请将值改为true
+define('DB_SSL',1);
 
 ////////////////////////////以下选项使用任何数据库都需填写////////////////////////////
 //数据库前缀，建议保持默认

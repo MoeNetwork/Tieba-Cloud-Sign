@@ -41,24 +41,36 @@ class wmysql
      * @param string $name 数据库名
      * @param bool $long 是否开启长连接
      */
-    public function __construct($host, $user, $pw, $name, $long = false)
+    public function __construct($host, $user, $pw, $name, $long = false, $useSsl = false)
     {
         if (!class_exists('mysqli')) {
             throw new Exception('服务器不支持MySqli类');
         }
         $coninfo = strpos($host, ':');
+        
+        $mysqli = mysqli_init();
+        if ($useSsl) {
+            $mysqli->ssl_set(null, null, "/etc/ssl/certs/ca-certificates.crt", "/etc/ssl/certs", null);
+        }
+
+        $connected = false;
         if ($coninfo === false) {
             if ($long) {
                 $host = 'p:' . $host;
             }
-            @$this->conn = new mysqli($host, $user, $pw, $name);
+            $connected = $mysqli->real_connect($host, $user, $pw, $name);
         } else {
             if ($long) {
-                @$this->conn = new mysqli('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
+                $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
             } else {
-                @$this->conn = new mysqli(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
+                $connected = $mysqli->real_connect(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
             }
         }
+        
+        if (!$connected) {
+            throw new Exception("连接数据库失败，原因：{$mysqli->error}");
+        }
+        @$this->conn = $mysqli;
 
         if ($this->conn->connect_error) {
             switch ($this->conn->connect_errno) {

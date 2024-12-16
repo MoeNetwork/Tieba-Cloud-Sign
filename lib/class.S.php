@@ -15,10 +15,10 @@ class S extends wmysql
      * @param string $name 数据库名
      * @param bool $long 是否开启长连接
      */
-    public function __construct($host, $user, $pw, $name, $long = false)
+    public function __construct($host, $user, $pw, $name, $long = false, $useSsl = false)
     {
         try {
-            parent::__construct($host, $user, $pw, $name, $long);
+            parent::__construct($host, $user, $pw, $name, $long, $useSsl);
         } catch (Exception $ex) {
             msg($ex->getMessage());
         }
