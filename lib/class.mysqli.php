@@ -48,9 +48,10 @@ class wmysql
         }
         $coninfo = strpos($host, ':');
         
+        $flags = 0;
         $mysqli = mysqli_init();
         if ($useSsl) {
-            $mysqli->ssl_set(null, null, "/etc/ssl/certs/ca-certificates.crt", "/etc/ssl/certs", null);
+            $flags = $flags | MYSQLI_CLIENT_SSL;
         }
 
         $connected = false;
@@ -58,12 +59,12 @@ class wmysql
             if ($long) {
                 $host = 'p:' . $host;
             }
-            $connected = $mysqli->real_connect($host, $user, $pw, $name);
+            $connected = $mysqli->real_connect($host, $user, $pw, $name, flags: $flags);
         } else {
             if ($long) {
-                $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
+                $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), flags: $flags);
             } else {
-                $connected = $mysqli->real_connect(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1));
+                $connected = $mysqli->real_connect(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), flags: $flags);
             }
         }
         
