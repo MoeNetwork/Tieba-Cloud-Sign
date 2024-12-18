@@ -176,8 +176,7 @@ define(\'SYSTEM_SALT\',\'\');
                 define('DB_PASSWD', $_POST['dbpw']);
                 define('DB_NAME', $_POST['dbname']);
                 define('DB_PREFIX', $_POST['dbprefix']);
-                $dbSsl = $_POST['dbSsl'];
-                define('DB_SSL', $dbSsl == "1" ? true : false);
+                define('DB_SSL', $_POST['dbSsl']);
             }
             $sql  = str_ireplace('{VAR-PREFIX}', DB_PREFIX, file_get_contents(SYSTEM_ROOT2 . '/install.template.sql'));
             $sql  = str_ireplace('{VAR-DB}', DB_NAME, $sql);
@@ -229,7 +228,7 @@ define(\'DB_USER\',\'' . DB_USER . '\');
 define(\'DB_PASSWD\',\'' . DB_PASSWD . '\');
 //MySQL 数据库名称
 define(\'DB_NAME\',\'' . DB_NAME . '\');
-//MySQL 启用SSL连接，如需启用请将值改为true
+//MySQL 启用SSL连接，如需启用请将值改为1
 define(\'DB_SSL\',' . DB_SSL .');
 
 ////////////////////////////以下选项使用任何数据库都需填写////////////////////////////
