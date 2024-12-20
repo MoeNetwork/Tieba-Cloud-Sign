@@ -1,3 +1,6 @@
 .idea/
 setup/install.lock
 !plugins/wmzz_debug
+.DS_Store
+.devcontainer
+.vscode
