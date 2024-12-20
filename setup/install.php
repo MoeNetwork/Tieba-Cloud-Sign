@@ -135,10 +135,10 @@ define(\'SYSTEM_SALT\',\'\');
                 echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" value="' . DB_PASSWD . '" disabled></div><br/>';
                 echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" value="' . DB_NAME . '" disabled></div><br/>';
                 echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" value="' . DB_PREFIX . '" disabled></div><br/>';
-                echo '<div class="input-group"><span class="input-group-addon">数据库开启SSL</span><select name="dbSsl" class="form-control" required="true"><option value="0">否</option><option value="1">是</option></select></div><br/>';
+                echo '<div class="input-group"><span class="input-group-addon">数据库开启SSL</span><select name="dbssl" class="form-control" required="true"><option value="0">否</option><option value="1">是</option></select></div><br/>';
                 echo '<input type="hidden" name="isbae" value="1">';
                 echo '<input type="hidden" name="from_config" value="1">';
-                echo '<input type="hidden" name="dbSsl" value="0">';
+                echo '<input type="hidden" name="dbssl" value="0">';
             } else {
                 echo '<br/><b>提示 1：</b>如果您已经手动写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/>';
                 echo '<b>提示 2：</b>如果程序并未写入数据库 [ 安装完成后进入首页提示 Table XX doesn\'t exist  ] 请选择强制手动导入 SQL<br/><br/>';
@@ -149,7 +149,7 @@ define(\'SYSTEM_SALT\',\'\');
                 echo '<div class="input-group"><span class="input-group-addon">数据库密码</span><input type="text" class="form-control" name="dbpw" placeholder=""></div><br/>';
                 echo '<div class="input-group"><span class="input-group-addon">数据库名称</span><input type="text" class="form-control" name="dbname" placeholder=""></div><br/>';
                 echo '<div class="input-group"><span class="input-group-addon">数据表前缀</span><input type="text" class="form-control" name="dbprefix" value="tc_" placeholder=""></div><br/>';
-                echo '<div class="input-group"><span class="input-group-addon">数据库开启SSL</span><select name="dbSsl" class="form-control" required="true"><option value="0">否</option><option value="1">是</option></select></div><br/>';
+                echo '<div class="input-group"><span class="input-group-addon">数据库开启SSL</span><select name="dbssl" class="form-control" required="true"><option value="0">否</option><option value="1">是</option></select></div><br/>';
                 echo '</div>';
             }
             echo '<h4>站点创始人信息</h4><br/>';
@@ -176,7 +176,7 @@ define(\'SYSTEM_SALT\',\'\');
                 define('DB_PASSWD', $_POST['dbpw']);
                 define('DB_NAME', $_POST['dbname']);
                 define('DB_PREFIX', $_POST['dbprefix']);
-                define('DB_SSL', $_POST['dbSsl']);
+                define('DB_SSL', $_POST['dbssl']);
             }
             $sql  = str_ireplace('{VAR-PREFIX}', DB_PREFIX, file_get_contents(SYSTEM_ROOT2 . '/install.template.sql'));
             $sql  = str_ireplace('{VAR-DB}', DB_NAME, $sql);

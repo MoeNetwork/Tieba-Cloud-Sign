@@ -41,7 +41,7 @@ class wmysql
      * @param string $name 数据库名
      * @param bool $long 是否开启长连接
      */
-    public function __construct($host, $user, $pw, $name, $long = false, $useSsl = false)
+    public function __construct($host, $user, $pw, $name, $long = false, $useSSL = false)
     {
         if (!function_exists('mysql_connect')) {
             throw new Exception('服务器PHP不支持MySql数据库');

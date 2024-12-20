@@ -12,7 +12,7 @@ define('DB_PASSWD', '');
 //MySQL 数据库名称
 define('DB_NAME', 'tiebacloud');
 //MySQL 启用SSL连接，如需启用请将值改为1
-define('DB_SSL',0);
+define('DB_SSL', 0);
 
 ////////////////////////////以下选项使用任何数据库都需填写////////////////////////////
 //数据库前缀，建议保持默认
