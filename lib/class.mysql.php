@@ -48,14 +48,14 @@ class wmysql
         }
 
         $flag = 0;
-        if ($useSsl) {
+        if ($useSSL) {
             $flag = $flag & MYSQL_CLIENT_SSL;
         }
 
         if ($long) {
             $this->conn = @mysql_pconnect($host, $user, $pw, $flag);
         } else {
-            $this->conn = @mysql_connect($host, $user, $pw, client_flags: $flag);
+            $this->conn = @mysql_connect($host, $user, $pw, false, $flag);
         }
         if (!$this->conn) {
             switch ($this->geterrno()) {

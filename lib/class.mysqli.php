@@ -50,7 +50,7 @@ class wmysql
         
         $flags = 0;
         $mysqli = mysqli_init();
-        if ($useSsl) {
+        if ($useSSL) {
             $flags = $flags | MYSQLI_CLIENT_SSL;
         }
 
@@ -59,12 +59,12 @@ class wmysql
             if ($long) {
                 $host = 'p:' . $host;
             }
-            $connected = $mysqli->real_connect($host, $user, $pw, $name, flags: $flags);
+            $connected = $mysqli->real_connect($host, $user, $pw, $name, null, $flags);
         } else {
             if ($long) {
-                $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), flags: $flags);
+                $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), null, $flags);
             } else {
-                $connected = $mysqli->real_connect(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), flags: $flags);
+                $connected = $mysqli->real_connect(substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), null, $flags);
             }
         }
         
