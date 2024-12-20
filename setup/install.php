@@ -138,7 +138,6 @@ define(\'SYSTEM_SALT\',\'\');
                 echo '<div class="input-group"><span class="input-group-addon">数据库开启SSL</span><select name="dbssl" class="form-control" required="true"><option value="0">否</option><option value="1">是</option></select></div><br/>';
                 echo '<input type="hidden" name="isbae" value="1">';
                 echo '<input type="hidden" name="from_config" value="1">';
-                echo '<input type="hidden" name="dbssl" value="0">';
             } else {
                 echo '<br/><b>提示 1：</b>如果您已经手动写好了 config.php ，请选择 [ <b>自动获得数据库配置信息</b> ] 为 <b>是</b><br/>';
                 echo '<b>提示 2：</b>如果程序并未写入数据库 [ 安装完成后进入首页提示 Table XX doesn\'t exist  ] 请选择强制手动导入 SQL<br/><br/>';
