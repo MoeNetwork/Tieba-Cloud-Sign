@@ -74,10 +74,10 @@ function checkclass($f, $m = false)
     </thead>
     <tbody>
         <tr>
-        <td><a href="http://php.net/" target="_blank">PHP 5+</a></td>
+        <td><a href="http://php.net/" target="_blank">PHP 8+</a></td>
             <td>必须</td>
             <td><?php echo phpversion(); ?></td>
-            <td>核心，未来云签到将不支持 PHP 7.4 以下版本，请尽快升级</td>
+            <td>核心，未来云签到将不兼容过旧的 PHP 版本，当前活跃的版本请查看 <a href="https://www.php.net/supported-versions.php" target="blank">Supported Versions</a></td>
         </tr>
         <tr>
             <td><a href="http://php.net/manual/zh/book.curl.php" target="_blank">Client URL</a></td>
