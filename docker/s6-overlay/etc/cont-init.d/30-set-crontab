@@ -2,7 +2,7 @@
 
 set_crontab() {
     echo "Set crontab to system..."
-    echo "* * * * * php $WORKDIR/do.php" | s6-setuidgid caddy crontab -
+    echo "* * * * * php84 $WORKDIR/do.php" | s6-setuidgid caddy crontab -
 }
 
 set_crontab 2>&1 | sed "s#^#[cont-init.d] $(basename $0): \1#g"
