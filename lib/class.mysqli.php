@@ -59,7 +59,7 @@ class wmysql
             if ($long) {
                 $host = 'p:' . $host;
             }
-            $connected = $mysqli->real_connect($host, $user, $pw, $name, null, $flags);
+            $connected = $mysqli->real_connect($host, $user, $pw, $name, null, null, $flags);
         } else {
             if ($long) {
                 $connected = $mysqli->real_connect('p:' . substr($host, 0, $coninfo), $user, $pw, $name, substr($host, $coninfo + 1), null, $flags);
