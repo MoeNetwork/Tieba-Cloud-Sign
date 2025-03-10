@@ -339,7 +339,7 @@ class misc
 
         if ($status_succ === true) {
             $m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` SET  `latest` =  '" . $today . "',`status` =  '0',`last_error` = NULL WHERE `" . DB_PREFIX . $table . "`.`id` = '{$id}'", true);
-        } else {
+        } elseif (!empty($error_code)) {
             $m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` SET  `latest` =  '" . $today . "',`status` =  '" . $error_code . "',`last_error` = '" . $error_msg . "' WHERE `" . DB_PREFIX . $table . "`.`id` = '{$id}'", true);
         }
 
