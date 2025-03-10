@@ -248,13 +248,21 @@ switch (SYSTEM_PAGE) {
         if (!empty($baiduUserInfo["portrait"])) {
             $baidu_name = $baiduUserInfo["name"];
             $baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
-            $checkSame = $m->once_fetch_array("SELECT * FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
-            if (option::get('same_pid') != '3' && (option::get('same_pid') == '1' || option::get('same_pid') == '2') && !ISADMIN) {
+
+            $same_pid = option::get('same_pid');
+
+            if ($same_pid === '3') {
+                $checkSame = $m->once_fetch_array("SELECT id, uid FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `portrait` = '{$baidu_name_portrait}' AND `uid`='" . UID . "'");
+            } else {
+                $checkSame = $m->once_fetch_array("SELECT id, uid FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `portrait` = '{$baidu_name_portrait}'");
+            }
+            
+            if ($same_pid != '3' && ($same_pid == '1' || $same_pid == '2') && !ISADMIN) {
                 if (!empty($checkSame)) {
-                    if (option::get('same_pid') == '2') {
+                    if ($same_pid == '2') {
                         $loginResult["error"] = -11;
                         $loginResult["msg"] = "你已经绑定了这个百度账号或者该账号已被其他人绑定，若要重新绑定，请先解绑";
-                    } elseif (option::get('same_pid') == '1' && $checkSame['uid'] == UID) {
+                    } elseif ($same_pid == '1' && $checkSame['uid'] == UID) {
                         $loginResult["error"] = -10;
                         $loginResult["msg"] = "你已经绑定了这个百度账号，若要重新绑定，请先解绑";
                     }
@@ -265,7 +273,7 @@ switch (SYSTEM_PAGE) {
                     $loginResult["name"] = "{$baidu_name} [{$baidu_name_portrait}]";
                 }
             } else {
-                if (option::get('same_pid') == '3' && !empty($checkSame)) {
+                if ($same_pid == '3' && $checkSame['uid'] == UID && !empty($checkSame)) {
                     $m->query("UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$loginResult["bduss"]}', `stoken`='{$loginResult["stoken"]}' WHERE `id` = '{$checkSame["id"]}';");
                     $loginResult["msg"] = "更新BDUSS成功";
                 } else {
