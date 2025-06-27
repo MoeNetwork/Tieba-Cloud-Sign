@@ -1,29 +1,40 @@
-version: "2.0"
+version: '3.8'
+
 services:
   web:
     image: moenetwork/tieba-cloud-sign
+    restart: always
     environment:
-      - PUID=1000  # 可修改为你想以什么用户运行caddy，该用户的UID
-      - PGID=1000  # 可修改为你想以什么用户运行caddy，该用户的UID
-      - DB_HOST=db:3306
+      - PUID=1000
+      - PGID=1000
+      - DB_HOST=db  # 已修正：只保留主机名
       - DB_USER=root
-      - DB_PASSWD=janejane123456  # 数据库密码
-      - DB_NAME=tiebacloud        # 数据库名
+      - DB_PASSWD=janejane123456
+      - DB_NAME=tiebacloud
       - CSRF=true
       # - TC_AUTO_CREATE_INSTALL_LOCK=true # 如果希望自动创建install.lock请解除此注释
-    #volumes:                                        # 如果重新创建或更新镜像希望保留之前的所有信息，请解除此两行注释
-      #- ./install.lock:/var/www/setup/install.lock  # 在当前目录下自行新建文件install.lock，内容为：1
     ports:
-      - 8080:8080
-    links:
-      - db
+      - "9000:8080"
+    volumes:
+      # 已启用：将宿主机的 install.lock 挂载到容器，实现持久化
+      #- ./install.lock:/var/www/setup/install.lock  # 在当前目录下自行新建文件install.lock，内容为：1
     depends_on:
       - db
+    networks:
+      - tieba-net
 
   db:
-    image: agrozyme/mariadb  #如若此镜像在你的平台上不可用，可以自行在docker hub上搜索你平台可用的mariadb镜像
+    image: agrozyme/mariadb
+    restart: always
     environment:
       - MYSQL_DATABASE=tiebacloud
       - MYSQL_ROOT_PASSWORD=janejane123456
     volumes:
+      # 数据库数据持久化
       - ./mysql:/var/lib/mysql
+    networks:
+      - tieba-net
+
+networks:
+  tieba-net:
+    driver: bridge
