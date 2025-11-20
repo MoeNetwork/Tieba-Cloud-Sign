@@ -91,7 +91,7 @@ class E extends Exception
             case E_COMPILE_WARNING:
                 $errnoo = '编译警告';
                 break;
-            case E_STRICT:
+            case 2048:
                 $errnoo = '严谨性提示';
                 break;
             default:
