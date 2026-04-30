@@ -40,9 +40,9 @@ if (isset($_GET["api"])) {
                 $tieba = isset($_POST['tieba']) ? sqladds($_POST['tieba']) : '';
 
                 //判定吧务权限
-                if (option::get('ver4_ban_break_check') === '0' && !ver4_is_manager($pid, $tieba)["isManager"]) {
-                    $apiReturnArray["message"] = "您不是 {$tieba}吧 的吧务";
-                }
+                // if (option::get('ver4_ban_break_check') === '0' && !ver4_is_manager($pid, $tieba)["isManager"]) {
+                //     $apiReturnArray["message"] = "您不是 {$tieba}吧 的吧务";
+                // }
 
                 $rts = isset($_POST['rts']) && !empty($_POST['rts']) ? sqladds($_POST['rts']) : date('Y-m-d');
                 $rte = isset($_POST['rte']) ? sqladds($_POST['rte']) : '2026-12-31';
@@ -201,17 +201,25 @@ if (isset($_GET['save'])) {
 if (isset($_GET['duser'])) {
     $id = isset($_GET['id']) ? sqladds($_GET['id']) : '';
     if (!empty($id)) {
-        global $m;
-        $m->query("DELETE FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `id` = '{$id}' AND `uid` = {$uid}");
-        redirect('index.php?plugin=ver4_ban&success=' . urlencode('已成功删除该被封禁ID，最迟24小时后该ID不会再被封禁！'));
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            global $m;
+            $m->query("DELETE FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `id` = '{$id}' AND `uid` = {$uid}");
+            redirect('index.php?plugin=ver4_ban&success=' . urlencode('已成功删除该被封禁ID，最迟24小时后该ID不会再被封禁！'));
+        }else {
+            redirect('index.php?plugin=ver4_ban&error=' . urlencode('请求不合法'));
+        }
     } else {
         redirect('index.php?plugin=ver4_ban&error=' . urlencode('ID不合法'));
     }
 }
 if (isset($_GET['dauser'])) {
-    global $m;
-    $m->query("DELETE FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `uid` = {$uid}");
-    redirect('index.php?plugin=ver4_ban&success=' . urlencode('循环云封禁列表已成功清空！'));
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        global $m;
+        $m->query("DELETE FROM `" . DB_NAME . "`.`" . DB_PREFIX . "ver4_ban_list` WHERE `uid` = {$uid}");
+        redirect('index.php?plugin=ver4_ban&success=' . urlencode('循环云封禁列表已成功清空！'));
+    }else {
+        redirect('index.php?plugin=ver4_ban&error=' . urlencode('请求不合法'));
+    }
 }
 if (isset($_GET['newuser'])) {
     $pid = isset($_POST['pid']) ? sqladds($_POST['pid']) : '';
@@ -219,9 +227,9 @@ if (isset($_GET['newuser'])) {
     $tieba = isset($_POST['tieba']) ? sqladds($_POST['tieba']) : '';
 
     //判定吧务权限
-    if (option::get('ver4_ban_break_check') === '0' && !ver4_is_manager($pid, $tieba)["isManager"]) {
-        redirect('index.php?plugin=ver4_ban&error=' . urlencode("您不是 {$tieba}吧 的吧务"));
-    }
+    // if (option::get('ver4_ban_break_check') === '0' && !ver4_is_manager($pid, $tieba)["isManager"]) {
+    //     redirect('index.php?plugin=ver4_ban&error=' . urlencode("您不是 {$tieba}吧 的吧务"));
+    // }
 
     $rts = isset($_POST['rts']) && !empty($_POST['rts']) ? sqladds($_POST['rts']) : date('Y-m-d');
     $rte = isset($_POST['rte']) ? sqladds($_POST['rte']) : '2026-12-31';
@@ -550,24 +558,24 @@ if (isset($_GET['newuser'])) {
           }))).join("\n"))
         }
       })
-      $('#forum_name, #selectUserPid').bind('input propertychange', function(){
-        if($("#forum_name").val() !== "" && $("#forum_name").val() !== form.fname){
-            $('#forum_name_label').text("检查权限中")
-            window.stop();
-            $.get("index.php?plugin=ver4_ban&api&m=precheck&pid=" + $("#selectUserPid").val() + '&tieba=' + $("#forum_name").val(),function(data){
-                if (data.data.isManager) {
-                    $('#forum_name_label').text("此帐号在" + $('#forum_name').val() + "吧为" + data.data.managerType)
-                } else if(data.data.isBreak) {
-                    $('#forum_name_label').text("已跳过权限检查")
-                } else {
-                    $('#forum_name_label').text("此帐号在" + $('#forum_name').val() + "吧没有封禁权限")
-                }
-                $('#forum_name_label').css("display", "block")
-            })
-        } else if ($("#forum_name").val() === "") {
-            $('#forum_name_label').css("display", "none")
-        }
-      })
+      // $('#forum_name, #selectUserPid').bind('input propertychange', function(){
+      //   if($("#forum_name").val() !== "" && $("#forum_name").val() !== form.fname){
+      //       $('#forum_name_label').text("检查权限中")
+      //       window.stop();
+      //       $.get("index.php?plugin=ver4_ban&api&m=precheck&pid=" + $("#selectUserPid").val() + '&tieba=' + $("#forum_name").val(),function(data){
+      //           if (data.data.isManager) {
+      //               $('#forum_name_label').text("此帐号在" + $('#forum_name').val() + "吧为" + data.data.managerType)
+      //           } else if(data.data.isBreak) {
+      //               $('#forum_name_label').text("已跳过权限检查")
+      //           } else {
+      //               $('#forum_name_label').text("此帐号在" + $('#forum_name').val() + "吧没有封禁权限")
+      //           }
+      //           $('#forum_name_label').css("display", "block")
+      //       })
+      //   } else if ($("#forum_name").val() === "") {
+      //       $('#forum_name_label').css("display", "none")
+      //   }
+      // })
       //$("select.form-control[name='pid']").change(function(){
       //  let domText = ''
       //  globalBanUserList[$("select.form-control[name='pid']").val()].map(x => domText += '<button class="btn btn-danger" type="button" id="' + x.tieba+'_'+btoa(x.portrait) + '">' + (x.name ? x.name : (x.name_show ? x.name_show : x.portrait)) + ' <span class="badge">' + x.tieba + '</span></button> ')

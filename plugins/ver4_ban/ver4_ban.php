@@ -146,7 +146,7 @@ function ver4_ban_get_userinfo_by_words($word): array
 function ver4_ban_global_ban_list_generate(array $i, $m): array
 {
     $globalBanList = [];
-    foreach ($i["user"]["baidu"] as $userId => $userBaiduName) {
+    foreach ((isset($i["user"]["baidu"]) ? $i["user"]["baidu"] : []) as $userId => $userBaiduName) {
         $globalBanList[$userId] = [
             "name" => $userBaiduName,//$i["user"]["baidu_name_show"][$userId]??$i["user"]["baidu_portrait"][$userId],//注释部分用于banka版, 原版使用此插件请不要取消注释
             "list" => [],
