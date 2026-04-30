@@ -20,54 +20,32 @@ class misc
      */
     public static function mail($to, $sub = '无主题', $msg = '无内容', $att = array())
     {
-        if (defined("SAE_MYSQL_DB") && class_exists('SaeMail')) {
-            $mail = new SaeMail();
-            $options = array(
-                'from'          => option::get('mail_name'),
-                'to'            => $to,
-                'smtp_host'     => option::get('mail_host'),
-                'smtp_port'     => option::get('mail_port'), //端口号（默认为25，一般不需修改）
-                'smtp_username' => option::get('mail_smtpname'), //smtp账号
-                'smtp_password' => option::get('mail_smtppw'), //smtp密码
-                'subject'       => $sub, //邮件标题
-                'content'       => $msg, //邮件内容
-                'content_type'  => 'HTML' //HTML格式发送
-            );
-            $mail->setOpt($options);
-            $ret = $mail->send();
-            if ($ret === false) {
-                return 'Mail Send Error: #' . $mail->errno() . ' - ' . $mail->errmsg();
-            } else {
+        $From = option::get('mail_name');
+        if (option::get('mail_mode') == 'SMTP') {
+            $Host = option::get('mail_host');
+            $Port = intval(option::get('mail_port'));
+            $SMTPAuth = option::get('mail_auth');
+            $Username = option::get('mail_smtpname');
+            $Password = option::get('mail_smtppw');
+            $Nickname = option::get('mail_yourname');
+            $Secure = option::get('mail_secure');
+            $mail = new SMTP($Host, $Port, $SMTPAuth, $Username, $Password, $Secure);
+            $mail->att = $att;
+            if ($mail->send($to, $From, $sub, $msg, $Nickname)) {
                 return true;
+            } else {
+                return $mail->log;
             }
         } else {
-            $From = option::get('mail_name');
-            if (option::get('mail_mode') == 'SMTP') {
-                $Host = option::get('mail_host');
-                $Port = intval(option::get('mail_port'));
-                $SMTPAuth = option::get('mail_auth');
-                $Username = option::get('mail_smtpname');
-                $Password = option::get('mail_smtppw');
-                $Nickname = option::get('mail_yourname');
-                $Secure = option::get('mail_secure');
-                $mail = new SMTP($Host, $Port, $SMTPAuth, $Username, $Password, $Secure);
-                $mail->att = $att;
-                if ($mail->send($to, $From, $sub, $msg, $Nickname)) {
-                    return true;
-                } else {
-                    return $mail->log;
-                }
-            } else {
-                $header  = "MIME-Version:1.0\r\n";
-                $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                $header .= "To: " . $to . "\r\n";
-                $header .= "From: " . $From . "\r\n";
-                $header .= "Subject: " . $sub . "\r\n";
-                $header .= 'Reply-To: ' . $From . "\r\n";
-                $header .= "Date: " . date("r") . "\r\n";
-                $header .= "Content-Transfer-Encoding: base64\r\n";
-                return mail($to, $sub, base64_encode($msg), $header);
-            }
+            $header  = "MIME-Version:1.0\r\n";
+            $header .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+            $header .= "To: " . $to . "\r\n";
+            $header .= "From: " . $From . "\r\n";
+            $header .= "Subject: " . $sub . "\r\n";
+            $header .= 'Reply-To: ' . $From . "\r\n";
+            $header .= "Date: " . date("r") . "\r\n";
+            $header .= "Content-Transfer-Encoding: base64\r\n";
+            return mail($to, $sub, base64_encode($msg), $header);
         }
     }
 
