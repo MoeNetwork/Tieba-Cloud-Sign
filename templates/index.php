@@ -164,6 +164,7 @@ doAction('index_2');
 echo '<br/>' . SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> // 作者: <a href="https://kenvix.com" target="_blank">Kenvix</a> &amp; <a href="http://www.mokeyjay.com/" target="_blank">mokeyjay</a> &amp; <a href="http://fyy1999.lofter.com/" target="_blank">FYY</a>
 
 <script type="text/javascript">
+    <?php if(ISADMIN) {?>
  $.ajax({ 
     async:true, 
    url: 'ajax.php?mod=admin:server', 
@@ -178,6 +179,7 @@ echo '<br/>' . SYSTEM_FN ?> V<?php echo SYSTEM_VER  . ' ' . SYSTEM_VER_NOTE ?> /
       $("#server").html("服务器信息读取失败。");
      }
     });
+    <?php }?>
     <?php if ($i['opt']['bduss_num'] != '0' && $i['opt']['bduss_num'] != '-1' && ISVIP == false) {
         ?>
   var baiduid = Math.round($("#baiduid_used").html() / $("#baiduid_limit").html() * 100);

@@ -10,7 +10,7 @@ if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
     msg('权限不足');
 }
 
-if (ROLE != 'admin' && stristr(strip_tags($_GET['mod']), 'admin:')) {
+if (ROLE != 'admin' && strpos(SYSTEM_PAGE, 'admin:') === 0) {
     msg('权限不足');
 }
 
@@ -46,50 +46,50 @@ switch (SYSTEM_PAGE) {
         Redirect('index.php?mod=admin:plugins&ok');
 
         break;
-    case 'admin:cloud':
-        doAction('plugin_update_1');
-        global $i;
-        $plug = $i['plugins']['desc'][$_GET['upd']];
-        if (!file_exists(UPDATE_CACHE)) {
-            mkdir(UPDATE_CACHE, 0777, true);
-        }
-
-        $up_url = SUPPORT_URL . 'getplug.php?m=up&pname=' . $_GET['upd'] . '&user=' . option::get('bbs_us') . '&pw=' . option::get('bbs_pw');
-        $c = new wcurl($up_url);
-        $file = $c->exec();
-        $c->close();
-        if ($file == 'WRONG') {
-            msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
-        }
-
-        $zipPath = UPDATE_CACHE . 'update_plug_' . time() . '.zip';
-        if (file_put_contents($zipPath, $file) === false) {
-            DeleteFile(UPDATE_CACHE);
-            msg('错误 - 更新失败：<br/><br/>无法下载更新包');
-        }
-
-        //解压缩
-        $z = new zip();
-        $z->open($zipPath);
-        $z->extract(UPDATE_CACHE);
-        $z->close();
-    //检查更新文件
-        $floderName = UPDATE_CACHE . $_GET['upd'];
-        if (!is_dir($floderName)) {
-            DeleteFile(UPDATE_CACHE);
-            msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
-        }
-
-        //覆盖文件
-        if (CopyAll($floderName, SYSTEM_ROOT . '/plugins/' . $_GET['upd']) !== true) {
-            DeleteFile(UPDATE_CACHE);
-            msg('错误 - 更新失败：<br/><br/>无法更新文件');
-        }
-        DeleteFile(UPDATE_CACHE);
-        doAction('plugin_update_2');
-        msg('（1/2）已成功下载最新版本的 ' . $plug['plugin']['name'] . ' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd=' . $_GET['upd'] . '">>> 下一步</a>', false);
-
-        break;
+    // case 'admin:cloud':
+    //     doAction('plugin_update_1');
+    //     global $i;
+    //     $plug = $i['plugins']['desc'][$_GET['upd']];
+    //     if (!file_exists(UPDATE_CACHE)) {
+    //         mkdir(UPDATE_CACHE, 0777, true);
+    //     }
+    // 
+    //     $up_url = SUPPORT_URL . 'getplug.php?m=up&pname=' . $_GET['upd'] . '&user=' . option::get('bbs_us') . '&pw=' . option::get('bbs_pw');
+    //     $c = new wcurl($up_url);
+    //     $file = $c->exec();
+    //     $c->close();
+    //     if ($file == 'WRONG') {
+    //         msg('错误 - 更新失败：<br/><br/>产品中心拒绝了下载<br/>请检查全局设置中的账号是否正确以及是否购买过此插件');
+    //     }
+    // 
+    //     $zipPath = UPDATE_CACHE . 'update_plug_' . time() . '.zip';
+    //     if (file_put_contents($zipPath, $file) === false) {
+    //         DeleteFile(UPDATE_CACHE);
+    //         msg('错误 - 更新失败：<br/><br/>无法下载更新包');
+    //     }
+    // 
+    //     //解压缩
+    //     $z = new zip();
+    //     $z->open($zipPath);
+    //     $z->extract(UPDATE_CACHE);
+    //     $z->close();
+    // //检查更新文件
+    //     $floderName = UPDATE_CACHE . $_GET['upd'];
+    //     if (!is_dir($floderName)) {
+    //         DeleteFile(UPDATE_CACHE);
+    //         msg('错误 - 更新失败：<br/><br/>无法解压缩更新包');
+    //     }
+    // 
+    //     //覆盖文件
+    //     if (CopyAll($floderName, SYSTEM_ROOT . '/plugins/' . $_GET['upd']) !== true) {
+    //         DeleteFile(UPDATE_CACHE);
+    //         msg('错误 - 更新失败：<br/><br/>无法更新文件');
+    //     }
+    //     DeleteFile(UPDATE_CACHE);
+    //     doAction('plugin_update_2');
+    //     msg('（1/2）已成功下载最新版本的 ' . $plug['plugin']['name'] . ' 插件。请单击下一步，以完成更新<br/><br/><a href="setting.php?mod=admin:plugins&upd=' . $_GET['upd'] . '">>> 下一步</a>', false);
+    // 
+    //     break;
     case 'admin:set':
         global $m;
         $sou = $_POST;
@@ -334,11 +334,12 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
         break;
     case 'admin:users':
         if (!empty($_GET['control'])) {
-            $osq = $m->once_fetch_array("SELECT `id`,`role`,`pw` FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users` WHERE `id` = '{$_GET['control']}' LIMIT 1");
+            $control_id = sqladds(strip_tags($_GET['control']));
+            $osq = $m->once_fetch_array("SELECT `id`,`role`,`pw` FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users` WHERE `id` = '{$control_id}' LIMIT 1");
             empty($osq['pw']) and msg('用户不存在');
             $osq['role'] == 'admin' and msg('无法控制管理员');
             doAction('admin_users_control');
-            setcookie("uid", $_GET['control'], time() + 999999);
+            setcookie("uid", $control_id, time() + 999999);
             setcookie("pwd", hash_hmac('sha256', $osq['pw'], $osq['id'] . $osq['pw']), time() + 999999);
             setcookie("con_uid", UID);
             setcookie("con_pwd", $_COOKIE['pwd']);

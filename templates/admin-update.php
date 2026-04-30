@@ -11,36 +11,36 @@ doAction('admin_update_1');
    <select id="server" class="form-control">
       <option value="0">Github [默认,国外]</option>
   </select>
-  <span class="input-group-btn">
+  <!--<span class="input-group-btn">
      <input id="save_btn" type="button" value="保存并应用" class="btn btn-info" onclick="save_server()">
- </span>
+ </span>-->
 </div>
 <br/>
-<script type="text/javascript">
-    <?php
-        $server = option::get('update_server') === null ? 0 : option::get('update_server');
-    ?>
-    $('#server').val('<?php echo $server; ?>');
-  function save_server() {
-       $('#save_btn').val('正在保存').attr("disabled","disabled");
-        $.ajax({
-         async:true,
-        url: 'ajax.php?mod=admin:update:changeServer&server=' + $('#server').val(),
-        type: "GET",
-       data : {},
-         dataType: 'html',
-          timeout: 90000,
-        success: function(data){
-         location.reload();
-      },
-          error: function(error){
-          console.log(error);
-            $('#save_btn').val('保存并应用').removeAttr("disabled");
-            alert('保存失败！错误信息已记录到控制台，按F12打开控制台查看详细信息');
-       }
-        });
-    }
-</script>
+<!--<script type="text/javascript">
+     <?php
+         // $server = option::get('update_server') === null ? 0 : option::get('update_server');
+     ?>
+     $('#server').val('<?php //echo $server; ?>');
+   function save_server() {
+        $('#save_btn').val('正在保存').attr("disabled","disabled");
+         $.ajax({
+          async:true,
+         url: 'ajax.php?mod=admin:update:changeServer&server=' + $('#server').val(),
+         type: "GET",
+        data : {},
+          dataType: 'html',
+           timeout: 90000,
+         success: function(data){
+          location.reload();
+       },
+           error: function(error){
+           console.log(error);
+             $('#save_btn').val('保存并应用').removeAttr("disabled");
+             alert('保存失败！错误信息已记录到控制台，按F12打开控制台查看详细信息');
+        }
+         });
+     }
+</script>-->
 
 <?php
 //检测服务器是否支持写入

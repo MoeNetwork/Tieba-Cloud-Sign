@@ -1,6 +1,10 @@
 <?php
 require dirname(__FILE__) . '/init.php';
 
+if (ROLE != 'admin' && strpos(SYSTEM_PAGE, 'admin:') === 0) {
+    msg('权限不足');
+}
+
 switch (SYSTEM_PAGE) {
     case 'ajax:status':
         global $m,$i;
@@ -180,11 +184,11 @@ switch (SYSTEM_PAGE) {
         msg('恭喜您，更新成功！', SYSTEM_URL . 'index.php?mod=admin:update&ok');
         break;
 
-    case 'admin:update:changeServer':
-        if (isset($_GET['server'])) {
-            option::set('update_server', $_GET['server']);
-        }
-        break;
+    // case 'admin:update:changeServer':
+    //     if (isset($_GET['server'])) {
+    //         option::set('update_server', $_GET['server']);
+    //     }
+    //     break;
 
     case 'baiduid:getverify':
         global $m;
