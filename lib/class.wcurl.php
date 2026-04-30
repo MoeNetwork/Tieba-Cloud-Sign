@@ -264,7 +264,7 @@ class wcurl
     public function close()
     {
         // DEPRECATED since PHP 8.5.0
-        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+        if (PHP_VERSION_ID <= 80000) {
             @curl_close($this->conn);
         }
     }
