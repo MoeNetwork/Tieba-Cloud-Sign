@@ -66,7 +66,7 @@ if (!empty($i['user']['bduss'])) {
                 echo '</thead><tbody>';
                 echo $f[$pkey] . '</tbody></table></div></div>';
             } else {
-                echo '<br/><div class="alert alert-warning" role="alert">还没有添加任何贴吧，点击上方的按钮扫描贴吧。<br/>扫描不到贴吧？请检查百度账号BDUSS是否已经失效（尝试重新绑定）</div>';
+                echo '<br/><div id="tbpidpanel_' . $pkey . '" class="alert alert-warning tbpanel" role="alert" style="display:none">还没有添加任何贴吧，点击上方的按钮扫描贴吧。<br/>扫描不到贴吧？请检查百度账号BDUSS是否已经失效（尝试重新绑定）</div>';
             }
         }
         echo '<input type="submit" id="submit_button" class="btn btn-primary" value="提交更改"></form>';
