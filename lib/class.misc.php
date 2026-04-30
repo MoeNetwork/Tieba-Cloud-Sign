@@ -156,13 +156,19 @@ class misc
     /**
      * 得到TBS
      */
-
+    private static $tbs_cache = [];
     public static function getTbs($uid, $bduss)
     {
+        if (isset(self::$tbs_cache[$bduss])) {
+            return self::$tbs_cache[$bduss];
+        }
         $ch = new wcurl('http://tieba.baidu.com/dc/common/tbs');
         $ch->addcookie("BDUSS=" . $bduss);
         $x = json_decode($ch->exec(), true);
-        return $x['tbs'];
+        self::$tbs_cache[$bduss] = isset($x['tbs']) && isset($x['is_login']) && $x['is_login']
+            ? $x['tbs']
+            : '';
+        return self::$tbs_cache[$bduss];
     }
 
     /**
@@ -555,6 +561,30 @@ class misc
         return $tl->get();
     }
 
+    public static function getTieba3($bduss, $stoken, $pn = 1)
+    {
+        $head = [
+            'Subapp-Type: hybrid',
+            'Content-Type: application/x-www-form-urlencoded',
+            'User-Agent: tieba/12.58.1.0',
+        ];
+        $tl = new wcurl('https://tieba.baidu.com/c/f/forum/forumGuide', $head);
+        $data = array(
+            'BDUSS' => $bduss,
+            'stoken' => $stoken,
+            'page_no' => $pn,
+            'res_num' => '200',
+            'sort_type' => '3',
+            'call_from' => '3',
+            'tbs' => misc::getTbs(0, $bduss),
+        );
+        self::addTiebaSign($data, false);
+        $tl->addCookie(array('BDUSS' => $bduss));
+        $tl->set(CURLOPT_RETURNTRANSFER, true);
+        $rt = $tl->post($data);
+        return $rt;
+    }
+
     /**
      * 扫描指定PID的所有贴吧
      * @param string $pid PID
@@ -577,25 +607,39 @@ class misc
         $a      = 0;
         while (true) {
             //if (empty($bid)) break;
-            $rc = self::getTieba2($bduss, $stoken, $pn);//fetch forum list //default 200 per page
+            $rc = self::getTieba3($bduss, $stoken, $pn);//fetch forum list //default 200 per page
             $rc = json_decode($rc, true);
             if (!$rc) {
                 break;
             }
-            $ngf = isset($rc["data"]["like_forum"]["list"]) ? $rc["data"]["like_forum"]["list"] : [];
+            $ngf = isset($rc["like_forum"]) ? $rc["like_forum"] : [];
             foreach ($ngf as $v) {
                 if ($tb['c'] + $a >= $o && !empty($o) && !$isvip) {
                     break;
                 }
+
+                // 被封贴吧 => is_forbidden
+                // 被合并的暂时没有办法直接判断，但签到时会有：340006#贴吧目录出问题啦，请到贴吧签到吧反馈
+                if (!$v['forum_id'] || $v['is_forbidden']) {
+                    continue;
+                }
+
                 $vn  = addslashes(htmlspecialchars($v['forum_name']));
                 $ist = $m->once_fetch_array("SELECT COUNT(id) AS `c` FROM `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` WHERE `pid` = {$pid} AND `tieba` = '{$vn}';");
                 if ($ist['c'] == 0) {
                     $a++;
-                    $m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` (`pid`,`fid`, `uid`, `tieba`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}');");
+                    if (!$v['is_sign']) {
+                        $latest = 0;
+                    } else {
+                        $latest = date('d');
+                    }
+                    $m->query("INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . $table . "` (`pid`,`fid`, `uid`, `tieba`, `latest`) VALUES ({$pid},'{$v['forum_id']}', {$uid}, '{$vn}', {$latest});");
                 }
             }
             $pn++;
-            if ($pn > $rc["data"]["like_forum"]["page"]["total_page"]) {
+            // 30 * 200 -> 6000
+			// avoid loop
+            if (!$rc["like_forum_has_more"] || $pn > 20) {
                 break;
             }
         }
