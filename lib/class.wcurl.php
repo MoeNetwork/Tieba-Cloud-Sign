@@ -263,8 +263,10 @@ class wcurl
      */
     public function close()
     {
-
-        @curl_close($this->conn);
+        // DEPRECATED since PHP 8.5.0
+        if (PHP_VERSION_ID <= 80000) {
+            @curl_close($this->conn);
+        }
     }
 
     /**
@@ -352,7 +354,9 @@ class wcurl
             curl_reset($this->conn);
         } else {
             if (is_resource($this->conn)) {
-                curl_close($this->conn);
+                if (PHP_VERSION_ID <= 80000) {
+                    curl_close($this->conn);
+                }
             }
             $this->conn = curl_init();
         }
