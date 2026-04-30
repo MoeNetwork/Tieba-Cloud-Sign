@@ -29,14 +29,15 @@ function getToken($pid)
 
 function lottery($pid, $token)
 {
-    $nt = time();
     $bduss = misc::getCookie($pid);
-    $head = array();
-    $head[] = 'Referer: https://zhidao.baidu.com/shop/lottery';
-    $head[] = 'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36';
-    $pl = new wcurl("https://zhidao.baidu.com/shop/submit/lottery?type=0&token={$token}&_={$nt}308", $head);
+    $head = [
+        "x-ik-ssl" => "1",
+        "Referer" =>  "https://zhidao.baidu.com/shop/lottery",
+        "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+    ];
+    $pl = new wcurl("https://zhidao.baidu.com/shop/submit/lottery", $head);
     $pl->addCookie('BDUSS=' . $bduss);
-    $re = $pl->get();
+    $re = $pl->post(["type" => "0", "token" => $token]);
     $result = json_decode($re, true);
     return $result;
 }
