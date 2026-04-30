@@ -25,7 +25,7 @@ class SMTP
 //附件内容
     public $secure = 'none';
 
-    public function __construct($relay_host = '', $smtp_port = 25, $auth = false, $user = '', $pass = '', $secure = 'none')
+    public function __construct($relay_host = '', $smtp_port = 25, $auth = 0, $user = '', $pass = '', $secure = 'none')
     {
         $this ->debug = false;
         $this ->smtp_port = $smtp_port;
@@ -35,7 +35,7 @@ class SMTP
         }
         $this ->relay_host = $relay_host;
         $this ->time_out = 30;
-        $this ->auth = $auth;
+        $this ->auth = (int)$auth;
         $this ->user = $user;
         $this ->pass = $pass;
         $this ->host_name = "localhost";
@@ -117,12 +117,17 @@ class SMTP
                 return $this ->smtp_error("sending HELO command");
             }
         }
-        if ($this ->auth) {
+        if ($this ->auth === 1) {
             if (!$this ->smtp_putcmd("AUTH LOGIN", base64_encode($this ->user))) {
                 return $this ->smtp_error("sending HELO command");
             }
             if (!$this ->smtp_putcmd("", base64_encode($this ->pass))) {
                 return $this ->smtp_error("sending HELO command");
+            }
+        } else if ($this->auth === 2) {
+            $auth_str = "\0" . $this->user . "\0" . $this->pass;
+            if (!$this->smtp_putcmd("AUTH PLAIN", base64_encode($auth_str))) {
+                return $this->smtp_error("sending AUTH PLAIN command");
             }
         }
         if (!$this ->smtp_putcmd("MAIL", "FROM:<" . $from . ">")) {

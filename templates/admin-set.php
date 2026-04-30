@@ -160,6 +160,7 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
         <br/><br/>无加密的SMTP服务器端口号通常为 25
         <br/>SSL加密的SMTP服务器端口号通常为 465
         <br/>TLS加密的SMTP服务器端口号通常为 587
+        <br/><br/>身份验证通常为 LOGIN
         </td><td>
         <div class="input-group">
               <span class="input-group-addon">邮件发送模式</span>
@@ -209,14 +210,17 @@ if (isset($i['mode'][2]) && $i['mode'][2] == 'sign') {
                   </select>
                 </div>
                 <br/><div class="input-group">
-                  <span class="input-group-addon">需要身份验证</span>
-                  <select name="mail_auth" class="form-control"  onchange="if(this.value == '1') { $('#smtp_set_auth').show(); } else { $('#smtp_set_auth').hide(); }">
+                  <span class="input-group-addon">身份验证</span>
+                  <select name="mail_auth" class="form-control"  onchange="if(this.value == '0') { $('#smtp_set_auth').hide(); } else { $('#smtp_set_auth').show(); }">
                     <option value="1" <?php if (option::get('mail_auth') == '1') {
                         echo 'selected';
-                                      } ?>>是</option>
+                                      } ?>>LOGIN</option>
+                    <option value="2" <?php if (option::get('mail_auth') == '2') {
+                        echo 'selected';
+                                      } ?>>PLAIN</option>
                     <option value="0" <?php if (option::get('mail_auth') == '0') {
                         echo 'selected';
-                                      } ?>>否</option>
+                                      } ?>>无</option>
                   </select>
                 </div><br/>
 

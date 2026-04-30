@@ -45,7 +45,7 @@ class misc
             if (option::get('mail_mode') == 'SMTP') {
                 $Host = option::get('mail_host');
                 $Port = intval(option::get('mail_port'));
-                $SMTPAuth = (bool) option::get('mail_auth');
+                $SMTPAuth = option::get('mail_auth');
                 $Username = option::get('mail_smtpname');
                 $Password = option::get('mail_smtppw');
                 $Nickname = option::get('mail_yourname');
