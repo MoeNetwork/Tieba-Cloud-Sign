@@ -123,7 +123,7 @@ switch (SYSTEM_PAGE) {
         if (!file_exists(UPDATE_CACHE)) {
             mkdir(UPDATE_CACHE, 0777, true);
         }
-        $commit_mode = isset($_POST["commit"]) && $_POST["commit"];
+        $commit_mode = isset($_POST["commit"]) && $_POST["commit"] && SYSTEM_DEV;
         $floderName = UPDATE_FNAME_GITHUB;
         //下载zip包
         //switch (option::get('update_server')){
