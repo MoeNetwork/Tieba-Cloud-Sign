@@ -1,4 +1,3 @@
-version: "2.0"
 services:
   web:
     image: moenetwork/tieba-cloud-sign
