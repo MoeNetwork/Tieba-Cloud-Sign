@@ -23,7 +23,7 @@ RUN apk add --no-cache \
        s6-overlay \
        shadow \
        tzdata \
-    && caddy upgrade \
+    # && caddy upgrade \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo -e "${TZ}" > /etc/timezone \
     && echo -e "max_execution_time = 3600\nupload_max_filesize=128M\npost_max_size=128M\nmemory_limit=1024M\ndate.timezone=${TZ}" > /etc/php84/conf.d/99-overrides.ini \
